@@ -6,6 +6,7 @@ import { LogPanel } from '../panels/LogPanel.js';
 import { PartnerPanel } from '../panels/PartnerPanel.js';
 import { PhasePanel } from '../panels/PhasePanel.js';
 import { StatusPanel } from '../panels/StatusPanel.js';
+import { Header } from './Header.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html #app's panel layout
 // (lines 1208-1213): side-by-side status/phase/partner panels, with the control bar and log
@@ -21,6 +22,7 @@ export function GameView() {
 
   return (
     <div id="app">
+      <Header />
       <StatusPanel />
       <PhasePanel />
       <PartnerPanel />

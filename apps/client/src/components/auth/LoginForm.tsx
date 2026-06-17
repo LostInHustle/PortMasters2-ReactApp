@@ -42,8 +42,10 @@ export function LoginForm({ onShowRegister }: LoginFormProps) {
         placeholder={tr('密码', 'Password')}
         autoComplete="current-password"
       />
-      <button type="submit">{tr('⛵ 登录起航', '⛵ Log In & Set Sail')}</button>
-      <button type="button" onClick={onShowRegister}>
+      <button type="submit" className="btn btn-success btn-lg">
+        {tr('⛵ 登录起航', '⛵ Log In & Set Sail')}
+      </button>
+      <button type="button" className="btn btn-lg" onClick={onShowRegister}>
         {tr('📝 注册新账号', '📝 Create Account')}
       </button>
     </form>

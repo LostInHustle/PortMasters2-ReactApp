@@ -61,8 +61,10 @@ export function RegisterForm({ onShowLogin }: RegisterFormProps) {
         placeholder={tr('确认密码', 'Confirm password')}
         autoComplete="new-password"
       />
-      <button type="submit">{tr('✅ 注册', '✅ Register')}</button>
-      <button type="button" onClick={onShowLogin}>
+      <button type="submit" className="btn btn-success btn-lg">
+        {tr('✅ 注册', '✅ Register')}
+      </button>
+      <button type="button" className="btn btn-lg" onClick={onShowLogin}>
         {tr('← 返回登录', '← Back to Login')}
       </button>
     </form>
