@@ -1,0 +1,26 @@
+{
+  "name": "portmasters2-react",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev -w @pm2/server",
+    "dev:client": "npm run dev -w @pm2/client",
+    "build": "npm run build -w @pm2/client",
+    "start": "npm run start -w @pm2/server",
+    "test": "npm run test -w @pm2/server",
+    "typecheck": "npm run typecheck -w @pm2/shared && npm run typecheck -w @pm2/server && npm run typecheck -w @pm2/client",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.5.0",
+    "prettier": "^3.8.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1"
+  }
+}
