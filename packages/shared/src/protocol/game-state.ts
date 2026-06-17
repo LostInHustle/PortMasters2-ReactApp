@@ -10,6 +10,7 @@ import type { ResourceId } from '../data/resources.js';
 import type { WorkerTypeId } from '../data/wages-workers.js';
 import type { CustomerOrder, MarketCard } from '../domain/cards.js';
 import type { IntelClue } from '../domain/intel.js';
+import type { TradeOrder } from '../domain/trade.js';
 import type { Worker } from '../domain/worker.js';
 
 // Ported verbatim from PortMasters2/server.py PlayerGame.__init__ (line 467): a deliberately
@@ -86,4 +87,19 @@ export interface PlayerGameState {
   logs: string[];
   logSeq: number;
   slot: 1 | 2 | null;
+}
+
+// Ported verbatim from PortMasters2/server.py SharedSession.broadcast_state's per-recipient
+// state dict (lines 1458-1469) -- the "state" message payload pushed after every action.
+export interface SessionStateMessage {
+  tradeOrders: TradeOrder[];
+  tradeReady: [boolean, boolean];
+  phaseReadyCount: number;
+  yourGame: PlayerGameState;
+  otherGame: PlayerGameState;
+  waitingForOther: string | null;
+  youReady: boolean;
+  yourSlot: 1 | 2;
+  partnerName: string;
+  partnerOnline: boolean;
 }
