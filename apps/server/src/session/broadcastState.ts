@@ -1,5 +1,7 @@
 import type { SessionStateMessage } from '@pm2/shared';
 import { serializePlayerGame } from '../game/serialize.js';
+import type { ServerState } from '../lobby/onlineRegistry.js';
+import { sendJson } from '../ws/send.js';
 import type { SharedSession } from './SharedSession.js';
 
 // Ported verbatim from PortMasters2/server.py SharedSession.broadcast_state (lines 1450-1470):
@@ -27,4 +29,16 @@ export function buildSessionState(
     partnerName: session.players[1 - slot]!,
     partnerOnline: isOnline(session.players[1 - slot]!),
   };
+}
+
+// Ported verbatim from PortMasters2/server.py SharedSession.broadcast_state's send loop
+// (lines 1450-1470): pushes each player their own "state" message, skipping anyone not
+// currently connected.
+export function broadcastSessionState(state: ServerState, session: SharedSession): void {
+  for (const slot of [0, 1] as const) {
+    const ws = state.online.get(session.players[slot]);
+    if (ws === undefined) continue;
+    const isOnline = (username: string) => state.online.has(username);
+    sendJson(ws, { type: 'state', data: buildSessionState(session, slot, isOnline) });
+  }
 }

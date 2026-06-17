@@ -123,10 +123,10 @@ export class SharedSession {
   ): TradeOrder | undefined {
     return createTradeOrder(this, sellerSlot, sellItems, buyItems);
   }
-  acceptTrade(orderId: string, buyerSlot: 0 | 1): boolean {
+  acceptTrade(orderId: unknown, buyerSlot: 0 | 1): boolean {
     return acceptTrade(this, orderId, buyerSlot);
   }
-  rejectTrade(orderId: string): TradeOrder | undefined {
+  rejectTrade(orderId: unknown): TradeOrder | undefined {
     return rejectTrade(this, orderId);
   }
 

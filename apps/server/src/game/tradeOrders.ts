@@ -69,7 +69,7 @@ export interface AcceptTradeContext {
 
 // Ported verbatim from PortMasters2/server.py accept_trade (lines 1393-1435): checks both
 // sides can afford their half before mutating anything, then swaps sell-for-buy in one pass.
-export function acceptTrade(ctx: AcceptTradeContext, orderId: string, buyerSlot: 0 | 1): boolean {
+export function acceptTrade(ctx: AcceptTradeContext, orderId: unknown, buyerSlot: 0 | 1): boolean {
   const order = ctx.tradeOrders.find((o) => o.id === orderId);
   if (!order || order.sellerSlot === buyerSlot) return false;
   const sellerGame = ctx.games[order.sellerSlot];
@@ -119,7 +119,7 @@ export function acceptTrade(ctx: AcceptTradeContext, orderId: string, buyerSlot:
 // Ported verbatim from PortMasters2/server.py reject_trade (lines 1437-1441).
 export function rejectTrade(
   ctx: { tradeOrders: TradeOrder[] },
-  orderId: string,
+  orderId: unknown,
 ): TradeOrder | undefined {
   const order = ctx.tradeOrders.find((o) => o.id === orderId);
   if (order) {
