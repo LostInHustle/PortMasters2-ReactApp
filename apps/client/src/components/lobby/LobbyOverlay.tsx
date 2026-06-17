@@ -1,6 +1,6 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
-import { InviteReceivedPrompt } from './InviteReceivedPrompt.js';
+import { useInviteReceivedModal } from './InviteReceivedModal.js';
 import { OnlineUsersList } from './OnlineUsersList.js';
 
 // Ported from PortMasters2/PortMasters_online.html's lobby section of applyLanguage
@@ -8,6 +8,7 @@ import { OnlineUsersList } from './OnlineUsersList.js';
 export function LobbyOverlay() {
   const { tr } = useTranslate();
   const { currentUser } = useSession();
+  useInviteReceivedModal();
 
   return (
     <div className="lobby-overlay">
@@ -20,7 +21,6 @@ export function LobbyOverlay() {
       </p>
       <h2>{tr('🧑‍✈️ 在线玩家', '🧑‍✈️ Players Online')}</h2>
       <OnlineUsersList />
-      <InviteReceivedPrompt />
     </div>
   );
 }
