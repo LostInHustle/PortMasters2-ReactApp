@@ -19,7 +19,7 @@ export function SetSailButton() {
       title={tr('双方都点击后进入福缘抽取', 'The fortune draw begins once both captains confirm')}
     >
       {ready
-        ? tr('⌛ 已确认，等待伙伴', '⌛ Confirmed — waiting for partner')
+        ? tr('⌛ 已确认，等待伙伴', '⌛ Confirmed, waiting for partner')
         : tr('🚢 扬帆起航', '🚢 Set Sail')}
       <span className="btn-sub">
         {tr('双方确认后抽取本程福缘', "Both confirm to draw this round's fortunes")}

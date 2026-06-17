@@ -53,25 +53,25 @@ export function WorkersTab() {
               <td>👔 Hemp Garb</td>
               <td>Hemp Cloth ×2</td>
               <td>15</td>
-              <td>30 – 42</td>
+              <td>30 to 42</td>
             </tr>
             <tr>
               <td>👕 Cloth Tunic</td>
               <td>Hemp Cloth ×2 + Silk ×1</td>
               <td>35</td>
-              <td>50 – 65</td>
+              <td>50 to 65</td>
             </tr>
             <tr>
               <td>👗 Fine Brocade</td>
               <td>Silk ×3</td>
               <td>60</td>
-              <td>70 – 90</td>
+              <td>70 to 90</td>
             </tr>
             <tr>
               <td>🌸 Scented Sachet</td>
               <td>Silk ×1 + Tea ×2</td>
               <td>80</td>
-              <td>95 – 120</td>
+              <td>95 to 120</td>
             </tr>
           </tbody>
         </table>
@@ -89,7 +89,7 @@ export function WorkersTab() {
             ones (auto-promoted after 2 lifetime items) make 2.
           </li>
           <li>
-            Wages are auto-paid at Upkeep, so
+            Wages are paid automatically at Upkeep, so
             <strong>running out of cash means bankruptcy</strong>; do the math before expanding.
           </li>
           <li>

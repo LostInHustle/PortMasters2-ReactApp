@@ -71,7 +71,7 @@ export function BoonsTab() {
                 <span className="muted">New Maritime Edict · Round 6+</span>
               </td>
               <td>Gain 1 free Broker's Whisper clue this round</td>
-              <td>Want to lock in a Trade-phase order early</td>
+              <td>Want to lock in a Trade phase order early</td>
             </tr>
             <tr>
               <td>
@@ -88,7 +88,7 @@ export function BoonsTab() {
                 <br />
                 <span className="muted">New Maritime Edict · Round 6+</span>
               </td>
-              <td>VAT on finished-goods deliveries is halved this round</td>
+              <td>VAT on finished goods deliveries is halved this round</td>
               <td>Planning to deliver lots of products this round</td>
             </tr>
             <tr>

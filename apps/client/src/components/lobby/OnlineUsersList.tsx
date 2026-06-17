@@ -17,7 +17,7 @@ export function OnlineUsersList() {
       <p>
         {tr(
           '🌊 暂无其他在线玩家。让朋友打开本页面注册登录，即可向其发出航程邀请。',
-          '🌊 No other players online. Ask a friend to open this page and sign up — then you can invite them to a voyage.',
+          '🌊 No other players online. Ask a friend to open this page and sign up, then you can invite them to a voyage.',
         )}
       </p>
     );
@@ -40,7 +40,7 @@ export function OnlineUsersList() {
               className="btn btn-success"
               title={tr(
                 '邀请该玩家加入双人航程（每分钟限一次，60秒内有效）',
-                'Invite this player to a two-captain voyage (once per minute, valid for 60s)',
+                'Invite this player to a shared voyage (once per minute, valid for 60s)',
               )}
               onClick={() => openModal(<InviteComposer to={user} />)}
             >

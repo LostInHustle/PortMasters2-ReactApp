@@ -62,7 +62,7 @@ export function BarterPhase() {
     showNotification(
       tr(
         '📨 订单已发布，对方可在其界面中接受或拒绝',
-        '📨 Offer posted — your partner can accept or decline it',
+        '📨 Offer posted, your partner can accept or decline it',
       ),
     );
   };
@@ -233,12 +233,12 @@ export function BarterPhase() {
           onClick={() => send({ action: 'setTradeReady' })}
           title={tr(
             '双方都点击后进入工匠管理。点击前请确认交易已谈妥',
-            'Artisan management begins once both captains are ready — settle your trades first',
+            'Artisan management begins once both captains are ready, settle your trades first',
           )}
         >
           {myReady
-            ? tr('⏳ 已准备，等待对方就绪', '⏳ Ready — waiting for partner')
-            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering — Ready')}
+            ? tr('⏳ 已准备，等待对方就绪', '⏳ Ready, waiting for partner')
+            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering, ready')}
           <span className="btn-sub">
             {myReady ? '' : tr('双方就绪后进入工匠管理', 'Advances when both are ready')}
           </span>

@@ -18,7 +18,7 @@ export function StartTab() {
           <strong>8 rounds on Easy, 12 on Standard, 16 on Hard</strong>
           ), build
           <strong>renown</strong>
-          through the buy-low → produce → sell-high loop. Renown is the net profit of every
+          through the buy low → produce → sell high loop. Renown is the net profit of every
           delivered order; your final rating depends on it. You start with 100 gold and a small
           stock of materials.
         </p>
@@ -37,7 +37,7 @@ export function StartTab() {
           </li>
           <li>
             <strong>Procure</strong>: buy cheap Hemp Cloth and Silk, since they're your crafting
-            inputs. Leave cash for wages and the 15-gold upkeep.
+            inputs. Leave cash for wages and the 15 gold upkeep.
           </li>
           <li>
             <strong>Barter</strong>: trade surpluses with your partner early, for example spare Tea

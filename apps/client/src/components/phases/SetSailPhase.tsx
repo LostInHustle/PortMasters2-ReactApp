@@ -41,7 +41,7 @@ export function SetSailPhase() {
             {tr('欢迎来到 PortMasters 2！', 'Welcome to PortMasters 2!')}
             {tr(
               '本作引入增值税、所得税、工匠工资、双人同步互市等深度机制，上手门槛高于一代。建议先按 F1 阅读手册；若感到吃力，可先体验 ',
-              ' This sequel adds VAT, income tax, artisan wages and synchronized two-captain bartering — a steeper curve than the original. Press F1 to read the manual; if it feels overwhelming, warm up with ',
+              ' This sequel adds VAT, income tax, artisan wages and synchronized bartering with a partner, a steeper curve than the original. Press F1 to read the manual; if it feels overwhelming, warm up with ',
             )}
             <a href={pm1Url(lang)} target="_blank" rel="noopener noreferrer">
               {pm1Label(lang)}

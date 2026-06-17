@@ -14,7 +14,7 @@ export function Header() {
     const confirmed = window.confirm(
       tr(
         '确定要退出登录吗？游戏进度已保存在服务器，重新登录可继续。',
-        'Log out? Your progress is saved on the server — log back in to continue.',
+        'Log out? Your progress is saved on the server, log back in to continue.',
       ),
     );
     if (!confirmed) return;
@@ -31,8 +31,8 @@ export function Header() {
           </h1>
           <div className="subtitle">
             {tr(
-              '海上丝绸之路 · 双人联机贸易战略 — 采购 · 互市 · 生产 · 远航',
-              'Maritime Silk Road · 2-Player Co-op Trading — Procure · Barter · Produce · Voyage',
+              '海上丝绸之路 · 双人联机贸易战略, 采购 · 互市 · 生产 · 远航',
+              'Maritime Silk Road · Online Trading for Two · Procure · Barter · Produce · Voyage',
             )}
           </div>
         </div>

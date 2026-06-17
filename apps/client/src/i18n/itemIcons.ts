@@ -71,7 +71,7 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   香囊: {
     zh: '顶级成品 · 基准产值 80。仅香囊师可制作（丝绸×1 + 茶叶×2）',
-    en: 'Top-tier product · base value 80. Sachet Makers only (Silk ×1 + Tea ×2)',
+    en: 'Top tier product · base value 80. Sachet Makers only (Silk ×1 + Tea ×2)',
   },
   瓷土: {
     zh: '基础原料。可由陶匠制成青瓷器（×3）',
@@ -99,11 +99,11 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   蕃香脂: {
     zh: '顶级成品 · 基准产值 85。仅香料师可制作（香料×2 + 丝绸×1）',
-    en: 'Top-tier product · base value 85. Perfumers only (Spices ×2 + Silk ×1)',
+    en: 'Top tier product · base value 85. Perfumers only (Spices ×2 + Silk ×1)',
   },
   珠链: {
     zh: '顶级成品 · 基准产值 105。仅珠宝匠可制作（珍珠×2 + 丝绸×1）',
-    en: 'Top-tier product · base value 105. Jewelers only (Pearls ×2 + Silk ×1)',
+    en: 'Top tier product · base value 105. Jewelers only (Pearls ×2 + Silk ×1)',
   },
 };
 

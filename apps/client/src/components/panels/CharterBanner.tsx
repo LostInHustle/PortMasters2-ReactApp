@@ -13,7 +13,7 @@ export function CharterBanner({ charterEvent }: { charterEvent: CharterEvent | n
       <span className="pm-icon">{charterEvent.icon}</span>
       <span>
         <strong>
-          {tr('丝路特许：', 'Silk Road Charter — ')}
+          {tr('丝路特许：', 'Silk Road Charter: ')}
           {charterName(charterEvent, lang)}
         </strong>
         <br />

@@ -42,7 +42,7 @@ export function ShipTab() {
           <li>Shipping never drops below 5 gold (certain fortunes/modules can push it to 0).</li>
           <li>
             Upgrades are a<strong>permanent investment</strong>: the more orders you deliver, the
-            faster they pay off. Aim for Lv.1–2 around rounds 2–4.
+            faster they pay off. Aim for Lv.1 to 2 around rounds 2 to 4.
           </li>
           <li>
             Late upgrades in the final round or two rarely pay for themselves, so keep that gold for

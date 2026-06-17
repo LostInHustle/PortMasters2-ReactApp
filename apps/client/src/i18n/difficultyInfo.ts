@@ -28,7 +28,7 @@ export const DIFFICULTY_INFO: Record<Difficulty, DifficultyInfo> = {
     tagline: { zh: '进阶船长的均衡阶梯', en: 'A balanced step up for rising captains' },
     summary: {
       zh: '标准模式是轻松与高难之间的阶梯，共 12 个回合，同样开放完整的海上贸易，但不会出现暗通海盗的牙行。丝路特许会在第四程引入瓷土与铜矿，在第八程引入香料与珍珠，让你在更紧凑的节奏里体验完整的货物、港口与工匠，海盗的威胁也比轻松模式更明显。适合已经熟悉基础玩法、想要更多挑战，又不愿一上来就投入高难长局的船长。',
-      en: 'Standard mode is the rung between Easy and Hard: a 12-round voyage that also opens the full maritime trade, but without the brokers who tip off pirates. The Silk Road Charter brings in porcelain clay and copper ore at round four and spices and pearls at round eight, so you get the complete set of goods, ports and artisans at a brisker pace, with pirates that bite a little harder than on Easy. It suits captains who know the basics and want a real challenge without committing to the long Hard voyage straight away.',
+      en: 'Standard mode is the rung between Easy and Hard: a 12 round voyage that also opens the full maritime trade, but without the brokers who tip off pirates. The Silk Road Charter brings in porcelain clay and copper ore at round four and spices and pearls at round eight, so you get the complete set of goods, ports and artisans at a brisker pace, with pirates that bite a little harder than on Easy. It suits captains who know the basics and want a real challenge without committing to the long Hard voyage straight away.',
     },
   },
   hard: {

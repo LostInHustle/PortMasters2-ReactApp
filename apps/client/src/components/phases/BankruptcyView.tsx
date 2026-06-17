@@ -28,7 +28,7 @@ export function BankruptcyView() {
       <p style={{ color: 'var(--ink-soft)', margin: '8px 0' }}>
         {tr(
           '现金无法覆盖工资或维护费，商队被迫清算。',
-          'Your gold could not cover wages or upkeep — the fleet has been liquidated.',
+          'Your gold could not cover wages or upkeep, the fleet has been liquidated.',
         )}
       </p>
       <div className="section-box" style={{ maxWidth: 420, margin: '14px auto' }}>
@@ -45,8 +45,8 @@ export function BankruptcyView() {
       </div>
       <Pm1Hint
         context={tr(
-          '破产并不可怕——多半是工资与维护费规划失衡。',
-          "Bankruptcy isn't the end — it usually comes down to wage and upkeep planning.",
+          '破产并不可怕，多半是工资与维护费规划失衡。',
+          "Bankruptcy isn't the end, it usually comes down to wage and upkeep planning.",
         )}
       />
       <p style={{ color: 'var(--ink-soft)', margin: '8px 0' }}>

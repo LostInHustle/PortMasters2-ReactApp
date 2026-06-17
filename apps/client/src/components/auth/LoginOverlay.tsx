@@ -21,10 +21,7 @@ export function LoginOverlay() {
           <div className="logo">⚓</div>
           <h2>PortMasters 2</h2>
           <div className="tagline">
-            {tr(
-              '海上丝绸之路 · 双人联机贸易战略',
-              'Maritime Silk Road · 2-Player Co-op Trading Strategy',
-            )}
+            {tr('海上丝绸之路 · 双人联机贸易战略', 'Maritime Silk Road · Online Trading for Two')}
           </div>
         </div>
         {mode === 'login' ? (
@@ -38,7 +35,7 @@ export function LoginOverlay() {
           <strong>{tr('本作为 PortMasters 2', 'This is PortMasters 2')}</strong>
           {tr(
             '，引入了税务、工资、双人同步互市等更复杂的机制，',
-            ' — it adds taxes, wages and synchronized two-captain bartering, so the learning curve is ',
+            ', it adds taxes, wages and synchronized bartering with a partner, so the learning curve is ',
           )}
           <strong>{tr('上手门槛较高', 'steeper than the original')}</strong>
           {tr('。如果是初次接触本系列，建议先体验上一代 ', '. New to the series? Start with ')}

@@ -28,7 +28,7 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     name: { zh: '福缘', en: 'Fortune' },
     brief: {
       zh: '航海家的罗盘从福缘池中为你随机抽出4张（双方抽到的组合不同），选择一项仅本回合生效的增益。要采购多就选折扣，要生产多就选匠人灵感。',
-      en: "The Navigator's Compass deals you 4 random fortunes (each captain gets a different draw). Pick one buff for this round only — discounts if you plan to buy big, Artisan's Inspiration if you plan to produce.",
+      en: "The Navigator's Compass deals you 4 random fortunes (each captain gets a different draw). Pick one buff for this round only, discounts if you plan to buy big, Artisan's Inspiration if you plan to produce.",
     },
   },
   {
@@ -73,7 +73,7 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     name: { zh: '结算', en: 'Upkeep' },
     brief: {
       zh: '工匠产出入库、自动支付工资，然后支付维护费。现金不足以支付即破产，务必提前规划！',
-      en: "Production arrives, wages are paid automatically, then you pay fleet upkeep. If you can't cover it, you go bankrupt — plan ahead!",
+      en: "Production arrives, wages are paid automatically, then you pay fleet upkeep. If you can't cover it, you go bankrupt, plan ahead!",
     },
   },
   {

@@ -11,7 +11,7 @@ export function TradeTab() {
   if (lang === 'en') {
     return (
       <>
-        <h4>🤝 The Barter Phase (this game's co-op heart)</h4>
+        <h4>🤝 The Barter Phase (this game's cooperative heart)</h4>
         <ul>
           <li>
             Post an offer: "I give A×n for B×m", where A and B can be any material, product, or
@@ -37,7 +37,7 @@ export function TradeTab() {
         <ul>
           <li>
             <strong>Invitations & difficulty</strong>: invite any online player from the lobby; one
-            invite per minute, 60-second expiry. When you send the invite you first choose the
+            invite per minute, 60 second expiry. When you send the invite you first choose the
             session difficulty (Easy, Standard or Hard, Easy by default), and the other captain
             reads a short explanation and agrees to it before you both start at the same level.
           </li>

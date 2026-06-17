@@ -14,7 +14,7 @@ export function ExpansionUnlockWindsModules() {
           Beyond the original Spring Current, Summer Monsoon, Autumn Gales and Winter Blockade, 4
           new trade-wind states join the pool. From Round 3 on, each "season" (every 2 rounds) is
           <strong>drawn at random from the currently unlocked pool</strong>
-          instead of a fixed 4-season cycle, though Rounds 1-2 are still always Spring Current,
+          instead of a fixed 4 season cycle, though Rounds 1 to 2 are still always Spring Current,
           exactly as before.
         </p>
         <table>
@@ -122,7 +122,7 @@ export function ExpansionUnlockWindsModules() {
         除原有的「春潮顺流」「盛夏季风」「秋汛乱流」「冬海封锁」外，新增 4 种季风状态。第 3
         程起，每个"季节"（每 2 回合一变）将从
         <strong>当时已解锁的季风池中随机抽取</strong>
-        ，不再是固定的四季循环。不过第 1-2 程仍固定为「春潮顺流」，与最初版本完全一致。
+        ，不再是固定的四季循环。不过第 1 至 2 程仍固定为「春潮顺流」，与最初版本完全一致。
       </p>
       <table>
         <thead>

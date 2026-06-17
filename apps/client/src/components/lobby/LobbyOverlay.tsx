@@ -21,7 +21,7 @@ export function LobbyOverlay() {
           {tr('欢迎，', 'Welcome, ')}
           <strong>{currentUser}</strong>
           {tr('！邀请一名在线玩家即可开始', '! Invite any player online to begin a ')}
-          <strong>{tr('双人共享航程', 'shared two-captain voyage')}</strong>
+          <strong>{tr('双人共享航程', 'shared voyage for two')}</strong>
           {tr('：', ': ')}
           <br />
           {tr(
@@ -50,7 +50,7 @@ export function LobbyOverlay() {
             <span className="kbd">F1</span>
             {tr(
               ' 查看完整手册；若感到吃力，可先游玩 ',
-              ' any time for the full manual — or warm up with ',
+              ' any time for the full manual, or warm up with ',
             )}
             <a href={pm1Url(lang)} target="_blank" rel="noopener noreferrer">
               {pm1Label(lang)}

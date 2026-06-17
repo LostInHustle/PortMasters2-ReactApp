@@ -118,7 +118,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           send({ action: 'join_game' });
           showNotification(
             lang === 'en'
-              ? `Joined the game — partner: ${msg.partner}`
+              ? `Joined the game, partner: ${msg.partner}`
               : `已加入游戏，伙伴: ${msg.partner}`,
           );
           break;
@@ -131,7 +131,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           }));
           showNotification(
             lang === 'en'
-              ? `Session resumed — partner: ${msg.partner}`
+              ? `Session resumed, partner: ${msg.partner}`
               : `已恢复游戏会话，伙伴: ${msg.partner}`,
           );
           break;
