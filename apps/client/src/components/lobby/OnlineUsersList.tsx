@@ -1,15 +1,16 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { useModal } from '../modal/ModalContext.js';
+import { InviteComposer } from './InviteComposer.js';
 
 // Ported from PortMasters2/PortMasters_online.html renderOnlineUsers (lines 2064-2093). The
 // original tracks a separate inviteStatus map per user; since the server only ever allows one
 // outstanding invite per sender, "pending" here is just "this user is the current lastInviteTo"
-// -- an equivalent, simpler derivation, not a behavior change. The difficulty-picker composer
-// (a modal in the original) is deferred to the Phase 7 modal system; for now an invite always
-// proposes Easy, matching the composer's own default before the inviter changes it.
+// -- an equivalent, simpler derivation, not a behavior change.
 export function OnlineUsersList() {
   const { tr } = useTranslate();
-  const { onlineUsers, lastInviteTo, sendInvite } = useSession();
+  const { onlineUsers, lastInviteTo } = useSession();
+  const { openModal } = useModal();
 
   if (onlineUsers.length === 0) {
     return (
@@ -41,7 +42,7 @@ export function OnlineUsersList() {
                 '邀请该玩家加入双人航程（每分钟限一次，60秒内有效）',
                 'Invite this player to a two-captain voyage (once per minute, valid for 60s)',
               )}
-              onClick={() => sendInvite(user, 'easy')}
+              onClick={() => openModal(<InviteComposer to={user} />)}
             >
               {tr('📨 邀请同航', '📨 Invite to Voyage')}
             </button>

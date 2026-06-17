@@ -5,6 +5,7 @@ import { pm1Label, pm1Url } from '../../i18n/pm1Links.js';
 import { useSession } from '../../state/SessionContext.js';
 import { CharterBanner } from '../panels/CharterBanner.js';
 import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
+import { useOpenManual } from '../manual/ManualModal.js';
 import { PhaseBrief } from './PhaseBrief.js';
 import { SetSailButton } from './SetSailButton.js';
 
@@ -16,6 +17,7 @@ const DISMISSED_KEY = 'pm2_banner_dismissed';
 export function SetSailPhase() {
   const { tr, pf, lang } = useTranslate();
   const { serverState } = useSession();
+  const openManual = useOpenManual();
   const [dismissed, setDismissed] = useState(() => localStorage.getItem(DISMISSED_KEY) === '1');
   const g = serverState?.yourGame;
   if (!g) return null;
@@ -76,7 +78,7 @@ export function SetSailPhase() {
       <div style={{ textAlign: 'center', margin: '22px 0' }}>
         <SetSailButton />
         <br />
-        <button className="btn btn-lg" style={{ marginTop: 12 }}>
+        <button className="btn btn-lg" style={{ marginTop: 12 }} onClick={() => openManual()}>
           {tr('📖 游戏手册与新手指引', '📖 Manual & Beginner Guide')}
         </button>
       </div>

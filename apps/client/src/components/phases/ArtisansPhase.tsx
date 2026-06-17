@@ -100,7 +100,9 @@ export function ArtisansPhase() {
                   <td>
                     {costOf(wt.key)} 💰{hireDiscount && <s className="muted">{WAGES[wt.key]}</s>}
                   </td>
-                  <td>{wt.can.map((t) => `${ITEM_ICONS[t]}${tn(t, lang)}`).join(tr('、', ', '))}</td>
+                  <td>
+                    {wt.can.map((t) => `${ITEM_ICONS[t]}${tn(t, lang)}`).join(tr('、', ', '))}
+                  </td>
                   <td style={{ textAlign: 'right' }}>
                     <button
                       className="btn btn-success"

@@ -43,7 +43,8 @@ export function StatusPanel() {
           <h3>{tr('⚠️ 本回合应付款项', '⚠️ Due This Round')}</h3>
           <div className="stat-row">
             <span
-              title={tr(
+              className="tip"
+              data-tip={tr(
                 '每回合结算阶段必须支付的固定运营成本，付不起即破产',
                 'Fixed operating cost paid every Upkeep phase — fail to pay and you go bankrupt',
               )}
@@ -56,7 +57,8 @@ export function StatusPanel() {
           </div>
           <div className="stat-row">
             <span
-              title={tr(
+              className="tip"
+              data-tip={tr(
                 '结算阶段自动支付的全部工匠工资，付不起即破产',
                 'All artisan wages, paid automatically at Upkeep — fail to pay and you go bankrupt',
               )}

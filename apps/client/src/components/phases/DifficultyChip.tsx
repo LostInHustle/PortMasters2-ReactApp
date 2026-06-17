@@ -8,7 +8,7 @@ export function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   const { tr, pf } = useTranslate();
   const info = difficultyInfo(difficulty);
   return (
-    <span className={`chip diff-${info.key}`} title={pf(info.summary)}>
+    <span className={`chip tip diff-${info.key}`} data-tip={pf(info.summary)}>
       {tr('难度', 'Difficulty')}：{pf(info.badge)}
     </span>
   );

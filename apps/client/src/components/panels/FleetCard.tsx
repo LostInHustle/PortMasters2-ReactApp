@@ -1,4 +1,4 @@
-import type { PlayerGameState } from '@pm2/shared';
+import type { ItemId, PlayerGameState } from '@pm2/shared';
 import {
   BOON_TEXT,
   FLAG_LABELS,
@@ -15,9 +15,8 @@ import { WORKER_TYPES } from '../../i18n/workerTypesText.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html buffChipsHTML (lines 2273-2293):
 // one chip per active Fortune buff, productOrderBonus rendered directly from its payload since
-// it's shared by two different Fortunes. `data-tip` becomes a plain `title` attribute for now;
-// the positioned tooltip bubble is Phase 7's tooltip provider.
-function BuffChips({ g }: { g: PlayerGameState }) {
+// it's shared by two different Fortunes.
+export function BuffChips({ g }: { g: PlayerGameState }) {
   const { tr, pf, lang } = useTranslate();
   const flags = g.modifierFlags;
   const chips: { key: string; icon: string; label: string; tip: string }[] = [];
@@ -47,7 +46,7 @@ function BuffChips({ g }: { g: PlayerGameState }) {
   return (
     <>
       {chips.map((c) => (
-        <span key={c.key} className="chip" title={c.tip}>
+        <span key={c.key} className="chip tip" data-tip={c.tip}>
           {c.icon} {c.label}
         </span>
       ))}
@@ -65,7 +64,7 @@ export function Modules({ g }: { g: PlayerGameState }) {
   return (
     <>
       {g.equippedModules.map((m, i) => (
-        <span key={`${m.id}-${i}`} className="chip" title={modDesc(m, lang)}>
+        <span key={`${m.id}-${i}`} className="chip tip" data-tip={modDesc(m, lang)}>
           {m.icon} {modName(m, lang)}
         </span>
       ))}
@@ -74,40 +73,43 @@ export function Modules({ g }: { g: PlayerGameState }) {
 }
 
 // Ported verbatim from PortMasters2/PortMasters_online.html invListHTML (lines 2339-2352).
-function InventoryList({ g }: { g: PlayerGameState }) {
-  const { tr, lang } = useTranslate();
+function InventoryRow({ item, count }: { item: ItemId; count: number }) {
+  const { lang } = useTranslate();
+  return (
+    <div className="inv-item">
+      <span className="icon">{ITEM_ICONS[item]}</span>
+      <span
+        className="name tip"
+        data-tip={itemTip(item, lang)}
+        style={{ color: ITEM_COLORS[item] }}
+      >
+        {tn(item, lang)}
+      </span>
+      <span className="count" style={{ color: ITEM_COLORS[item] }}>
+        {count}
+      </span>
+    </div>
+  );
+}
+
+export function InventoryList({ g }: { g: PlayerGameState }) {
+  const { tr } = useTranslate();
   return (
     <>
       <div className="inv-section-title">{tr('原 材 料', 'MATERIALS')}</div>
       {g.unlockedResources.map((r) => (
-        <div className="inv-item" key={r}>
-          <span className="icon">{ITEM_ICONS[r]}</span>
-          <span className="name" title={itemTip(r, lang)} style={{ color: ITEM_COLORS[r] }}>
-            {tn(r, lang)}
-          </span>
-          <span className="count" style={{ color: ITEM_COLORS[r] }}>
-            {g.inventory[r] || 0}
-          </span>
-        </div>
+        <InventoryRow item={r} count={g.inventory[r] || 0} key={r} />
       ))}
       <div className="inv-section-title">{tr('成 品', 'PRODUCTS')}</div>
       {g.unlockedProducts.map((r) => (
-        <div className="inv-item" key={r}>
-          <span className="icon">{ITEM_ICONS[r]}</span>
-          <span className="name" title={itemTip(r, lang)} style={{ color: ITEM_COLORS[r] }}>
-            {tn(r, lang)}
-          </span>
-          <span className="count" style={{ color: ITEM_COLORS[r] }}>
-            {g.inventory[r] || 0}
-          </span>
-        </div>
+        <InventoryRow item={r} count={g.inventory[r] || 0} key={r} />
       ))}
     </>
   );
 }
 
 // Ported verbatim from PortMasters2/PortMasters_online.html workerTeamHTML (lines 2354-2372).
-function WorkerTeam({ g }: { g: PlayerGameState }) {
+export function WorkerTeam({ g }: { g: PlayerGameState }) {
   const { tr, pf } = useTranslate();
   const lines = WORKER_TYPES.map((wt) => {
     const list = g[wt.listKey];
@@ -120,7 +122,7 @@ function WorkerTeam({ g }: { g: PlayerGameState }) {
     return (
       <div className="inv-item" key={wt.key}>
         <span className="icon">{wt.icon}</span>
-        <span className="name" title={pf(wt.tip)}>
+        <span className="name tip" data-tip={pf(wt.tip)}>
           {pf(wt.name)}
         </span>
         <span className="muted" style={{ marginRight: 6 }}>
@@ -147,7 +149,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         <h3>{tr('📊 航海概况', '📊 Voyage Overview')}</h3>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               `全程共${g.maxRounds}个航程（回合），结束后按声望评级`,
               `${g.maxRounds} voyages (rounds) in total; final rating is based on renown`,
             )}
@@ -163,7 +166,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         </div>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               '当前现金存款。工资、维护费、税款都从这里扣除，归零即破产',
               'Cash on hand. Wages, upkeep and taxes are paid from here — hit zero and you go bankrupt',
             )}
@@ -176,7 +180,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         </div>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               '声望（信誉值）= 每笔完成订单的净利润累计。决定最终评级，越高越好',
               'Renown = cumulative net profit of completed orders. Determines your final rating',
             )}
@@ -187,7 +192,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         </div>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               '当前所处阶段，双方始终同步',
               'Current phase — both captains always stay in sync',
             )}
@@ -213,7 +219,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         <h3>{tr('🚢 旗舰状态', '🚢 Flagship')}</h3>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               '每升1级，每单运费永久减5金币，并解锁1个模块槽位',
               'Each level permanently cuts shipping by 5 gold per order and unlocks 1 module slot',
             )}
@@ -224,7 +231,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
         </div>
         <div className="stat-row">
           <span
-            title={tr(
+            className="tip"
+            data-tip={tr(
               '运费 = max(5, 货物件数×2 − 船级×5 − 福缘减免)',
               'Shipping = max(5, items ×2 − level ×5 − fortune discounts)',
             )}

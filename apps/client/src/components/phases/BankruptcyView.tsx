@@ -1,15 +1,15 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { useSpectate } from '../../state/SpectateContext.js';
 import { Pm1Hint } from './Pm1Hint.js';
 import { useConfirmRestart } from './useConfirmRestart.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html bankruptcyHTML (lines 3295-3319).
-// The spectator window (openSpectate) is part of the Phase 7 spectate system and isn't wired up
-// yet.
 export function BankruptcyView() {
   const { tr } = useTranslate();
   const { serverState, chatPartner } = useSession();
   const confirmRestart = useConfirmRestart();
+  const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   const og = serverState?.otherGame;
   if (!g) return null;
@@ -69,6 +69,7 @@ export function BankruptcyView() {
         {partnerPlaying && (
           <button
             className="btn btn-lg btn-ghost"
+            onClick={openSpectate}
             title={tr(
               '在独立窗口中实时观看伙伴的航程',
               "Watch your partner's voyage live in its own window",

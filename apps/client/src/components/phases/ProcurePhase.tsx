@@ -80,8 +80,8 @@ export function ProcurePhase() {
                   <div className="resource-row" key={i}>
                     <span className="icon">{ITEM_ICONS[r.type]}</span>
                     <span
-                      className="name"
-                      title={itemTip(r.type, lang)}
+                      className="name tip"
+                      data-tip={itemTip(r.type, lang)}
                       style={{ color: ITEM_COLORS[r.type] }}
                     >
                       {tn(r.type, lang)}

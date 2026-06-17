@@ -1,17 +1,20 @@
 import type { ReactNode } from 'react';
-import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { useSpectate } from '../../state/SpectateContext.js';
 import { useWs } from '../../ws/WsContext.js';
+import { useOpenManual } from '../manual/ManualModal.js';
+import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html renderControls (lines 3348-3401):
-// the bottom action bar's primary call-to-action and hint, one per phase. openSpectate/
-// showManual are part of Phase 7 and aren't wired up yet.
+// the bottom action bar's primary call-to-action and hint, one per phase.
 export function ControlPanel() {
   const { tr } = useTranslate();
   const { serverState } = useSession();
   const { send } = useWs();
   const confirmRestart = useConfirmRestart();
+  const openManual = useOpenManual();
+  const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
 
   if (!g || g.gameOver) {
@@ -34,12 +37,16 @@ export function ControlPanel() {
         )}
         <div className="control-spacer" />
         {isBankrupt && partnerPlaying && (
-          <button className="btn btn-ghost">{tr('👀 观战伙伴', '👀 Spectate Partner')}</button>
+          <button className="btn btn-ghost" onClick={openSpectate}>
+            {tr('👀 观战伙伴', '👀 Spectate Partner')}
+          </button>
         )}
         <button className="btn btn-danger" onClick={confirmRestart}>
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
         </button>
-        <button className="btn btn-ghost">{tr('📖 手册', '📖 Manual')}</button>
+        <button className="btn btn-ghost" onClick={() => openManual()}>
+          {tr('📖 手册', '📖 Manual')}
+        </button>
       </>
     );
   }
@@ -140,7 +147,11 @@ export function ControlPanel() {
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
       {primary}
-      <button className="btn btn-ghost" title={tr('快捷键 F1', 'Shortcut: F1')}>
+      <button
+        className="btn btn-ghost"
+        onClick={() => openManual()}
+        title={tr('快捷键 F1', 'Shortcut: F1')}
+      >
         {tr('📖 手册', '📖 Manual')}
       </button>
     </>

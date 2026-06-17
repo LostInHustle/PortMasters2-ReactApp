@@ -101,7 +101,8 @@ export function TradePhase() {
                 </div>
                 <div className="stat-row" style={{ marginTop: 3 }}>
                   <span
-                    title={tr(
+                    className="tip"
+                    data-tip={tr(
                       '运费 = max(5, 件数×2 − 船级×5)，福缘可进一步减免；成品另缴约5%增值税',
                       'Shipping = max(5, items ×2 − ship level ×5); fortunes can reduce it further. Product orders also pay ~5% VAT',
                     )}

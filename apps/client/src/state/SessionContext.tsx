@@ -27,6 +27,7 @@ interface SessionState {
   lastInviteTo: string | null;
   serverState: SessionStateMessage | null;
   chatHistory: ChatMessage[];
+  chatOpen: boolean;
 }
 
 interface SessionContextValue extends SessionState {
@@ -36,6 +37,8 @@ interface SessionContextValue extends SessionState {
   respondInvite: (accept: boolean) => void;
   sendChat: (message: string) => void;
   requestChatHistory: () => void;
+  toggleChat: () => void;
+  closeChat: () => void;
   logout: () => void;
 }
 
@@ -50,6 +53,7 @@ const initialState: SessionState = {
   lastInviteTo: null,
   serverState: null,
   chatHistory: [],
+  chatOpen: false,
 };
 
 // Ported from PortMasters2/PortMasters_online.html's global session state (lines 1807-1815) and
@@ -236,16 +240,41 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     [send],
   );
 
+  // Ported verbatim from PortMasters2/PortMasters_online.html sendChat (lines 2214-2222): the
+  // server only relays a chat message to the *other* party (lobby/chat.ts), so the sender has
+  // to echo their own message into the transcript locally rather than waiting for it to come
+  // back over the wire. The WS send is a real side effect, so it stays out of the setState
+  // updater (which React may invoke more than once) and reads the gating fields off `state`
+  // directly instead.
   const sendChat = useCallback(
     (message: string) => {
-      send({ action: 'send_chat', message });
+      const trimmed = message.trim();
+      const { chatPartner, partnerOnline, currentUser } = state;
+      if (!trimmed || !chatPartner || !partnerOnline || !currentUser) return;
+      send({ action: 'send_chat', message: trimmed });
+      setState((s) => ({
+        ...s,
+        chatHistory: [...s.chatHistory, { from: currentUser, message: trimmed }],
+      }));
     },
-    [send],
+    [send, state],
   );
 
   const requestChatHistory = useCallback(() => {
     send({ action: 'get_chat_history' });
   }, [send]);
+
+  // Ported verbatim from PortMasters2/PortMasters_online.html toggleChat (lines 2200-2212):
+  // opening the window also (re-)fetches history; closing is just a visibility flip.
+  const toggleChat = useCallback(() => {
+    const { chatOpen, chatPartner } = state;
+    if (!chatOpen && chatPartner) requestChatHistory();
+    setState((s) => ({ ...s, chatOpen: !s.chatOpen }));
+  }, [state, requestChatHistory]);
+
+  const closeChat = useCallback(() => {
+    setState((s) => ({ ...s, chatOpen: false }));
+  }, []);
 
   const logout = useCallback(() => {
     setState(initialState);
@@ -261,6 +290,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         respondInvite,
         sendChat,
         requestChatHistory,
+        toggleChat,
+        closeChat,
         logout,
       }}
     >

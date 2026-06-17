@@ -30,7 +30,8 @@ export function ShipyardPhase() {
           </div>
           <div className="stat-row" style={{ fontSize: 13 }}>
             <span
-              title={tr(
+              className="tip"
+              data-tip={tr(
                 '每单运费 = max(5, 件数×2 − 此减免)',
                 'Shipping per order = max(5, items ×2 − this discount)',
               )}

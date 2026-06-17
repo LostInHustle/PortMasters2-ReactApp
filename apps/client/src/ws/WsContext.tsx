@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 
 type ServerMessage = Record<string, unknown> & { type: string };
 type MessageListener = (msg: ServerMessage) => void;
@@ -42,14 +50,16 @@ export function WsProvider({ children }: { children: ReactNode }) {
     return () => socket.close();
   }, []);
 
-  const send = (action: Record<string, unknown>): void => {
+  // Stable across re-renders (refs, not state) so consumers can safely list them as effect
+  // dependencies without re-subscribing on every unrelated render of this provider.
+  const send = useCallback((action: Record<string, unknown>): void => {
     wsRef.current?.send(JSON.stringify(action));
-  };
+  }, []);
 
-  const subscribe = (listener: MessageListener): (() => void) => {
+  const subscribe = useCallback((listener: MessageListener): (() => void) => {
     listenersRef.current.add(listener);
     return () => listenersRef.current.delete(listener);
-  };
+  }, []);
 
   return <WsContext.Provider value={{ connected, send, subscribe }}>{children}</WsContext.Provider>;
 }

@@ -1,12 +1,15 @@
 import { useLang } from '../../i18n/LangContext.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
+import { useSession } from '../../state/SessionContext.js';
+import { useOpenManual } from '../manual/ManualModal.js';
 
 // Ported from PortMasters2/PortMasters_online.html applyLanguage's header section
-// (lines 1751-1757) and logout() (lines 1930-1935). The manual/chat buttons are part of the
-// Phase 7 modal/chat systems and aren't wired up yet.
+// (lines 1751-1757) and logout() (lines 1930-1935).
 export function Header() {
   const { tr } = useTranslate();
   const { lang, toggleLang } = useLang();
+  const { toggleChat } = useSession();
+  const openManual = useOpenManual();
 
   const logout = () => {
     const confirmed = window.confirm(
@@ -36,6 +39,15 @@ export function Header() {
         }
       >
         {lang === 'en' ? '🌐 中文' : '🌐 English'}
+      </button>
+      <button
+        onClick={() => openManual()}
+        title={tr('打开游戏手册（快捷键 F1）', 'Open the game manual (F1)')}
+      >
+        {tr('📖 手册', '📖 Manual')}
+      </button>
+      <button onClick={toggleChat} title={tr('与伙伴聊天', 'Chat with your partner')}>
+        {tr('💬 聊天', '💬 Chat')}
       </button>
       <button
         onClick={logout}
