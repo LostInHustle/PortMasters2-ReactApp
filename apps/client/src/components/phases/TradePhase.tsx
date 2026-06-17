@@ -75,7 +75,7 @@ export function TradePhase() {
                   <div className="section-hint" style={{ color: '#92400e' }}>
                     {tr(
                       '帝国使节只在关键航程现身。提前囤好指定货物，可换取足以改写本局的报酬。',
-                      'Imperial envoys appear only at milestone voyages. Hoard the requested goods early for a run-defining payout.',
+                      'Imperial envoys appear only at milestone voyages. Hoard the requested goods early for a payout that can redefine the game.',
                     )}
                   </div>
                 )}
@@ -151,7 +151,7 @@ export function TradePhase() {
             'Confirm to enter Upkeep: production arrives, wages and upkeep are paid',
           )}
         >
-          {tr('✅ 完成交易，进入结算', '✅ Done Trading — To Upkeep')}
+          {tr('✅ 完成交易，进入结算', '✅ Done Trading, to Upkeep')}
           <span className="btn-sub">{tr('双方确认后同步推进', 'Advances when both confirm')}</span>
         </button>
       </div>

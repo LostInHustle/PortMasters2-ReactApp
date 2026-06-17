@@ -51,8 +51,8 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
       <div className="whisper-body">
         <div className="section-hint">
           {tr(
-            `花费 ${g.intelCost} 金币向牙行打探贸易阶段（未来订单）的货物需求——每条密语都会在贸易阶段兑现为一张对应货品与港口的订单，提前备货即可稳赚。`,
-            `Pay the brokers ${g.intelCost} gold for intel on upcoming Trade-phase demand — every whisper becomes a real order for that exact item and port, so stock up early for a guaranteed sale.`,
+            `花费 ${g.intelCost} 金币向牙行打探贸易阶段（未来订单）的货物需求，每条密语都会在贸易阶段兑现为一张对应货品与港口的订单，提前备货即可稳赚。`,
+            `Pay the brokers ${g.intelCost} gold for intel on upcoming Trade phase demand, every whisper becomes a real order for that exact item and port, so stock up early for a guaranteed sale.`,
           )}{' '}
           {hasNetwork
             ? tr(

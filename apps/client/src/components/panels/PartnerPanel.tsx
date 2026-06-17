@@ -25,7 +25,7 @@ export function PartnerPanel() {
         <p className="muted" style={{ padding: '8px 2px', lineHeight: 1.8 }}>
           {tr(
             '进入共享会话后，这里会实时展示伙伴的声望、存款、货物、工匠与增益，方便协商互市。',
-            "Once you're in a shared session, this panel shows your partner's renown, gold, cargo, artisans and buffs in real time — handy for negotiating trades.",
+            "Once you're in a shared session, this panel shows your partner's renown, gold, cargo, artisans and buffs in real time, handy for negotiating trades.",
           )}
         </p>
       </div>
@@ -80,7 +80,7 @@ export function PartnerPanel() {
         <span className="muted">
           {tr(
             '💡 看准对方缺什么、富余什么，在互市阶段发起互利交易，或随时点右上角 💬 沟通。',
-            '💡 Spot what your partner lacks or has in surplus, then strike a deal during Barter — or hit 💬 up top to talk it over.',
+            '💡 Spot what your partner lacks or has in surplus, then strike a deal during Barter, or hit 💬 up top to talk it over.',
           )}
         </span>
       </div>

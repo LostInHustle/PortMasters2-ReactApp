@@ -30,7 +30,7 @@ export function EconomyTab() {
               <td>🧾 VAT</td>
               <td>(sale price − avg. material cost − labor) × 5%</td>
               <td>
-                Auto-deducted on
+                Deducted automatically on
                 <strong>product</strong>
                 orders
               </td>
@@ -38,7 +38,7 @@ export function EconomyTab() {
             <tr>
               <td>📜 Income tax</td>
               <td>Round net profit × 10% (5% with Tax Exemption)</td>
-              <td>Auto-deducted at round end</td>
+              <td>Deducted automatically at round end</td>
             </tr>
             <tr>
               <td>🔧 Upkeep</td>
@@ -53,13 +53,13 @@ export function EconomyTab() {
         <h4>💰 Income Sources</h4>
         <ul>
           <li>
-            <strong>Material orders</strong>: reward = demand ×5 + 10–25 variance; low effort, thin
-            margins.
+            <strong>Material orders</strong>: reward = demand ×5 + 10 to 25 variance; low effort,
+            thin margins.
           </li>
           <li>
-            <strong>Product orders</strong>: settled at market price (Hemp Garb 30–42 / Cloth Tunic
-            50–65 / Fine Brocade 70–90 / Sachet 95–120), and remain your main profit source even
-            after VAT.
+            <strong>Product orders</strong>: settled at market price (Hemp Garb 30 to 42 / Cloth
+            Tunic 50 to 65 / Fine Brocade 70 to 90 / Sachet 95 to 120), and remain your main profit
+            source even after VAT.
           </li>
           <li>
             <strong>Barter</strong>: strike good deals with your partner to cover each other's gaps.
@@ -123,8 +123,8 @@ export function EconomyTab() {
         </li>
         <li>
           <strong>成品订单</strong>
-          ：按成品市价结算（麻衣 30-42 / 布衣 50-65 / 绫罗绸缎 70-90 / 香囊
-          95-120），扣增值税后仍是主要利润来源。
+          ：按成品市价结算（麻衣 30-42 / 布衣 50-65 / 绫罗绸缎 70-90 / 香囊 95 到
+          120），扣增值税后仍是主要利润来源。
         </li>
         <li>
           <strong>互市</strong>

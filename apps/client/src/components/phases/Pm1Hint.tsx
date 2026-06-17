@@ -12,7 +12,7 @@ export function Pm1Hint({ context }: { context: ReactNode }) {
         {context}{' '}
         {tr(
           '本作 PortMasters 2 上手门槛较高；可以先游玩上一代 ',
-          'PortMasters 2 has a steep learning curve — consider warming up with ',
+          'PortMasters 2 has a steep learning curve, consider warming up with ',
         )}
         <a href={pm1Url(lang)} target="_blank" rel="noopener noreferrer">
           {pm1Label(lang)}

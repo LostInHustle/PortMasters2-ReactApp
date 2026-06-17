@@ -31,7 +31,7 @@ export function ControlPanel() {
           <span className="control-hint">
             {tr(
               '💡 伙伴仍在航行中，可打开观战窗口实时围观',
-              '💡 Your partner is still sailing — open the spectator window to watch live',
+              '💡 Your partner is still sailing, open the spectator window to watch live',
             )}
           </span>
         )}
@@ -59,7 +59,7 @@ export function ControlPanel() {
     case 0:
       primary = serverState?.youReady ? (
         <button className="btn btn-grey btn-lg" disabled>
-          {tr('⌛ 已确认，等待伙伴', '⌛ Confirmed — waiting for partner')}
+          {tr('⌛ 已确认，等待伙伴', '⌛ Confirmed, waiting for partner')}
         </button>
       ) : (
         <button className="btn btn-success btn-lg" onClick={() => send({ action: 'startBoon' })}>
@@ -81,7 +81,7 @@ export function ControlPanel() {
       );
       hint = tr(
         '采购完成后确认，双方就绪即进入互市',
-        'Confirm when done buying — Barter starts when both are ready',
+        'Confirm when done buying, Barter starts when both are ready',
       );
       break;
     case 'trade':

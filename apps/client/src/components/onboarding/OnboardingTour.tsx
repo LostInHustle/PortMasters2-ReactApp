@@ -29,8 +29,8 @@ export function OnboardingTour() {
       <div className="manual-body" style={{ maxHeight: '46vh' }}>
         <p>
           {tr(
-            '这里是 PortMasters 2 —— 海上丝绸之路双人联机贸易战略。开始前 60 秒了解三件事：',
-            'This is PortMasters 2 — a 2-player co-op trading strategy on the Maritime Silk Road. Sixty seconds, three things to know:',
+            '这里是 PortMasters 2 ， 海上丝绸之路双人联机贸易战略。开始前 60 秒了解三件事：',
+            'This is PortMasters 2, a trading strategy for two captains on the Maritime Silk Road. Sixty seconds, three things to know:',
           )}
         </p>
         <p className="muted">
@@ -43,7 +43,7 @@ export function OnboardingTour() {
         <p>
           {tr(
             '每回合必须支付工匠工资与 15 金币维护费，付不起立即破产。左侧面板会实时核算「本回合应付款项」，时刻盯紧它。',
-            'Every round you must pay artisan wages plus 15 gold upkeep — miss it and you go bankrupt instantly. The left panel tallies "Due This Round" live; keep an eye on it.',
+            'Every round you must pay artisan wages plus 15 gold upkeep, miss it and you go bankrupt instantly. The left panel tallies "Due This Round" live; keep an eye on it.',
           )}
         </p>
         <h4>{tr('2️⃣ 与伙伴同船同行', '2️⃣ You sail in lockstep with a partner')}</h4>
@@ -56,8 +56,8 @@ export function OnboardingTour() {
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>
         <p>
           {tr(
-            '雇工匠把原料加工成成品（香囊市价 95-120！），再交付订单。注意成品要缴约 5% 增值税，回合末还有约 10% 所得税。',
-            'Hire artisans to turn materials into products (Sachets fetch 95–120!) and deliver them on orders. Mind the ~5% VAT on products and ~10% income tax at round end.',
+            '雇工匠把原料加工成成品（香囊市价 95 到 120！），再交付订单。注意成品要缴约 5% 增值税，回合末还有约 10% 所得税。',
+            'Hire artisans to turn materials into products (Sachets fetch 95 to 120!) and deliver them on orders. Mind the ~5% VAT on products and ~10% income tax at round end.',
           )}
         </p>
         <div className="pm-banner">
@@ -85,7 +85,7 @@ export function OnboardingTour() {
         }}
       >
         <button className="btn btn-success btn-lg" onClick={() => finish(false)}>
-          {tr('⚓ 我已了解，开始航行', "⚓ Got it — let's sail")}
+          {tr('⚓ 我已了解，开始航行', "⚓ Got it, let's sail")}
         </button>
         <button className="btn btn-gold btn-lg" onClick={() => finish(true)}>
           {tr('📖 先看完整手册', '📖 Read the full manual first')}

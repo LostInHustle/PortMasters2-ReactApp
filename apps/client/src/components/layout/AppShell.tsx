@@ -4,20 +4,22 @@ import { LoginOverlay } from '../auth/LoginOverlay.js';
 import { ChatWindow } from '../chat/ChatWindow.js';
 import { LobbyOverlay } from '../lobby/LobbyOverlay.js';
 import { SpectateView } from '../spectate/SpectateView.js';
+import { BgOrbs } from './BgOrbs.js';
 import { GameView } from './GameView.js';
-import { Header } from './Header.js';
 import { ToastStack } from './ToastStack.js';
 
 // Top-level view switch, replacing the original's display:none/flex toggles between
 // #login-overlay/#lobby-overlay/the game view (e.g. login(), lines 1916-1918; invite_accepted
-// handling, lines 1961-1969).
+// handling, lines 1961-1969). The app header lives inside GameView (#app's grid-area: header),
+// not here, so login/lobby (each a fullscreen overlay with its own language toggle) don't show
+// it -- matching the original, where .header sits inside #app.
 export function AppShell() {
   const { currentUser, chatPartner } = useSession();
   useKeyboardShortcuts();
 
   return (
     <>
-      {currentUser && <Header />}
+      <BgOrbs />
       {!currentUser ? <LoginOverlay /> : !chatPartner ? <LobbyOverlay /> : <GameView />}
       {currentUser && <ChatWindow />}
       {currentUser && <SpectateView />}

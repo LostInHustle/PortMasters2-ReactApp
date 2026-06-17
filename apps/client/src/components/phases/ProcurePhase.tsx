@@ -111,7 +111,7 @@ export function ProcurePhase() {
                       : canAfford
                         ? tr(
                             '立即购入，货物直接进入船舱',
-                            'Buy now — goods go straight to your hold',
+                            'Buy now, goods go straight to your hold',
                           )
                         : tr('现金不足，无法采购', 'Not enough gold')
                   }
@@ -133,10 +133,10 @@ export function ProcurePhase() {
           onClick={() => send({ action: 'ready_for_next_phase' })}
           title={tr(
             '确认后等待对方，双方都确认即进入互市',
-            'Confirm and wait — Barter begins once both captains are ready',
+            'Confirm and wait, Barter begins once both captains are ready',
           )}
         >
-          {tr('✅ 完成采购，进入互市', '✅ Done Procuring — To Barter')}
+          {tr('✅ 完成采购，进入互市', '✅ Done Procuring, to Barter')}
           <span className="btn-sub">{tr('双方确认后同步推进', 'Advances when both confirm')}</span>
         </button>
       </div>

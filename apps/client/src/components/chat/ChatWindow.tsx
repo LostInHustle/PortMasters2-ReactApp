@@ -14,7 +14,7 @@ export function ChatWindow() {
   if (!chatOpen) return null;
 
   const enabled = Boolean(chatPartner) && partnerOnline;
-  const partnerLabel = chatPartner || tr('无', '—');
+  const partnerLabel = chatPartner || tr('无', 'none');
 
   const submit = () => {
     if (!draft.trim()) return;
@@ -56,7 +56,7 @@ export function ChatWindow() {
           placeholder={
             enabled
               ? tr('输入消息...', 'Type a message...')
-              : tr('对方离线，无法发送', 'Partner offline — cannot send')
+              : tr('对方离线，无法发送', 'Partner offline, cannot send')
           }
           onKeyDown={(e) => {
             if (e.key === 'Enter') submit();

@@ -67,8 +67,8 @@ export function UpkeepPhase() {
               }}
             >
               {tr(
-                '🚨 现金不足以支付维护费——支付后将破产出局！',
-                "🚨 You can't cover the upkeep — paying it will bankrupt your fleet!",
+                '🚨 现金不足以支付维护费，支付后将破产出局！',
+                "🚨 You can't cover the upkeep, paying it will bankrupt your fleet!",
               )}
             </div>
           )}

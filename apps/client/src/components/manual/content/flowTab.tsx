@@ -56,7 +56,7 @@ export function FlowTab() {
             </tr>
             <tr>
               <td>🔧 Upkeep</td>
-              <td>Production arrives, wages auto-paid, then pay upkeep manually</td>
+              <td>Production arrives, wages paid automatically, then pay upkeep manually</td>
               <td>Both pay upkeep</td>
             </tr>
             <tr>

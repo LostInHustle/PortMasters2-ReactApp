@@ -29,7 +29,7 @@ export function ArtisansPhase() {
             <span className="chip green">
               {tr(
                 '🎓 学徒传承：本回合雇佣半价',
-                '🎓 Apprentice Legacy: hiring half-price this round',
+                '🎓 Apprentice Legacy: hiring half price this round',
               )}
             </span>
           )
@@ -41,7 +41,7 @@ export function ArtisansPhase() {
           <div className="section-hint">
             {tr(
               '分配生产任务会立即扣除对应材料，请先核对库存。',
-              'Assigning a task immediately consumes the materials — check your stock first.',
+              'Assigning a task immediately consumes the materials, check your stock first.',
             )}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
@@ -143,7 +143,7 @@ export function ArtisansPhase() {
               'The Trade phase begins once both captains confirm',
             )}
           >
-            {tr('✅ 完成工匠管理，进入贸易', '✅ Done Managing — To Trade')}
+            {tr('✅ 完成工匠管理，进入贸易', '✅ Done Managing, to Trade')}
             <span className="btn-sub">
               {tr('双方确认后同步推进', 'Advances when both confirm')}
             </span>

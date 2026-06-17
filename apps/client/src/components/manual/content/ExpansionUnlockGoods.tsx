@@ -11,7 +11,7 @@ export function ExpansionUnlockGoods() {
       <>
         <h4>🗺️ Silk Road Charter: Phased Unlocks (Hard mode)</h4>
         <p>
-          Rounds 1-5 play exactly like the original release, with 3 raw materials, 4 products, 3
+          Rounds 1 to 5 play exactly like the original release, with 3 raw materials, 4 products, 3
           artisan types and 5 ports. From
           <strong>Round 6</strong>, the "New Maritime Edict" takes effect; from
           <strong>Round 10</strong>, "Ten Thousand Kingdoms Trade" opens. Each wave adds new
@@ -63,25 +63,25 @@ export function ExpansionUnlockGoods() {
               <td>🧱 Porcelain Clay</td>
               <td>New Maritime Edict</td>
               <td>Quanzhou, Fuzhou</td>
-              <td>8 – 12</td>
+              <td>8 to 12</td>
             </tr>
             <tr>
               <td>⛏️ Copper Ore</td>
               <td>New Maritime Edict</td>
               <td>Guangzhou, Goryeo</td>
-              <td>10 – 15</td>
+              <td>10 to 15</td>
             </tr>
             <tr>
               <td>🌶️ Spices</td>
               <td>Ten Thousand Kingdoms Trade</td>
               <td>Srivijaya, Dashi</td>
-              <td>14 – 20</td>
+              <td>14 to 20</td>
             </tr>
             <tr>
               <td>🦪 Pearls</td>
               <td>Ten Thousand Kingdoms Trade</td>
               <td>Guangzhou, Srivijaya</td>
-              <td>16 – 24</td>
+              <td>16 to 24</td>
             </tr>
           </tbody>
         </table>
@@ -103,7 +103,7 @@ export function ExpansionUnlockGoods() {
               <td>New Maritime Edict</td>
               <td>Copper Ore ×3</td>
               <td>45</td>
-              <td>55 – 72</td>
+              <td>55 to 72</td>
               <td>Coppersmith</td>
             </tr>
             <tr>
@@ -111,7 +111,7 @@ export function ExpansionUnlockGoods() {
               <td>New Maritime Edict</td>
               <td>Porcelain Clay ×3</td>
               <td>65</td>
-              <td>78 – 100</td>
+              <td>78 to 100</td>
               <td>Potter</td>
             </tr>
             <tr>
@@ -119,7 +119,7 @@ export function ExpansionUnlockGoods() {
               <td>Ten Thousand Kingdoms Trade</td>
               <td>Spices ×2 + Silk ×1</td>
               <td>85</td>
-              <td>100 – 130</td>
+              <td>100 to 130</td>
               <td>Perfumer</td>
             </tr>
             <tr>
@@ -127,7 +127,7 @@ export function ExpansionUnlockGoods() {
               <td>Ten Thousand Kingdoms Trade</td>
               <td>Pearls ×2 + Silk ×1</td>
               <td>105</td>
-              <td>125 – 160</td>
+              <td>125 to 160</td>
               <td>Jeweler</td>
             </tr>
           </tbody>
@@ -139,7 +139,7 @@ export function ExpansionUnlockGoods() {
     <>
       <h4>🗺️ 丝路特许：分批解锁（高难模式）</h4>
       <p>
-        第 1-5 程的玩法与最初版本完全一致，包含 3 种原料、4 种成品、3 类工匠、5 座港口。从
+        第 1 至 5 程的玩法与最初版本完全一致，包含 3 种原料、4 种成品、3 类工匠、5 座港口。从
         <strong>第 6 程</strong>
         起，「市舶新政」颁布；从
         <strong>第 10 程</strong>

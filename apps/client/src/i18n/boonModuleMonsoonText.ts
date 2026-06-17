@@ -72,7 +72,7 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
     name: { zh: '拓商减负', en: 'Frontier Tariff Relief' },
     desc: {
       zh: '本回合交付成品订单的增值税减半。',
-      en: 'VAT on finished-goods deliveries is halved this round.',
+      en: 'VAT on finished goods deliveries is halved this round.',
     },
   },
   exotic_treasures: {
@@ -195,7 +195,7 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
     name: { zh: '避税账本', en: 'Hidden Ledger' },
     desc: {
       zh: '所得税按增值税后利润计。15%概率在订单完成时罚款20金币(稽查)。',
-      en: 'Income tax assessed on post-VAT profit. 15% chance of a 20-gold audit fine when an order completes.',
+      en: 'Income tax assessed on profit after VAT. 15% chance of a 20 gold audit fine when an order completes.',
     },
   },
   silk_monopoly: {
