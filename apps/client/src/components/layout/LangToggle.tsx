@@ -14,9 +14,7 @@ export function LangToggle({ className, style }: { className?: string; style?: C
       style={style}
       onClick={toggleLang}
       title={
-        lang === 'en'
-          ? '切换为中文界面 / Switch to Chinese'
-          : 'Switch to English / 切换为英文界面'
+        lang === 'en' ? '切换为中文界面 / Switch to Chinese' : 'Switch to English / 切换为英文界面'
       }
     >
       {lang === 'en' ? '🌐 中文' : '🌐 English'}
