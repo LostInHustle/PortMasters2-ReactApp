@@ -1,12 +1,19 @@
-import { createServer } from 'node:http';
+import { fileURLToPath } from 'node:url';
+import { createAppServer } from './http/createHttpServer.js';
+import { createServerState } from './lobby/onlineRegistry.js';
+import { UserStore } from './auth/UserStore.js';
+
+const USERS_FILE = fileURLToPath(new URL('../data/users.json', import.meta.url));
+const WEB_ROOT = fileURLToPath(new URL('../../client/dist', import.meta.url));
 
 const PORT = Number(process.env.PORT ?? 8080);
 
-const server = createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('PortMasters 2 server scaffold OK');
-});
+// Ported from PortMasters2/server.py main() (lines 1852-1856): one process serves both the
+// built client's static assets and the WebSocket endpoint on the same port, the same single-port
+// story the original gets from `websockets.serve(..., process_request=...)`.
+const state = createServerState(new UserStore(USERS_FILE));
+const server = createAppServer(state, WEB_ROOT);
 
 server.listen(PORT, () => {
-  console.log(`PortMasters 2 server listening on http://localhost:${PORT}`);
+  console.log(`✅ Server started: web http://0.0.0.0:${PORT}, WebSocket ws://0.0.0.0:${PORT}`);
 });

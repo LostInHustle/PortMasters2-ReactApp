@@ -23,8 +23,10 @@ export interface BrokerIntelContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py _reveal_intel (lines 837-848).
-function revealIntel(ctx: BrokerIntelContext, rng: Rng, count: number): number {
+// Ported verbatim from PortMasters2/server.py _reveal_intel (lines 837-848). Exported because
+// SharedSession.advance() (server.py's phase 5->1 branch) calls this directly for free-intel
+// boons, not only purchaseIntel below.
+export function revealIntel(ctx: BrokerIntelContext, rng: Rng, count: number): number {
   let revealed = 0;
   for (let i = 0; i < count; i++) {
     if (ctx.phase2DemandTags.length === 0) break;
