@@ -1,0 +1,33 @@
+/* Owner-requested UX enhancements layered on top of the verbatim-ported global.css.
+   Kept in a separate file (imported after global.css in main.tsx) so the faithful port stays
+   pristine and these deliberate improvements are easy to review or revert. */
+
+/* Bug 1: make button feedback obvious.
+   The ported base style's press is a subtle scale(.97); on screen a click felt unacknowledged,
+   since the confirming toast appears in the far top-right corner. This deepens the press so the
+   button itself reacts unmistakably the instant it is clicked (a firm push-down with a darker,
+   inset look), regardless of where the user's eyes are. A focus ring is added for keyboard and
+   click clarity. Loaded after global.css, so these override the base :active. */
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.94);
+  filter: brightness(0.92) saturate(1.12);
+  box-shadow:
+    0 1px 4px var(--btn-shadow),
+    inset 0 2px 7px rgba(0, 0, 0, 0.22);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(14, 165, 233, 0.45),
+    0 3px 10px var(--btn-shadow);
+}
+
+/* Bug 3: a chat alert toast is clickable and opens the chat window. Show that affordance so it
+   reads as an actionable alert rather than a passive notice. */
+.notification.clickable {
+  cursor: pointer;
+}
+.notification.clickable:hover {
+  filter: brightness(1.14);
+  transform: translateX(-3px);
+}
