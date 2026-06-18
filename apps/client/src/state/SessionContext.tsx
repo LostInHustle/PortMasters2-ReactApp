@@ -67,6 +67,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<SessionState>(initialState);
   const lastLogSeqRef = useRef<number | null>(null);
 
+  // The message handler below lives in a subscribe effect whose closure would otherwise capture
+  // a stale `state`. This ref always holds the latest state, so handlers (e.g. the chat alert,
+  // which must know whether the chat window is currently open) read live values.
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  // Opens the chat window and refreshes its history. Used both by the header toggle and as the
+  // click action on an incoming chat alert.
+  const openChat = useCallback(() => {
+    send({ action: 'get_chat_history' });
+    setState((s) => ({ ...s, chatOpen: true }));
+  }, [send]);
+
   useEffect(() => {
     return subscribe((msg) => {
       switch (msg.type) {
@@ -176,18 +189,21 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           if (!msg.success) setState((s) => ({ ...s, lastInviteTo: null }));
           break;
 
-        case 'chat_message':
-          setState((s) => {
-            if (msg.from !== s.chatPartner) return s;
-            return {
-              ...s,
-              chatHistory: [
-                ...s.chatHistory,
-                { from: msg.from as string, message: msg.message as string },
-              ],
-            };
-          });
+        case 'chat_message': {
+          // Ported from PortMasters2/PortMasters_online.html's chat_message handler
+          // (lines 2014-2021): record the message, and when the chat window is closed, raise a
+          // notification. The toast is clickable and opens the chat, so an alert leads straight
+          // to the conversation.
+          const from = msg.from as string;
+          const message = msg.message as string;
+          const live = stateRef.current;
+          if (from !== live.chatPartner) break;
+          setState((s) => ({ ...s, chatHistory: [...s.chatHistory, { from, message }] }));
+          if (!live.chatOpen) {
+            showNotification(`💬 ${from}: ${message}`, false, openChat);
+          }
           break;
+        }
 
         case 'chat_history':
           setState((s) => ({ ...s, chatHistory: msg.history as ChatMessage[] }));
@@ -205,7 +221,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           break;
       }
     });
-  }, [subscribe, send, showNotification, lang]);
+  }, [subscribe, send, showNotification, lang, openChat]);
 
   const register = useCallback(
     (username: string, password: string) => {

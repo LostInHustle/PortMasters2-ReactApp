@@ -1,5 +1,6 @@
 import { tn } from '../../i18n/enNames.js';
 import { ITEM_COLORS, ITEM_ICONS, itemTip } from '../../i18n/itemIcons.js';
+import { priceTip } from '../../i18n/priceTip.js';
 import { tnames } from '../../i18n/serverTextRules.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
@@ -87,7 +88,7 @@ export function ProcurePhase() {
                       {tn(r.type, lang)}
                     </span>
                     <span className="qty">×{r.quantity}</span>
-                    <span className="price">
+                    <span className="price tip" data-tip={priceTip(r, lang)}>
                       {tr('单价', 'unit')} {r.price}💰
                       {r.materialDetails &&
                         ` · ${tr('用料', 'uses')} ${tnames(r.materialDetails, lang)}`}
