@@ -164,6 +164,9 @@ export class PlayerGame {
   getCardFinalCost(card: MarketCard): number {
     return costCalc.getCardFinalCost(this, card);
   }
+  getCardResourceUnitPrices(card: MarketCard): number[] {
+    return costCalc.getCardResourceUnitPrices(this, card);
+  }
   getHireCost(workerType: WorkerTypeId): number {
     return costCalc.getHireCost(this, workerType);
   }
@@ -252,6 +255,10 @@ export class PlayerGame {
   }
   payMaintenance(): boolean {
     return productionFns.payMaintenance(this, this.rng);
+  }
+  /** What payWages will actually charge for the current roster -- the live "Due This Round" figure. */
+  estimatedWages(): number {
+    return productionFns.calcTotalWages(this);
   }
 
   // ---------- Pirates / escort ----------

@@ -80,6 +80,14 @@ export interface PlayerGameState {
   fixedCost: number;
   maintenancePenalty: number;
   workerWages: number;
+  /**
+   * Not part of the original port: what payWages will actually charge for the current roster at
+   * the next Upkeep (every worker type, with artisans_workshop's wage markup applied), so the
+   * Procure/Artisans "Due This Round" preview never has to re-derive this and risk drifting from
+   * the real charge. workerWages above stays the original's post-settlement bookkeeping field
+   * (0 until Upkeep actually runs); this is the live, forward-looking figure shown before that.
+   */
+  estimatedWages: number;
   roundRevenue: number;
   roundCosts: number;
   shipUpgradeCost: readonly [number, number, number];

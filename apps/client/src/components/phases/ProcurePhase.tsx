@@ -49,6 +49,15 @@ export function ProcurePhase() {
       ),
     });
   }
+  if (g.equippedModules.some((m) => m.id === 'smugglers_hold')) {
+    discountChips.push({
+      key: 'sh',
+      label: tr(
+        '🏴‍☠️ 走私暗舱：采购成本实付85折',
+        "🏴‍☠️ Smuggler's Hold: purchases at ~85% of sticker price",
+      ),
+    });
+  }
 
   return (
     <>
@@ -65,7 +74,9 @@ export function ProcurePhase() {
       <div className="card-grid">
         {g.resourceCards.map((card) => {
           const purchased = g.purchasedCards.includes(card.id!);
-          const canAfford = g.money >= card.totalCost && !purchased;
+          const effectiveCost = card.effectiveCost ?? card.totalCost;
+          const cardDiscounted = effectiveCost !== card.totalCost;
+          const canAfford = g.money >= effectiveCost && !purchased;
           return (
             <div className="card" key={card.id}>
               <div className="card-header">
@@ -77,27 +88,48 @@ export function ProcurePhase() {
                 </span>
               </div>
               <div className="card-body">
-                {card.resources.map((r, i) => (
-                  <div className="resource-row" key={i}>
-                    <span className="icon">{ITEM_ICONS[r.type]}</span>
-                    <span
-                      className="name tip"
-                      data-tip={itemTip(r.type, lang)}
-                      style={{ color: ITEM_COLORS[r.type] }}
-                    >
-                      {tn(r.type, lang)}
-                    </span>
-                    <span className="qty">×{r.quantity}</span>
-                    <span className="price tip" data-tip={priceTip(r, lang)}>
-                      {tr('单价', 'unit')} {r.price}💰
-                      {r.materialDetails &&
-                        ` · ${tr('用料', 'uses')} ${tnames(r.materialDetails, lang)}`}
-                    </span>
-                  </div>
-                ))}
+                {card.resources.map((r, i) => {
+                  const effectivePrice = r.effectivePrice ?? r.price;
+                  const rowDiscounted = effectivePrice !== r.price;
+                  return (
+                    <div className="resource-row" key={i}>
+                      <span className="icon">{ITEM_ICONS[r.type]}</span>
+                      <span
+                        className="name tip"
+                        data-tip={itemTip(r.type, lang)}
+                        style={{ color: ITEM_COLORS[r.type] }}
+                      >
+                        {tn(r.type, lang)}
+                      </span>
+                      <span className="qty">×{r.quantity}</span>
+                      <span className="price tip" data-tip={priceTip(r, lang)}>
+                        {tr('单价', 'unit')}{' '}
+                        {rowDiscounted ? (
+                          <>
+                            <span className="price-original">{r.price}</span>{' '}
+                            <span className="price-discounted">{effectivePrice}💰</span>
+                          </>
+                        ) : (
+                          <>{r.price}💰</>
+                        )}
+                        {r.materialDetails &&
+                          ` · ${tr('用料', 'uses')} ${tnames(r.materialDetails, lang)}`}
+                      </span>
+                    </div>
+                  );
+                })}
                 <div className="card-total">
                   <span>{tr('合计货款', 'Total')}</span>
-                  <span>{card.totalCost} 💰</span>
+                  <span>
+                    {cardDiscounted ? (
+                      <>
+                        <span className="price-original">{card.totalCost}</span>{' '}
+                        <span className="price-discounted">{effectiveCost} 💰</span>
+                      </>
+                    ) : (
+                      <>{card.totalCost} 💰</>
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="card-footer">

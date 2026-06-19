@@ -1,4 +1,3 @@
-import { WAGES } from '@pm2/shared';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { CrewSections } from './FleetCard.js';
@@ -6,7 +5,10 @@ import { CrewSections } from './FleetCard.js';
 const NO_DUE_PHASES = new Set<unknown>([0, 5, 'endgame', 'bankruptcy']);
 
 // Ported verbatim from PortMasters2/PortMasters_online.html renderStatus (lines 2410-2448):
-// your own fleet card, plus a "due this round" breakdown once wages/upkeep are pending.
+// your own fleet card, plus a "due this round" breakdown once wages/upkeep are pending. Wages
+// and upkeep are both read straight off the server-computed estimatedWages/fixedCost/
+// maintenancePenalty fields rather than re-derived here, so this can never drift from what
+// payWages/payMaintenance actually charge at settlement (see costCalculations.ts/production.ts).
 export function StatusPanel() {
   const { tr } = useTranslate();
   const { currentUser, serverState } = useSession();
@@ -14,10 +16,7 @@ export function StatusPanel() {
   if (!g) return null;
 
   const showDue = !NO_DUE_PHASES.has(g.phase) && !g.gameOver;
-  const pendWages =
-    g.weavers.length * WAGES.weaver +
-    g.masterWeavers.length * WAGES.master +
-    g.sachetMakers.length * WAGES.sachet_maker;
+  const pendWages = g.estimatedWages;
   const pendMaint = g.fixedCost + g.maintenancePenalty;
   const pendTotal = pendWages + pendMaint;
   const safe = g.money >= pendTotal;

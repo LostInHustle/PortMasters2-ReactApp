@@ -6,6 +6,7 @@ import {
   calcVat,
   escortCost,
   getCardFinalCost,
+  getCardResourceUnitPrices,
   getHireCost,
   hasModule,
 } from '../../src/game/costCalculations.js';
@@ -107,6 +108,80 @@ describe('getCardFinalCost', () => {
     const ctx = { equippedModules: withModules('smugglers_hold'), modifierFlags: {} };
     const card = { port: '泉州港' as const, resources: [], totalCost: 100, isProductCard: false };
     expect(getCardFinalCost(ctx, card)).toBe(85);
+  });
+
+  it('hemp_monopoly and kiln_cellar knock a flat amount off only their matching resources', () => {
+    const ctx = {
+      equippedModules: withModules('kiln_cellar'),
+      modifierFlags: { hempPriceReduction: 2 },
+    };
+    const card = {
+      port: '泉州港' as const,
+      resources: [
+        { type: '麻布' as const, quantity: 3, price: 5 }, // -2/unit -> 6 off
+        { type: '瓷土' as const, quantity: 2, price: 4 }, // -2/unit -> 4 off
+        { type: '丝绸' as const, quantity: 1, price: 10 }, // untouched
+      ],
+      totalCost: 3 * 5 + 2 * 4 + 1 * 10,
+      isProductCard: false,
+    };
+    expect(getCardFinalCost(ctx, card)).toBe(card.totalCost - 6 - 4);
+  });
+});
+
+// The per-line prices a Procure card should display must reflect the same item-specific
+// discounts getCardFinalCost charges, so the two can never tell the player different numbers.
+describe('getCardResourceUnitPrices', () => {
+  it('matches the unit price unchanged when no item-specific discount is active', () => {
+    const ctx = { equippedModules: [], modifierFlags: {} };
+    const card = {
+      port: '泉州港' as const,
+      resources: [{ type: '麻布' as const, quantity: 3, price: 5 }],
+      totalCost: 15,
+      isProductCard: false,
+    };
+    expect(getCardResourceUnitPrices(ctx, card)).toEqual([5]);
+  });
+
+  it('only discounts the resource line the boon/module targets', () => {
+    const ctx = {
+      equippedModules: withModules('kiln_cellar', 'foreign_quarter_pass'),
+      modifierFlags: { hempPriceReduction: 2 },
+    };
+    const card = {
+      port: '泉州港' as const,
+      resources: [
+        { type: '麻布' as const, quantity: 3, price: 5 },
+        { type: '瓷土' as const, quantity: 2, price: 4 },
+        { type: '香料' as const, quantity: 1, price: 10 },
+        { type: '丝绸' as const, quantity: 1, price: 10 },
+      ],
+      totalCost: 0,
+      isProductCard: false,
+    };
+    expect(getCardResourceUnitPrices(ctx, card)).toEqual([3, 2, 7, 10]);
+  });
+
+  it('does not distribute card-wide discounts (purchaseDiscount, smugglers_hold) onto a line', () => {
+    const ctx = { equippedModules: withModules('smugglers_hold'), modifierFlags: { purchaseDiscount: 0.15 } };
+    const card = {
+      port: '泉州港' as const,
+      resources: [{ type: '丝绸' as const, quantity: 1, price: 10 }],
+      totalCost: 10,
+      isProductCard: false,
+    };
+    expect(getCardResourceUnitPrices(ctx, card)).toEqual([10]);
+  });
+
+  it('floors at 0 if a flat reduction would exceed the unit price', () => {
+    const ctx = { equippedModules: [], modifierFlags: { hempPriceReduction: 10 } };
+    const card = {
+      port: '泉州港' as const,
+      resources: [{ type: '麻布' as const, quantity: 1, price: 3 }],
+      totalCost: 3,
+      isProductCard: false,
+    };
+    expect(getCardResourceUnitPrices(ctx, card)).toEqual([0]);
   });
 });
 
