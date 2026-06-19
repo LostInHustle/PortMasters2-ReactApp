@@ -256,6 +256,10 @@ export class PlayerGame {
   payMaintenance(): boolean {
     return productionFns.payMaintenance(this, this.rng);
   }
+  /** What payWages will actually charge for the current roster -- the live "Due This Round" figure. */
+  estimatedWages(): number {
+    return productionFns.calcTotalWages(this);
+  }
 
   // ---------- Pirates / escort ----------
   pirateThreat(): number {

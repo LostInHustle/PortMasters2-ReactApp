@@ -81,6 +81,7 @@ export function serializePlayerGame(game: PlayerGame): PlayerGameState {
     fixedCost: game.fixedCost,
     maintenancePenalty: game.maintenancePenalty,
     workerWages: game.workerWages,
+    estimatedWages: game.estimatedWages(),
     roundRevenue: game.roundRevenue,
     roundCosts: game.roundCosts,
     shipUpgradeCost: game.shipUpgradeCost,

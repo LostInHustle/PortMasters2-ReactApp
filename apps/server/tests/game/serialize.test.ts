@@ -112,4 +112,15 @@ describe('serializePlayerGame', () => {
     expect(state.resourceCards[0]!.effectiveCost).toBe(15);
     expect(state.resourceCards[0]!.resources[0]!.effectivePrice).toBe(5);
   });
+
+  // The "Due This Round" sidebar must reflect every hired worker type, not just the founding
+  // three -- see production.ts's calcTotalWages, shared with the real payWages charge.
+  it('reports estimatedWages for the full current roster, beyond the founding worker types', () => {
+    const game = new PlayerGame('standard');
+    game.workers.weaver.push({ task: null, progress: 0, producedCount: 0, isSkilled: false });
+    game.workers.jeweler.push({ task: null, progress: 0, producedCount: 0, isSkilled: false });
+    const state = serializePlayerGame(game);
+    expect(state.estimatedWages).toBe(8 + 24); // WAGES.weaver + WAGES.jeweler
+    expect(state.estimatedWages).toBe(game.estimatedWages());
+  });
 });

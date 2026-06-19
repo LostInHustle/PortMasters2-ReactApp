@@ -38,9 +38,27 @@ export function processProduction(ctx: ProcessProductionContext): void {
   }
 }
 
-export interface PayWagesContext {
+export interface WageContext {
   workers: Record<WorkerTypeId, Worker[]>;
   equippedModules: readonly ShipModule[];
+}
+
+// The wage bill the current roster will actually owe at the next Upkeep, across every worker
+// type (not just the founding three) and any module that scales wages (artisans_workshop).
+// payWages charges exactly this; the Procure/Artisans UI's "Due This Round" preview calls this
+// same function so the two can never disagree.
+export function calcTotalWages(ctx: WageContext): number {
+  let total = 0;
+  for (const [wtype, list] of Object.entries(ctx.workers) as [WorkerTypeId, Worker[]][]) {
+    if (list.length === 0) continue;
+    let wage = WAGES[wtype];
+    if (hasModule(ctx, 'artisans_workshop')) wage = Math.trunc(wage * 1.2);
+    total += wage * list.length;
+  }
+  return total;
+}
+
+export interface PayWagesContext extends WageContext {
   money: number;
   workerWages: number;
   roundCosts: number;
@@ -49,12 +67,7 @@ export interface PayWagesContext {
 
 // Ported verbatim from PortMasters2/server.py pay_wages (lines 937-956).
 export function payWages(ctx: PayWagesContext): boolean {
-  let total = 0;
-  for (const [wtype, list] of Object.entries(ctx.workers) as [WorkerTypeId, Worker[]][]) {
-    let wage = WAGES[wtype];
-    if (hasModule(ctx, 'artisans_workshop')) wage = Math.trunc(wage * 1.2);
-    total += wage * list.length;
-  }
+  const total = calcTotalWages(ctx);
   if (total === 0) return true;
   if (ctx.money >= total) {
     ctx.money -= total;
