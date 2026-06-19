@@ -1,4 +1,4 @@
-import { WORKER_TYPES_BACKEND, type PlayerGameState, type Worker } from '@pm2/shared';
+import { WORKER_TYPES_BACKEND, type MarketCard, type PlayerGameState, type Worker } from '@pm2/shared';
 import type { PlayerGame } from './PlayerGame.js';
 import { difficultyBrokerCorruption, pirateLossPct } from './difficultyRules.js';
 import { charterEvent } from './poolSelectors.js';
@@ -18,6 +18,19 @@ function flattenWorkerRosters(game: PlayerGame): WorkerRosterFields {
   return Object.fromEntries(
     WORKER_TYPES_BACKEND.map((w): [string, Worker[]] => [w.attr, game.workers[w.id]]),
   ) as WorkerRosterFields;
+}
+
+// Stamps each Procure card with what it actually costs right now, given this player's active
+// boons and modules, so the client never has to re-derive (and risk drifting from) the discount
+// math that already lives in costCalculations.ts. game.resourceCards itself is left untouched --
+// this only shapes the copy that goes out over the wire.
+function withCardPricing(game: PlayerGame, card: MarketCard): MarketCard {
+  const unitPrices = game.getCardResourceUnitPrices(card);
+  return {
+    ...card,
+    effectiveCost: game.getCardFinalCost(card),
+    resources: card.resources.map((r, i) => ({ ...r, effectivePrice: unitPrices[i] })),
+  };
 }
 
 // Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the literal
@@ -44,7 +57,7 @@ export function serializePlayerGame(game: PlayerGame): PlayerGameState {
     draftOpen: game.draftOpen,
     draftRerolled: game.draftRerolled,
     phase: game.phase,
-    resourceCards: game.resourceCards,
+    resourceCards: game.resourceCards.map((card) => withCardPricing(game, card)),
     customerCards: game.customerCards,
     purchaseCount: game.purchaseCount,
     orderCount: game.orderCount,

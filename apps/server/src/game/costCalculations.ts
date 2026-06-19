@@ -5,6 +5,7 @@ import {
   RECIPES,
   WAGES,
   type BoonModifiers,
+  type ItemId,
   type MarketCard,
   type ModuleId,
   type OrderResource,
@@ -98,31 +99,45 @@ export interface CardFinalCostContext {
   modifierFlags: BoonModifiers;
 }
 
+// The flat per-unit discount (boon or module) that targets one specific resource type inside a
+// purchase card -- e.g. Hemp Monopoly or Kiln Cellar knock a fixed amount off specific goods,
+// independent of the rest of the card. Shared by getCardFinalCost (the authoritative total a
+// purchase charges) and getCardResourceUnitPrices (the per-line price a card should display) so
+// the two can never disagree about which goods are discounted or by how much.
+function flatItemDiscount(ctx: CardFinalCostContext, type: ItemId): number {
+  let reduction = 0;
+  if (ctx.modifierFlags.hempPriceReduction && type === '麻布') {
+    reduction += ctx.modifierFlags.hempPriceReduction;
+  }
+  if (hasModule(ctx, 'kiln_cellar') && (type === '瓷土' || type === '铜矿')) {
+    reduction += 2;
+  }
+  if (hasModule(ctx, 'foreign_quarter_pass') && (type === '香料' || type === '珍珠')) {
+    reduction += 3;
+  }
+  return reduction;
+}
+
 // Ported verbatim from PortMasters2/server.py get_card_final_cost (lines 557-575).
 export function getCardFinalCost(ctx: CardFinalCostContext, card: MarketCard): number {
   let cost = card.totalCost;
   if (ctx.modifierFlags.purchaseDiscount) {
     cost = Math.trunc(cost * (1 - ctx.modifierFlags.purchaseDiscount));
   }
-  if (ctx.modifierFlags.hempPriceReduction) {
-    for (const r of card.resources) {
-      if (r.type === '麻布') cost -= r.quantity * ctx.modifierFlags.hempPriceReduction;
-    }
-  }
-  if (hasModule(ctx, 'kiln_cellar')) {
-    for (const r of card.resources) {
-      if (r.type === '瓷土' || r.type === '铜矿') cost -= r.quantity * 2;
-    }
-  }
-  if (hasModule(ctx, 'foreign_quarter_pass')) {
-    for (const r of card.resources) {
-      if (r.type === '香料' || r.type === '珍珠') cost -= r.quantity * 3;
-    }
+  for (const r of card.resources) {
+    cost -= r.quantity * flatItemDiscount(ctx, r.type);
   }
   if (hasModule(ctx, 'smugglers_hold')) {
     cost = Math.trunc(cost * 0.85);
   }
   return Math.max(0, cost);
+}
+
+// The per-unit price each resource line on a card actually costs once item-specific discounts
+// apply, in the same order as card.resources. Card-wide discounts (Merchant's Charm, Smuggler's
+// Hold) are not attributable to a single line -- they only show up in getCardFinalCost's total.
+export function getCardResourceUnitPrices(ctx: CardFinalCostContext, card: MarketCard): number[] {
+  return card.resources.map((r) => Math.max(0, r.price - flatItemDiscount(ctx, r.type)));
 }
 
 // Ported verbatim from PortMasters2/server.py get_hire_cost (lines 577-581).

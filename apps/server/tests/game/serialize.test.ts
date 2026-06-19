@@ -69,4 +69,47 @@ describe('serializePlayerGame', () => {
     expect(serializePlayerGame(new PlayerGame('easy')).brokerCorruption).toBe(false);
     expect(serializePlayerGame(new PlayerGame('hard')).brokerCorruption).toBe(true);
   });
+
+  // The Procure UI must never show a stale sticker price once a boon or module discounts a
+  // purchase -- see costCalculations.getCardFinalCost/getCardResourceUnitPrices.
+  it('stamps resourceCards with the discounted price boons and modules actually charge', () => {
+    const game = new PlayerGame('easy');
+    game.modifierFlags = { hempPriceReduction: 2, purchaseDiscount: 0.15 };
+    game.resourceCards = [
+      {
+        id: 0,
+        port: '泉州港',
+        resources: [
+          { type: '麻布', quantity: 3, price: 5 },
+          { type: '丝绸', quantity: 1, price: 10 },
+        ],
+        totalCost: 25,
+        isProductCard: false,
+      },
+    ];
+    const state = serializePlayerGame(game);
+    const card = state.resourceCards[0]!;
+    expect(card.totalCost).toBe(25); // sticker price is untouched
+    expect(card.effectiveCost).toBe(game.getCardFinalCost(game.resourceCards[0]!));
+    expect(card.effectiveCost).toBeLessThan(card.totalCost);
+    expect(card.resources[0]!.price).toBe(5); // sticker unit price is untouched
+    expect(card.resources[0]!.effectivePrice).toBe(3); // hemp: -2/unit
+    expect(card.resources[1]!.effectivePrice).toBe(10); // silk: no item-specific discount
+  });
+
+  it('leaves effectiveCost equal to totalCost when no discount is active', () => {
+    const game = new PlayerGame('easy');
+    game.resourceCards = [
+      {
+        id: 0,
+        port: '泉州港',
+        resources: [{ type: '麻布', quantity: 3, price: 5 }],
+        totalCost: 15,
+        isProductCard: false,
+      },
+    ];
+    const state = serializePlayerGame(game);
+    expect(state.resourceCards[0]!.effectiveCost).toBe(15);
+    expect(state.resourceCards[0]!.resources[0]!.effectivePrice).toBe(5);
+  });
 });
