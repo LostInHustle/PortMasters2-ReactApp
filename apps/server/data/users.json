@@ -13,5 +13,10 @@
     "salt": "cb45fa0773282d58fbc5479cdcf0d197",
     "hash": "cacf744df64b23200f06ab5d5ce8e5edd59c858b224541846c96788e1b5e2fa0",
     "created_at": "2026-06-15 21:34:58"
+  },
+  "巧克力": {
+    "salt": "b0003b6e38b8ccbf50c5be9b77a0baba",
+    "hash": "ba2e06ba1c55860ef3294e31d185c8b302a7ff30de14437f1ca5deb369cd25cc",
+    "created_at": "2026-06-20 13:10:30"
   }
 }

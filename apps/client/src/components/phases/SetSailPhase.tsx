@@ -29,8 +29,8 @@ export function SetSailPhase() {
       <div className="hero-title">⚓ PortMasters 2 🚢</div>
       <div className="subtitle-text">
         {tr(
-          '海上丝绸之路 · 扬帆远航 · 与伙伴同船竞航，成为海上霸主！',
-          'The Maritime Silk Road · Set your course · Race your partner fleet-to-fleet to rule the seas!',
+          '海上丝绸之路 · 扬帆远航 · 与其他船长同船竞航，成为海上霸主！',
+          'The Maritime Silk Road · Set your course · Race fellow captains fleet-to-fleet to rule the seas!',
         )}
       </div>
       <EnvironmentBanner g={g} />
@@ -40,8 +40,8 @@ export function SetSailPhase() {
           <span>
             {tr('欢迎来到 PortMasters 2！', 'Welcome to PortMasters 2!')}
             {tr(
-              '本作引入增值税、所得税、工匠工资、双人同步互市等深度机制，上手门槛高于一代。建议先按 F1 阅读手册；若感到吃力，可先体验 ',
-              ' This sequel adds VAT, income tax, artisan wages and synchronized bartering with a partner, a steeper curve than the original. Press F1 to read the manual; if it feels overwhelming, warm up with ',
+              '本作引入增值税、所得税、工匠工资、多人同步互市等深度机制，上手门槛高于一代。建议先按 F1 阅读手册；若感到吃力，可先体验 ',
+              ' This sequel adds VAT, income tax, artisan wages and synchronized bartering with fellow captains, a steeper curve than the original. Press F1 to read the manual; if it feels overwhelming, warm up with ',
             )}
             <a href={pm1Url(lang)} target="_blank" rel="noopener noreferrer">
               {pm1Label(lang)}
@@ -70,8 +70,8 @@ export function SetSailPhase() {
           ))}
           <br />
           {tr(
-            '每个阶段都需双方确认后同步推进；互市阶段可与伙伴自由交易货物与金币。',
-            'Every phase advances only after both captains confirm; during Barter you can trade goods and gold freely.',
+            '每个阶段都需所有船长确认后同步推进；互市阶段可与其他船长自由交易货物与金币。',
+            'Every phase advances only after every captain confirms; during Barter you can trade goods and gold freely with anyone.',
           )}
         </div>
       </div>
@@ -109,8 +109,8 @@ function RoundStartPhase() {
         </div>
         <div className="subtitle-text">
           {tr(
-            `航程进度 ${g.currentRound} / ${g.maxRounds} · 与伙伴确认后抽取本程福缘`,
-            `Voyage ${g.currentRound} of ${g.maxRounds} · confirm with your partner to draw this round's fortunes`,
+            `航程进度 ${g.currentRound} / ${g.maxRounds} · 与其他船长确认后抽取本程福缘`,
+            `Voyage ${g.currentRound} of ${g.maxRounds} · confirm with your fellow captains to draw this round's fortunes`,
           )}
         </div>
         {s && (

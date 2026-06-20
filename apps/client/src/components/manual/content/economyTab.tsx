@@ -30,9 +30,7 @@ export function EconomyTab() {
               <td>🧾 VAT</td>
               <td>(sale price − avg. material cost − labor) × 5%</td>
               <td>
-                Deducted automatically on
-                <strong>product</strong>
-                orders
+                Deducted automatically on <strong>product</strong> orders
               </td>
             </tr>
             <tr>
@@ -44,8 +42,7 @@ export function EconomyTab() {
               <td>🔧 Upkeep</td>
               <td>Flat 15 gold/round</td>
               <td>
-                Paid manually at Upkeep;
-                <strong>failing means bankruptcy</strong>
+                Paid manually at Upkeep; <strong>failing means bankruptcy</strong>
               </td>
             </tr>
           </tbody>

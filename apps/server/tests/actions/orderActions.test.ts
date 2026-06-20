@@ -17,36 +17,36 @@ function makeOrder(id: number) {
 
 describe('handleCompleteOrder', () => {
   it('returns false outside phase 2', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 1;
-    sess.games[0].customerCards = [makeOrder(0)];
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 1;
+    sess.games[0]!.customerCards = [makeOrder(0)];
     expect(handleCompleteOrder(sess, 0, { orderId: 0 })).toBe(false);
   });
 
   it('returns true within phase 2 even when no matching order exists', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 2;
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 2;
     expect(handleCompleteOrder(sess, 0, { orderId: 999 })).toBe(true);
   });
 
   it('completes a matching, not-yet-completed order', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 2;
-    sess.games[0].customerCards = [makeOrder(0)];
-    const moneyBefore = sess.games[0].money;
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 2;
+    sess.games[0]!.customerCards = [makeOrder(0)];
+    const moneyBefore = sess.games[0]!.money;
     expect(handleCompleteOrder(sess, 0, { orderId: 0 })).toBe(true);
-    expect(sess.games[0].completedOrders.has(0)).toBe(true);
-    expect(sess.games[0].inventory['麻布']).toBe(6);
-    expect(sess.games[0].money).toBeGreaterThan(moneyBefore);
+    expect(sess.games[0]!.completedOrders.has(0)).toBe(true);
+    expect(sess.games[0]!.inventory['麻布']).toBe(6);
+    expect(sess.games[0]!.money).toBeGreaterThan(moneyBefore);
   });
 
   it('does not re-complete an already-completed order', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 2;
-    sess.games[0].customerCards = [makeOrder(0)];
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 2;
+    sess.games[0]!.customerCards = [makeOrder(0)];
     handleCompleteOrder(sess, 0, { orderId: 0 });
-    const inventoryAfterFirst = sess.games[0].inventory['麻布'];
+    const inventoryAfterFirst = sess.games[0]!.inventory['麻布'];
     handleCompleteOrder(sess, 0, { orderId: 0 });
-    expect(sess.games[0].inventory['麻布']).toBe(inventoryAfterFirst);
+    expect(sess.games[0]!.inventory['麻布']).toBe(inventoryAfterFirst);
   });
 });

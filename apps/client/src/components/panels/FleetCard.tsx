@@ -139,8 +139,8 @@ export function WorkerTeam({ g }: { g: PlayerGameState }) {
 }
 
 // Ported verbatim from PortMasters2/PortMasters_online.html crewSectionsHTML (lines 2374-2407):
-// the fleet status card shared by your panel, your partner's panel, and spectate, so the two
-// sides are always directly comparable.
+// the fleet status card shared by your own status panel and the Captain Viewer (spectate), so
+// every captain's fleet is always directly comparable.
 export function CrewSections({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
   return (

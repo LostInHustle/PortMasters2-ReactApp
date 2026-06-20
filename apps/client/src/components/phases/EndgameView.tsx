@@ -50,8 +50,8 @@ export function EndgameView() {
         className="btn btn-xl"
         onClick={confirmRestart}
         title={tr(
-          '需等待对方也结束本局，双方进度将一同重置',
-          'Requires your partner to finish too; both voyages reset together',
+          '需等待其他船长也结束本局，所有人的进度将一同重置',
+          'Requires every other captain to finish too; everyone resets together',
         )}
       >
         {tr('🔄 再启新航程', '🔄 Begin a New Voyage')}

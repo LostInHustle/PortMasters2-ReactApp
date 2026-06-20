@@ -12,9 +12,9 @@ export function ExpansionUnlockGoods() {
         <h4>🗺️ Silk Road Charter: Phased Unlocks (Hard mode)</h4>
         <p>
           Rounds 1 to 5 play exactly like the original release, with 3 raw materials, 4 products, 3
-          artisan types and 5 ports. From
-          <strong>Round 6</strong>, the "New Maritime Edict" takes effect; from
-          <strong>Round 10</strong>, "Ten Thousand Kingdoms Trade" opens. Each wave adds new
+          artisan types and 5 ports. From <strong>Round 6</strong>, the "New Maritime Edict" takes
+          effect; from <strong>Round 10</strong>, "Ten Thousand Kingdoms Trade" opens. Each wave
+          adds new
           resources, products, ports, artisans, fortunes, ship modules and trade winds to the pools
           you draw from, so the later the voyage, the wider the board. As the waves arrive, the
           hands you pick from in the buying and trade phases grow too, going from 5 cards to 8 once

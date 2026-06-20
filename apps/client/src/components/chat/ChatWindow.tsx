@@ -8,13 +8,14 @@ import { ChatMessageList } from './ChatMessageList.js';
 // is replaced with the non-deprecated `onKeyDown` -- same Enter-to-send behavior, modern API.
 export function ChatWindow() {
   const { tr } = useTranslate();
-  const { chatOpen, chatPartner, partnerOnline, sendChat, closeChat } = useSession();
+  const { chatOpen, currentUser, serverState, sendChat, closeChat } = useSession();
   const [draft, setDraft] = useState('');
 
   if (!chatOpen) return null;
 
-  const enabled = Boolean(chatPartner) && partnerOnline;
-  const partnerLabel = chatPartner || tr('无', 'none');
+  const others = serverState?.players.filter((p) => p.name !== currentUser) ?? [];
+  const enabled = others.some((p) => p.online);
+  const partnerLabel = others.length > 0 ? others.map((p) => p.name).join(tr('、', ', ')) : tr('无', 'none');
 
   const submit = () => {
     if (!draft.trim()) return;
@@ -56,7 +57,7 @@ export function ChatWindow() {
           placeholder={
             enabled
               ? tr('输入消息...', 'Type a message...')
-              : tr('对方离线，无法发送', 'Partner offline, cannot send')
+              : tr('其他船长都已离线，无法发送', 'Everyone else is offline, cannot send')
           }
           onKeyDown={(e) => {
             if (e.key === 'Enter') submit();

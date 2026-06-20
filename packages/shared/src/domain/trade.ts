@@ -14,7 +14,7 @@ export interface TradeItem {
 
 export interface TradeOrder {
   id: string;
-  sellerSlot: 0 | 1;
+  sellerSlot: number;
   sell: TradeItem[];
   buy: TradeItem[];
 }

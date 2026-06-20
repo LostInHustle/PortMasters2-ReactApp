@@ -13,10 +13,10 @@ function isProductId(value: unknown): value is ProductId {
 // (lines 1661-1664).
 export function handleHireWorker(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'worker_mgmt' || !isWorkerType(data.workerType)) return false;
   game.hireWorker(data.workerType);
   return true;
@@ -26,10 +26,10 @@ export function handleHireWorker(
 // (lines 1665-1668).
 export function handleFireWorker(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'worker_mgmt' || !isWorkerType(data.workerType)) return false;
   const index = typeof data.index === 'number' ? data.index : -1;
   game.fireWorker(data.workerType, index);
@@ -40,10 +40,10 @@ export function handleFireWorker(
 // (lines 1669-1672).
 export function handleAssignTask(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'worker_mgmt' || !isWorkerType(data.workerType) || !isProductId(data.task)) {
     return false;
   }

@@ -4,8 +4,8 @@ import { sendToUser } from '../ws/send.js';
 
 // Ported verbatim from PortMasters2/server.py handle_game_action's setTradeReady branch
 // (lines 1632-1637).
-export function handleSetTradeReady(sess: SharedSession, slot: 0 | 1): boolean {
-  const game = sess.games[slot];
+export function handleSetTradeReady(sess: SharedSession, slot: number): boolean {
+  const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
   sess.tradeReady[slot] = true;
   if (sess.tradeGateComplete()) {
@@ -18,10 +18,10 @@ export function handleSetTradeReady(sess: SharedSession, slot: 0 | 1): boolean {
 // (lines 1638-1643).
 export function handleCreateTradeOrder(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
   sess.createTradeOrder(slot, data.sell ?? [], data.buy ?? []);
   return true;
@@ -31,10 +31,10 @@ export function handleCreateTradeOrder(
 // (lines 1644-1647).
 export function handleAcceptTrade(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
   sess.acceptTrade(data.orderId, slot);
   return true;
@@ -46,15 +46,15 @@ export function handleAcceptTrade(
 export function handleRejectTrade(
   state: ServerState,
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   username: string,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
   const order = sess.rejectTrade(data.orderId);
   if (order) {
-    const seller = sess.players[order.sellerSlot];
+    const seller = sess.players[order.sellerSlot]!;
     if (seller !== username) {
       const sellTxt = order.sell.map((i) => `${i.type}×${i.quantity}`).join('、');
       const buyTxt = order.buy.map((i) => `${i.type}×${i.quantity}`).join('、');

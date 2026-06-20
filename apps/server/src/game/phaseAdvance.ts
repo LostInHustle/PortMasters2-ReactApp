@@ -37,26 +37,26 @@ export interface PhaseAdvanceGame extends BrokerIntelContext, MonsoonSyncGame {
 }
 
 export interface PhaseAdvanceContext extends MonsoonSyncContext {
-  games: readonly [PhaseAdvanceGame, PhaseAdvanceGame];
-  tradeReady: [boolean, boolean];
+  games: readonly PhaseAdvanceGame[];
+  tradeReady: boolean[];
   tradeOrders: TradeOrder[];
   ready: Set<number>;
 }
 
 // Ported verbatim from PortMasters2/server.py SharedSession._active_phase (lines 1236-1240):
-// the session follows whichever player is still playing; if both have finished, it doesn't
+// the session follows whichever player is still playing; if everyone has finished, it doesn't
 // matter which, so it falls back to games[0].
-export function activePhase(games: readonly [PhaseAdvanceGame, PhaseAdvanceGame]): Phase {
+export function activePhase(games: readonly PhaseAdvanceGame[]): Phase {
   for (const g of games) {
     if (!g.gameOver) return g.phase;
   }
-  return games[0].phase;
+  return games[0]!.phase;
 }
 
 // Ported verbatim from PortMasters2/server.py SharedSession._set_phase (lines 1242-1246):
 // players in an end state (bankrupt/finished) stay on their own end-game page and stop
 // following the session's phase progression.
-export function setPhase(games: readonly [PhaseAdvanceGame, PhaseAdvanceGame], phase: Phase): void {
+export function setPhase(games: readonly PhaseAdvanceGame[], phase: Phase): void {
   for (const g of games) {
     if (!g.gameOver) g.phase = phase;
   }
@@ -106,7 +106,7 @@ export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
   } else if (phase === 1) {
     // Procure closes, Barter opens: a fresh trade board for this round.
     setPhase(ctx.games, 'trade');
-    ctx.tradeReady = [false, false];
+    ctx.tradeReady = ctx.games.map(() => false);
     ctx.tradeOrders = [];
   } else if (phase === 'worker_mgmt') {
     // Barter closes, Artisans opens: deal this round's customer orders, Emperor Mandate first

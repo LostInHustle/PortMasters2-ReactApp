@@ -15,58 +15,53 @@ export function FaqTab() {
         <h4>❓ Frequently Asked Questions</h4>
         <ul>
           <li>
-            <strong>Clicked a button and nothing happened, or stuck waiting?</strong>
-            You're most likely waiting on your partner. Check "Ready n/2" in the bottom bar, and
-            nudge them via 💬.
+            <strong>Clicked a button and nothing happened, or stuck waiting?</strong> You're most
+            likely waiting on your partner. Check "Ready n/N" in the bottom bar, and nudge them via
+            💬.
           </li>
           <li>
-            <strong>Have the materials but can't assign production?</strong>
-            All artisans may already have tasks; each takes only one per round.
+            <strong>Have the materials but can't assign production?</strong> All artisans may
+            already have tasks; each takes only one per round.
           </li>
           <li>
-            <strong>Why did I suddenly go bankrupt?</strong>
-            You couldn't cover wages or upkeep at settlement. Before expanding the team, check "⚠️
-            Due This Round" on the left.
+            <strong>Why did I suddenly go bankrupt?</strong> You couldn't cover wages or upkeep at
+            settlement. Before expanding the team, check "⚠️ Due This Round" on the left.
           </li>
           <li>
-            <strong>Can I still play after bankruptcy?</strong>
-            Your run is over, but you can open the "👀 Spectator Window" to watch your partner live,
-            and you never block them; once they finish, click "Set Sail Again" for a fresh run
-            together.
+            <strong>Can I still play after bankruptcy?</strong> Your run is over, but you can open
+            the "👀 Spectator Window" to watch your partner live, and you never block them; once
+            they finish, click "Set Sail Again" for a fresh run together.
           </li>
           <li>
-            <strong>Partner disconnected?</strong>
-            The session stays on the server, so they just log back in. Chat and trades pause while
-            they're away.
+            <strong>Partner disconnected?</strong> The session stays on the server, so they just
+            log back in. Chat and trades pause while they're away.
           </li>
           <li>
-            <strong>What exactly is renown?</strong>
-            It's the running total of each order's reward minus its shipping cost. It's the sole
-            basis of your final rating and is never reduced by spending.
+            <strong>What exactly is renown?</strong> It's the running total of each order's reward
+            minus its shipping cost. It's the sole basis of your final rating and is never reduced
+            by spending.
           </li>
         </ul>
         <h4>⌨️ Shortcuts</h4>
         <ul>
           <li>
-            <span className="kbd">F1</span>
-            opens this manual ·<span className="kbd">Esc</span>
+            <span className="kbd">F1</span> opens this manual · <span className="kbd">Esc</span>{' '}
             closes dialogs / the spectator window / chat
           </li>
         </ul>
         <h4>😣 Finding PortMasters 2 too hard?</h4>
         <p>
-          The simplest fix is to play on
-          <strong>Easy</strong>. Easy mode keeps to the founding set of goods so the market never
-          gets crowded, which lets you settle into the buy, produce and trade rhythm without
-          pressure. It is already the default, so you only need to confirm it when you invite, and
-          the "Difficulty & Expansion" section spells out exactly what differs between the two
-          levels.
+          The simplest fix is to play on <strong>Easy</strong>. Easy mode keeps to the founding set
+          of goods so the market never gets crowded, which lets you settle into the buy, produce and
+          trade rhythm without pressure. It is already the default, so you only need to confirm it
+          when you invite, and the "Difficulty & Expansion" section spells out exactly what differs
+          between the two levels.
         </p>
         <p>
-          If you would still like the gentlest possible introduction, warm up with
+          If you would still like the gentlest possible introduction, warm up with{' '}
           <a href={pm1Url(lang)} target="_blank" rel="noopener">
             <strong>PortMasters 1 →</strong>
-          </a>
+          </a>{' '}
           first, with no online sync, no complex taxes, and a gentler intro to the buy → produce →
           trade loop.
         </p>
@@ -79,7 +74,7 @@ export function FaqTab() {
       <ul>
         <li>
           <strong>点了按钮没反应，或者一直在等待？</strong>
-          大概率是在等对方确认。看底部「双方就绪 n/2」，并用 💬 聊天催一下伙伴。
+          大概率是在等对方确认。看底部「船长就绪 n/N」，并用 💬 聊天催一下伙伴。
         </li>
         <li>
           <strong>材料明明够却无法分配生产？</strong>

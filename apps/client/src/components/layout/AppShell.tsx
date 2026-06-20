@@ -12,15 +12,17 @@ import { ToastStack } from './ToastStack.js';
 // #login-overlay/#lobby-overlay/the game view (e.g. login(), lines 1916-1918; invite_accepted
 // handling, lines 1961-1969). The app header lives inside GameView (#app's grid-area: header),
 // not here, so login/lobby (each a fullscreen overlay with its own language toggle) don't show
-// it -- matching the original, where .header sits inside #app.
+// it -- matching the original, where .header sits inside #app. Routes on `serverState` rather
+// than a single chatPartner string: that field covers both the 1:1 fast path and a 2-5 player
+// room once it has actually started, and naturally falls back to the lobby after session_ended.
 export function AppShell() {
-  const { currentUser, chatPartner } = useSession();
+  const { currentUser, serverState } = useSession();
   useKeyboardShortcuts();
 
   return (
     <>
       <BgOrbs />
-      {!currentUser ? <LoginOverlay /> : !chatPartner ? <LobbyOverlay /> : <GameView />}
+      {!currentUser ? <LoginOverlay /> : !serverState ? <LobbyOverlay /> : <GameView />}
       {currentUser && <ChatWindow />}
       {currentUser && <SpectateView />}
       <ToastStack />

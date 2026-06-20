@@ -3,7 +3,13 @@ import { broadcastSessionState } from '../session/broadcastState.js';
 import { handleSelectBoon, handleStartBoon } from './boonActions.js';
 import { handleCompleteOrder } from './orderActions.js';
 import { handlePurchase, handlePurchaseIntel } from './procureActions.js';
-import { handleJoinGame, handleReadyForNextPhase, handleRestart } from './sessionActions.js';
+import {
+  endGameSession,
+  handleEndSessionVote,
+  handleJoinGame,
+  handleReadyForNextPhase,
+  handleRestart,
+} from './sessionActions.js';
 import {
   handleCancelModuleDraft,
   handleDraftModules,
@@ -22,8 +28,9 @@ import { handleAssignTask, handleFireWorker, handleHireWorker } from './workerAc
 
 // Ported verbatim from PortMasters2/server.py handle_game_action (lines 1583-1734): the in-game
 // action dispatcher. A player with no session is silently ignored, matching the original's
-// `if sess is None: return`. Bankrupt/finished players may only join_game or restart (read-only
-// spectator + restart), matching the original's end-state guard.
+// `if sess is None: return`. Bankrupt/finished players may only join_game, restart, or
+// end_session (read-only spectator + restart + a voice in disbanding the room), matching the
+// original's end-state guard as extended by the vote-to-end feature.
 export function handleGameAction(
   state: ServerState,
   username: string,
@@ -32,10 +39,17 @@ export function handleGameAction(
   const sess = state.sessions.get(username);
   if (sess === undefined) return;
   const slot = sess.slotOf(username);
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   const action = data.action;
 
-  if (game.gameOver && action !== 'join_game' && action !== 'restart') return;
+  if (
+    game.gameOver &&
+    action !== 'join_game' &&
+    action !== 'restart' &&
+    action !== 'end_session'
+  ) {
+    return;
+  }
 
   let changed = false;
   switch (action) {
@@ -105,9 +119,15 @@ export function handleGameAction(
     case 'restart':
       changed = handleRestart(state, sess, slot, username);
       break;
+    case 'end_session':
+      changed = handleEndSessionVote(sess, slot);
+      break;
   }
 
-  if (changed) {
-    broadcastSessionState(state, sess);
+  if (!changed) return;
+  if (sess.endVoteComplete()) {
+    endGameSession(state, sess);
+    return;
   }
+  broadcastSessionState(state, sess);
 }

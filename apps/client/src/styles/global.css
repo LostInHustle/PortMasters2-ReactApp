@@ -234,7 +234,7 @@ a {
 #status-panel {
   grid-area: me;
 }
-#partner-panel {
+#roster-panel {
   grid-area: partner;
 }
 
@@ -382,6 +382,36 @@ a {
   background: linear-gradient(135deg, rgba(52, 211, 153, 0.18), rgba(13, 148, 136, 0.14));
   border-color: rgba(16, 185, 129, 0.35);
   color: #047857;
+}
+/* ---- Roster widgets: every other player in the room, collapsed by default ---- */
+.roster-widget {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(14, 165, 233, 0.18);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.roster-widget-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.roster-widget-head:hover {
+  background: rgba(14, 165, 233, 0.08);
+}
+.roster-widget-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.roster-toggle {
+  font-size: 13px;
+  color: var(--ink-soft);
 }
 .muted {
   color: var(--ink-faint);
@@ -1805,18 +1835,66 @@ a {
 .spectate-head .sp-close:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+/* Names on the left (always visible, never scrolled out of view), the selected captain's
+   full data on the right. Splitting navigation from content like this is what lets the
+   detail side stay wide enough to render in 1-2 columns without the cramped, deeply
+   scrolled single column a narrow sidebar forces. */
 .spectate-body {
   padding: 14px 18px;
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  min-height: 0;
+}
+.sp-names {
+  flex: none;
+  width: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+  padding-right: 14px;
+}
+.sp-name-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ocean-900);
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s ease;
+}
+.sp-name-item:hover {
+  background: rgba(14, 165, 233, 0.14);
+}
+.sp-name-item.active {
+  background: var(--grad-primary);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+}
+.sp-name-item .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sp-detail {
+  flex: 1;
+  min-width: 0;
   overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 14px;
   align-items: start;
 }
-.spectate-body .sp-col {
+.sp-detail .sp-col {
   min-width: 0;
 }
-.spectate-body .sp-wide {
+.sp-detail .sp-wide {
   grid-column: 1 / -1;
 }
 .spectate-foot {
@@ -1829,6 +1907,18 @@ a {
 }
 @media (max-width: 760px) {
   .spectate-body {
+    flex-direction: column;
+  }
+  .sp-names {
+    width: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    padding-right: 0;
+    padding-bottom: 10px;
+  }
+  .sp-detail {
     grid-template-columns: 1fr;
   }
 }

@@ -39,23 +39,23 @@ describe('trade actions', () => {
   });
 
   it('handleSetTradeReady returns false outside trade, true inside, and completes the gate', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 1;
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 1;
     expect(handleSetTradeReady(sess, 0)).toBe(false);
 
-    sess.games[0].phase = 'trade';
-    sess.games[1].phase = 'trade';
+    sess.games[0]!.phase = 'trade';
+    sess.games[1]!.phase = 'trade';
     expect(handleSetTradeReady(sess, 0)).toBe(true);
     expect(sess.tradeReady).toEqual([true, false]);
 
     expect(handleSetTradeReady(sess, 1)).toBe(true);
-    expect(sess.games[0].phase).toBe('worker_mgmt'); // gate completed -> advanced
+    expect(sess.games[0]!.phase).toBe('worker_mgmt'); // gate completed -> advanced
   });
 
   it('handleCreateTradeOrder returns true within trade regardless of malformed items', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 'trade';
-    sess.games[1].phase = 'trade';
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 'trade';
+    sess.games[1]!.phase = 'trade';
     expect(
       handleCreateTradeOrder(sess, 0, { sell: [{ type: 'junk', quantity: -1 }], buy: [] }),
     ).toBe(true);
@@ -68,9 +68,9 @@ describe('trade actions', () => {
   });
 
   it('handleAcceptTrade returns true within trade regardless of success', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 'trade';
-    sess.games[1].phase = 'trade';
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 'trade';
+    sess.games[1]!.phase = 'trade';
     expect(handleAcceptTrade(sess, 1, { orderId: 'nope' })).toBe(true);
 
     sess.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], []);
@@ -82,9 +82,9 @@ describe('trade actions', () => {
   it('handleRejectTrade notifies the seller only when they are not the rejecter', () => {
     const aliceWs = new FakeSocket();
     state.online.set('alice', aliceWs);
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 'trade';
-    sess.games[1].phase = 'trade';
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 'trade';
+    sess.games[1]!.phase = 'trade';
     sess.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], []);
     const order = sess.tradeOrders[0]!;
 
@@ -97,9 +97,9 @@ describe('trade actions', () => {
   it('handleRejectTrade does not notify when the rejecter is the order owner', () => {
     const aliceWs = new FakeSocket();
     state.online.set('alice', aliceWs);
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 'trade';
-    sess.games[1].phase = 'trade';
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 'trade';
+    sess.games[1]!.phase = 'trade';
     sess.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], []);
     const order = sess.tradeOrders[0]!;
 

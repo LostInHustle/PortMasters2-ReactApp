@@ -6,10 +6,10 @@ import type { SharedSession } from '../session/SharedSession.js';
 // whether a matching, not-yet-completed order was actually found.
 export function handleCompleteOrder(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 2) return false;
   const order = game.customerCards.find((o) => o.id === data.orderId);
   if (order && !game.completedOrders.has(order.id!)) {

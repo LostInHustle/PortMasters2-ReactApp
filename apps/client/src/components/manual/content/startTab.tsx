@@ -16,9 +16,8 @@ export function StartTab() {
         <p>
           You and your partner each run a maritime trading fleet. Over the voyage (
           <strong>8 rounds on Easy, 12 on Standard, 16 on Hard</strong>
-          ), build
-          <strong>renown</strong>
-          through the buy low → produce → sell high loop. Renown is the net profit of every
+          ), build <strong>renown</strong> through the buy low → produce → sell high loop. Renown
+          is the net profit of every
           delivered order; your final rating depends on it. You start with 100 gold and a small
           stock of materials.
         </p>
@@ -75,10 +74,10 @@ export function StartTab() {
           <span className="pm-icon">🧭</span>
           <span>
             <strong>This is PortMasters 2</strong>, and the learning curve is steep. If it feels
-            overwhelming, warm up with
+            overwhelming, warm up with{' '}
             <a href={pm1Url(lang)} target="_blank" rel="noopener">
               PortMasters 1 →
-            </a>
+            </a>{' '}
             and come back.
           </span>
         </div>
