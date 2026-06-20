@@ -107,7 +107,7 @@ export class PlayerGame {
   lastLogs: string[] = [];
   logSeq = 0;
   /** Injected by SharedSession (Phase 3). */
-  slot: 1 | 2 | null = null;
+  slot: number | null = null;
   rng: Rng;
 
   constructor(difficulty: Difficulty = DEFAULT_DIFFICULTY, rng: Rng = defaultRng) {

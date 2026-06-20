@@ -14,7 +14,7 @@ import { PhaseBrief } from './PhaseBrief.js';
 // React's reconciliation (this component stays mounted across re-renders) avoids for free.
 export function BarterPhase() {
   const { tr, lang } = useTranslate();
-  const { serverState, chatPartner } = useSession();
+  const { serverState } = useSession();
   const { send } = useWs();
   const { showNotification } = useToast();
   const g = serverState?.yourGame;
@@ -25,8 +25,10 @@ export function BarterPhase() {
   const receivedOrders = orders.filter((o) => o.sellerSlot !== mySlot - 1);
   const myOrders = orders.filter((o) => o.sellerSlot === mySlot - 1);
   const myReady = serverState.tradeReady[mySlot - 1];
-  const otherReady = serverState.tradeReady[2 - mySlot];
-  const partner = serverState.partnerName || chatPartner || tr('对方', 'Partner');
+  const otherIndices = serverState.players.map((_, i) => i).filter((i) => i !== mySlot - 1);
+  const othersReadyCount = otherIndices.filter((i) => serverState.tradeReady[i]).length;
+  const nameOf = (sellerSlot: number) =>
+    serverState.players[sellerSlot]?.name ?? tr('对方', 'Partner');
   const sep = tr('、', ', ');
 
   const options: TradeItemType[] = [GOLD, ...g.unlockedResources, ...g.unlockedProducts];
@@ -61,8 +63,8 @@ export function BarterPhase() {
     });
     showNotification(
       tr(
-        '📨 订单已发布，对方可在其界面中接受或拒绝',
-        '📨 Offer posted, your partner can accept or decline it',
+        '📨 订单已发布，其他船长可在其界面中接受或拒绝',
+        '📨 Offer posted, any other captain can accept or decline it',
       ),
     );
   };
@@ -77,15 +79,18 @@ export function BarterPhase() {
               {tr('我', 'You')}{' '}
               {myReady ? tr('✅ 已准备', '✅ Ready') : tr('⌛ 未准备', '⌛ Not ready')}
             </span>
-            <span className={`chip ${otherReady ? 'green' : 'amber'}`}>
-              {partner} {otherReady ? tr('✅ 已准备', '✅ Ready') : tr('⌛ 未准备', '⌛ Not ready')}
+            <span className={`chip ${othersReadyCount === otherIndices.length ? 'green' : 'amber'}`}>
+              {tr(
+                `其他船长 ${othersReadyCount}/${otherIndices.length} 已准备`,
+                `Others ${othersReadyCount}/${otherIndices.length} ready`,
+              )}
             </span>
           </>
         }
       />
 
       <div className="trade-section">
-        <h3>{tr(`📥 ${partner} 向你发起的交易`, `📥 Offers from ${partner}`)}</h3>
+        <h3>{tr('📥 收到的交易', '📥 Offers Received')}</h3>
         <div className="section-hint">
           {tr(
             '接受即按订单内容即时互换；若任意一方资源不足，交易不会成立。不想要可直接拒绝。',
@@ -93,10 +98,13 @@ export function BarterPhase() {
           )}
         </div>
         {receivedOrders.length === 0 ? (
-          <p className="muted">{tr('暂无来自对方的订单', 'No offers from your partner yet')}</p>
+          <p className="muted">{tr('暂无来自其他船长的订单', 'No offers from other captains yet')}</p>
         ) : (
           receivedOrders.map((o) => (
             <div className="trade-order" key={o.id}>
+              <div className="muted" style={{ fontSize: 11 }}>
+                {nameOf(o.sellerSlot)}
+              </div>
               <div>
                 {tr('📤 对方给出：', '📤 They give: ')}
                 <strong>
@@ -134,11 +142,11 @@ export function BarterPhase() {
       </div>
 
       <div className="trade-section">
-        <h3>{tr(`📤 向 ${partner} 发布交易订单`, `📤 Post an Offer to ${partner}`)}</h3>
+        <h3>{tr('📤 向其他船长发布交易订单', '📤 Post an Offer')}</h3>
         <div className="section-hint">
           {tr(
-            '下拉框中实时显示你的持有量，方便核对。订单发布后对方可接受或拒绝；本阶段结束前未成交的订单自动作废。',
-            'The dropdowns show your current stock. Your partner can accept or decline; unaccepted offers expire when this phase ends.',
+            '下拉框中实时显示你的持有量，方便核对。订单发布后任意其他船长都可接受或拒绝；本阶段结束前未成交的订单自动作废。',
+            'The dropdowns show your current stock. Any other captain can accept or decline; unaccepted offers expire when this phase ends.',
           )}
         </div>
         <div className="trade-create">
@@ -219,7 +227,7 @@ export function BarterPhase() {
               {o.sell.map((i) => `${tn(i.type, lang)}×${i.quantity}`).join(sep)} ⇄ {tr('换', 'for')}{' '}
               {o.buy.map((i) => `${tn(i.type, lang)}×${i.quantity}`).join(sep)}{' '}
               <span className="muted">
-                {tr('（等待对方接受或拒绝）', '(awaiting partner response)')}
+                {tr('（等待其他船长接受或拒绝）', '(awaiting a response)')}
               </span>
             </div>
           ))
@@ -232,12 +240,12 @@ export function BarterPhase() {
           disabled={myReady}
           onClick={() => send({ action: 'setTradeReady' })}
           title={tr(
-            '双方都点击后进入工匠管理。点击前请确认交易已谈妥',
-            'Artisan management begins once both captains are ready, settle your trades first',
+            '所有船长都点击后进入工匠管理。点击前请确认交易已谈妥',
+            'Artisan management begins once every captain is ready, settle your trades first',
           )}
         >
           {myReady
-            ? tr('⏳ 已准备，等待对方就绪', '⏳ Ready, waiting for partner')
+            ? tr('⏳ 已准备，等待其他船长就绪', '⏳ Ready, waiting for others')
             : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering, ready')}
           <span className="btn-sub">
             {myReady ? '' : tr('双方就绪后进入工匠管理', 'Advances when both are ready')}

@@ -78,18 +78,15 @@ export function WorkersTab() {
         <h4>⚙️ Production Rules</h4>
         <ul>
           <li>
-            Assigning a task
-            <strong>consumes materials immediately</strong>; the product arrives at
-            <strong>Upkeep</strong>
-            and can be sold from the next round.
+            Assigning a task <strong>consumes materials immediately</strong>; the product arrives
+            at <strong>Upkeep</strong> and can be sold from the next round.
           </li>
           <li>
-            Each artisan takes one task per round; regular artisans make 1 item,
-            <strong>skilled ⭐</strong>
-            ones (auto-promoted after 2 lifetime items) make 2.
+            Each artisan takes one task per round; regular artisans make 1 item,{' '}
+            <strong>skilled ⭐</strong> ones (auto-promoted after 2 lifetime items) make 2.
           </li>
           <li>
-            Wages are paid automatically at Upkeep, so
+            Wages are paid automatically at Upkeep, so{' '}
             <strong>running out of cash means bankruptcy</strong>; do the math before expanding.
           </li>
           <li>

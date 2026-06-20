@@ -32,23 +32,23 @@ describe('handleJoinGame', () => {
 
 describe('handleReadyForNextPhase', () => {
   it('returns false outside the gated phases or once already ready', () => {
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].phase = 0;
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.phase = 0;
     expect(handleReadyForNextPhase(sess, 0)).toBe(false);
 
-    sess.games[0].phase = 1;
+    sess.games[0]!.phase = 1;
     sess.ready.add(0);
     expect(handleReadyForNextPhase(sess, 0)).toBe(false);
   });
 
   it('marks ready and advances once both players are ready, for each gated phase', () => {
     for (const phase of [1, 'worker_mgmt', 2, 4] as const) {
-      const sess = new SharedSession('alice', 'bob');
-      sess.games[0].phase = phase;
-      sess.games[1].phase = phase;
+      const sess = SharedSession.createPair('alice', 'bob');
+      sess.games[0]!.phase = phase;
+      sess.games[1]!.phase = phase;
       expect(handleReadyForNextPhase(sess, 0)).toBe(true);
       expect(handleReadyForNextPhase(sess, 1)).toBe(true);
-      expect(sess.games[0].phase).not.toBe(phase);
+      expect(sess.games[0]!.phase).not.toBe(phase);
     }
   });
 });
@@ -69,7 +69,7 @@ describe('handleRestart', () => {
   it("refuses to restart while the partner's game is still in progress", () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
-    const sess = new SharedSession('alice', 'bob');
+    const sess = SharedSession.createPair('alice', 'bob');
     expect(handleRestart(state, sess, 0, 'alice')).toBe(false);
     expect(alice.sent).toEqual([
       { type: 'system_message', message: '需等待对方完成本局后才能重新起航' },
@@ -79,12 +79,12 @@ describe('handleRestart', () => {
   it("restarts once the partner's game has ended, notifying the partner", () => {
     const bob = new FakeSocket();
     state.online.set('bob', bob);
-    const sess = new SharedSession('alice', 'bob');
-    sess.games[0].money = 9999;
-    sess.games[1].gameOver = true;
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.money = 9999;
+    sess.games[1]!.gameOver = true;
 
     expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
-    expect(sess.games[0].money).toBe(100);
+    expect(sess.games[0]!.money).toBe(100);
     expect(bob.sent).toEqual([
       { type: 'system_message', message: '对方重新开始了游戏，双方进度已重置' },
     ]);

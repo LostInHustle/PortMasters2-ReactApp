@@ -15,6 +15,7 @@ export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChi
   const meta = PHASE_META.get(phaseKey);
   if (!meta || !serverState) return null;
   const readyCount = serverState.phaseReadyCount;
+  const readyTotal = serverState.phaseTotalCount;
   const waiting = serverState.waitingForOther;
 
   return (
@@ -32,13 +33,13 @@ export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChi
       <div className="pb-sync">
         <DifficultyChip difficulty={serverState.yourGame.difficulty} />
         <span
-          className={`chip ${readyCount >= 2 ? 'green' : ''}`}
+          className={`chip ${readyCount >= readyTotal ? 'green' : ''}`}
           title={tr(
             '双方都确认后才进入下一阶段',
             'The next phase starts once both captains confirm',
           )}
         >
-          {tr(`🔄 双方就绪 ${readyCount} / 2`, `🔄 Ready ${readyCount} / 2`)}
+          {tr(`🔄 双方就绪 ${readyCount} / ${readyTotal}`, `🔄 Ready ${readyCount} / ${readyTotal}`)}
         </span>
         {waiting && <span className="chip amber">⏳ {lst(waiting, lang)}</span>}
         {extraChips}

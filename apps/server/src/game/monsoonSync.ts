@@ -10,17 +10,17 @@ export interface MonsoonSyncGame {
 }
 
 export interface MonsoonSyncContext {
-  games: readonly [MonsoonSyncGame, MonsoonSyncGame];
+  games: readonly MonsoonSyncGame[];
   tierUnlock: Record<number, number>;
   monsoonCycleCache: Record<number, MonsoonState>;
 }
 
 // Ported verbatim from PortMasters2/server.py SharedSession.sync_monsoon_state (lines 1248-1261).
 // Rounds 1-2 (cycle 0) always keep the original Spring Current opening; every later 2-round
-// cycle randomly picks one monsoon state and caches it, so both rounds in a cycle (and both
-// players) see the same weather, and re-syncing later doesn't re-roll an already-seen cycle.
+// cycle randomly picks one monsoon state and caches it, so every round in a cycle (and every
+// player) sees the same weather, and re-syncing later doesn't re-roll an already-seen cycle.
 export function syncMonsoonState(ctx: MonsoonSyncContext, rng: Rng): void {
-  const activeGame = ctx.games.find((g) => !g.gameOver) ?? ctx.games[0];
+  const activeGame = ctx.games.find((g) => !g.gameOver) ?? ctx.games[0]!;
   const activeRound = Math.max(1, Math.min(activeGame.currentRound, activeGame.maxRounds));
   const cycle = Math.floor((activeRound - 1) / 2);
   let state: MonsoonState;

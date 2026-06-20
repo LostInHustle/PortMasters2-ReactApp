@@ -18,6 +18,12 @@ import type { Worker } from '../domain/worker.js';
 // plan's "phase encoding" decision.
 export type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 'trade' | 'worker_mgmt' | 'bankruptcy' | 'endgame';
 
+// Ported from PortMasters2/server.py's MIN_ROOM_PLAYERS/MAX_ROOM_PLAYERS module constants:
+// shared by the server (clamping/validating room size) and the client (the create-room and
+// roster UI), so the allowed range only ever needs to change in one place.
+export const MIN_ROOM_PLAYERS = 2;
+export const MAX_ROOM_PLAYERS = 5;
+
 // Ported verbatim from PortMasters2/server.py end_round (lines 1038-1045).
 export interface RoundSummary {
   round: number;
@@ -94,20 +100,54 @@ export interface PlayerGameState {
   shipUpgradePenalty: number;
   logs: string[];
   logSeq: number;
-  slot: 1 | 2 | null;
+  slot: number | null;
 }
 
-// Ported verbatim from PortMasters2/server.py SharedSession.broadcast_state's per-recipient
-// state dict (lines 1458-1469) -- the "state" message payload pushed after every action.
+// A captain's entry in the room roster -- name, online status, and whether they're the host (who
+// alone may start the voyage while the room hasn't launched yet).
+export interface RosterPlayer {
+  name: string;
+  online: boolean;
+  isHost: boolean;
+}
+
+// Ported from PortMasters2/server.py GameSession.broadcast_state's per-recipient state dict,
+// generalized from a single partner to a room of 2-5: otherGames/players replace the old
+// singular otherGame/partnerName/partnerOnline now that there can be more than one fellow
+// captain, and the end-session vote tally rides along so every client can show live consensus.
 export interface SessionStateMessage {
   tradeOrders: TradeOrder[];
-  tradeReady: [boolean, boolean];
+  tradeReady: boolean[];
   phaseReadyCount: number;
+  phaseTotalCount: number;
   yourGame: PlayerGameState;
-  otherGame: PlayerGameState;
+  otherGames: Record<string, PlayerGameState>;
   waitingForOther: string | null;
   youReady: boolean;
-  yourSlot: 1 | 2;
-  partnerName: string;
-  partnerOnline: boolean;
+  yourSlot: number;
+  host: string;
+  maxPlayers: number;
+  players: RosterPlayer[];
+  endSessionVotes: number;
+  endSessionTotal: number;
+  youVotedEnd: boolean;
+}
+
+// The roster of a room, broadcast to its current members both before and after it starts --
+// the pre-start "Host a voyage" lobby view and the in-game roster panel read the same shape.
+export interface RoomRosterMessage {
+  host: string;
+  difficulty: Difficulty;
+  maxPlayers: number;
+  started: boolean;
+  players: RosterPlayer[];
+}
+
+// One row of the lobby's "Open rooms" browse list -- every online player sees this for every
+// room that hasn't started yet, so they can pick one to join.
+export interface OpenRoomSummary {
+  host: string;
+  difficulty: Difficulty;
+  count: number;
+  maxPlayers: number;
 }

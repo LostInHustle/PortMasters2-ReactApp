@@ -6,10 +6,10 @@ import type { SharedSession } from '../session/SharedSession.js';
 // whether a matching, not-yet-purchased card was actually found.
 export function handlePurchase(
   sess: SharedSession,
-  slot: 0 | 1,
+  slot: number,
   data: Record<string, unknown>,
 ): boolean {
-  const game = sess.games[slot];
+  const game = sess.games[slot]!;
   if (game.phase !== 1) return false;
   const card = game.resourceCards.find((c) => c.id === data.cardId);
   if (card && !game.purchasedCards.has(card.id!)) {
@@ -20,8 +20,8 @@ export function handlePurchase(
 
 // Ported verbatim from PortMasters2/server.py handle_game_action's purchaseIntel branch
 // (lines 1628-1631).
-export function handlePurchaseIntel(sess: SharedSession, slot: 0 | 1): boolean {
-  const game = sess.games[slot];
+export function handlePurchaseIntel(sess: SharedSession, slot: number): boolean {
+  const game = sess.games[slot]!;
   if (game.phase !== 1) return false;
   game.purchaseIntel();
   return true;

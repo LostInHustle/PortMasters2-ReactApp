@@ -88,7 +88,7 @@ describe('connectionHandler', () => {
       state.users.register('alice', 'longenough');
       const bobWs = new FakeSocket();
       state.online.set('bob', bobWs);
-      const sess = new SharedSession('alice', 'bob');
+      const sess = SharedSession.createPair('alice', 'bob');
       state.sessions.set('alice', sess);
       state.sessions.set('bob', sess);
 
@@ -99,11 +99,7 @@ describe('connectionHandler', () => {
         password: 'longenough',
       });
 
-      expect(aliceWs.sent).toContainEqual({
-        type: 'session_resumed',
-        partner: 'bob',
-        partnerOnline: true,
-      });
+      expect(aliceWs.sent).toContainEqual({ type: 'session_resumed' });
       expect(bobWs.sent).toContainEqual({
         type: 'partner_status',
         username: 'alice',
@@ -136,7 +132,7 @@ describe('connectionHandler', () => {
       expect(ws.sent).toEqual([{ type: 'chat_history', history: [] }]);
 
       ws.sent = [];
-      const sess = new SharedSession('alice', 'bob');
+      const sess = SharedSession.createPair('alice', 'bob');
       sess.addChat('alice', 'hi');
       state.sessions.set('alice', sess);
       processMessage(state, ws, 'alice', { action: 'get_chat_history' });
@@ -150,7 +146,7 @@ describe('connectionHandler', () => {
       const bobWs = new FakeSocket();
       state.online.set('alice', aliceWs);
       state.online.set('bob', bobWs);
-      const sess = new SharedSession('alice', 'bob');
+      const sess = SharedSession.createPair('alice', 'bob');
       state.sessions.set('alice', sess);
       state.sessions.set('bob', sess);
 
@@ -192,7 +188,7 @@ describe('connectionHandler', () => {
       const bobWs = new FakeSocket();
       state.online.set('alice', aliceWs);
       state.online.set('bob', bobWs);
-      const sess = new SharedSession('alice', 'bob');
+      const sess = SharedSession.createPair('alice', 'bob');
       state.sessions.set('alice', sess);
       state.sessions.set('bob', sess);
 
@@ -210,7 +206,7 @@ describe('connectionHandler', () => {
     it('recycles the session once both players have gone offline', () => {
       const aliceWs = new FakeSocket();
       state.online.set('alice', aliceWs);
-      const sess = new SharedSession('alice', 'bob');
+      const sess = SharedSession.createPair('alice', 'bob');
       state.sessions.set('alice', sess);
       state.sessions.set('bob', sess);
 

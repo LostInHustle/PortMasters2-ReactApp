@@ -49,8 +49,8 @@ export function OnboardingTour() {
         <h4>{tr('2️⃣ 与伙伴同船同行', '2️⃣ You sail in lockstep with a partner')}</h4>
         <p>
           {tr(
-            '每个阶段都需双方确认才推进（看底部「双方就绪 n/2」）。右侧面板可随时查看伙伴的存款、声望、货物、工匠与增益；互市阶段可自由交易，💬 聊天随时沟通。',
-            "Every phase advances only when both captains confirm (see 'Ready n/2' at the bottom). The right panel shows your partner's gold, renown, cargo, artisans and buffs; trade freely during Barter and talk any time via 💬.",
+            '每个阶段都需双方确认才推进（看底部「船长就绪 n/N」）。右侧面板可随时查看伙伴的存款、声望、货物、工匠与增益；互市阶段可自由交易，💬 聊天随时沟通。',
+            "Every phase advances only when both captains confirm (see 'Ready n/N' at the bottom). The right panel shows your partner's gold, renown, cargo, artisans and buffs; trade freely during Barter and talk any time via 💬.",
           )}
         </p>
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>

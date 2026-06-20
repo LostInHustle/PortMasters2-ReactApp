@@ -44,7 +44,7 @@ describe('handleSendChat', () => {
   it('tells the sender when their partner is offline', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
-    state.sessions.set('alice', new SharedSession('alice', 'bob'));
+    state.sessions.set('alice', SharedSession.createPair('alice', 'bob'));
     handleSendChat(state, 'alice', 'hi');
     expect(alice.sent).toEqual([{ type: 'system_message', message: '对方已离线，无法发送消息' }]);
   });
@@ -54,7 +54,7 @@ describe('handleSendChat', () => {
     const bob = new FakeSocket();
     state.online.set('alice', alice);
     state.online.set('bob', bob);
-    const sess = new SharedSession('alice', 'bob');
+    const sess = SharedSession.createPair('alice', 'bob');
     state.sessions.set('alice', sess);
     handleSendChat(state, 'alice', '   ');
     expect(bob.sent).toEqual([]);
@@ -66,7 +66,7 @@ describe('handleSendChat', () => {
     const bob = new FakeSocket();
     state.online.set('alice', alice);
     state.online.set('bob', bob);
-    const sess = new SharedSession('alice', 'bob');
+    const sess = SharedSession.createPair('alice', 'bob');
     state.sessions.set('alice', sess);
     const long = '  ' + 'x'.repeat(600) + '  ';
 

@@ -5,18 +5,23 @@ import { useSession } from '../../state/SessionContext.js';
 import { useSpectate } from '../../state/SpectateContext.js';
 import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCard.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderSpectate (lines 3232-3293):
-// a read-only, live-updating view of the partner's fleet, reusing the same fleet-card pieces as
-// the status/partner panels rather than duplicating their markup.
+// Generalizes PortMasters2/PortMasters_online.html renderSpectate (lines 3232-3293) into the
+// prototype's later "Captain Viewer": a read-only, live-updating view of another captain's
+// fleet, reusing the same fleet-card pieces as the status/roster panels. With more than one
+// other captain in the room, a name switcher lets the viewer hop between them without closing
+// the window -- the original always had exactly one partner to show, so this row only renders
+// once there's an actual choice to make.
 export function SpectateView() {
   const { tr, lang } = useTranslate();
-  const { serverState, chatPartner, partnerOnline } = useSession();
-  const { isSpectating, closeSpectate } = useSpectate();
+  const { serverState } = useSession();
+  const { isSpectating, target, closeSpectate, setTarget } = useSpectate();
 
   if (!isSpectating) return null;
-  const og = serverState?.otherGame;
-  if (!og) return null;
-  const name = serverState?.partnerName || chatPartner || tr('伙伴', 'Partner');
+  const otherGames = serverState?.otherGames ?? {};
+  const og = target ? otherGames[target] : undefined;
+  if (!og || !target) return null;
+  const others = serverState?.players.filter((p) => p.name in otherGames) ?? [];
+  const online = others.find((p) => p.name === target)?.online ?? false;
   const recentLogs = og.logs.slice(-8).reverse();
 
   return (
@@ -33,7 +38,7 @@ export function SpectateView() {
             LIVE
           </span>
           <div className="sp-title">
-            {tr(`👀 观战 · ${name} 的商队`, `👀 Spectating ${name}'s Fleet`)}
+            {tr(`👀 观战 · ${target} 的商队`, `👀 Spectating ${target}'s Fleet`)}
             <div className="sp-sub">
               {tr(
                 `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随对方操作实时更新`,
@@ -41,7 +46,7 @@ export function SpectateView() {
               )}
             </div>
           </div>
-          {!partnerOnline && <span className="chip amber">{tr('对方离线', 'Offline')}</span>}
+          {!online && <span className="chip amber">{tr('对方离线', 'Offline')}</span>}
           <button
             className="sp-close"
             onClick={closeSpectate}
@@ -50,6 +55,20 @@ export function SpectateView() {
             ×
           </button>
         </div>
+        {others.length > 1 && (
+          <div className="sp-names">
+            {others.map((p) => (
+              <button
+                key={p.name}
+                className={`sp-name-item ${p.name === target ? 'active' : ''}`}
+                onClick={() => setTarget(p.name)}
+              >
+                {p.name}
+                {!p.online && ' 💤'}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="spectate-body">
           <div className="sp-col">
             <div className="status-section">

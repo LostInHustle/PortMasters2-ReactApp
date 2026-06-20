@@ -12,10 +12,9 @@ export function ExpansionUnlockWindsModules() {
         <h4>🌬️ New Trade Winds</h4>
         <p>
           Beyond the original Spring Current, Summer Monsoon, Autumn Gales and Winter Blockade, 4
-          new trade-wind states join the pool. From Round 3 on, each "season" (every 2 rounds) is
-          <strong>drawn at random from the currently unlocked pool</strong>
-          instead of a fixed 4 season cycle, though Rounds 1 to 2 are still always Spring Current,
-          exactly as before.
+          new trade-wind states join the pool. From Round 3 on, each "season" (every 2 rounds) is{' '}
+          <strong>drawn at random from the currently unlocked pool</strong> instead of a fixed 4
+          season cycle, though Rounds 1 to 2 are still always Spring Current, exactly as before.
         </p>
         <table>
           <thead>
@@ -107,9 +106,8 @@ export function ExpansionUnlockWindsModules() {
         <div className="pm-banner" style={{ marginTop: '10px' }}>
           <span className="pm-icon">🗺️</span>
           <span>
-            These additions arrive as banner announcements on the
-            <strong>Set Sail</strong>
-            page, so watch for them at the start of Round 6 and Round 10!
+            These additions arrive as banner announcements on the <strong>Set Sail</strong> page,
+            so watch for them at the start of Round 6 and Round 10!
           </span>
         </div>
       </>

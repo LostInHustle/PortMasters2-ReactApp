@@ -1,4 +1,10 @@
-import type { ChatMessage, Difficulty, SessionStateMessage } from '@pm2/shared';
+import type {
+  ChatMessage,
+  Difficulty,
+  OpenRoomSummary,
+  RoomRosterMessage,
+  SessionStateMessage,
+} from '@pm2/shared';
 import {
   createContext,
   useCallback,
@@ -21,8 +27,8 @@ interface PendingInvite {
 interface SessionState {
   currentUser: string | null;
   onlineUsers: string[];
-  chatPartner: string | null;
-  partnerOnline: boolean;
+  room: RoomRosterMessage | null;
+  openRooms: OpenRoomSummary[];
   pendingInviteFrom: PendingInvite | null;
   lastInviteTo: string | null;
   serverState: SessionStateMessage | null;
@@ -35,6 +41,11 @@ interface SessionContextValue extends SessionState {
   login: (username: string, password: string) => void;
   sendInvite: (to: string, difficulty: Difficulty) => void;
   respondInvite: (accept: boolean) => void;
+  createRoom: (maxPlayers: number, difficulty: Difficulty) => void;
+  joinRoom: (host: string) => void;
+  leaveRoom: () => void;
+  startRoom: () => void;
+  voteEndSession: () => void;
   sendChat: (message: string) => void;
   requestChatHistory: () => void;
   toggleChat: () => void;
@@ -47,8 +58,8 @@ const SessionContext = createContext<SessionContextValue | null>(null);
 const initialState: SessionState = {
   currentUser: null,
   onlineUsers: [],
-  chatPartner: null,
-  partnerOnline: false,
+  room: null,
+  openRooms: [],
   pendingInviteFrom: null,
   lastInviteTo: null,
   serverState: null,
@@ -122,12 +133,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           break;
 
         case 'invite_accepted':
-          setState((s) => ({
-            ...s,
-            chatPartner: msg.partner as string,
-            partnerOnline: true,
-            lastInviteTo: null,
-          }));
+          setState((s) => ({ ...s, lastInviteTo: null }));
           send({ action: 'join_game' });
           showNotification(
             lang === 'en'
@@ -137,21 +143,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           break;
 
         case 'session_resumed':
-          setState((s) => ({
-            ...s,
-            chatPartner: msg.partner as string,
-            partnerOnline: Boolean(msg.partnerOnline),
-          }));
-          showNotification(
-            lang === 'en'
-              ? `Session resumed, partner: ${msg.partner}`
-              : `已恢复游戏会话，伙伴: ${msg.partner}`,
-          );
+          showNotification(lang === 'en' ? 'Session resumed' : '已恢复游戏会话');
           break;
 
         case 'partner_status':
           setState((s) => {
-            if (msg.username !== s.chatPartner) return s;
+            const inRoom = s.serverState?.players.some((p) => p.name === msg.username);
+            if (!inRoom) return s;
             showNotification(
               msg.online
                 ? lang === 'en'
@@ -162,8 +160,37 @@ export function SessionProvider({ children }: { children: ReactNode }) {
                   : `${msg.username} 已离线`,
               !msg.online,
             );
-            return { ...s, partnerOnline: Boolean(msg.online) };
+            return s;
           });
+          break;
+
+        case 'room_roster':
+          setState((s) => ({
+            ...s,
+            room: msg as unknown as RoomRosterMessage,
+          }));
+          break;
+
+        case 'open_rooms_update':
+          setState((s) => ({ ...s, openRooms: msg.rooms as OpenRoomSummary[] }));
+          break;
+
+        case 'room_started':
+          setState((s) => ({ ...s, room: null }));
+          showNotification(lang === 'en' ? 'The voyage has begun!' : '航程开始！');
+          break;
+
+        case 'session_ended':
+          setState((s) => ({
+            ...s,
+            room: null,
+            serverState: null,
+            chatHistory: [],
+            chatOpen: false,
+          }));
+          showNotification(
+            lang === 'en' ? 'The session has ended, back to the lobby' : '会话已结束，已返回大厅',
+          );
           break;
 
         case 'invite_rejected':
@@ -190,14 +217,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           break;
 
         case 'chat_message': {
-          // Ported from PortMasters2/PortMasters_online.html's chat_message handler
-          // (lines 2014-2021): record the message, and when the chat window is closed, raise a
-          // notification. The toast is clickable and opens the chat, so an alert leads straight
-          // to the conversation.
+          // Generalized from PortMasters2/PortMasters_online.html's chat_message handler
+          // (lines 2014-2021) from a 1:1 DM to a room broadcast: the server only ever relays
+          // this to genuine room members, so the client trusts it rather than re-checking
+          // against a single "chatPartner" that no longer exists in a room of up to 5.
           const from = msg.from as string;
           const message = msg.message as string;
           const live = stateRef.current;
-          if (from !== live.chatPartner) break;
           setState((s) => ({ ...s, chatHistory: [...s.chatHistory, { from, message }] }));
           if (!live.chatOpen) {
             showNotification(`💬 ${from}: ${message}`, false, openChat);
@@ -256,17 +282,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     [send],
   );
 
-  // Ported verbatim from PortMasters2/PortMasters_online.html sendChat (lines 2214-2222): the
-  // server only relays a chat message to the *other* party (lobby/chat.ts), so the sender has
-  // to echo their own message into the transcript locally rather than waiting for it to come
-  // back over the wire. The WS send is a real side effect, so it stays out of the setState
-  // updater (which React may invoke more than once) and reads the gating fields off `state`
-  // directly instead.
+  // Generalized from PortMasters2/PortMasters_online.html sendChat (lines 2214-2222) from a 1:1
+  // partner check to "is anyone else in the room online": the server relays to every other
+  // online room member (lobby/chat.ts), so the sender echoes their own message locally rather
+  // than waiting for it to come back over the wire. The WS send is a real side effect, so it
+  // stays out of the setState updater (which React may invoke more than once) and reads the
+  // gating fields off `state` directly instead.
   const sendChat = useCallback(
     (message: string) => {
       const trimmed = message.trim();
-      const { chatPartner, partnerOnline, currentUser } = state;
-      if (!trimmed || !chatPartner || !partnerOnline || !currentUser) return;
+      const { currentUser, serverState } = state;
+      const anyoneElseOnline = serverState?.players.some(
+        (p) => p.name !== currentUser && p.online,
+      );
+      if (!trimmed || !currentUser || !anyoneElseOnline) return;
       send({ action: 'send_chat', message: trimmed });
       setState((s) => ({
         ...s,
@@ -283,14 +312,41 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // Ported verbatim from PortMasters2/PortMasters_online.html toggleChat (lines 2200-2212):
   // opening the window also (re-)fetches history; closing is just a visibility flip.
   const toggleChat = useCallback(() => {
-    const { chatOpen, chatPartner } = state;
-    if (!chatOpen && chatPartner) requestChatHistory();
+    const { chatOpen, serverState } = state;
+    if (!chatOpen && serverState) requestChatHistory();
     setState((s) => ({ ...s, chatOpen: !s.chatOpen }));
   }, [state, requestChatHistory]);
 
   const closeChat = useCallback(() => {
     setState((s) => ({ ...s, chatOpen: false }));
   }, []);
+
+  const createRoom = useCallback(
+    (maxPlayers: number, difficulty: Difficulty) => {
+      send({ action: 'create_room', maxPlayers, difficulty });
+    },
+    [send],
+  );
+
+  const joinRoom = useCallback(
+    (host: string) => {
+      send({ action: 'join_room', host });
+    },
+    [send],
+  );
+
+  const leaveRoom = useCallback(() => {
+    send({ action: 'leave_room' });
+    setState((s) => ({ ...s, room: null }));
+  }, [send]);
+
+  const startRoom = useCallback(() => {
+    send({ action: 'start_room' });
+  }, [send]);
+
+  const voteEndSession = useCallback(() => {
+    send({ action: 'end_session' });
+  }, [send]);
 
   const logout = useCallback(() => {
     setState(initialState);
@@ -304,6 +360,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         login,
         sendInvite,
         respondInvite,
+        createRoom,
+        joinRoom,
+        leaveRoom,
+        startRoom,
+        voteEndSession,
         sendChat,
         requestChatHistory,
         toggleChat,

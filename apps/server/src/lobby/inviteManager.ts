@@ -118,7 +118,7 @@ export function handleRespondInvite(
     return;
   }
   const difficulty = normalizeDifficulty(inv.difficulty);
-  const sess = new SharedSession(sender, responder, difficulty);
+  const sess = SharedSession.createPair(sender, responder, difficulty);
   state.sessions.set(sender, sess);
   state.sessions.set(responder, sess);
   sendToUser(state, sender, { type: 'invite_accepted', partner: responder, difficulty });

@@ -41,7 +41,7 @@ export function ShipTab() {
         <ul>
           <li>Shipping never drops below 5 gold (certain fortunes/modules can push it to 0).</li>
           <li>
-            Upgrades are a<strong>permanent investment</strong>: the more orders you deliver, the
+            Upgrades are a <strong>permanent investment</strong>: the more orders you deliver, the
             faster they pay off. Aim for Lv.1 to 2 around rounds 2 to 4.
           </li>
           <li>
@@ -50,11 +50,8 @@ export function ShipTab() {
           </li>
           <li>
             Once a slot is unlocked you can "Choose Ship Modules" at the Shipyard. Each round's 3
-            options are
-            <strong>fixed</strong>
-            (closing and reopening shows the same batch), and you get one
-            <strong>Change Batch</strong>
-            reroll per round.
+            options are <strong>fixed</strong> (closing and reopening shows the same batch), and
+            you get one <strong>Change Batch</strong> reroll per round.
           </li>
         </ul>
       </>

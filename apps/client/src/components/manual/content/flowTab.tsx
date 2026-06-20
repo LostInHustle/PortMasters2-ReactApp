@@ -67,7 +67,7 @@ export function FlowTab() {
           </tbody>
         </table>
         <p>
-          The "🔄 Ready n/2" chip in the bottom bar shows sync progress; once you confirm, a waiting
+          The "🔄 Ready n/N" chip in the bottom bar shows sync progress; once you confirm, a waiting
           hint appears until your partner does too. Bankrupt players count as auto-ready and never
           block their partner.
         </p>
@@ -129,8 +129,8 @@ export function FlowTab() {
         </tbody>
       </table>
       <p>
-        底部操作栏的「🔄 双方就绪
-        n/2」实时显示同步进度；你确认后若对方未确认，会显示等待提示。已破产的玩家视为自动就绪，不会阻塞对方。
+        底部操作栏的「🔄 船长就绪
+        n/N」实时显示同步进度；你确认后若对方未确认，会显示等待提示。已破产的玩家视为自动就绪，不会阻塞对方。
       </p>
     </>
   );

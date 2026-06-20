@@ -19,7 +19,9 @@ export function ControlPanel() {
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
-    const partnerPlaying = serverState?.otherGame && !serverState.otherGame.gameOver;
+    const partnerPlaying = Object.values(serverState?.otherGames ?? {}).some(
+      (og) => !og.gameOver,
+    );
     return (
       <>
         <span className="sync-chip">
@@ -37,7 +39,7 @@ export function ControlPanel() {
         )}
         <div className="control-spacer" />
         {isBankrupt && partnerPlaying && (
-          <button className="btn btn-ghost" onClick={openSpectate}>
+          <button className="btn btn-ghost" onClick={() => openSpectate()}>
             {tr('👀 观战伙伴', '👀 Spectate Partner')}
           </button>
         )}
@@ -142,7 +144,10 @@ export function ControlPanel() {
           'The next phase starts once both captains confirm',
         )}
       >
-        {tr(`🔄 双方就绪 ${readyCount} / 2`, `🔄 Ready ${readyCount} / 2`)}
+        {tr(
+          `🔄 双方就绪 ${readyCount} / ${serverState?.phaseTotalCount ?? 0}`,
+          `🔄 Ready ${readyCount} / ${serverState?.phaseTotalCount ?? 0}`,
+        )}
       </span>
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
