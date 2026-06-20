@@ -6,6 +6,7 @@ import {
   type RosterPlayer,
 } from '@pm2/shared';
 import { normalizeDifficulty } from '../game/difficultyRules.js';
+import { broadcastSessionState } from '../session/broadcastState.js';
 import { SharedSession } from '../session/SharedSession.js';
 import { sendJson, sendToUser } from '../ws/send.js';
 import type { ServerState } from './onlineRegistry.js';
@@ -141,4 +142,5 @@ export function handleStartRoom(state: ServerState, username: string): void {
     sendToUser(state, player, msg);
   }
   broadcastOpenRooms(state);
+  broadcastSessionState(state, room);
 }

@@ -29,14 +29,14 @@ export function OnboardingTour() {
       <div className="manual-body" style={{ maxHeight: '46vh' }}>
         <p>
           {tr(
-            '这里是 PortMasters 2 ， 海上丝绸之路双人联机贸易战略。开始前 60 秒了解三件事：',
-            'This is PortMasters 2, a trading strategy for two captains on the Maritime Silk Road. Sixty seconds, three things to know:',
+            '这里是 PortMasters 2 ， 海上丝绸之路联机贸易战略，2-5 位船长共享同一段航程。开始前 60 秒了解三件事：',
+            'This is PortMasters 2, an online trading strategy on the Maritime Silk Road for 2-5 captains sharing one voyage. Sixty seconds, three things to know:',
           )}
         </p>
         <p className="muted">
           {tr(
-            '小提示：每一局有轻松、标准、高难三档难度，默认是轻松，由邀请时双方商定。觉得吃力就保持轻松，它只包含基础货物，更适合上手；想要更多挑战可以拾级而上。',
-            'Tip: each session has Easy, Standard and Hard difficulties, Easy by default, agreed between the two of you when the invite is sent. If it feels like a lot, stay on Easy, which keeps to the founding set of goods and is friendlier for getting started, and climb the ladder when you want more.',
+            '小提示：每一局有轻松、标准、高难三档难度，默认是轻松，由发起邀请或创建房间的船长选定。觉得吃力就保持轻松，它只包含基础货物，更适合上手；想要更多挑战可以拾级而上。',
+            'Tip: each session has Easy, Standard and Hard difficulties, Easy by default, chosen by whoever sends the invite or creates the room. If it feels like a lot, stay on Easy, which keeps to the founding set of goods and is friendlier for getting started, and climb the ladder when you want more.',
           )}
         </p>
         <h4>{tr('1️⃣ 一切围绕现金流', '1️⃣ Cash flow is everything')}</h4>
@@ -46,11 +46,11 @@ export function OnboardingTour() {
             'Every round you must pay artisan wages plus 15 gold upkeep, miss it and you go bankrupt instantly. The left panel tallies "Due This Round" live; keep an eye on it.',
           )}
         </p>
-        <h4>{tr('2️⃣ 与伙伴同船同行', '2️⃣ You sail in lockstep with a partner')}</h4>
+        <h4>{tr('2️⃣ 与其他船长同船同行', '2️⃣ You sail in lockstep with your fellow captains')}</h4>
         <p>
           {tr(
-            '每个阶段都需双方确认才推进（看底部「船长就绪 n/N」）。右侧面板可随时查看伙伴的存款、声望、货物、工匠与增益；互市阶段可自由交易，💬 聊天随时沟通。',
-            "Every phase advances only when both captains confirm (see 'Ready n/N' at the bottom). The right panel shows your partner's gold, renown, cargo, artisans and buffs; trade freely during Barter and talk any time via 💬.",
+            '每个阶段都需所有船长确认才推进（看底部「船长就绪 n/N」）。右侧面板列出每位船长，点击可查看其存款、声望、货物、工匠与增益；互市阶段可与任意人自由交易，💬 聊天随时沟通。',
+            "Every phase advances only when every captain confirms (see 'Ready n/N' at the bottom). The right panel lists every captain -- click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
           )}
         </p>
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>

@@ -94,4 +94,37 @@ describe('handleGameAction', () => {
 
     expect(sess.games[0]!.phase).toBe(5);
   });
+
+  it('allows end_session even for a player who has already finished', () => {
+    const alice = new FakeSocket();
+    state.online.set('alice', alice);
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[0]!.gameOver = true;
+    sess.games[0]!.phase = 'bankruptcy';
+    state.sessions.set('alice', sess);
+
+    handleGameAction(state, 'alice', { action: 'end_session' });
+
+    expect(sess.endVotes.has(0)).toBe(true);
+    expect(alice.sent).toHaveLength(1);
+    expect((alice.sent[0] as { type: string }).type).toBe('state');
+  });
+
+  it('once every player votes end_session, disbands the room instead of broadcasting state', () => {
+    const alice = new FakeSocket();
+    const bob = new FakeSocket();
+    state.online.set('alice', alice);
+    state.online.set('bob', bob);
+    const sess = SharedSession.createPair('alice', 'bob');
+    state.sessions.set('alice', sess);
+    state.sessions.set('bob', sess);
+
+    handleGameAction(state, 'alice', { action: 'end_session' });
+    handleGameAction(state, 'bob', { action: 'end_session' });
+
+    expect(alice.sent.at(-1)).toEqual({ type: 'session_ended' });
+    expect(bob.sent.at(-1)).toEqual({ type: 'session_ended' });
+    expect(state.sessions.has('alice')).toBe(false);
+    expect(state.sessions.has('bob')).toBe(false);
+  });
 });

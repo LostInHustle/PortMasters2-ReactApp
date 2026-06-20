@@ -180,8 +180,8 @@ export function BarterPhase() {
               value={buyType}
               onChange={(e) => setBuyType(e.target.value as TradeItemType)}
               title={tr(
-                '选择希望从对方处获得的物资或金币',
-                'Choose what you want from your partner',
+                '选择希望从其他船长处获得的物资或金币',
+                'Choose what you want in return',
               )}
             >
               {options.map((t) => (

@@ -3,6 +3,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
+  endGameSession,
+  handleEndSessionVote,
   handleJoinGame,
   handleReadyForNextPhase,
   handleRestart,
@@ -88,5 +90,65 @@ describe('handleRestart', () => {
     expect(bob.sent).toEqual([
       { type: 'system_message', message: '对方重新开始了游戏，双方进度已重置' },
     ]);
+  });
+
+  it('in a 3-player room, requires every other player (not just one) to have finished', () => {
+    const sess = new SharedSession('alice', 'easy', 3);
+    sess.addPlayer('bob');
+    sess.addPlayer('carol');
+    sess.start();
+    sess.games[1]!.gameOver = true;
+    // carol (slot 2) hasn't finished yet, so alice still can't restart.
+    expect(handleRestart(state, sess, 0, 'alice')).toBe(false);
+
+    sess.games[2]!.gameOver = true;
+    expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
+  });
+});
+
+describe('handleEndSessionVote / endGameSession', () => {
+  let dir: string;
+  let state: ServerState;
+
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), 'pm2-endsession-'));
+    state = createServerState(new UserStore(join(dir, 'users.json')));
+  });
+
+  afterEach(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('records a vote and reports completion only once every player has voted', () => {
+    const sess = SharedSession.createPair('alice', 'bob');
+    expect(handleEndSessionVote(sess, 0)).toBe(true);
+    expect(sess.endVoteComplete()).toBe(false);
+    expect(handleEndSessionVote(sess, 1)).toBe(true);
+    expect(sess.endVoteComplete()).toBe(true);
+  });
+
+  it('does not auto-count a bankrupt/finished player -- everyone must vote explicitly', () => {
+    const sess = SharedSession.createPair('alice', 'bob');
+    sess.games[1]!.gameOver = true;
+    sess.games[1]!.bankrupt = true;
+    expect(handleEndSessionVote(sess, 0)).toBe(true);
+    expect(sess.endVoteComplete()).toBe(false);
+  });
+
+  it('endGameSession notifies and drops every player from state.sessions', () => {
+    const alice = new FakeSocket();
+    const bob = new FakeSocket();
+    state.online.set('alice', alice);
+    state.online.set('bob', bob);
+    const sess = SharedSession.createPair('alice', 'bob');
+    state.sessions.set('alice', sess);
+    state.sessions.set('bob', sess);
+
+    endGameSession(state, sess);
+
+    expect(alice.sent).toEqual([{ type: 'session_ended' }]);
+    expect(bob.sent).toEqual([{ type: 'session_ended' }]);
+    expect(state.sessions.has('alice')).toBe(false);
+    expect(state.sessions.has('bob')).toBe(false);
   });
 });

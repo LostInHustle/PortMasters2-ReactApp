@@ -2,7 +2,8 @@ import { difficultyInfo } from '../../i18n/difficultyInfo.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 
-// New: the lobby's "browse open rooms" list, fed by open_rooms_update (roomManager.ts's
+// Ported verbatim from PortMasters2/PortMasters_online.html renderOpenRooms (lines 2337-2356):
+// the lobby's "browse open rooms" list, fed by open_rooms_update (roomManager.ts's
 // broadcastOpenRooms). Every room that hasn't started yet shows up here for any online player to
 // join, alongside the existing 1:1 invite flow in OnlineUsersList.
 export function OpenRoomsList() {
@@ -12,10 +13,10 @@ export function OpenRoomsList() {
 
   if (joinable.length === 0) {
     return (
-      <p className="muted">
+      <p style={{ color: '#94a3b8', textAlign: 'center', padding: 24, fontSize: 13 }}>
         {tr(
-          '🌊 暂无可加入的房间。创建一个房间，邀请其他船长自由加入吧。',
-          '🌊 No open rooms right now. Create one and let other captains join freely.',
+          '🌊 暂无招募中的航程。点击上方按钮，招募一支属于你的船队。',
+          '🌊 No open voyages right now. Use the button above to recruit your own crew.',
         )}
       </p>
     );
@@ -28,11 +29,14 @@ export function OpenRoomsList() {
           <span className="u-name">
             <span className="dot on" />
             {r.host}
-            <span className={`chip diff-${r.difficulty}`} style={{ marginLeft: 6 }}>
+            <span
+              className={`diff-badge diff-${r.difficulty}`}
+              style={{ fontSize: 11, padding: '2px 10px' }}
+            >
               {pf(difficultyInfo(r.difficulty).badge)}
             </span>
-            <span className="muted" style={{ marginLeft: 6 }}>
-              {r.count}/{r.maxPlayers}
+            <span className="muted" style={{ fontSize: 12 }}>
+              {r.count} / {r.maxPlayers}
             </span>
           </span>
           <button
@@ -40,7 +44,7 @@ export function OpenRoomsList() {
             disabled={r.count >= r.maxPlayers}
             onClick={() => joinRoom(r.host)}
           >
-            {tr('🚪 加入', '🚪 Join')}
+            {tr('加入', '➕ Join')}
           </button>
         </div>
       ))}

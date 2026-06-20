@@ -50,7 +50,6 @@ interface SessionContextValue extends SessionState {
   requestChatHistory: () => void;
   toggleChat: () => void;
   closeChat: () => void;
-  logout: () => void;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -348,10 +347,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     send({ action: 'end_session' });
   }, [send]);
 
-  const logout = useCallback(() => {
-    setState(initialState);
-  }, []);
-
   return (
     <SessionContext.Provider
       value={{
@@ -369,7 +364,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         requestChatHistory,
         toggleChat,
         closeChat,
-        logout,
       }}
     >
       {children}

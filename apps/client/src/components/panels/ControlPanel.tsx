@@ -32,15 +32,15 @@ export function ControlPanel() {
         {partnerPlaying && (
           <span className="control-hint">
             {tr(
-              '💡 伙伴仍在航行中，可打开观战窗口实时围观',
-              '💡 Your partner is still sailing, open the spectator window to watch live',
+              '💡 还有同行仍在航行中，可打开观战窗口实时围观',
+              '💡 Others are still sailing. Open the spectator window to watch live',
             )}
           </span>
         )}
         <div className="control-spacer" />
         {isBankrupt && partnerPlaying && (
           <button className="btn btn-ghost" onClick={() => openSpectate()}>
-            {tr('👀 观战伙伴', '👀 Spectate Partner')}
+            {tr('👀 观战同行', '👀 Spectate')}
           </button>
         )}
         <button className="btn btn-danger" onClick={confirmRestart}>
@@ -69,8 +69,8 @@ export function ControlPanel() {
         </button>
       );
       hint = serverState?.youReady
-        ? tr('等待对方确认后进入福缘抽取', 'Waiting for your partner to confirm')
-        : tr('双方都确认后进入福缘抽取', 'Fortune draw begins once both confirm');
+        ? tr('等待其他船长确认后进入福缘抽取', 'Waiting for the others to confirm')
+        : tr('所有船长都确认后进入福缘抽取', 'Fortune draw begins once everyone confirms');
       break;
     case 5:
       hint = tr('请在上方卡片中选择并锁定一项福缘', 'Pick and lock one fortune card above');
@@ -117,7 +117,7 @@ export function ControlPanel() {
           {tr('💸 支付维护费', '💸 Pay Upkeep')}
         </button>
       );
-      hint = tr('支付后等待对方完成结算', 'After paying, wait for your partner to settle');
+      hint = tr('支付后等待其他船长完成结算', 'After paying, wait for the others to settle');
       break;
     case 4:
       primary = (

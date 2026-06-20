@@ -70,8 +70,8 @@ export function BankruptcyView() {
             className="btn btn-lg btn-ghost"
             onClick={() => openSpectate()}
             title={tr(
-              '在独立窗口中实时观看其他船长的航程',
-              "Watch the other captains' voyages live in their own window",
+              '在独立窗口中实时观看同行的航程',
+              "Watch a fellow captain's voyage live in its own window",
             )}
           >
             {tr('👀 打开观战窗口', '👀 Open Spectator Window')}

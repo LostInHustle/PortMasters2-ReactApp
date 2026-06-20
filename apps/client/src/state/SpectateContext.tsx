@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { useSession } from './SessionContext.js';
 
 interface SpectateContextValue {
@@ -15,13 +23,12 @@ const SpectateContext = createContext<SpectateContextValue | null>(null);
 // 3222-3235) and the prototype's later openCaptainViewer (which doubles this same window as a
 // "click any roster widget" detail view, not just the self-bankruptcy auto-watch) into one
 // target-aware viewer: `target` names which other captain's fleet is shown, defaulting to the
-// first one available when no specific target is requested. The auto-close check is unchanged --
-// the window closes itself once this player is no longer bankrupt (the session restarted),
-// matching the original's check inside renderAll() rather than requiring a manual close.
+// first one available when no specific target is requested.
 export function SpectateProvider({ children }: { children: ReactNode }) {
   const [isSpectating, setIsSpectating] = useState(false);
   const [target, setTargetState] = useState<string | null>(null);
   const { serverState } = useSession();
+  const wasBankrupt = useRef(false);
 
   const openSpectate = useCallback(
     (requested?: string) => {
@@ -36,11 +43,17 @@ export function SpectateProvider({ children }: { children: ReactNode }) {
   }, []);
   const setTarget = useCallback((next: string) => setTargetState(next), []);
 
+  // The window closes itself the moment THIS player stops being bankrupt (a restart while
+  // bankrupt-spectating) -- tracked as an edge on the previous bankrupt state, not the current
+  // level, so opening this same window from a roster click while simply not bankrupt (the
+  // common case once it doubles as the Captain Viewer) doesn't immediately snap it shut.
   useEffect(() => {
-    if (isSpectating && serverState?.yourGame && !serverState.yourGame.bankrupt) {
+    const isBankrupt = serverState?.yourGame?.bankrupt ?? false;
+    if (isSpectating && wasBankrupt.current && !isBankrupt) {
       setIsSpectating(false);
       setTargetState(null);
     }
+    wasBankrupt.current = isBankrupt;
   }, [isSpectating, serverState]);
 
   return (

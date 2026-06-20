@@ -34,8 +34,8 @@ export function LoginOverlay() {
           {tr('💡 ', '💡 ')}
           <strong>{tr('本作为 PortMasters 2', 'This is PortMasters 2')}</strong>
           {tr(
-            '，引入了税务、工资、双人同步互市等更复杂的机制，',
-            ', it adds taxes, wages and synchronized bartering with a partner, so the learning curve is ',
+            '，引入了税务、工资、多人同步互市等更复杂的机制，',
+            ', it adds taxes, wages and synchronized bartering with fellow captains, so the learning curve is ',
           )}
           <strong>{tr('上手门槛较高', 'steeper than the original')}</strong>
           {tr('。如果是初次接触本系列，建议先体验上一代 ', '. New to the series? Start with ')}
