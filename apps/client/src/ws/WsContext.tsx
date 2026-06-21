@@ -19,11 +19,14 @@ interface WsContextValue {
 
 const WsContext = createContext<WsContextValue | null>(null);
 
-// /ws matches the dev-time Vite proxy (vite.config.ts) that forwards WebSocket upgrades to the
-// backend on a different port; in production the same server serves both, so the path is just a
-// fixed endpoint there too. The backend itself doesn't care about path -- this is a dev-workflow
-// detail, not a protocol requirement.
+// VITE_WS_URL points at a backend deployed on a different origin than the client (e.g. client on
+// Vercel, server on Railway) -- Vercel can't host the persistent WebSocket process itself, so
+// same-origin is no longer a safe assumption in production. Unset, this falls back to /ws on the
+// page's own origin, which is what the dev-time Vite proxy (vite.config.ts) forwards to the local
+// backend, and what a single-process same-origin deploy would also serve.
 function wsUrl(): string {
+  const override = import.meta.env.VITE_WS_URL;
+  if (override) return override;
   const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
   return `${proto}://${window.location.host}/ws`;
 }
