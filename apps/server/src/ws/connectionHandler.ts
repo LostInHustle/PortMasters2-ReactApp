@@ -1,5 +1,6 @@
 import type WebSocket from 'ws';
 import { handleGameAction } from '../actions/handleGameAction.js';
+import { issueToken, resolveToken, revokeToken } from '../auth/sessionTokens.js';
 import { handleSendChat } from '../lobby/chat.js';
 import { handleRespondInvite, handleSendInvite } from '../lobby/inviteManager.js';
 import type { Sendable, ServerState } from '../lobby/onlineRegistry.js';
@@ -13,9 +14,31 @@ import {
 import { broadcastSessionState } from '../session/broadcastState.js';
 import { broadcastOnlineUsers, sendJson, sendToUser } from './send.js';
 
+// Shared tail of both `login` and `resume_token` once the online slot is claimed: tell everyone
+// else this username is online, and -- if a live (started) session already exists for them --
+// push the full game state right away so a reconnect lands back in the game, not just the
+// lobby. Claiming `state.online` itself stays in each caller, before it sends its response (see
+// the comment at each call site for why).
+function completeAuthentication(state: ServerState, ws: Sendable, username: string): void {
+  broadcastOnlineUsers(state);
+  broadcastOpenRooms(state);
+  // A pending (not-yet-started) room never survives a disconnect -- handleDisconnect already
+  // ran handleLeaveRoom for it -- so any session still on record here is a live voyage.
+  const sess = state.sessions.get(username);
+  if (sess !== undefined && sess.started) {
+    sendJson(ws, { type: 'session_resumed' });
+    for (const other of sess.otherPlayers(username)) {
+      sendToUser(state, other, { type: 'partner_status', username, online: true });
+    }
+    broadcastSessionState(state, sess);
+  }
+}
+
 // Ported verbatim from PortMasters2/server.py handler's not-logged-in branch
 // (lines 1750-1778): only register/login are accepted before a connection has claimed a
-// username.
+// username. Extended with `resume_token`, the silent counterpart to `login` a fresh connection
+// (a reconnect, or an actual page refresh) sends automatically when it's holding a token from a
+// previous login -- see sessionTokens.ts for why this exists.
 function processUnauthenticated(
   state: ServerState,
   ws: Sendable,
@@ -42,21 +65,23 @@ function processUnauthenticated(
       // account cannot both pass the check above.
       state.online.set(u, ws);
     }
-    sendJson(ws, { type: 'login_result', success: ok, username: u, message: msg });
+    const token = ok ? issueToken(state, u) : undefined;
+    sendJson(ws, { type: 'login_result', success: ok, username: u, message: msg, token });
     if (!ok) return null;
-    broadcastOnlineUsers(state);
-    broadcastOpenRooms(state);
-    // A pending (not-yet-started) room never survives a disconnect -- handleDisconnect already
-    // ran handleLeaveRoom for it -- so any session still on record here is a live voyage.
-    const sess = state.sessions.get(u);
-    if (sess !== undefined && sess.started) {
-      sendJson(ws, { type: 'session_resumed' });
-      for (const other of sess.otherPlayers(u)) {
-        sendToUser(state, other, { type: 'partner_status', username: u, online: true });
-      }
-      broadcastSessionState(state, sess);
-    }
+    completeAuthentication(state, ws, u);
     return u;
+  }
+  if (action === 'resume_token') {
+    const username = resolveToken(state, data.token);
+    if (username === undefined || state.online.has(username)) {
+      sendJson(ws, { type: 'resume_result', success: false });
+      return null;
+    }
+    // Same ordering as login above: claim before responding.
+    state.online.set(username, ws);
+    sendJson(ws, { type: 'resume_result', success: true, username });
+    completeAuthentication(state, ws, username);
+    return username;
   }
   sendJson(ws, { type: 'error', message: '请先登录' });
   return null;
@@ -76,6 +101,12 @@ function processAuthenticated(
         type: 'online_users',
         users: [...state.online.keys()].filter((n) => n !== username),
       });
+      break;
+    case 'logout':
+      // Revokes the resume token so it can't silently log this player back in later -- the
+      // actual "go offline" cleanup (state.online, session/room) still happens through the
+      // normal close handler once the client reloads right after sending this.
+      revokeToken(state, data.token);
       break;
     case 'send_invite':
       handleSendInvite(state, username, String(data.to ?? ''), data.difficulty);
