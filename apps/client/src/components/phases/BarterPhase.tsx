@@ -79,7 +79,9 @@ export function BarterPhase() {
               {tr('我', 'You')}{' '}
               {myReady ? tr('✅ 已准备', '✅ Ready') : tr('⌛ 未准备', '⌛ Not ready')}
             </span>
-            <span className={`chip ${othersReadyCount === otherIndices.length ? 'green' : 'amber'}`}>
+            <span
+              className={`chip ${othersReadyCount === otherIndices.length ? 'green' : 'amber'}`}
+            >
               {tr(
                 `其他船长 ${othersReadyCount}/${otherIndices.length} 已准备`,
                 `Others ${othersReadyCount}/${otherIndices.length} ready`,
@@ -98,7 +100,9 @@ export function BarterPhase() {
           )}
         </div>
         {receivedOrders.length === 0 ? (
-          <p className="muted">{tr('暂无来自其他船长的订单', 'No offers from other captains yet')}</p>
+          <p className="muted">
+            {tr('暂无来自其他船长的订单', 'No offers from other captains yet')}
+          </p>
         ) : (
           receivedOrders.map((o) => (
             <div className="trade-order" key={o.id}>
@@ -179,10 +183,7 @@ export function BarterPhase() {
             <select
               value={buyType}
               onChange={(e) => setBuyType(e.target.value as TradeItemType)}
-              title={tr(
-                '选择希望从其他船长处获得的物资或金币',
-                'Choose what you want in return',
-              )}
+              title={tr('选择希望从其他船长处获得的物资或金币', 'Choose what you want in return')}
             >
               {options.map((t) => (
                 <option value={t} key={t}>

@@ -56,12 +56,21 @@ describe('connectionHandler', () => {
       });
       expect(result).toBe('alice');
       expect(state.online.get('alice')).toBe(ws);
-      expect(ws.sent[0]).toEqual({
+      const sent = ws.sent[0] as {
+        type: string;
+        success: boolean;
+        username: string;
+        message: string;
+        token: string;
+      };
+      expect(sent).toMatchObject({
         type: 'login_result',
         success: true,
         username: 'alice',
         message: '登录成功',
       });
+      expect(typeof sent.token).toBe('string');
+      expect(sent.token.length).toBeGreaterThan(0);
     });
 
     it('refuses a second login for an already-online account', () => {
@@ -113,6 +122,84 @@ describe('connectionHandler', () => {
       const result = processMessage(state, ws, null, { action: 'get_online_users' });
       expect(result).toBeNull();
       expect(ws.sent).toEqual([{ type: 'error', message: '请先登录' }]);
+    });
+
+    describe('resume_token', () => {
+      function loginAndGetToken(state: ServerState, username: string): string {
+        state.users.register(username, 'longenough');
+        const ws = new FakeSocket();
+        processMessage(state, ws, null, { action: 'login', username, password: 'longenough' });
+        const sent = ws.sent[0] as { token: string };
+        return sent.token;
+      }
+
+      it('silently re-identifies a fresh connection holding a valid token', () => {
+        const token = loginAndGetToken(state, 'alice');
+        state.online.delete('alice'); // the old connection is gone, as it would be by now
+
+        const ws2 = new FakeSocket();
+        const result = processMessage(state, ws2, null, { action: 'resume_token', token });
+
+        expect(result).toBe('alice');
+        expect(state.online.get('alice')).toBe(ws2);
+        expect(ws2.sent).toContainEqual({
+          type: 'resume_result',
+          success: true,
+          username: 'alice',
+        });
+      });
+
+      it('fails for an unknown token, with no password-style error message', () => {
+        const ws = new FakeSocket();
+        const result = processMessage(state, ws, null, {
+          action: 'resume_token',
+          token: 'not-a-real-token',
+        });
+        expect(result).toBeNull();
+        expect(ws.sent).toEqual([{ type: 'resume_result', success: false }]);
+      });
+
+      it('refuses to resume while the account is already online elsewhere', () => {
+        const token = loginAndGetToken(state, 'alice'); // ws1 still holds the online slot
+
+        const ws2 = new FakeSocket();
+        const result = processMessage(state, ws2, null, { action: 'resume_token', token });
+
+        expect(result).toBeNull();
+        expect(ws2.sent).toEqual([{ type: 'resume_result', success: false }]);
+      });
+
+      it('resumes a live session exactly like login does', () => {
+        const token = loginAndGetToken(state, 'alice');
+        state.online.delete('alice');
+        const bobWs = new FakeSocket();
+        state.online.set('bob', bobWs);
+        const sess = SharedSession.createPair('alice', 'bob');
+        state.sessions.set('alice', sess);
+        state.sessions.set('bob', sess);
+
+        const ws2 = new FakeSocket();
+        processMessage(state, ws2, null, { action: 'resume_token', token });
+
+        expect(ws2.sent).toContainEqual({ type: 'session_resumed' });
+        expect(bobWs.sent).toContainEqual({
+          type: 'partner_status',
+          username: 'alice',
+          online: true,
+        });
+      });
+
+      it('logout revokes the token, so it can no longer resume anything', () => {
+        const token = loginAndGetToken(state, 'alice');
+        processMessage(state, state.online.get('alice')!, 'alice', { action: 'logout', token });
+        state.online.delete('alice');
+
+        const ws2 = new FakeSocket();
+        const result = processMessage(state, ws2, null, { action: 'resume_token', token });
+
+        expect(result).toBeNull();
+        expect(ws2.sent).toEqual([{ type: 'resume_result', success: false }]);
+      });
     });
   });
 

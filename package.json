@@ -12,7 +12,7 @@
     "build": "npm run build -w @pm2/client",
     "start": "npm run start -w @pm2/server",
     "serve": "npm run build && npm run start",
-    "test": "npm run test -w @pm2/server",
+    "test": "npm run test -w @pm2/server && npm run test -w @pm2/client",
     "typecheck": "npm run typecheck -w @pm2/shared && npm run typecheck -w @pm2/server && npm run typecheck -w @pm2/client",
     "lint": "eslint ."
   },

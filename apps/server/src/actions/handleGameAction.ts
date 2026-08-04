@@ -42,12 +42,7 @@ export function handleGameAction(
   const game = sess.games[slot]!;
   const action = data.action;
 
-  if (
-    game.gameOver &&
-    action !== 'join_game' &&
-    action !== 'restart' &&
-    action !== 'end_session'
-  ) {
+  if (game.gameOver && action !== 'join_game' && action !== 'restart' && action !== 'end_session') {
     return;
   }
 

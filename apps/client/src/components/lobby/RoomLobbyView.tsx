@@ -19,7 +19,9 @@ export function RoomLobbyView() {
       <h3 style={{ color: 'var(--ocean-900)', margin: '12px 0', fontSize: 15 }}>
         {tr('🧑‍🤝‍🧑 等待出航', '🧑‍🤝‍🧑 Waiting to Sail')}
       </h3>
-      <p style={{ fontSize: 13, color: 'var(--ink-soft)', textAlign: 'center', margin: '0 0 10px' }}>
+      <p
+        style={{ fontSize: 13, color: 'var(--ink-soft)', textAlign: 'center', margin: '0 0 10px' }}
+      >
         {tr(
           `难度 ${pf(difficultyInfo(room.difficulty).badge)} · 人数 ${room.players.length} / ${room.maxPlayers}`,
           `Difficulty ${pf(difficultyInfo(room.difficulty).badge)} · ${room.players.length} / ${room.maxPlayers} players`,

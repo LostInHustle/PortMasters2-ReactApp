@@ -16,10 +16,9 @@ export function StartTab() {
         <p>
           You and your partner each run a maritime trading fleet. Over the voyage (
           <strong>8 rounds on Easy, 12 on Standard, 16 on Hard</strong>
-          ), build <strong>renown</strong> through the buy low → produce → sell high loop. Renown
-          is the net profit of every
-          delivered order; your final rating depends on it. You start with 100 gold and a small
-          stock of materials.
+          ), build <strong>renown</strong> through the buy low → produce → sell high loop. Renown is
+          the net profit of every delivered order; your final rating depends on it. You start with
+          100 gold and a small stock of materials.
         </p>
         <p className="muted">
           Every session has Easy, Standard and Hard difficulties forming a ladder, and the default

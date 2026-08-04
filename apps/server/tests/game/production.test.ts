@@ -32,9 +32,7 @@ describe('calcTotalWages', () => {
     workers.potter = [worker()]; // 14
     workers.perfumer = [worker()]; // 18
     workers.jeweler = [worker()]; // 24
-    expect(calcTotalWages({ workers, equippedModules: [] })).toBe(
-      8 + 12 + 20 + 24 + 14 + 18 + 24,
-    );
+    expect(calcTotalWages({ workers, equippedModules: [] })).toBe(8 + 12 + 20 + 24 + 14 + 18 + 24);
   });
 
   it('applies artisans_workshop wage markup (+20%, truncated) to every worker', () => {

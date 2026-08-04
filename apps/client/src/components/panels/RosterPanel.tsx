@@ -85,7 +85,10 @@ export function RosterPanel() {
         style={{ background: 'linear-gradient(135deg,rgba(56,189,248,.08),rgba(20,184,166,.08))' }}
       >
         <span className="muted">
-          {tr('💡 看准同行缺什么、富余什么，在', '💡 Spot what a fellow captain lacks or has in surplus, then strike a deal during ')}
+          {tr(
+            '💡 看准同行缺什么、富余什么，在',
+            '💡 Spot what a fellow captain lacks or has in surplus, then strike a deal during ',
+          )}
           <strong>{tr('互市阶段', 'Barter')}</strong>
           {tr('发起互利交易，或随时点右上角 💬 沟通。', ', or hit 💬 up top to talk it over.')}
         </span>

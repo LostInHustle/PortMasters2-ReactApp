@@ -78,8 +78,8 @@ export function WorkersTab() {
         <h4>⚙️ Production Rules</h4>
         <ul>
           <li>
-            Assigning a task <strong>consumes materials immediately</strong>; the product arrives
-            at <strong>Upkeep</strong> and can be sold from the next round.
+            Assigning a task <strong>consumes materials immediately</strong>; the product arrives at{' '}
+            <strong>Upkeep</strong> and can be sold from the next round.
           </li>
           <li>
             Each artisan takes one task per round; regular artisans make 1 item,{' '}

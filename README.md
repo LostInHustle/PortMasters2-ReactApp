@@ -110,16 +110,16 @@ The guiding rule is that anything which must be identical on both sides lives in
 
 A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Hard, and each voyage runs through **8 phases**. No phase advances until both captains confirm.
 
-| Phase | What happens |
-|:---|:---|
-| **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went. |
-| **🧭 Fortune** | The compass deals you 4 of the fortunes at random, and your partner gets a different hand. Lock one in; it lasts this round only. |
-| **🛒 Procure** | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand. |
-| **🤝 Barter** | Trade with your partner. Post an offer like "I give this for that" and it settles the moment they accept. |
-| **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away. |
-| **📦 Trade** | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️. |
-| **🔧 Upkeep** | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt. |
-| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the voyage. |
+| Phase           | What happens                                                                                                                        |
+| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went.                                     |
+| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and your partner gets a different hand. Lock one in; it lasts this round only.   |
+| **🛒 Procure**  | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand.      |
+| **🤝 Barter**   | Trade with your partner. Post an offer like "I give this for that" and it settles the moment they accept.                           |
+| **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                          |
+| **📦 Trade**    | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️.                                  |
+| **🔧 Upkeep**   | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt. |
+| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the voyage.                                                   |
 
 ### ⚖️ Difficulty Modes
 
@@ -192,17 +192,17 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 
 ## 🔧 9. Useful Commands
 
-| Command | What it does |
-|:---|:---|
-| `npm install` | Install every workspace. |
-| `npm run serve` | Build the client and serve the whole game on port 8080. |
-| `npm run dev:server` | Run the backend, auto restarting on :8080. |
-| `npm run dev:client` | Run the Vite dev server with hot reload on :5173. |
-| `npm run build` | Build the client into `apps/client/dist`. |
-| `npm run start` | Serve a prebuilt client on :8080. |
-| `npm test` | Run the 214 server tests. |
-| `npm run typecheck` | Type check all three workspaces. |
-| `npm run lint` | Lint the whole repo. |
+| Command              | What it does                                            |
+| :------------------- | :------------------------------------------------------ |
+| `npm install`        | Install every workspace.                                |
+| `npm run serve`      | Build the client and serve the whole game on port 8080. |
+| `npm run dev:server` | Run the backend, auto restarting on :8080.              |
+| `npm run dev:client` | Run the Vite dev server with hot reload on :5173.       |
+| `npm run build`      | Build the client into `apps/client/dist`.               |
+| `npm run start`      | Serve a prebuilt client on :8080.                       |
+| `npm test`           | Run the 214 server tests.                               |
+| `npm run typecheck`  | Type check all three workspaces.                        |
+| `npm run lint`       | Lint the whole repo.                                    |
 
 ---
 
@@ -228,4 +228,4 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 
 ---
 
-🌊 *Fair winds and following seas, Captains!* 🏴‍☠️
+🌊 _Fair winds and following seas, Captains!_ 🏴‍☠️

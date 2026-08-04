@@ -50,8 +50,8 @@ export function ShipTab() {
           </li>
           <li>
             Once a slot is unlocked you can "Choose Ship Modules" at the Shipyard. Each round's 3
-            options are <strong>fixed</strong> (closing and reopening shows the same batch), and
-            you get one <strong>Change Batch</strong> reroll per round.
+            options are <strong>fixed</strong> (closing and reopening shows the same batch), and you
+            get one <strong>Change Batch</strong> reroll per round.
           </li>
         </ul>
       </>

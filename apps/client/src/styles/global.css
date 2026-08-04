@@ -1689,6 +1689,34 @@ a {
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
 }
 
+/* ---- Connection banner: persistent, unlike a toast, for as long as the socket is down ---- */
+.connection-banner {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--grad-warning);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+  animation: fadeIn 0.2s ease;
+}
+.connection-banner-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  flex: none;
+  animation: livePulse 1.6s ease-in-out infinite;
+}
+
 /* ---- Notifications / toast stack ---- */
 /* All toasts live in a fixed top-right column so multiple can stack instead of overlapping. */
 #toast-stack {

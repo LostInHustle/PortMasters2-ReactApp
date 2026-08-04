@@ -106,8 +106,8 @@ export function ExpansionUnlockWindsModules() {
         <div className="pm-banner" style={{ marginTop: '10px' }}>
           <span className="pm-icon">🗺️</span>
           <span>
-            These additions arrive as banner announcements on the <strong>Set Sail</strong> page,
-            so watch for them at the start of Round 6 and Round 10!
+            These additions arrive as banner announcements on the <strong>Set Sail</strong> page, so
+            watch for them at the start of Round 6 and Round 10!
           </span>
         </div>
       </>

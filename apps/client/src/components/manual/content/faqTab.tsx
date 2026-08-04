@@ -33,8 +33,8 @@ export function FaqTab() {
             they finish, click "Set Sail Again" for a fresh run together.
           </li>
           <li>
-            <strong>Partner disconnected?</strong> The session stays on the server, so they just
-            log back in. Chat and trades pause while they're away.
+            <strong>Partner disconnected?</strong> The session stays on the server, so they just log
+            back in. Chat and trades pause while they're away.
           </li>
           <li>
             <strong>What exactly is renown?</strong> It's the running total of each order's reward

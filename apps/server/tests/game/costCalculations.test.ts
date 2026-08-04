@@ -163,7 +163,10 @@ describe('getCardResourceUnitPrices', () => {
   });
 
   it('does not distribute card-wide discounts (purchaseDiscount, smugglers_hold) onto a line', () => {
-    const ctx = { equippedModules: withModules('smugglers_hold'), modifierFlags: { purchaseDiscount: 0.15 } };
+    const ctx = {
+      equippedModules: withModules('smugglers_hold'),
+      modifierFlags: { purchaseDiscount: 0.15 },
+    };
     const card = {
       port: '泉州港' as const,
       resources: [{ type: '丝绸' as const, quantity: 1, price: 10 }],

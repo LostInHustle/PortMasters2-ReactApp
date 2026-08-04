@@ -5,6 +5,7 @@ import { ChatWindow } from '../chat/ChatWindow.js';
 import { LobbyOverlay } from '../lobby/LobbyOverlay.js';
 import { SpectateView } from '../spectate/SpectateView.js';
 import { BgOrbs } from './BgOrbs.js';
+import { ConnectionBanner } from './ConnectionBanner.js';
 import { GameView } from './GameView.js';
 import { ToastStack } from './ToastStack.js';
 
@@ -22,6 +23,7 @@ export function AppShell() {
   return (
     <>
       <BgOrbs />
+      <ConnectionBanner />
       {!currentUser ? <LoginOverlay /> : !serverState ? <LobbyOverlay /> : <GameView />}
       {currentUser && <ChatWindow />}
       {currentUser && <SpectateView />}

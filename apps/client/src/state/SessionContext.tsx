@@ -17,6 +17,7 @@ import {
 import { lst } from '../i18n/serverTextRules.js';
 import { useTranslate } from '../i18n/useTranslate.js';
 import { useWs } from '../ws/WsContext.js';
+import { clearStoredToken, getStoredToken, setStoredToken } from './sessionToken.js';
 import { useToast } from './ToastContext.js';
 
 interface PendingInvite {
@@ -71,7 +72,7 @@ const initialState: SessionState = {
 // globals then manually re-renders (renderOnlineUsers/renderAll/...); here the same per-message
 // branches update React state, and every consumer re-renders on its own via the context value.
 export function SessionProvider({ children }: { children: ReactNode }) {
-  const { subscribe, send } = useWs();
+  const { connected, subscribe, send } = useWs();
   const { showNotification } = useToast();
   const { lang } = useTranslate();
   const [state, setState] = useState<SessionState>(initialState);
@@ -82,6 +83,41 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // which must know whether the chat window is currently open) read live values.
   const stateRef = useRef(state);
   stateRef.current = state;
+
+  // A fresh WebSocket connection (WsContext's auto-reconnect after an idle-timeout drop, a
+  // laptop sleep, a server redeploy -- or just an actual page refresh) is, by itself, a
+  // connection the server has never seen: there is no session tied to the TCP connection itself.
+  // What makes a reconnect resumable is the token from sessionToken.ts -- if one is stored,
+  // fire it off immediately and wait for `resume_result` instead of assuming the worst. Only
+  // when there's no token (or the server doesn't recognize it -- see the resume_result handler
+  // below) do we fall back to telling a previously-logged-in player they need to log in again.
+  // `wasConnectedRef` distinguishes a real reconnect from the initial connection on first mount.
+  const wasConnectedRef = useRef(false);
+  useEffect(() => {
+    if (connected) {
+      const isReconnect = wasConnectedRef.current;
+      wasConnectedRef.current = true;
+      const token = getStoredToken();
+      if (token) {
+        send({ action: 'resume_token', token });
+        return;
+      }
+      if (isReconnect && stateRef.current.currentUser) {
+        setState(initialState);
+        showNotification(
+          lang === 'en'
+            ? 'Reconnected. The previous connection was lost, please log in again.'
+            : '已重新连接。此前的连接已断开，请重新登录。',
+          true,
+        );
+      }
+    } else if (wasConnectedRef.current && stateRef.current.currentUser) {
+      showNotification(
+        lang === 'en' ? 'Connection lost. Reconnecting…' : '连接已断开，正在重新连接…',
+        true,
+      );
+    }
+  }, [connected, lang, showNotification, send]);
 
   // Opens the chat window and refreshes its history. Used both by the header toggle and as the
   // click action on an incoming chat alert.
@@ -98,10 +134,35 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
         case 'login_result':
           if (msg.success) {
+            if (typeof msg.token === 'string') setStoredToken(msg.token);
             setState((s) => ({ ...s, currentUser: msg.username as string }));
             send({ action: 'get_online_users' });
           } else {
             showNotification(lst(msg.message as string, lang), true);
+          }
+          break;
+
+        // Reply to the silent resume_token attempt fired by the connected-effect above. Never
+        // shown as an interactive "wrong password"-style error -- a failure here just means the
+        // token is unknown (expired, already revoked by an explicit logout, or the server
+        // restarted and lost it), so the fallback is the ordinary login screen, with a heads-up
+        // toast only if this player had actually been mid-session when it happened.
+        case 'resume_result':
+          if (msg.success) {
+            setState((s) => ({ ...s, currentUser: msg.username as string }));
+            send({ action: 'get_online_users' });
+          } else {
+            clearStoredToken();
+            setState((s) => {
+              if (!s.currentUser) return s;
+              showNotification(
+                lang === 'en'
+                  ? 'Reconnected, but your session could not be resumed. Please log in again.'
+                  : '已重新连接，但无法恢复此前的会话，请重新登录。',
+                true,
+              );
+              return initialState;
+            });
           }
           break;
 
@@ -291,9 +352,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     (message: string) => {
       const trimmed = message.trim();
       const { currentUser, serverState } = state;
-      const anyoneElseOnline = serverState?.players.some(
-        (p) => p.name !== currentUser && p.online,
-      );
+      const anyoneElseOnline = serverState?.players.some((p) => p.name !== currentUser && p.online);
       if (!trimmed || !currentUser || !anyoneElseOnline) return;
       send({ action: 'send_chat', message: trimmed });
       setState((s) => ({

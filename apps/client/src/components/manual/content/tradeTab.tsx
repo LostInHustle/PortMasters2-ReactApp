@@ -18,9 +18,8 @@ export function TradeTab() {
             gold.
           </li>
           <li>
-            Your partner can <strong>accept</strong> (instant swap) or{' '}
-            <strong>decline</strong> (offer voided). Trades fail safely if either side lacks the
-            resources.
+            Your partner can <strong>accept</strong> (instant swap) or <strong>decline</strong>{' '}
+            (offer voided). Trades fail safely if either side lacks the resources.
           </li>
           <li>
             Once both captains click "✅ Ready", the artisan phase begins; unaccepted offers expire.

@@ -15,7 +15,8 @@ export function ChatWindow() {
 
   const others = serverState?.players.filter((p) => p.name !== currentUser) ?? [];
   const enabled = others.some((p) => p.online);
-  const partnerLabel = others.length > 0 ? others.map((p) => p.name).join(tr('、', ', ')) : tr('无', 'none');
+  const partnerLabel =
+    others.length > 0 ? others.map((p) => p.name).join(tr('、', ', ')) : tr('无', 'none');
 
   const submit = () => {
     if (!draft.trim()) return;

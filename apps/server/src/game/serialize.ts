@@ -1,4 +1,9 @@
-import { WORKER_TYPES_BACKEND, type MarketCard, type PlayerGameState, type Worker } from '@pm2/shared';
+import {
+  WORKER_TYPES_BACKEND,
+  type MarketCard,
+  type PlayerGameState,
+  type Worker,
+} from '@pm2/shared';
 import type { PlayerGame } from './PlayerGame.js';
 import { difficultyBrokerCorruption, pirateLossPct } from './difficultyRules.js';
 import { charterEvent } from './poolSelectors.js';

@@ -151,3 +151,13 @@ export interface OpenRoomSummary {
   count: number;
   maxPlayers: number;
 }
+
+// Reply to the unauthenticated `resume_token` action -- a separate message type from
+// login_result (rather than reusing it) so the client can tell a silent, automatic resume
+// attempt apart from an interactive login the player actually typed: a failed interactive login
+// should show "wrong password," but a failed silent resume (an unknown/expired/already-revoked
+// token) should just fall back to the ordinary login screen with no alarming message.
+export interface ResumeResultMessage {
+  success: boolean;
+  username?: string;
+}

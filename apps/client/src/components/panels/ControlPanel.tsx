@@ -19,9 +19,7 @@ export function ControlPanel() {
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
-    const partnerPlaying = Object.values(serverState?.otherGames ?? {}).some(
-      (og) => !og.gameOver,
-    );
+    const partnerPlaying = Object.values(serverState?.otherGames ?? {}).some((og) => !og.gameOver);
     return (
       <>
         <span className="sync-chip">

@@ -18,20 +18,20 @@ export function ExpansionTab() {
           Every session is played at one of three difficulties that form a ladder, and it always
           starts on <strong>Easy</strong> by default. <strong>Easy mode</strong> is the shorter 8
           round voyage and keeps the whole game on the founding set of goods, with only the three
-          raw materials Hemp Cloth, Silk and Tea, the four starter products, the first three
-          artisan guilds, and the fortunes, ship modules, ports and trade winds tied to them. The
-          board never grows crowded, so you have plenty of room to learn the rhythm of each round
-          at your own pace. <strong>Standard mode</strong> is the 12 round middle rung: it also
-          opens the full trade, with the Silk Road Charter unlocking at Rounds 4 and 8, but with no
-          corrupt brokers. <strong>Hard mode</strong> is the longer 16 round voyage that opens the
-          full maritime trade with the charter unlocking at Rounds 6 and 10 and the corrupt-broker
-          hazard switched on, so there is a great deal more to manage and the competition for cargo
-          space and coin grows much fiercer. The phased unlocks below happen on Standard and Hard
-          but never on Easy. Raids bite harder as you climb the ladder too: a successful raid takes
-          a share of your current gold (a larger share later in the voyage and on higher
-          difficulties) and the escort fee scales with your wealth as well; and on Hard a Broker's
-          Whisper can come from a corrupt broker who tips off pirates and raises that voyage's raid
-          chance, turning the escort call at Upkeep into a genuine trade-off.
+          raw materials Hemp Cloth, Silk and Tea, the four starter products, the first three artisan
+          guilds, and the fortunes, ship modules, ports and trade winds tied to them. The board
+          never grows crowded, so you have plenty of room to learn the rhythm of each round at your
+          own pace. <strong>Standard mode</strong> is the 12 round middle rung: it also opens the
+          full trade, with the Silk Road Charter unlocking at Rounds 4 and 8, but with no corrupt
+          brokers. <strong>Hard mode</strong> is the longer 16 round voyage that opens the full
+          maritime trade with the charter unlocking at Rounds 6 and 10 and the corrupt-broker hazard
+          switched on, so there is a great deal more to manage and the competition for cargo space
+          and coin grows much fiercer. The phased unlocks below happen on Standard and Hard but
+          never on Easy. Raids bite harder as you climb the ladder too: a successful raid takes a
+          share of your current gold (a larger share later in the voyage and on higher difficulties)
+          and the escort fee scales with your wealth as well; and on Hard a Broker's Whisper can
+          come from a corrupt broker who tips off pirates and raises that voyage's raid chance,
+          turning the escort call at Upkeep into a genuine trade-off.
         </p>
         <p>
           The difficulty is settled before a voyage begins. The inviting captain chooses the level
@@ -44,8 +44,8 @@ export function ExpansionTab() {
           <span>
             The phased unlock tables below use <strong>Hard mode</strong> (Rounds 6 and 10) as the
             example. <strong>Standard mode</strong> unlocks the same content earlier (Rounds 4 and
-            8); <strong>Easy mode</strong> stays on the founding set named above for the entire
-            game and these expansions never arrive.
+            8); <strong>Easy mode</strong> stays on the founding set named above for the entire game
+            and these expansions never arrive.
           </span>
         </div>
         <ExpansionUnlockGoods />

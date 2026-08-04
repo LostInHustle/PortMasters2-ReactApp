@@ -20,6 +20,9 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^🚨 避税账本触发，罚款20金币！$/, () => `🚨 Hidden Ledger audit, fined 20 gold!`],
   [/^📦 订单完成，净利润(-?\d+)金币$/, (m) => `📦 Order delivered, net profit ${m[1]!} gold`],
   [/^❌ 旗舰尚无模块槽位，请先升级船坞$/, () => `❌ No module slots yet, upgrade your ship first`],
+  [/^❌ 本回合的「换一批」已经用过了$/, () => `❌ You've already used "Change Batch" this round`],
+  [/^🔀 已更换一批可选模块$/, () => `🔀 Drew a fresh batch of modules`],
+  [/^❌ 已经装备了该模块$/, () => `❌ That module is already equipped`],
   [/^🔄 将 (.+) 替换为 (.+)！$/, (m) => `🔄 Swapped ${tn(m[1]!, 'en')} for ${tn(m[2]!, 'en')}!`],
   [/^✅ 安装了 (.+)！$/, (m) => `✅ Installed ${tn(m[1]!, 'en')}!`],
   [
@@ -33,6 +36,7 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
     (m) =>
       `🗣️ Broker's Whisper: 'Word from ${tn(m[1]!, 'en')}, strong demand for ${tn(m[2]!, 'en')}!'`,
   ],
+  [/^❌ 该工种尚未开放$/, () => `❌ That artisan type isn't unlocked yet`],
   [/^👥 雇佣了新工匠（(\w+)）$/, (m) => `👥 Hired a new artisan (${wName(m[1]!, 'en')})`],
   [/^❌ 资金不足，无法雇佣$/, () => `❌ Not enough gold to hire`],
   [
@@ -91,6 +95,18 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
     () => `You don't have a partner yet, so messages can't be sent`,
   ],
   [/^对方已离线，无法发送消息$/, () => `Your partner is offline, message not sent`],
+  /* Rooms (recruit flow) */
+  [
+    /^你已在游戏会话中，无法创建房间$/,
+    () => `You're already in a game session and can't create a room`,
+  ],
+  [
+    /^你已在游戏会话中，无法加入房间$/,
+    () => `You're already in a game session and can't join a room`,
+  ],
+  [/^该房间不可加入$/, () => `That room can't be joined`],
+  [/^只有房主才能开始航程$/, () => `Only the host can start the voyage`],
+  [/^至少需要 2 名船长才能起航$/, () => `Needs at least 2 captains to set sail`],
   /* Invite results */
   [/^无效的邀请对象$/, () => `Invalid invitation target`],
   [

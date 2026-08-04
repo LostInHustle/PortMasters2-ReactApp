@@ -39,7 +39,10 @@ export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChi
             'The next phase starts once both captains confirm',
           )}
         >
-          {tr(`🔄 双方就绪 ${readyCount} / ${readyTotal}`, `🔄 Ready ${readyCount} / ${readyTotal}`)}
+          {tr(
+            `🔄 双方就绪 ${readyCount} / ${readyTotal}`,
+            `🔄 Ready ${readyCount} / ${readyTotal}`,
+          )}
         </span>
         {waiting && <span className="chip amber">⏳ {lst(waiting, lang)}</span>}
         {extraChips}
