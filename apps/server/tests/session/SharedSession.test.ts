@@ -138,7 +138,7 @@ describe('barter delegation', () => {
     const session = SharedSession.createPair('alice', 'bob');
     const rejected = session.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], []);
     expect(rejected?.sellerSlot).toBe(0);
-    expect(session.rejectTrade(rejected!.id)).toBe(rejected);
+    expect(session.rejectTrade(rejected!.id, 1)).toBe(rejected);
     expect(session.tradeOrders).toHaveLength(0);
 
     const order = session.createTradeOrder(0, [{ type: '麻布', quantity: 5 }], []);

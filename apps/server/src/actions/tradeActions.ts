@@ -23,7 +23,7 @@ export function handleCreateTradeOrder(
 ): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
-  sess.createTradeOrder(slot, data.sell ?? [], data.buy ?? []);
+  sess.createTradeOrder(slot, data.sell ?? [], data.buy ?? [], data.targetSlot);
   return true;
 }
 
@@ -52,7 +52,7 @@ export function handleRejectTrade(
 ): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
-  const order = sess.rejectTrade(data.orderId);
+  const order = sess.rejectTrade(data.orderId, slot);
   if (order) {
     const seller = sess.players[order.sellerSlot]!;
     if (seller !== username) {
