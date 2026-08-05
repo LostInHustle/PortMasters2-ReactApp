@@ -13,7 +13,7 @@ export interface PirateRiskContext {
 }
 
 // Ported verbatim from PortMasters2/server.py pirate_threat (lines 994-996): the raw raid
-// chance before mitigation -- the weather plus any corrupt-broker tips.
+// chance before mitigation, the weather plus any corrupt-broker tips.
 export function pirateThreat(
   ctx: Pick<PirateRiskContext, 'monsoonState' | 'brokerPirateRisk'>,
 ): number {

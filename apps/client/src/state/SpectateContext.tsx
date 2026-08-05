@@ -44,7 +44,7 @@ export function SpectateProvider({ children }: { children: ReactNode }) {
   const setTarget = useCallback((next: string) => setTargetState(next), []);
 
   // The window closes itself the moment THIS player stops being bankrupt (a restart while
-  // bankrupt-spectating) -- tracked as an edge on the previous bankrupt state, not the current
+  // bankrupt-spectating), tracked as an edge on the previous bankrupt state, not the current
   // level, so opening this same window from a roster click while simply not bankrupt (the
   // common case once it doubles as the Captain Viewer) doesn't immediately snap it shut.
   useEffect(() => {

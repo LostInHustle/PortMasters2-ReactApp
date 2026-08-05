@@ -20,7 +20,9 @@ function withModules(...ids: string[]): readonly ShipModule[] {
 // counts (not just weaver/master/sachet_maker), each at WAGES[type] per head.
 describe('calcTotalWages', () => {
   it('is 0 with no hired workers', () => {
-    expect(calcTotalWages({ workers: emptyRoster(), equippedModules: [] })).toBe(0);
+    expect(calcTotalWages({ workers: emptyRoster(), equippedModules: [], modifierFlags: {} })).toBe(
+      0,
+    );
   });
 
   it('sums every worker type, not just weaver/master/sachet_maker', () => {
@@ -32,15 +34,39 @@ describe('calcTotalWages', () => {
     workers.potter = [worker()]; // 14
     workers.perfumer = [worker()]; // 18
     workers.jeweler = [worker()]; // 24
-    expect(calcTotalWages({ workers, equippedModules: [] })).toBe(8 + 12 + 20 + 24 + 14 + 18 + 24);
+    expect(calcTotalWages({ workers, equippedModules: [], modifierFlags: {} })).toBe(
+      8 + 12 + 20 + 24 + 14 + 18 + 24,
+    );
   });
 
   it('applies artisans_workshop wage markup (+20%, truncated) to every worker', () => {
     const workers = emptyRoster();
     workers.jeweler = [worker()]; // 24 -> trunc(24*1.2) = 28
     workers.weaver = [worker()]; // 8 -> trunc(8*1.2) = 9
-    const ctx = { workers, equippedModules: withModules('artisans_workshop') };
+    const ctx = { workers, equippedModules: withModules('artisans_workshop'), modifierFlags: {} };
     expect(calcTotalWages(ctx)).toBe(28 + 9);
+  });
+
+  // Regression: the Apprentice Legacy boon (hireDiscount) advertises halved wages for the round
+  // and the artisan table renders them halved, but the charge used to ignore the flag entirely,
+  // so players were billed full price for a boon they had spent their Fortune pick on.
+  it('applies the Apprentice Legacy hireDiscount to the round wage bill', () => {
+    const workers = emptyRoster();
+    workers.jeweler = [worker()]; // 24 -> trunc(24*0.5) = 12
+    workers.weaver = [worker()]; // 8 -> trunc(8*0.5) = 4
+    const ctx = { workers, equippedModules: [], modifierFlags: { hireDiscount: 0.5 } };
+    expect(calcTotalWages(ctx)).toBe(12 + 4);
+  });
+
+  it('stacks the workshop markup and the hireDiscount in that order', () => {
+    const workers = emptyRoster();
+    workers.jeweler = [worker()]; // 24 -> trunc(24*1.2) = 28 -> trunc(28*0.5) = 14
+    const ctx = {
+      workers,
+      equippedModules: withModules('artisans_workshop'),
+      modifierFlags: { hireDiscount: 0.5 },
+    };
+    expect(calcTotalWages(ctx)).toBe(14);
   });
 });
 
@@ -51,6 +77,7 @@ describe('payWages', () => {
     const ctx = {
       workers,
       equippedModules: [],
+      modifierFlags: {},
       money: 100,
       workerWages: 0,
       roundCosts: 0,
@@ -69,6 +96,7 @@ describe('payWages', () => {
     const ctx = {
       workers,
       equippedModules: [],
+      modifierFlags: {},
       money: 10,
       workerWages: 0,
       roundCosts: 0,
@@ -83,6 +111,7 @@ describe('payWages', () => {
     const ctx = {
       workers: emptyRoster(),
       equippedModules: [],
+      modifierFlags: {},
       money: 10,
       workerWages: 0,
       roundCosts: 0,

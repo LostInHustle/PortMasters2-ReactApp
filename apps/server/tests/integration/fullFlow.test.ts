@@ -9,7 +9,7 @@ import { createAppServer } from '../../src/http/createHttpServer.js';
 import { createServerState } from '../../src/lobby/onlineRegistry.js';
 
 // Phase 4 exit criterion (plan.md): "a real WS client can register/login/list/invite/accept and
-// receive state pushes" -- driven here against a real http+ws server on an ephemeral port, with
+// receive state pushes", driven here against a real http+ws server on an ephemeral port, with
 // no mocking of the network layer.
 interface Msg {
   type: string;

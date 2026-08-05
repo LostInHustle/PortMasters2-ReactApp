@@ -17,7 +17,7 @@ export function generateSalt(): string {
 
 // Constant-time compare, like Python's hmac.compare_digest (server.py line 1180). Unlike
 // compare_digest, Node's timingSafeEqual throws on a length mismatch instead of returning
-// false, so a wrong-length hash must be rejected before reaching it -- this preserves the
+// false, so a wrong-length hash must be rejected before reaching it. This preserves the
 // original's "wrong password just fails" behavior instead of throwing on malformed records.
 export function verifyPassword(password: string, salt: string, expectedHash: string): boolean {
   const actual = Buffer.from(hashPassword(password, salt), 'hex');

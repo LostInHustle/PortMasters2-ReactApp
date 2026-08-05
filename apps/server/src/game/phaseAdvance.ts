@@ -64,7 +64,7 @@ export function setPhase(games: readonly PhaseAdvanceGame[], phase: Phase): void
 
 // Ported verbatim from PortMasters2/server.py SharedSession.advance (lines 1275-1345): once
 // both players are ready, the whole session advances to the next phase together. This is the
-// plan's named file-size-ceiling exception -- one linear phase-sequencing function, kept as a
+// plan's named file-size-ceiling exception, one linear phase-sequencing function, kept as a
 // single if/else-if chain mirroring the Python if/elif chain branch-for-branch, since splitting
 // it further would scatter genuinely cohesive sequencing logic across files.
 export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
@@ -132,7 +132,7 @@ export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
       }
     }
   } else if (phase === 2) {
-    // Artisans closes, Upkeep opens: production runs, then wages -- a game that can't pay
+    // Artisans closes, Upkeep opens: production runs, then wages, a game that can't pay
     // wages ends right here, bankrupt.
     setPhase(ctx.games, 3);
     for (const g of ctx.games) {

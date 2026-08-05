@@ -92,7 +92,7 @@ export const WORKER_TYPES: WorkerTypeInfo[] = [
 
 // Accepts a plain string (not narrowed to WorkerTypeId) since callers include values lifted
 // out of regex-matched log text (serverTextRules.ts), which can't be statically known to be a
-// valid worker type id -- falls back to the raw key, exactly like the original.
+// valid worker type id, falls back to the raw key, exactly like the original.
 export function wName(key: string, lang: Lang): string {
   const info = WORKER_TYPES.find((w) => w.key === key);
   return (info && pf(info.name, lang)) || key;

@@ -20,7 +20,7 @@ interface WsContextValue {
 const WsContext = createContext<WsContextValue | null>(null);
 
 // VITE_WS_URL points at a backend deployed on a different origin than the client (e.g. client on
-// Vercel, server on Railway) -- Vercel can't host the persistent WebSocket process itself, so
+// Vercel, server on Railway), Vercel can't host the persistent WebSocket process itself, so
 // same-origin is no longer a safe assumption in production. Unset, this falls back to /ws on the
 // page's own origin, which is what the dev-time Vite proxy (vite.config.ts) forwards to the local
 // backend, and what a single-process same-origin deploy would also serve.
@@ -41,7 +41,7 @@ const RECONNECT_MAX_DELAY_MS = 30_000;
 // the socket's lifetime.
 //
 // Root-caused from the production symptom "leave the tab open for a while and login stops
-// working": this app has no token or expiring session of any kind -- the connection itself was
+// working": this app has no token or expiring session of any kind, the connection itself was
 // dying silently (idle WebSocket connections get dropped by Railway's edge proxy, and most
 // reverse proxies, well before anything app-level is involved), and there was no reconnect
 // logic at all, so a dropped socket just sat there forever looking like a frozen page. The
@@ -100,7 +100,7 @@ export function WsProvider({ children }: { children: ReactNode }) {
   // readyState, not just nullness: a socket mid-reconnect (CONNECTING) or on its way out
   // (CLOSING) throws or silently drops on send anyway, so this just makes that explicit instead
   // of leaking a raw DOMException out of an arbitrary call site. The dropped action isn't
-  // retried -- the disconnected state is already visible via `connected` (SessionContext resets
+  // retried, the disconnected state is already visible via `connected` (SessionContext resets
   // to the login screen on reconnect), so there's nothing more to tell the caller per send.
   const send = useCallback((action: Record<string, unknown>): void => {
     const socket = wsRef.current;

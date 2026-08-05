@@ -4,7 +4,7 @@ import { generateSalt, hashPassword, verifyPassword } from './passwordHash.js';
 
 // Ported verbatim from PortMasters2/server.py UserStore (lines 1134-1182). created_at keeps its
 // snake_case spelling because it's a literal field of the on-disk users.json record, copied
-// verbatim from the original as seed data -- not cleaned up to camelCase.
+// verbatim from the original as seed data, not cleaned up to camelCase.
 export interface UserRecord {
   salt: string;
   hash: string;

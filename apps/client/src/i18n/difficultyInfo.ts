@@ -3,7 +3,7 @@ import type { Bilingual } from './LangContext.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html DIFFICULTY_INFO (lines 1295-1323),
 // restructured from lang-dependent closures (badge: () => tr(...)) into plain bilingual data,
-// since `tr` now takes an explicit lang parameter instead of reading a module-global -- the
+// since `tr` now takes an explicit lang parameter instead of reading a module-global, the
 // content itself (every zh/en string) is unchanged.
 export interface DifficultyInfo {
   key: Difficulty;

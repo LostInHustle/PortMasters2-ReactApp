@@ -16,8 +16,14 @@ export function ArtisansPhase() {
   const g = serverState?.yourGame;
   if (!g) return null;
   const hireDiscount = g.modifierFlags.hireDiscount;
+  const hasWorkshop = g.equippedModules.some((m) => m.id === 'artisans_workshop');
+  // Mirrors the server's effectiveWage (apps/server/src/game/costCalculations.ts): the wage the
+  // roster is actually charged at Upkeep. The round total is not recomputed here at all, it is
+  // read off g.estimatedWages, so this table and the charge cannot disagree.
+  const wageBeforeBoon = (key: keyof typeof WAGES) =>
+    hasWorkshop ? Math.trunc(WAGES[key] * 1.2) : WAGES[key];
   const costOf = (key: keyof typeof WAGES) =>
-    hireDiscount ? Math.floor(WAGES[key] / 2) : WAGES[key];
+    hireDiscount ? Math.trunc(wageBeforeBoon(key) * hireDiscount) : wageBeforeBoon(key);
   const hiredAny = WORKER_TYPES.some((wt) => g[wt.listKey].length > 0);
 
   return (
@@ -105,7 +111,8 @@ export function ArtisansPhase() {
                     {wt.icon} {pf(wt.name)}
                   </td>
                   <td>
-                    {costOf(wt.key)} 💰{hireDiscount && <s className="muted">{WAGES[wt.key]}</s>}
+                    {costOf(wt.key)} 💰
+                    {hireDiscount && <s className="muted">{wageBeforeBoon(wt.key)}</s>}
                   </td>
                   <td>
                     {wt.can.map((t) => `${ITEM_ICONS[t]}${tn(t, lang)}`).join(tr('、', ', '))}

@@ -6,7 +6,7 @@ import { InviteComposer } from './InviteComposer.js';
 // Ported from PortMasters2/PortMasters_online.html renderOnlineUsers (lines 2064-2093). The
 // original tracks a separate inviteStatus map per user; since the server only ever allows one
 // outstanding invite per sender, "pending" here is just "this user is the current lastInviteTo"
-// -- an equivalent, simpler derivation, not a behavior change.
+//, an equivalent, simpler derivation, not a behavior change.
 export function OnlineUsersList() {
   const { tr } = useTranslate();
   const { onlineUsers, lastInviteTo } = useSession();

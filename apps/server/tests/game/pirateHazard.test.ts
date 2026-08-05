@@ -7,7 +7,7 @@ import {
 import type { Rng } from '../../src/game/randomUtil.js';
 
 // A fixed-value Rng substitutes for live randomness so raid outcomes are asserted exactly
-// rather than against Math.random() -- the seam the plan calls for (no Python-side equivalent
+// rather than against Math.random(), the seam the plan calls for (no Python-side equivalent
 // to cross-check against here, since this is a Node-only testing affordance).
 function fixedRng(value: number): Rng {
   return {

@@ -100,7 +100,7 @@ export interface CardFinalCostContext {
 }
 
 // The flat per-unit discount (boon or module) that targets one specific resource type inside a
-// purchase card -- e.g. Hemp Monopoly or Kiln Cellar knock a fixed amount off specific goods,
+// purchase card, e.g. Hemp Monopoly or Kiln Cellar knock a fixed amount off specific goods,
 // independent of the rest of the card. Shared by getCardFinalCost (the authoritative total a
 // purchase charges) and getCardResourceUnitPrices (the per-line price a card should display) so
 // the two can never disagree about which goods are discounted or by how much.
@@ -135,21 +135,34 @@ export function getCardFinalCost(ctx: CardFinalCostContext, card: MarketCard): n
 
 // The per-unit price each resource line on a card actually costs once item-specific discounts
 // apply, in the same order as card.resources. Card-wide discounts (Merchant's Charm, Smuggler's
-// Hold) are not attributable to a single line -- they only show up in getCardFinalCost's total.
+// Hold) are not attributable to a single line. They only show up in getCardFinalCost's total.
 export function getCardResourceUnitPrices(ctx: CardFinalCostContext, card: MarketCard): number[] {
   return card.resources.map((r) => Math.max(0, r.price - flatItemDiscount(ctx, r.type)));
 }
 
-// Ported verbatim from PortMasters2/server.py get_hire_cost (lines 577-581).
+// What one worker of this type actually costs at the next Upkeep. Single source of truth for
+// wages: calcTotalWages sums it, payWages charges that sum, getHireCost gates hiring on it and
+// the artisan table displays it, so the number shown can never drift from the number charged.
+// The Apprentice Legacy boon (hireDiscount) is a modifier on this round's wage bill, which is
+// what its description promises and what the artisan table shows.
+export function effectiveWage(
+  ctx: { modifierFlags: BoonModifiers; equippedModules: readonly ShipModule[] },
+  wtype: WorkerTypeId,
+): number {
+  let wage = WAGES[wtype];
+  if (hasModule(ctx, 'artisans_workshop')) wage = Math.trunc(wage * 1.2);
+  const discount = ctx.modifierFlags.hireDiscount;
+  if (discount) wage = Math.trunc(wage * discount);
+  return wage;
+}
+
+// Ported from PortMasters2/server.py get_hire_cost. Hiring itself is free; this is the
+// affordability gate, so it has to be the wage the roster will actually be charged at Upkeep.
 export function getHireCost(
-  ctx: { modifierFlags: BoonModifiers },
+  ctx: { modifierFlags: BoonModifiers; equippedModules: readonly ShipModule[] },
   workerType: WorkerTypeId,
 ): number {
-  let wage = WAGES[workerType];
-  if (ctx.modifierFlags.hireDiscount) {
-    wage = Math.trunc(wage * 0.5);
-  }
-  return wage;
+  return effectiveWage(ctx, workerType);
 }
 
 // Ported verbatim from PortMasters2/server.py escort_cost (lines 972-977).

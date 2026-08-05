@@ -4,7 +4,7 @@ import { useSpectate } from '../../state/SpectateContext.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html rosterWidgetHTML/renderRoster
 // (lines 2746-2806): with up to 5 captains in a room, the side panel can no longer show one
-// fleet in full -- instead each fellow captain collapses to a single-row card (online dot, host
+// fleet in full, instead each fellow captain collapses to a single-row card (online dot, host
 // crown, gold, renown, bankrupt/finished chip), and clicking it opens the shared Captain Viewer
 // (SpectateView, via SpectateContext) for full detail. Replaces PartnerPanel.
 export function RosterPanel() {

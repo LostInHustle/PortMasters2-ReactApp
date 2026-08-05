@@ -16,7 +16,7 @@ import { UpkeepPhase } from '../phases/UpkeepPhase.js';
 // stepper plus one phase-specific view, switched on g.phase. A bankrupt player always stays on
 // the bankruptcy page even if the server sends a different phase value (the original's
 // defensive `g.bankrupt ? 'bankruptcy' : g.phase`). captureTradeForm/restoreTradeForm and manual
-// scroll-position preservation aren't ported -- React keeps each phase component mounted and
+// scroll-position preservation aren't ported. React keeps each phase component mounted and
 // preserves its own state and scroll position across re-renders for free.
 export function PhasePanel() {
   const { tr } = useTranslate();
@@ -67,7 +67,7 @@ export function PhasePanel() {
 
   return (
     <div className="panel phase-panel" id="phase-panel">
-      <div className="phase-view">
+      <div className="phase-view phase-enter" key={String(phase)}>
         <Stepper currentKey={phase} />
         {inner}
       </div>

@@ -191,11 +191,13 @@ describe('getCardResourceUnitPrices', () => {
 // Expected values hand-derived from get_hire_cost (server.py lines 577-581): WAGES.weaver = 8.
 describe('getHireCost', () => {
   it('returns the base wage with no modifiers', () => {
-    expect(getHireCost({ modifierFlags: {} }, 'weaver')).toBe(8);
+    expect(getHireCost({ modifierFlags: {}, equippedModules: [] }, 'weaver')).toBe(8);
   });
 
   it('hire_discount flag halves the wage (truncated)', () => {
-    expect(getHireCost({ modifierFlags: { hireDiscount: 0.5 } }, 'weaver')).toBe(4);
+    expect(
+      getHireCost({ modifierFlags: { hireDiscount: 0.5 }, equippedModules: [] }, 'weaver'),
+    ).toBe(4);
   });
 });
 

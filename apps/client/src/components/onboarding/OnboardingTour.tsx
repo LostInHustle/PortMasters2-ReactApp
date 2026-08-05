@@ -50,7 +50,7 @@ export function OnboardingTour() {
         <p>
           {tr(
             '每个阶段都需所有船长确认才推进（看底部「船长就绪 n/N」）。右侧面板列出每位船长，点击可查看其存款、声望、货物、工匠与增益；互市阶段可与任意人自由交易，💬 聊天随时沟通。',
-            "Every phase advances only when every captain confirms (see 'Ready n/N' at the bottom). The right panel lists every captain -- click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
+            "Every phase advances only when every captain confirms (see 'Ready n/N' at the bottom). The right panel lists every captain, click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
           )}
         </p>
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>

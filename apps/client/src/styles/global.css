@@ -511,7 +511,11 @@ a {
   max-height: calc(100vh - 250px);
   position: relative;
 }
-.phase-view {
+/* The entrance animation belongs to a phase TRANSITION, not to every repaint. The view is keyed
+   by phase in PhasePanel, so it remounts (and animates) only when the phase actually changes;
+   ordinary state broadcasts reconcile in place and must not replay it, or the board appears to
+   flash every time another captain acts. */
+.phase-view.phase-enter {
   animation: fadeUp 0.35s ease;
 }
 @keyframes fadeUp {

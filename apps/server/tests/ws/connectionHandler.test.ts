@@ -1,7 +1,7 @@
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserStore } from '../../src/auth/UserStore.js';
 import {
   createServerState,
@@ -159,14 +159,29 @@ describe('connectionHandler', () => {
         expect(ws.sent).toEqual([{ type: 'resume_result', success: false }]);
       });
 
-      it('refuses to resume while the account is already online elsewhere', () => {
+      // Regression: this used to refuse whenever the username was still in state.online, which
+      // is exactly the situation a page refresh creates, the new socket connects before the
+      // old one's close frame is processed, so the stale entry is still present and the player
+      // got logged out by the very act of refreshing. A valid token is proof of identity, so it
+      // takes the slot over instead.
+      it('takes over the online slot when a stale socket still holds it (page refresh)', () => {
         const token = loginAndGetToken(state, 'alice'); // ws1 still holds the online slot
+        const staleWs = state.online.get('alice');
 
         const ws2 = new FakeSocket();
         const result = processMessage(state, ws2, null, { action: 'resume_token', token });
 
-        expect(result).toBeNull();
-        expect(ws2.sent).toEqual([{ type: 'resume_result', success: false }]);
+        expect(result).toBe('alice');
+        expect(ws2.sent).toContainEqual({
+          type: 'resume_result',
+          success: true,
+          username: 'alice',
+        });
+        expect(state.online.get('alice')).toBe(ws2);
+
+        // The stale socket closing afterwards must not evict the connection that replaced it.
+        handleDisconnect(state, staleWs!, 'alice');
+        expect(state.online.get('alice')).toBe(ws2);
       });
 
       it('resumes a live session exactly like login does', () => {
@@ -290,17 +305,50 @@ describe('connectionHandler', () => {
       expect(state.sessions.has('bob')).toBe(true);
     });
 
-    it('recycles the session once both players have gone offline', () => {
-      const aliceWs = new FakeSocket();
-      state.online.set('alice', aliceWs);
-      const sess = SharedSession.createPair('alice', 'bob');
-      state.sessions.set('alice', sess);
-      state.sessions.set('bob', sess);
+    // Regression: the session used to be recycled the instant the last player went offline.
+    // A refreshing browser is offline for a moment, so that destroyed the very voyage the
+    // player was about to resume into. It now survives a grace period.
+    it('keeps a deserted session alive through the grace period, then recycles it', () => {
+      vi.useFakeTimers();
+      try {
+        const aliceWs = new FakeSocket();
+        state.online.set('alice', aliceWs);
+        const sess = SharedSession.createPair('alice', 'bob');
+        state.sessions.set('alice', sess);
+        state.sessions.set('bob', sess);
 
-      handleDisconnect(state, aliceWs, 'alice');
+        handleDisconnect(state, aliceWs, 'alice');
 
-      expect(state.sessions.has('alice')).toBe(false);
-      expect(state.sessions.has('bob')).toBe(false);
+        // Still here: this is the window a page refresh lands in.
+        expect(state.sessions.get('alice')).toBe(sess);
+        expect(state.sessions.get('bob')).toBe(sess);
+
+        vi.advanceTimersByTime(90_000);
+        expect(state.sessions.has('alice')).toBe(false);
+        expect(state.sessions.has('bob')).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('does not recycle a session a player reconnected to during the grace period', () => {
+      vi.useFakeTimers();
+      try {
+        const aliceWs = new FakeSocket();
+        state.online.set('alice', aliceWs);
+        const sess = SharedSession.createPair('alice', 'bob');
+        state.sessions.set('alice', sess);
+        state.sessions.set('bob', sess);
+
+        handleDisconnect(state, aliceWs, 'alice');
+        state.online.set('alice', new FakeSocket()); // the refreshed tab reconnects
+
+        vi.advanceTimersByTime(90_000);
+        expect(state.sessions.get('alice')).toBe(sess);
+        expect(state.sessions.get('bob')).toBe(sess);
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 });

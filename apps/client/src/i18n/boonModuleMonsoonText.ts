@@ -11,7 +11,7 @@ import { pf } from './LangContext.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html BOON_TEXT/MONSOON_TEXT/MODULE_TEXT/
 // CHARTER_TEXT/FLAG_LABELS (lines 1455-1569): display text for Fortunes, monsoon states, ship
-// modules and the Silk Road Charter is keyed by id and looked up per language -- the server
+// modules and the Silk Road Charter is keyed by id and looked up per language, the server
 // still sends the Chinese name/desc as usual, and the client overrides it by id when rendering.
 interface BilingualPair {
   name: Bilingual;
@@ -325,10 +325,3 @@ export const FLAG_LABELS: Partial<Record<keyof BoonModifiers, FlagLabel>> = {
   escortDiscount: { icon: '🛡️', id: 'deep_sea_escort_pact' },
   extraOrder: { icon: '🛍️', id: 'merchants_converge' },
 };
-
-export function activeFlagLabels(flags: BoonModifiers): FlagLabel[] {
-  return (Object.keys(flags) as (keyof BoonModifiers)[])
-    .filter((k) => flags[k])
-    .map((k) => FLAG_LABELS[k])
-    .filter((l): l is FlagLabel => l !== undefined);
-}

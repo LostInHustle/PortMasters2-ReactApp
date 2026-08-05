@@ -51,7 +51,7 @@ export function handleRestart(
 
 // New: each captain votes to disband the room and return everyone to the lobby. Every single
 // player must explicitly vote (sess.endVoteComplete() does not auto-count bankrupt/finished
-// players) -- this is wired into handleGameAction.ts, which (unlike most actions) allows a
+// players). This is wired into handleGameAction.ts, which (unlike most actions) allows a
 // gameOver player to call it.
 export function handleEndSessionVote(sess: SharedSession, slot: number): boolean {
   sess.endVotes.add(slot);
@@ -59,7 +59,7 @@ export function handleEndSessionVote(sess: SharedSession, slot: number): boolean
 }
 
 // Disbands a room once endVoteComplete() passes: every member is told the session ended and
-// dropped from state.sessions, with no resumable state kept -- unlike bankruptcy/restart, which
+// dropped from state.sessions, with no resumable state kept, unlike bankruptcy/restart, which
 // preserve the session, voting to end it is final.
 export function endGameSession(state: ServerState, sess: SharedSession): void {
   for (const player of sess.players) {

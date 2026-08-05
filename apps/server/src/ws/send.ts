@@ -3,7 +3,7 @@ import type { Sendable } from '../lobby/onlineRegistry.js';
 // Ported from PortMasters2/server.py send_json/send_to_user/broadcast_online_users
 // (lines 1480-1494). Python's `websockets` library makes `ws.send()` an async call the original
 // awaits; the `ws` package used here sends synchronously (fire-and-forget, no promise), so these
-// drop `async`/`await` entirely -- a zero-behavior-change adaptation to the library, not a
+// drop `async`/`await` entirely, a zero-behavior-change adaptation to the library, not a
 // fidelity deviation.
 export function sendJson(ws: Sendable, obj: unknown): void {
   try {

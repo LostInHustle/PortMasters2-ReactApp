@@ -269,7 +269,7 @@ describe('advance: phase 3 -> 4 (Shipyard opens)', () => {
     const g2 = makeGame({ phase: 3, gameOver: true, bankrupt: true });
     advance(makeCtx(g1, g2), noShuffleRng());
     expect(g1.phase).toBe(4);
-    // unlike phase 4's branch, phase 3 has no bankruptcy re-assertion -- a gameOver game
+    // unlike phase 4's branch, phase 3 has no bankruptcy re-assertion, a gameOver game
     // is simply skipped, so its phase is whatever it already was.
     expect(g2.phase).toBe(3);
   });
