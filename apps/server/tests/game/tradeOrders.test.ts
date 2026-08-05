@@ -4,6 +4,7 @@ import {
   acceptTrade,
   createTradeOrder,
   rejectTrade,
+  sanitizeTargetSlot,
   sanitizeTradeItems,
   type TradeGame,
 } from '../../src/game/tradeOrders.js';
@@ -46,7 +47,7 @@ describe('sanitizeTradeItems', () => {
 
 describe('createTradeOrder', () => {
   it('assigns sequential trade_N ids and stores the sanitized item lists', () => {
-    const ctx = { tradeOrders: [], tradeIdCounter: 0 };
+    const ctx = { tradeOrders: [], tradeIdCounter: 0, players: ['a', 'b'] };
     const first = createTradeOrder(ctx, 0, [{ type: '麻布', quantity: 2 }], []);
     const second = createTradeOrder(ctx, 1, [], [{ type: '金币', quantity: 5 }]);
     expect(first?.id).toBe('trade_1');
@@ -55,7 +56,7 @@ describe('createTradeOrder', () => {
   });
 
   it('returns undefined and stores nothing when both sides sanitize to empty', () => {
-    const ctx = { tradeOrders: [], tradeIdCounter: 0 };
+    const ctx = { tradeOrders: [], tradeIdCounter: 0, players: ['a', 'b'] };
     const order = createTradeOrder(ctx, 0, [{ type: 'junk', quantity: -1 }], []);
     expect(order).toBeUndefined();
     expect(ctx.tradeOrders).toHaveLength(0);
@@ -79,6 +80,7 @@ describe('acceptTrade', () => {
       sellerSlot: 0,
       sell: [{ type: '麻布', quantity: 5 }],
       buy: [{ type: '金币', quantity: 20 }],
+      targetSlot: null,
     };
     const ctx = { tradeOrders: [order], games: [seller, buyer] as const };
     expect(acceptTrade(ctx, 'trade_1', 1)).toBe(true);
@@ -97,6 +99,7 @@ describe('acceptTrade', () => {
       sellerSlot: 0,
       sell: [{ type: '麻布', quantity: 5 }],
       buy: [],
+      targetSlot: null,
     };
     const ctx = { tradeOrders: [order], games: [seller, buyer] as const };
     expect(acceptTrade(ctx, 'trade_1', 1)).toBe(false);
@@ -112,6 +115,7 @@ describe('acceptTrade', () => {
       sellerSlot: 0,
       sell: [{ type: '麻布', quantity: 5 }],
       buy: [{ type: '金币', quantity: 20 }],
+      targetSlot: null,
     };
     const ctx = { tradeOrders: [order], games: [seller, buyer] as const };
     expect(acceptTrade(ctx, 'trade_1', 1)).toBe(false);
@@ -120,7 +124,13 @@ describe('acceptTrade', () => {
   it('rejects a self-accept (buyer slot equals seller slot) and an unknown order id', () => {
     const seller = makeGame(100, { 麻布: 10 } as Record<ItemId, number>);
     const buyer = makeGame(50);
-    const order: TradeOrder = { id: 'trade_1', sellerSlot: 0, sell: [], buy: [] };
+    const order: TradeOrder = {
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [],
+      buy: [],
+      targetSlot: null,
+    };
     const ctx = { tradeOrders: [order], games: [seller, buyer] as const };
     expect(acceptTrade(ctx, 'trade_1', 0)).toBe(false);
     expect(acceptTrade(ctx, 'nope', 1)).toBe(false);
@@ -129,16 +139,102 @@ describe('acceptTrade', () => {
 
 describe('rejectTrade', () => {
   it('removes and returns the matching order', () => {
-    const order: TradeOrder = { id: 'trade_1', sellerSlot: 0, sell: [], buy: [] };
+    const order: TradeOrder = {
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [],
+      buy: [],
+      targetSlot: null,
+    };
     const ctx = { tradeOrders: [order] };
-    expect(rejectTrade(ctx, 'trade_1')).toBe(order);
+    expect(rejectTrade(ctx, 'trade_1', 1)).toBe(order);
     expect(ctx.tradeOrders).toHaveLength(0);
   });
 
   it('returns undefined for an unknown order id and leaves the list untouched', () => {
-    const order: TradeOrder = { id: 'trade_1', sellerSlot: 0, sell: [], buy: [] };
+    const order: TradeOrder = {
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [],
+      buy: [],
+      targetSlot: null,
+    };
     const ctx = { tradeOrders: [order] };
-    expect(rejectTrade(ctx, 'nope')).toBeUndefined();
+    expect(rejectTrade(ctx, 'nope', 1)).toBeUndefined();
     expect(ctx.tradeOrders).toHaveLength(1);
+  });
+});
+
+// A directed offer is addressed to one captain: only they (or its author, cancelling) may act on
+// it. Enforced on the server, not just hidden in the UI, so a crafted action cannot poach a
+// private deal or make someone else's offer vanish.
+describe('directed offers', () => {
+  const roster = { players: ['alice', 'bob', 'carol'] };
+
+  it('keeps a valid target slot and defaults to open when none is given', () => {
+    const ctx = { tradeOrders: [], tradeIdCounter: 0, ...roster };
+    expect(createTradeOrder(ctx, 0, [{ type: '麻布', quantity: 1 }], [], 2)?.targetSlot).toBe(2);
+    expect(createTradeOrder(ctx, 0, [{ type: '麻布', quantity: 1 }], [])?.targetSlot).toBeNull();
+  });
+
+  it('falls back to open for a target that is not a real other slot', () => {
+    for (const bad of [0, 3, -1, 1.5, 'bob', null, undefined, NaN]) {
+      expect(sanitizeTargetSlot(roster, 0, bad)).toBeNull();
+    }
+    expect(sanitizeTargetSlot(roster, 0, 1)).toBe(1);
+  });
+
+  it('lets only the target accept a directed offer', () => {
+    const games = [
+      makeGame(100, { 麻布: 9 }),
+      makeGame(100, { 麻布: 0 }),
+      makeGame(100, { 麻布: 0 }),
+    ] as const;
+    const order: TradeOrder = {
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [{ type: '麻布', quantity: 3 }],
+      buy: [],
+      targetSlot: 2,
+    };
+    const ctx = { tradeOrders: [order], games };
+    expect(acceptTrade(ctx, 'trade_1', 1)).toBe(false); // not the addressee
+    expect(ctx.tradeOrders).toHaveLength(1);
+    expect(acceptTrade(ctx, 'trade_1', 2)).toBe(true);
+    expect(games[2].inventory['麻布']).toBe(3);
+  });
+
+  it('lets only the target or the author withdraw a directed offer', () => {
+    const make = (): TradeOrder => ({
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [],
+      buy: [],
+      targetSlot: 2,
+    });
+    let ctx = { tradeOrders: [make()] };
+    expect(rejectTrade(ctx, 'trade_1', 1)).toBeUndefined();
+    expect(ctx.tradeOrders).toHaveLength(1);
+    expect(rejectTrade(ctx, 'trade_1', 2)).toBeDefined();
+
+    ctx = { tradeOrders: [make()] };
+    expect(rejectTrade(ctx, 'trade_1', 0)).toBeDefined(); // the author cancels their own
+  });
+
+  it('leaves open offers available to the whole room', () => {
+    const games = [
+      makeGame(100, { 麻布: 9 }),
+      makeGame(100, { 麻布: 0 }),
+      makeGame(100, { 麻布: 0 }),
+    ] as const;
+    const order: TradeOrder = {
+      id: 'trade_1',
+      sellerSlot: 0,
+      sell: [{ type: '麻布', quantity: 3 }],
+      buy: [],
+      targetSlot: null,
+    };
+    const ctx = { tradeOrders: [order], games };
+    expect(acceptTrade(ctx, 'trade_1', 1)).toBe(true);
   });
 });

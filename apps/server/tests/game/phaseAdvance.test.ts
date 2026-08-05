@@ -193,7 +193,7 @@ describe('advance: phase 1 -> trade (Barter opens)', () => {
     const g2 = makeGame({ phase: 1 });
     const ctx = makeCtx(g1, g2, {
       tradeReady: [true, true],
-      tradeOrders: [{ id: 'trade_1', sellerSlot: 0, sell: [], buy: [] }],
+      tradeOrders: [{ id: 'trade_1', sellerSlot: 0, sell: [], buy: [], targetSlot: null }],
     });
     advance(ctx, noShuffleRng());
     expect(g1.phase).toBe('trade');

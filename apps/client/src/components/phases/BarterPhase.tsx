@@ -22,7 +22,11 @@ export function BarterPhase() {
 
   const mySlot = g.slot!;
   const orders = serverState.tradeOrders;
-  const receivedOrders = orders.filter((o) => o.sellerSlot !== mySlot - 1);
+  // A directed offer is only visible to its addressee. The server enforces the same rule, so
+  // this is presentation, not protection.
+  const receivedOrders = orders.filter(
+    (o) => o.sellerSlot !== mySlot - 1 && (o.targetSlot === null || o.targetSlot === mySlot - 1),
+  );
   const myOrders = orders.filter((o) => o.sellerSlot === mySlot - 1);
   const myReady = serverState.tradeReady[mySlot - 1];
   const otherIndices = serverState.players.map((_, i) => i).filter((i) => i !== mySlot - 1);
@@ -38,6 +42,8 @@ export function BarterPhase() {
   const [sellQty, setSellQty] = useState('1');
   const [buyType, setBuyType] = useState<TradeItemType>(GOLD);
   const [buyQty, setBuyQty] = useState('1');
+  // '' means the offer is open to the whole room, which stays the default.
+  const [targetSlot, setTargetSlot] = useState('');
 
   const submitOrder = () => {
     const sq = parseInt(sellQty, 10);
@@ -60,12 +66,18 @@ export function BarterPhase() {
       action: 'createTradeOrder',
       sell: [{ type: sellType, quantity: sq }],
       buy: [{ type: buyType, quantity: bq }],
+      targetSlot: targetSlot === '' ? null : Number(targetSlot),
     });
     showNotification(
-      tr(
-        '📨 订单已发布，其他船长可在其界面中接受或拒绝',
-        '📨 Offer posted, any other captain can accept or decline it',
-      ),
+      targetSlot === ''
+        ? tr(
+            '📨 订单已发布，其他船长可在其界面中接受或拒绝',
+            '📨 Offer posted, any other captain can accept or decline it',
+          )
+        : tr(
+            `📨 订单已发给 ${serverState.players[Number(targetSlot)]?.name ?? ''}，只有对方能接受`,
+            `📨 Offer sent to ${serverState.players[Number(targetSlot)]?.name ?? ''}, only they can accept it`,
+          ),
     );
   };
 
@@ -108,6 +120,11 @@ export function BarterPhase() {
             <div className="trade-order" key={o.id}>
               <div className="muted" style={{ fontSize: 11 }}>
                 {nameOf(o.sellerSlot)}
+                {o.targetSlot !== null && (
+                  <span className="chip amber" style={{ marginLeft: 6 }}>
+                    {tr('🎯 只发给你', '🎯 Just for you')}
+                  </span>
+                )}
               </div>
               <div>
                 {tr('📤 对方给出：', '📤 They give: ')}
@@ -149,8 +166,8 @@ export function BarterPhase() {
         <h3>{tr('📤 向其他船长发布交易订单', '📤 Post an Offer')}</h3>
         <div className="section-hint">
           {tr(
-            '下拉框中实时显示你的持有量，方便核对。订单发布后任意其他船长都可接受或拒绝；本阶段结束前未成交的订单自动作废。',
-            'The dropdowns show your current stock. Any other captain can accept or decline; unaccepted offers expire when this phase ends.',
+            '下拉框中实时显示你的持有量，方便核对。公开订单任意其他船长都可接受或拒绝，定向订单只有指定的那位船长看得到；本阶段结束前未成交的订单自动作废。',
+            'The dropdowns show your current stock. An open offer can be taken by any other captain, while a directed one is visible only to the captain you address it to; unaccepted offers expire when this phase ends.',
           )}
         </div>
         <div className="trade-create">
@@ -202,15 +219,42 @@ export function BarterPhase() {
             />{' '}
             {tr('个', 'pcs')}
           </div>
+          <div>
+            {tr('发 给：', 'Offer to: ')}
+            <select
+              value={targetSlot}
+              onChange={(e) => setTargetSlot(e.target.value)}
+              title={tr(
+                '公开发布，或只发给某一位船长',
+                'Post it openly, or address it to one captain',
+              )}
+            >
+              <option value="">{tr('🌐 所有船长（公开）', '🌐 Everyone (open offer)')}</option>
+              {otherIndices.map((i) => (
+                <option value={String(i)} key={i}>
+                  🎯 {serverState.players[i]?.name ?? ''}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
             className="btn btn-gold"
             onClick={submitOrder}
-            title={tr(
-              '发布后房间内其他人会立即看到此订单',
-              'Everyone else in the room sees the offer immediately',
-            )}
+            title={
+              targetSlot === ''
+                ? tr(
+                    '发布后房间内其他人会立即看到此订单',
+                    'Everyone else in the room sees the offer immediately',
+                  )
+                : tr(
+                    '只有指定的那位船长能看到并接受此订单',
+                    'Only the captain you chose can see and accept this offer',
+                  )
+            }
           >
-            {tr('📨 发布订单', '📨 Post Offer')}
+            {targetSlot === ''
+              ? tr('📨 发布订单', '📨 Post Offer')
+              : tr('🎯 定向发送', '🎯 Send Direct')}
           </button>
         </div>
       </div>
@@ -231,7 +275,12 @@ export function BarterPhase() {
               {o.sell.map((i) => `${tn(i.type, lang)}×${i.quantity}`).join(sep)} ⇄ {tr('换', 'for')}{' '}
               {o.buy.map((i) => `${tn(i.type, lang)}×${i.quantity}`).join(sep)}{' '}
               <span className="muted">
-                {tr('（等待其他船长接受或拒绝）', '(awaiting a response)')}
+                {o.targetSlot === null
+                  ? tr('（等待其他船长接受或拒绝）', '(awaiting a response)')
+                  : tr(
+                      `（只发给 ${nameOf(o.targetSlot)}，等待回应）`,
+                      `(only to ${nameOf(o.targetSlot)}, awaiting a response)`,
+                    )}
               </span>
             </div>
           ))

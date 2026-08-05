@@ -163,14 +163,15 @@ export class SharedSession {
     sellerSlot: number,
     sellItems: unknown,
     buyItems: unknown,
+    targetSlot?: unknown,
   ): TradeOrder | undefined {
-    return createTradeOrder(this, sellerSlot, sellItems, buyItems);
+    return createTradeOrder(this, sellerSlot, sellItems, buyItems, targetSlot);
   }
   acceptTrade(orderId: unknown, buyerSlot: number): boolean {
     return acceptTrade(this, orderId, buyerSlot);
   }
-  rejectTrade(orderId: unknown): TradeOrder | undefined {
-    return rejectTrade(this, orderId);
+  rejectTrade(orderId: unknown, rejecterSlot: number): TradeOrder | undefined {
+    return rejectTrade(this, orderId, rejecterSlot);
   }
 
   // ---------- Chat ----------

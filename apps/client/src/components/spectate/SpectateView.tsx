@@ -5,11 +5,16 @@ import { useSession } from '../../state/SessionContext.js';
 import { useSpectate } from '../../state/SpectateContext.js';
 import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCard.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderCaptainViewer (lines
-// 3559-3614): a read-only, live-updating view of another captain's fleet, reusing the same
-// fleet-card pieces as the status/roster panels. The name list on the left is always visible
-// (even with just one other captain) so switching never requires closing the window; the
-// detail pane on the right (.sp-detail) is what changes.
+// A read-only, live-updating view of another captain's fleet, kept in step with
+// PortMasters2/PortMasters_online.html renderCaptainViewer. The name list on the left is always
+// visible (even with just one other captain) so switching never requires closing the window;
+// the detail pane on the right is what changes.
+//
+// The detail pane borrows the atomic pieces from FleetCard (BuffChips/InventoryList/Modules/
+// WorkerTeam) but deliberately NOT the .status-section wrappers the 300px sidebar uses. Six
+// equally weighted glass boxes side by side gave a scout no hierarchy, so the figures that
+// decide whether a rival is a threat were no more prominent than their cargo list. Gold, renown
+// and ship now lead as tiles, voyage progress reads as a track, and the rest are quiet panes.
 export function SpectateView() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();
@@ -71,73 +76,68 @@ export function SpectateView() {
             ))}
           </div>
           <div className="sp-detail">
-            <div className="sp-col">
-              <div className="status-section">
-                <h3>{tr('📊 航海概况', '📊 Voyage Overview')}</h3>
-                <div className="stat-row">
-                  <span>{tr('🌊 航程进度', '🌊 Voyage')}</span>
-                  <span className="stat-value">
-                    {tr(
-                      `第 ${og.currentRound} / ${og.maxRounds} 程`,
-                      `Round ${og.currentRound} / ${og.maxRounds}`,
-                    )}
-                  </span>
-                </div>
-                <div className="stat-row">
-                  <span>{tr('🧭 当前阶段', '🧭 Phase')}</span>
-                  <span className="stat-value">{phaseName(og.phase, lang)}</span>
-                </div>
-                <div className="stat-row">
-                  <span>{tr('💰 现金存款', '💰 Gold')}</span>
-                  <span className="stat-money">
-                    {og.money} {tr('金币', 'gold')}
-                  </span>
-                </div>
-                <div className="stat-row">
-                  <span>{tr('🏆 声望（信誉）', '🏆 Renown')}</span>
-                  <span className="stat-score">{og.score}</span>
-                </div>
+            <div className="sp-hero">
+              <div className="sp-tile gold">
+                <div className="k">{tr('现金', 'Gold')}</div>
+                <div className="v">💰 {og.money}</div>
               </div>
-              <div className="status-section">
-                <h3>{tr('🪄 本回合增益', '🪄 Round Buffs')}</h3>
-                <BuffChips g={og} />
+              <div className="sp-tile renown">
+                <div className="k">{tr('声望', 'Renown')}</div>
+                <div className="v">🏆 {og.score}</div>
               </div>
-              <div className="status-section">
-                <h3>{tr('🚢 旗舰状态', '🚢 Flagship')}</h3>
-                <div className="stat-row">
-                  <span>{tr('商船等级', 'Ship level')}</span>
-                  <span className="stat-value">Lv.{og.shipLevel}</span>
-                </div>
-                <div className="stat-row">
-                  <span>{tr('模块槽位', 'Module slots')}</span>
-                  <span className="stat-value">
-                    {og.equippedModules.length} / {og.shipLevel}
+              <div className="sp-tile">
+                <div className="k">{tr('商船', 'Flagship')}</div>
+                <div className="v">
+                  🚢 Lv.{og.shipLevel}
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-faint)' }}>
+                    {' '}
+                    {og.equippedModules.length}/{og.shipLevel}
                   </span>
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <Modules g={og} />
                 </div>
               </div>
             </div>
-            <div className="sp-col">
-              <div className="status-section">
-                <h3>{tr('📦 船舱货物', '📦 Cargo Hold')}</h3>
+            <div className="sp-voyage">
+              <span>
+                {tr(
+                  `第 ${og.currentRound} / ${og.maxRounds} 程`,
+                  `Round ${og.currentRound} of ${og.maxRounds}`,
+                )}
+              </span>
+              <span className="sp-track">
+                <span
+                  className="sp-track-fill"
+                  style={{ width: `${Math.round((og.currentRound / og.maxRounds) * 100)}%` }}
+                />
+              </span>
+              <span>{phaseName(og.phase, lang)}</span>
+            </div>
+
+            <div className="sp-pane">
+              <h4>{tr('🪄 本回合增益', '🪄 Round Buffs')}</h4>
+              <BuffChips g={og} />
+            </div>
+
+            <div className="sp-split">
+              <div className="sp-pane">
+                <h4>{tr('📦 船舱货物', '📦 Cargo Hold')}</h4>
                 <InventoryList g={og} />
               </div>
-              <div className="status-section">
-                <h3>{tr('👥 工匠团队', '👥 Artisan Team')}</h3>
+              <div className="sp-pane">
+                <h4>{tr('👥 工匠团队', '👥 Artisan Team')}</h4>
                 <WorkerTeam g={og} />
               </div>
             </div>
-            <div className="status-section sp-wide">
-              <h3>{tr('📜 近期动态（最新在前）', '📜 Recent Activity (newest first)')}</h3>
+
+            <div className="sp-pane">
+              <h4>{tr('🚢 已装模块', '🚢 Installed Modules')}</h4>
+              <Modules g={og} />
+            </div>
+
+            <div className="sp-pane">
+              <h4>{tr('📜 近期动态 · 最新在前', '📜 Recent Activity · Newest first')}</h4>
               {recentLogs.length > 0 ? (
                 recentLogs.map((m, i) => (
-                  <div
-                    className="stat-row"
-                    style={{ fontSize: 11.5, color: 'var(--ink-soft)' }}
-                    key={i}
-                  >
+                  <div className="sp-feed-item" key={i}>
                     {lst(m, lang)}
                   </div>
                 ))

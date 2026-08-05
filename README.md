@@ -8,7 +8,7 @@ A full rebuild of PortMasters 2 on a modern TypeScript stack. The Python and sin
 
 ## 📖 1. Overview
 
-Welcome back to the Maritime Silk Road. Two captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods, gold and rumors with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every voyage (8 rounds on Easy, 12 on Standard, 16 on Hard). The richer reputation wins.
+Welcome back to the Maritime Silk Road. Two to five captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods, gold and rumors with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every voyage (8 rounds on Easy, 12 on Standard, 16 on Hard). The richer reputation wins.
 
 This edition keeps everything the original did and changes only the engine room:
 
@@ -60,7 +60,7 @@ Open **http://localhost:5173**. Vite proxies the `/ws` WebSocket through to the 
 
 ### 🎯 Two browsers, one game
 
-PortMasters 2 is a two captain game, so you need two logged in sessions to leave the login screen. Open the site in two separate browsers, or one normal window and one private/incognito window, and register a different account in each.
+PortMasters 2 seats two to five captains, so you need at least two logged in sessions to leave the login screen. Open the site in two separate browsers, or one normal window and one private/incognito window, and register a different account in each.
 
 ---
 
@@ -81,7 +81,7 @@ ReactPM2/
 │   ├── src/
 │   │   ├── game/         # PlayerGame + the pure rule functions it delegates to
 │   │   │                 # (costs, production, pirates, modules, card generation)
-│   │   ├── session/      # SharedSession, the two player phase state machine
+│   │   ├── session/      # SharedSession, the shared phase state machine
 │   │   ├── actions/      # one handler per game action (purchase, trade, hire…)
 │   │   ├── lobby/        # online registry, invitations, chat
 │   │   ├── auth/         # PBKDF2 password hashing, the user store
@@ -108,14 +108,14 @@ The guiding rule is that anything which must be identical on both sides lives in
 
 ## 🎮 4. Gameplay Mechanics
 
-A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Hard, and each voyage runs through **8 phases**. No phase advances until both captains confirm.
+A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Hard, and each voyage runs through **8 phases**. No phase advances until every captain confirms.
 
 | Phase           | What happens                                                                                                                        |
 | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
 | **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went.                                     |
-| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and your partner gets a different hand. Lock one in; it lasts this round only.   |
+| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and every captain gets a different hand. Lock one in; it lasts this round only.   |
 | **🛒 Procure**  | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand.      |
-| **🤝 Barter**   | Trade with your partner. Post an offer like "I give this for that" and it settles the moment they accept.                           |
+| **🤝 Barter**   | Trade with the room. Post an offer like "I give this for that" and it settles the moment someone accepts.                           |
 | **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                          |
 | **📦 Trade**    | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️.                                  |
 | **🔧 Upkeep**   | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt. |
@@ -123,7 +123,7 @@ A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Har
 
 ### ⚖️ Difficulty Modes
 
-Every session starts on **Easy**. The inviting captain chooses the level and the other reads what it means and confirms before the voyage begins, so both captains always sail the same difficulty.
+Every session starts on **Easy**. Whoever sends the invitation or opens the room chooses the level, and an invited captain reads what it means and confirms before the voyage begins, so everyone always sails the same difficulty.
 
 - **Easy (8 rounds)** keeps the whole voyage on the founding set of goods: three raw materials, four starter products, the first three artisan guilds, and their matching fortunes, modules, ports and weather. The market never gets crowded, which makes it the gentle place to start.
 - **Standard (12 rounds)** opens the full trade at a brisker pace, with the Silk Road Charter expanding on Rounds 4 and 8, but no corrupt brokers.
@@ -147,7 +147,7 @@ Product orders pay roughly 5% VAT, and at the end of each round you pay about 10
 
 ### 🌐 Multiplayer
 
-Accounts are stored with salted PBKDF2 hashing. The lobby lists who is online, invitations carry the chosen difficulty, and a one per minute cooldown keeps things calm. If you drop, your account and the running session survive on the server, so you can log back in and pick up where you left off, as long as your partner is still around.
+Accounts are stored with salted PBKDF2 hashing. The lobby lists who is online, invitations carry the chosen difficulty, and a one per minute cooldown keeps things calm; you can also open a room for two to five captains that others join freely. If you drop, your account and the running session survive on the server, so refreshing the page or logging back in picks up where you left off. A voyage is only recycled once every captain has been offline for a grace period.
 
 ---
 
@@ -170,7 +170,7 @@ Everything else is point and click. Hover any underlined hint for a tooltip, and
 - **Sell finished goods, not raw materials.** A Scented Sachet is worth far more than the materials inside it.
 - **Buy whispers.** Every clue becomes a guaranteed order later in the round, so stock up early for a sure sale, and the Broker's Network module makes whispers even cheaper.
 - **Watch the weather.** Each round's monsoon raises some ports' payouts and lowers some prices, and it changes the pirate risk too.
-- **Talk to your partner.** You can see each other's cargo and gold, so use the barter phase and the chat to cover each other's gaps.
+- **Talk to your fellow captains.** You can see each other's cargo and gold, so use the barter phase and the chat to cover each other's gaps.
 
 ---
 
@@ -184,7 +184,7 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 
 - **`Cannot find module ... .bin/...` when running a script.** The `node_modules/.bin` symlinks can get flattened into plain files by some cloud sync tools (iCloud Drive on a synced Desktop is the usual culprit). Rebuild them with `rm -rf node_modules/.bin && npm install`.
 - **The page loads but looks unstyled.** Make sure you started the client through `npm run dev:client` or built it with `npm run build`. The stylesheet is bundled by Vite; opening a raw file will not pick it up.
-- **Nothing past the login screen.** It takes two accounts. Open a second browser or a private window and register a separate captain.
+- **Nothing past the login screen.** It takes at least two accounts. Open a second browser or a private window and register a separate captain.
 - **The server restarted.** Accounts survive in `apps/server/data/users.json`, but a running voyage lives in memory and is gone. Start a fresh session.
 - **Sharing over the internet.** Use the single port build (`npm run serve`) and tunnel that one port (`ngrok http 8080`) so the page and the WebSocket share one https origin.
 

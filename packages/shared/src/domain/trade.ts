@@ -17,4 +17,11 @@ export interface TradeOrder {
   sellerSlot: number;
   sell: TradeItem[];
   buy: TradeItem[];
+  /**
+   * Slot of the one captain this offer is addressed to, or null when it is open to the whole
+   * room (the original behaviour, and still the default). A directed offer is only shown to,
+   * and can only be accepted or declined by, its target, so a captain can strike a deal with
+   * one specific partner without the rest of the room taking it first.
+   */
+  targetSlot: number | null;
 }
