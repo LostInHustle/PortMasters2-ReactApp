@@ -72,8 +72,15 @@ export function ArtisansPhase() {
           <h3>{tr('🔨 雇佣工匠', '🔨 Hire Artisans')}</h3>
           <div className="section-hint">
             {tr(
-              '雇佣本身免费，但每回合结算时自动支付工资（现金不足即破产）。工匠累计产出 2 件后晋升熟练⭐，此后每次产 2 件。',
-              'Hiring is free, but wages are paid automatically every Upkeep (run out of cash and you go bankrupt). After producing 2 items an artisan becomes skilled ⭐ and makes 2 per task.',
+              <>
+                雇佣本身免费，但每回合结算时自动支付工资（现金不足即破产）。工匠累计产出 2 件后晋升
+                <strong>熟练⭐</strong>，此后每次产 2 件。
+              </>,
+              <>
+                Hiring is free, but wages are paid automatically every Upkeep (run out of cash and
+                you go bankrupt). After producing 2 items an artisan becomes{' '}
+                <strong>skilled ⭐</strong> and makes 2 per task.
+              </>,
             )}{' '}
             {tr('当前现金：', 'Gold on hand: ')}
             <strong style={{ color: '#059669' }}>
@@ -124,8 +131,14 @@ export function ArtisansPhase() {
             <h3>{tr('👥 团队任务分配', '👥 Task Assignments')}</h3>
             <div className="section-hint">
               {tr(
-                '为空闲工匠指派生产任务；产出将在结算阶段自动入库。解雇空闲工匠需支付一次工资作遣散费。',
-                'Assign tasks to idle artisans; output arrives automatically at Upkeep. Dismissing an idle artisan costs one wage as severance.',
+                <>
+                  为空闲工匠指派生产任务；产出将在<strong>结算阶段</strong>
+                  自动入库。解雇空闲工匠需支付一次工资作遣散费。
+                </>,
+                <>
+                  Assign tasks to idle artisans; output arrives automatically at{' '}
+                  <strong>Upkeep</strong>. Dismissing an idle artisan costs one wage as severance.
+                </>,
               )}
             </div>
             {WORKER_TYPES.map((wt) => (
@@ -139,13 +152,13 @@ export function ArtisansPhase() {
             className="btn btn-lg"
             onClick={() => send({ action: 'ready_for_next_phase' })}
             title={tr(
-              '双方确认后进入贸易订单阶段',
-              'The Trade phase begins once both captains confirm',
+              '全员确认后进入贸易订单阶段',
+              'The Trade phase begins once everyone confirms',
             )}
           >
-            {tr('✅ 完成工匠管理，进入贸易', '✅ Done Managing, to Trade')}
+            {tr('✅ 完成工匠管理，进入贸易', '✅ Done Managing → Trade')}
             <span className="btn-sub">
-              {tr('双方确认后同步推进', 'Advances when both confirm')}
+              {tr('全员确认后同步推进', 'Advances when everyone confirms')}
             </span>
           </button>
         </div>

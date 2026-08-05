@@ -54,7 +54,7 @@ function InviteReceivedContent({
       <div className="diff-summary">{pf(info.summary)}</div>
       <p className="muted">
         {tr(
-          '接受后双方将进入共享会话，始终停留在同一回合与同一阶段，可以自由互市交易，并能随时查看彼此的船队状态。如果你更想换一种难度，可以先婉拒，再由任意一方按心仪的难度重新发出邀请。',
+          '接受后你们将进入共享会话，始终停留在同一回合与同一阶段，可以自由互市交易，并能随时查看彼此的船队状态。如果你更想换一种难度，可以先婉拒，再由任意一方按心仪的难度重新发出邀请。',
           "Accept to enter a shared session where you both stay on the same round and the same phase, barter freely, and can check each other's fleet at any time. If you would prefer a different difficulty, decline for now and either of you can send a fresh invitation set to the level you both want.",
         )}
       </p>

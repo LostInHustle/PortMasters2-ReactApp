@@ -16,7 +16,7 @@ export function useLogout(): () => void {
     const confirmed = window.confirm(
       tr(
         '确定要退出登录吗？游戏进度已保存在服务器，重新登录可继续。',
-        'Log out? Your progress is saved on the server, log back in to continue.',
+        'Log out? Your progress is saved on the server, so you can log back in to continue.',
       ),
     );
     if (!confirmed) return;

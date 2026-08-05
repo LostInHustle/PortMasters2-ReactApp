@@ -169,7 +169,7 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
             className="tip"
             data-tip={tr(
               '当前现金存款。工资、维护费、税款都从这里扣除，归零即破产',
-              'Cash on hand. Wages, upkeep and taxes are paid from here, hit zero and you go bankrupt',
+              'Cash on hand. Wages, upkeep and taxes are paid from here, and hitting zero means bankruptcy',
             )}
           >
             {tr('💰 现金存款', '💰 Gold')}
@@ -194,8 +194,8 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <span
             className="tip"
             data-tip={tr(
-              '当前所处阶段，双方始终同步',
-              'Current phase, both captains always stay in sync',
+              '当前所处阶段，全员始终同步',
+              'Current phase. Everyone always stays in sync',
             )}
           >
             {tr('🧭 当前阶段', '🧭 Phase')}

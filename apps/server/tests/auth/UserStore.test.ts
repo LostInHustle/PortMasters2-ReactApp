@@ -26,9 +26,12 @@ describe('UserStore', () => {
 
   it('rejects usernames outside 3-20 chars and passwords outside 6-128 chars', () => {
     const store = new UserStore(path);
-    expect(store.register('ab', 'longenough')).toEqual([false, '用户名需为 3-20 个字符']);
-    expect(store.register('a'.repeat(21), 'longenough')).toEqual([false, '用户名需为 3-20 个字符']);
-    expect(store.register('gooduser', 'short')).toEqual([false, '密码需为 6-128 位']);
+    expect(store.register('ab', 'longenough')).toEqual([false, '用户名需为 3 到 20 个字符']);
+    expect(store.register('a'.repeat(21), 'longenough')).toEqual([
+      false,
+      '用户名需为 3 到 20 个字符',
+    ]);
+    expect(store.register('gooduser', 'short')).toEqual([false, '密码需为 6 到 128 位']);
   });
 
   it('registers a new user, then accepts correct credentials and rejects wrong ones', () => {

@@ -26,7 +26,7 @@ export function ExpansionUnlockWindsModules() {
           </thead>
           <tbody>
             <tr>
-              <td>🌫️ Min River Kiln-Smoke</td>
+              <td>🌫️ Min River Kiln Smoke</td>
               <td>New Maritime Edict</td>
               <td>
                 Fuzhou and Quanzhou orders pay more; Porcelain Clay is cheaper; pirate risk is
@@ -70,7 +70,7 @@ export function ExpansionUnlockWindsModules() {
               <td>🎫 Trade Bureau Token</td>
               <td>New Maritime Edict</td>
               <td>
-                Orders for new trade-route goods (Porcelain Clay, Copper Ore and their products) pay
+                Orders for new trade route goods (Porcelain Clay, Copper Ore and their products) pay
                 +10%
               </td>
             </tr>
@@ -80,7 +80,7 @@ export function ExpansionUnlockWindsModules() {
               <td>Porcelain Clay and Copper Ore purchase price −2 gold per unit</td>
             </tr>
             <tr>
-              <td>📡 Ocean-Going Interpreter</td>
+              <td>📡 Ocean Going Interpreter</td>
               <td>New Maritime Edict</td>
               <td>Each Broker's Whisper purchase reveals 1 extra clue at no added cost</td>
             </tr>
@@ -95,7 +95,7 @@ export function ExpansionUnlockWindsModules() {
               <td>Pirate risk reduced by 30%</td>
             </tr>
             <tr>
-              <td>⛵ Fleet of Ten-Thousand Treasures</td>
+              <td>⛵ Fleet of Ten Thousand Treasures</td>
               <td>Ten Thousand Kingdoms Trade</td>
               <td>
                 Shipping for Foreign Perfume Oil and Pearl Necklace is 3 gold cheaper per item

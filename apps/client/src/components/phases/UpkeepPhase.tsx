@@ -68,7 +68,7 @@ export function UpkeepPhase() {
             >
               {tr(
                 '🚨 现金不足以支付维护费，支付后将破产出局！',
-                "🚨 You can't cover the upkeep, paying it will bankrupt your fleet!",
+                "🚨 You can't cover the upkeep. Paying it will bankrupt your fleet!",
               )}
             </div>
           )}
@@ -83,8 +83,19 @@ export function UpkeepPhase() {
           <h3>{tr('🛡️ 海盗反制：雇佣护航', '🛡️ Pirate Counterplay: Hire Escort')}</h3>
           <div className="section-hint">
             {tr(
-              `本程海盗袭扰概率为 ${riskPct}%（含天象与可疑牙行的影响），若触发将损失当前金币的 ${lossPct}%（按现有现金约为 ${projectedLoss} 金币）。护航费用按当前财富计算，本次为 ${escortCost} 金币，可完全免疫本次结算的海盗 RNG。`,
-              `This voyage's pirate raid chance is ${riskPct}% (weather plus any shady brokers); if it lands you lose ${lossPct}% of your gold (about ${projectedLoss} gold at your current balance). The escort fee scales with your wealth, ${escortCost} gold right now, and fully neutralizes pirate RNG for this upkeep.`,
+              <>
+                本程海盗袭扰概率为 <strong>{riskPct}%</strong>
+                （含天象与可疑牙行的影响），若触发将损失当前金币的 <strong>{lossPct}%</strong>
+                （按现有现金约为 {projectedLoss} 金币）。护航费用按当前财富计算，本次为{' '}
+                <strong>{escortCost}</strong> 金币，可完全免疫本次结算的海盗 RNG。
+              </>,
+              <>
+                This voyage&apos;s pirate raid chance is <strong>{riskPct}%</strong> (weather plus
+                any shady brokers); if it lands you lose <strong>{lossPct}%</strong> of your gold
+                (about {projectedLoss} gold at your current balance). The escort fee scales with
+                your wealth, <strong>{escortCost}</strong> gold right now, and fully neutralizes
+                pirate RNG for this upkeep.
+              </>,
             )}
           </div>
           <button
@@ -118,7 +129,7 @@ export function UpkeepPhase() {
           >
             {tr('💸 支付维护费', '💸 Pay Upkeep')}
             <span className="btn-sub">
-              {tr('双方完成后进入船坞', 'Shipyard opens when both have paid')}
+              {tr('全员完成后进入船坞', 'Shipyard opens when everyone has paid')}
             </span>
           </button>
         </div>

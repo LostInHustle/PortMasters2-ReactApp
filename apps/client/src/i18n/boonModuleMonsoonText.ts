@@ -83,7 +83,7 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
     },
   },
   deep_sea_escort_pact: {
-    name: { zh: '远洋护航', en: 'Deep-Sea Escort Pact' },
+    name: { zh: '远洋护航', en: 'Deep Sea Escort Pact' },
     desc: {
       zh: '本回合雇佣护航费用减半，海盗风险减半。',
       en: 'Escort hiring costs half price and pirate risk is halved this round.',
@@ -137,7 +137,7 @@ export const MONSOON_TEXT: Record<string, BilingualPair> = {
     },
   },
   fujian_kiln_smoke: {
-    name: { zh: '闽江窑烟', en: 'Min River Kiln-Smoke' },
+    name: { zh: '闽江窑烟', en: 'Min River Kiln Smoke' },
     desc: {
       zh: '福州港与泉州港订单报酬提高，瓷土采购价降低。海盗风险中等。',
       en: 'Fuzhou and Quanzhou orders pay more, Porcelain Clay is cheaper, and pirate risk is moderate.',
@@ -178,12 +178,12 @@ export function monsoonDesc(m: MonsoonState | null | undefined, lang: Lang): str
 export const MODULE_TEXT: Record<string, BilingualPair> = {
   smugglers_hold: {
     name: { zh: '走私暗舱', en: "Smuggler's Hold" },
-    desc: { zh: '采购成本-15%。所得税+20%。', en: 'Purchase costs −15%. Income tax +20%.' },
+    desc: { zh: '采购成本−15%。所得税+20%。', en: 'Purchase costs −15%. Income tax +20%.' },
   },
   bulk_hauler: {
     name: { zh: '散货索具', en: 'Bulk Rigging' },
     desc: {
-      zh: '每件货物运费-1。船坞升级费用+15金币。',
+      zh: '每件货物运费−1。船坞升级费用+15金币。',
       en: 'Shipping −1 gold per item. Ship upgrades cost +15 gold.',
     },
   },
@@ -202,7 +202,7 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
     name: { zh: '丝路垄断', en: 'Silk Monopoly' },
     desc: {
       zh: '丝绸运费为0。丝绸产品订单收入+20%。',
-      en: 'Silk ships free. Silk-product order income +20%.',
+      en: 'Silk ships free. Silk product order income +20%.',
     },
   },
   brokers_network: {
@@ -221,13 +221,13 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
   },
   overdrive_engine: {
     name: { zh: '超载引擎', en: 'Overdrive Engine' },
-    desc: { zh: '运费-5金币。维护费+10金币。', en: 'Shipping −5 gold. Maintenance +10 gold.' },
+    desc: { zh: '运费−5金币。维护费+10金币。', en: 'Shipping −5 gold. Maintenance +10 gold.' },
   },
   bureau_token: {
     name: { zh: '市舶司令牌', en: 'Trade Bureau Token' },
     desc: {
       zh: '新航线货品（瓷土、铜矿及其成品）订单收入+10%。',
-      en: 'Orders for new trade-route goods (Porcelain Clay, Copper Ore and their products) pay +10%.',
+      en: 'Orders for new trade route goods (Porcelain Clay, Copper Ore and their products) pay +10%.',
     },
   },
   kiln_cellar: {
@@ -238,7 +238,7 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
     },
   },
   ocean_relay: {
-    name: { zh: '远洋通译', en: 'Ocean-Going Interpreter' },
+    name: { zh: '远洋通译', en: 'Ocean Going Interpreter' },
     desc: {
       zh: '牙行密语每次额外显示1条线索（不增加花费）。',
       en: "Each Broker's Whisper purchase reveals 1 extra clue at no added cost.",
@@ -256,7 +256,7 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
     desc: { zh: '海盗风险降低30%。', en: 'Pirate risk reduced by 30%.' },
   },
   fleet_of_treasures: {
-    name: { zh: '万宝商船', en: 'Fleet of Ten-Thousand Treasures' },
+    name: { zh: '万宝商船', en: 'Fleet of Ten Thousand Treasures' },
     desc: {
       zh: '「蕃香脂」与「珠链」每件运费降低3金币。',
       en: 'Shipping for Foreign Perfume Oil and Pearl Necklace is 3 gold cheaper per item.',

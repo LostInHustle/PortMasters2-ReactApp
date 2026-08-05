@@ -128,7 +128,7 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
     (m) => `Invitation sent to ${m[1]!}, awaiting response (valid for ${m[2]!}s)`,
   ],
   /* Register / Login */
-  [/^用户名需为 3-20 个字符$/, () => `Username must be 3 to 20 characters`],
+  [/^用户名需为 3 到 20 个字符$/, () => `Username must be 3 to 20 characters`],
   [/^密码至少 6 位$/, () => `Password must be at least 6 characters`],
   [/^该用户名已被注册$/, () => `That username is already taken`],
   [/^注册成功，请登录$/, () => `Account created, please log in`],

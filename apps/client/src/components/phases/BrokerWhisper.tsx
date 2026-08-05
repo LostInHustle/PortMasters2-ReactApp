@@ -26,7 +26,7 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
         <span className="chip amber">
           {tr(
             `🔮 花 ${g.intelCost} 金币打探未来需求`,
-            `🔮 ${g.intelCost} gold buys future-demand intel`,
+            `🔮 ${g.intelCost} gold buys future demand intel`,
           )}
         </span>
         {revealed.length > 0 && (
@@ -44,7 +44,7 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
         )}
         {hasOceanRelay && (
           <span className="chip green">
-            {tr('📡 远洋通译已生效', '📡 Ocean-Going Interpreter active')}
+            {tr('📡 远洋通译已生效', '📡 Ocean Going Interpreter active')}
           </span>
         )}
       </summary>
@@ -66,12 +66,21 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
           {hasOceanRelay &&
             tr(
               ' 此外，📡 远洋通译已生效：每次额外多获得 1 条线索（不增加花费）。',
-              ' Additionally, 📡 Ocean-Going Interpreter is active: each purchase reveals 1 extra clue at no added cost.',
+              ' Additionally, 📡 Ocean Going Interpreter is active: each purchase reveals 1 extra clue at no added cost.',
             )}
           {g.brokerCorruption &&
             tr(
-              ' ⚠️ 高难航路上并非每个牙行都可信：每次打探都有可能遇到可疑牙行走漏你的行踪，抬高本程海盗袭扰概率，记得在结算阶段权衡是否雇佣护航。',
-              " ⚠️ On the hard route not every broker is trustworthy: each purchase risks a shady broker leaking your route and raising this voyage's pirate raid chance, so weigh hiring an escort at Upkeep.",
+              <>
+                {' '}
+                ⚠️ 高难航路上并非每个牙行都可信：每次打探都有可能遇到<strong>可疑牙行</strong>
+                走漏你的行踪，抬高本程海盗袭扰概率，记得在结算阶段权衡是否雇佣护航。
+              </>,
+              <>
+                {' '}
+                ⚠️ On the hard route not every broker is trustworthy: each purchase risks a{' '}
+                <strong>shady broker</strong> leaking your route and raising this voyage&apos;s
+                pirate raid chance, so weigh hiring an escort at Upkeep.
+              </>,
             )}
         </div>
         <div style={{ margin: '10px 0' }}>

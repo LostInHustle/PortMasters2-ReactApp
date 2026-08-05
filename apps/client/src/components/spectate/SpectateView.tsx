@@ -41,7 +41,7 @@ export function SpectateView() {
             <div className="sp-sub">
               {tr(
                 `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
-                `Round ${og.currentRound} / ${og.maxRounds} · ${phaseName(og.phase, lang)} phase · read-only, updates live`,
+                `Round ${og.currentRound} / ${og.maxRounds} · ${phaseName(og.phase, lang)} phase · read only, updates live`,
               )}
             </div>
           </div>

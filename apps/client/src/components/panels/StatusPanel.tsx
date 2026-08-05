@@ -45,7 +45,7 @@ export function StatusPanel() {
               className="tip"
               data-tip={tr(
                 '每回合结算阶段必须支付的固定运营成本，付不起即破产',
-                'Fixed operating cost paid every Upkeep phase, fail to pay and you go bankrupt',
+                'Fixed operating cost paid every Upkeep phase. Fail to pay and you go bankrupt',
               )}
             >
               {tr('🔧 维护费', '🔧 Upkeep')}
@@ -59,7 +59,7 @@ export function StatusPanel() {
               className="tip"
               data-tip={tr(
                 '结算阶段自动支付的全部工匠工资，付不起即破产',
-                'All artisan wages, paid automatically at Upkeep, fail to pay and you go bankrupt',
+                'All artisan wages, paid automatically at Upkeep. Fail to pay and you go bankrupt',
               )}
             >
               {tr('👥 工资合计', '👥 Total wages')}
@@ -94,7 +94,7 @@ export function StatusPanel() {
             >
               {tr(
                 '🚨 现金不足以支付本回合结算费用，请尽快回笼资金！',
-                "🚨 You can't cover this round's settlement, raise cash fast!",
+                "🚨 You can't cover this round's settlement. Raise cash fast!",
               )}
             </div>
           )}

@@ -29,8 +29,8 @@ export function OnboardingTour() {
       <div className="manual-body" style={{ maxHeight: '46vh' }}>
         <p>
           {tr(
-            '这里是 PortMasters 2 ， 海上丝绸之路联机贸易战略，2-5 位船长共享同一段航程。开始前 60 秒了解三件事：',
-            'This is PortMasters 2, an online trading strategy on the Maritime Silk Road for 2-5 captains sharing one voyage. Sixty seconds, three things to know:',
+            '这里是 PortMasters 2 ， 海上丝绸之路联机贸易战略，2 到 5 位船长共享同一段航程。开始前 60 秒了解三件事：',
+            'This is PortMasters 2, an online trading strategy on the Maritime Silk Road for 2 to 5 captains sharing one voyage. Sixty seconds, three things to know:',
           )}
         </p>
         <p className="muted">

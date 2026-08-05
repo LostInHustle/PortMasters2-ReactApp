@@ -80,8 +80,8 @@ export function ControlPanel() {
         </button>
       );
       hint = tr(
-        '采购完成后确认，双方就绪即进入互市',
-        'Confirm when done buying, Barter starts when both are ready',
+        '采购完成后确认，全员就绪即进入互市',
+        'Confirm when done buying. Barter starts when everyone is ready',
       );
       break;
     case 'trade':
@@ -137,13 +137,10 @@ export function ControlPanel() {
     <>
       <span
         className="sync-chip"
-        title={tr(
-          '双方都确认后才会进入下一阶段',
-          'The next phase starts once both captains confirm',
-        )}
+        title={tr('全员确认后才进入下一阶段', 'The next phase starts once everyone confirms')}
       >
         {tr(
-          `🔄 双方就绪 ${readyCount} / ${serverState?.phaseTotalCount ?? 0}`,
+          `🔄 全员就绪 ${readyCount} / ${serverState?.phaseTotalCount ?? 0}`,
           `🔄 Ready ${readyCount} / ${serverState?.phaseTotalCount ?? 0}`,
         )}
       </span>

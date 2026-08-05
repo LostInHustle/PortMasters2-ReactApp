@@ -4,7 +4,7 @@
    transcribing the stylesheet 1:1 is the highest-fidelity, lowest-risk port. Imported once in
    main.tsx so it applies app-wide, exactly as the original <style> applied document-wide. */
 /* ============================================================
-   PortMasters 2 — Design System
+   PortMasters 2 Design System
    Bright and natural, ocean-glass feel, smooth gradients, near-future (~2030) aesthetic
    Layer hierarchy (low to high): background decor < chat window < fullscreen overlay < dialogs < notifications
    ============================================================ */
@@ -151,11 +151,14 @@ a {
 }
 
 /* ---- Header ---- */
+/* The header, the control bar and the log all span the full grid width and stack down the page,
+   so they share one horizontal inset (20px). They used to run 22 / 16 / 14, which left the page
+   with a visibly ragged left edge from top to bottom. */
 .header {
   grid-area: header;
   background: var(--grad-deep);
   color: #fff;
-  padding: 14px 22px;
+  padding: 14px 20px;
   border-radius: var(--radius-lg);
   display: flex;
   justify-content: space-between;
@@ -297,7 +300,7 @@ a {
   background: var(--glass-strong);
   border: 1px solid rgba(14, 165, 233, 0.14);
   border-radius: var(--radius-md);
-  padding: 11px 12px;
+  padding: 10px 12px;
   margin-bottom: 10px;
 }
 .status-section h3 {
@@ -401,7 +404,18 @@ a {
 .roster-widget-head:hover {
   background: rgba(14, 165, 233, 0.08);
 }
+/* Without this the name takes its full intrinsic width and shoves the margin-left:auto stats
+   block past the widget edge, where .roster-widget's overflow:hidden clips the gold and score.
+   Mirrors .crew-head .who .nm in the left panel. */
+.roster-widget-head .nm {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .roster-widget-stats {
+  flex: none;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -422,18 +436,18 @@ a {
    One shared bubble is appended to <body> and positioned by JS (see initTooltips).
    The old `.tip::after` pseudo-element was structurally trapped, which is why hints
    were cut off no matter how the copy was tuned:
-     • clipped by every scrolling/clipping ancestor — .side-panel, .phase-panel and
+     • clipped by every scrolling/clipping ancestor: .side-panel, .phase-panel and
        .card all set `overflow` other than visible, and an absolutely-positioned
        descendant cannot escape an ancestor's overflow box (no z-index fixes this);
      • pinned beneath ancestor stacking contexts (.phase-view animation, .card:hover
        transform), so even where it wasn't clipped it could render behind siblings;
      • hard-centered (left:50%) with a fixed max-width and no edge detection, so a
-       hint near any viewport edge overflowed — and a width that fit English spilled
+       hint near any viewport edge overflowed, and a width that fit English spilled
        over in 中文 (and vice-versa), which is the "works in one language only" symptom.
    A body-level position:fixed bubble is measured against the viewport instead: no
    ancestor can clip it or trap its stacking, and runtime collision detection
    (flip above/below + horizontal clamp) keeps every hint fully on-screen in both
-   languages. Markup is unchanged — any current/future [data-tip] is covered. */
+   languages. Markup is unchanged: any current or future [data-tip] is covered. */
 .tip {
   cursor: help;
   border-bottom: 1px dashed rgba(100, 116, 139, 0.55);
@@ -488,9 +502,11 @@ a {
 }
 
 /* ---- Center stage ---- */
+/* Top inset matches .side-panel so the three panels sharing this grid row (me / main / partner)
+   start their first line of content on the same baseline. */
 .phase-panel {
   grid-area: main;
-  padding: 18px 20px;
+  padding: 14px 20px;
   overflow-y: auto;
   max-height: calc(100vh - 250px);
   position: relative;
@@ -526,10 +542,12 @@ a {
   text-align: center;
   position: relative;
 }
+/* The bubble is 33px tall with border-box sizing, so its centre sits at 16.5px; a 3px connector
+   has to start at 15px to share that centre line. At 16px it rode 1px low against every step. */
 .step::before {
   content: '';
   position: absolute;
-  top: 16px;
+  top: 15px;
   left: -50%;
   width: 100%;
   height: 3px;
@@ -1214,7 +1232,7 @@ a {
 .control-panel {
   grid-area: actions;
   background: var(--grad-deep);
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-radius: var(--radius-lg);
   display: flex;
   flex-wrap: wrap;
@@ -1245,7 +1263,7 @@ a {
 /* ---- Log ---- */
 .log-panel {
   grid-area: log;
-  padding: 10px 14px;
+  padding: 10px 20px;
   height: 132px;
   overflow-y: auto;
   font-size: 11.5px;
@@ -1262,8 +1280,9 @@ a {
   backdrop-filter: blur(8px);
   padding: 3px 0;
 }
+/* Matches the sticky .log-title inset above, so the heading and the entries share one left edge. */
 .log-entry {
-  padding: 3px 6px;
+  padding: 3px 0;
   border-bottom: 1px dotted rgba(148, 163, 184, 0.3);
   color: var(--ink-soft);
 }
@@ -1667,6 +1686,14 @@ a {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(148, 163, 184, 0.3);
   border-bottom-left-radius: 5px;
+}
+/* Room chat is shared by everyone present, so a received bubble is labelled with its sender.
+   A message you sent yourself needs no label. */
+.chat-bubble-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ocean-600, #0284c7);
+  margin-bottom: 2px;
 }
 #chat-input-area {
   padding: 10px 12px;

@@ -29,8 +29,8 @@ export function SetSailPhase() {
       <div className="hero-title">⚓ PortMasters 2 🚢</div>
       <div className="subtitle-text">
         {tr(
-          '海上丝绸之路 · 扬帆远航 · 与其他船长同船竞航，成为海上霸主！',
-          'The Maritime Silk Road · Set your course · Race fellow captains fleet-to-fleet to rule the seas!',
+          '海上丝绸之路 · 扬帆远航 · 与其他船长竞航，成为海上霸主！',
+          'The Maritime Silk Road · Set your course · Race your fellow captains to rule the seas!',
         )}
       </div>
       <EnvironmentBanner g={g} />

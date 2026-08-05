@@ -46,10 +46,10 @@ export class UserStore {
 
   register(username: unknown, password: unknown): [boolean, string] {
     if (typeof username !== 'string' || username.length < 3 || username.length > 20) {
-      return [false, '用户名需为 3-20 个字符'];
+      return [false, '用户名需为 3 到 20 个字符'];
     }
     if (typeof password !== 'string' || password.length < 6 || password.length > 128) {
-      return [false, '密码需为 6-128 位'];
+      return [false, '密码需为 6 到 128 位'];
     }
     if (username in this.users) {
       return [false, '该用户名已被注册'];

@@ -41,7 +41,7 @@ export function revealIntel(ctx: BrokerIntelContext, rng: Rng, count: number): n
 }
 
 // Ported verbatim from PortMasters2/server.py purchase_intel (lines 850-864): Broker's Network
-// reveals 2 clues per purchase instead of 1, and Ocean-Going Interpreter adds 1 more on top.
+// reveals 2 clues per purchase instead of 1, and Ocean Going Interpreter adds 1 more on top.
 export function purchaseIntel(ctx: BrokerIntelContext, rng: Rng): boolean {
   if (ctx.phase2DemandTags.length === 0) {
     ctx.log('🔮 牙行已无更多密语...');

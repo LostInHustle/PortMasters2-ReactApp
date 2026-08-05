@@ -9,12 +9,12 @@ export interface ShipModule {
 // Module effects are implemented ad hoc in game logic via has_module(id) checks (no
 // structured "modifiers" field in the original), so this table is display data only.
 export const MODULES_TIER0 = [
-  { id: 'smugglers_hold', name: '走私暗舱', icon: '🏴‍☠️', desc: '采购成本-15%。所得税+20%。' },
+  { id: 'smugglers_hold', name: '走私暗舱', icon: '🏴‍☠️', desc: '采购成本−15%。所得税+20%。' },
   {
     id: 'bulk_hauler',
     name: '散货索具',
     icon: '🏗️',
-    desc: '每件货物运费-1。船坞升级费用+15金币。',
+    desc: '每件货物运费−1。船坞升级费用+15金币。',
   },
   { id: 'artisans_workshop', name: '工匠工坊', icon: '🛠️', desc: '工人产量+1。工资+20%。' },
   {
@@ -36,7 +36,7 @@ export const MODULES_TIER0 = [
     desc: '每次花费2金币。每次购买密语显示2条线索。',
   },
   { id: 'salvage_crane', name: '打捞起重机', icon: '♻️', desc: '30%概率在订单完成时退还运费。' },
-  { id: 'overdrive_engine', name: '超载引擎', icon: '⚡', desc: '运费-5金币。维护费+10金币。' },
+  { id: 'overdrive_engine', name: '超载引擎', icon: '⚡', desc: '运费−5金币。维护费+10金币。' },
 ] as const satisfies readonly ShipModule[];
 
 // Ported verbatim from PortMasters2/server.py MODULES_TIER1 (lines 386-390).

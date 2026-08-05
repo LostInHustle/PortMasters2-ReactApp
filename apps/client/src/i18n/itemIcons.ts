@@ -55,7 +55,7 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   茶叶: {
     zh: '香囊原料（×2）。也可直接完成原料订单出售',
-    en: 'Sachet ingredient (×2). Can also be sold directly on raw-material orders',
+    en: 'Sachet ingredient (×2). Can also be sold directly on raw material orders',
   },
   麻衣: {
     zh: '成品 · 基准产值 15。由织女 / 大师制作（麻布×2）',

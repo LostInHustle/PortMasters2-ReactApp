@@ -6,7 +6,7 @@ export interface CharterEvent {
 }
 
 // Ported verbatim from PortMasters2/server.py CHARTER_EVENTS (lines 190-203).
-// Keyed by the content tier (1 or 2) it announces — see unlocked()/charter_event() in the
+// Keyed by the content tier (1 or 2) it announces. See unlocked() and charter_event() in the
 // Python source, ported to apps/server/src/game/difficultyRules.ts and poolSelectors.ts.
 export const CHARTER_EVENTS: Record<1 | 2, CharterEvent> = {
   1: {
