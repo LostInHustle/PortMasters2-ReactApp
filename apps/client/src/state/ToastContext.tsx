@@ -14,6 +14,7 @@ interface ToastContextValue {
   pushToast: (message: string, kind?: string, ttl?: number, onClick?: () => void) => void;
   showNotification: (message: string, isError?: boolean, onClick?: () => void) => void;
   dismissToast: (id: number) => void;
+  dismissAllToasts: () => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -56,12 +57,20 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     [pushToast],
   );
 
-  // Dismiss a toast immediately (used when its onClick action fires, so the alert clears as soon
-  // as it has been acted on).
+  // Dismiss a toast immediately: used by its close button, and when its onClick action fires so
+  // the alert clears as soon as it has been acted on.
   const dismissToast = useCallback((id: number) => fadeOut(id), [fadeOut]);
 
+  // Clears a whole burst at once, so a run of log toasts never has to be closed one by one.
+  const dismissAllToasts = useCallback(() => {
+    setToasts((prev) => prev.map((t) => ({ ...t, fading: true })));
+    setTimeout(() => setToasts([]), FADE_MS);
+  }, []);
+
   return (
-    <ToastContext.Provider value={{ toasts, pushToast, showNotification, dismissToast }}>
+    <ToastContext.Provider
+      value={{ toasts, pushToast, showNotification, dismissToast, dismissAllToasts }}
+    >
       {children}
     </ToastContext.Provider>
   );
