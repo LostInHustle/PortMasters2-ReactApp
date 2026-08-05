@@ -15,16 +15,29 @@ import { broadcastSessionState } from '../session/broadcastState.js';
 import { broadcastOnlineUsers, sendJson, sendToUser } from './send.js';
 
 // Shared tail of both `login` and `resume_token` once the online slot is claimed: tell everyone
-// else this username is online, and -- if a live (started) session already exists for them --
+// else this username is online, and, if a live (started) session already exists for them --
 // push the full game state right away so a reconnect lands back in the game, not just the
 // lobby. Claiming `state.online` itself stays in each caller, before it sends its response (see
 // the comment at each call site for why).
+// How long a voyage survives with nobody connected. A page refresh drops the socket for a
+// fraction of a second, so recycling the moment the last player goes offline destroyed the game
+// the player was about to resume into. Long enough to cover a reload or a brief network drop,
+// short enough that genuinely abandoned rooms do not pile up.
+const SESSION_REAP_GRACE_MS = 90_000;
+
 function completeAuthentication(state: ServerState, ws: Sendable, username: string): void {
   broadcastOnlineUsers(state);
   broadcastOpenRooms(state);
-  // A pending (not-yet-started) room never survives a disconnect -- handleDisconnect already
-  // ran handleLeaveRoom for it -- so any session still on record here is a live voyage.
+  // A pending (not-yet-started) room never survives a disconnect, handleDisconnect already
+  // ran handleLeaveRoom for it, so any session still on record here is a live voyage.
   const sess = state.sessions.get(username);
+  if (sess !== undefined) {
+    // Someone came back before the grace period ran out, so keep the voyage alive.
+    if (sess.reapTimer !== null) {
+      clearTimeout(sess.reapTimer);
+      sess.reapTimer = null;
+    }
+  }
   if (sess !== undefined && sess.started) {
     sendJson(ws, { type: 'session_resumed' });
     for (const other of sess.otherPlayers(username)) {
@@ -38,7 +51,7 @@ function completeAuthentication(state: ServerState, ws: Sendable, username: stri
 // (lines 1750-1778): only register/login are accepted before a connection has claimed a
 // username. Extended with `resume_token`, the silent counterpart to `login` a fresh connection
 // (a reconnect, or an actual page refresh) sends automatically when it's holding a token from a
-// previous login -- see sessionTokens.ts for why this exists.
+// previous login. See sessionTokens.ts for why this exists.
 function processUnauthenticated(
   state: ServerState,
   ws: Sendable,
@@ -73,10 +86,17 @@ function processUnauthenticated(
   }
   if (action === 'resume_token') {
     const username = resolveToken(state, data.token);
-    if (username === undefined || state.online.has(username)) {
+    if (username === undefined) {
       sendJson(ws, { type: 'resume_result', success: false });
       return null;
     }
+    // A valid token is itself proof of identity, so this is the same account re-identifying
+    // itself, in practice, a page refresh. Do NOT reject just because the username still
+    // looks online: a refreshing browser opens the new socket before the old one's close frame
+    // is processed, so the stale entry is usually still in `state.online` at this exact moment.
+    // Rejecting there logged players out precisely when they refreshed. Taking the slot over is
+    // safe because handleDisconnect ignores any socket that is no longer the registered one, so
+    // the stale close cannot tear down this new connection or its live session.
     // Same ordering as login above: claim before responding.
     state.online.set(username, ws);
     sendJson(ws, { type: 'resume_result', success: true, username });
@@ -103,7 +123,7 @@ function processAuthenticated(
       });
       break;
     case 'logout':
-      // Revokes the resume token so it can't silently log this player back in later -- the
+      // Revokes the resume token so it can't silently log this player back in later, the
       // actual "go offline" cleanup (state.online, session/room) still happens through the
       // normal close handler once the client reloads right after sending this.
       revokeToken(state, data.token);
@@ -186,10 +206,17 @@ export function handleDisconnect(state: ServerState, ws: Sendable, username: str
   }
   if (onlineOthers.length > 0) {
     broadcastSessionState(state, sess);
-  } else {
-    for (const player of sess.players) {
-      state.sessions.delete(player);
-    }
+  } else if (sess.reapTimer === null) {
+    // Everyone is offline. Do not recycle straight away: a refreshing browser is offline for a
+    // moment and would otherwise destroy the very voyage it is about to resume into.
+    sess.reapTimer = setTimeout(() => {
+      sess.reapTimer = null;
+      if (sess.players.some((p) => state.online.has(p))) return;
+      for (const player of sess.players) {
+        if (state.sessions.get(player) === sess) state.sessions.delete(player);
+      }
+    }, SESSION_REAP_GRACE_MS);
+    sess.reapTimer.unref?.(); // a pending reap must never hold the process open
   }
 }
 

@@ -127,7 +127,7 @@ describe('handleEndSessionVote / endGameSession', () => {
     expect(sess.endVoteComplete()).toBe(true);
   });
 
-  it('does not auto-count a bankrupt/finished player -- everyone must vote explicitly', () => {
+  it('does not auto-count a bankrupt/finished player, everyone must vote explicitly', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[1]!.gameOver = true;
     sess.games[1]!.bankrupt = true;

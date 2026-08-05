@@ -20,8 +20,8 @@ export interface PendingInvite {
 // Replaces PortMasters2/server.py's module-level globals (USERS, ONLINE, SESSIONS, ROOMS,
 // PENDING_INVITES, LAST_INVITE_AT, lines 1472-1477): one object built once in main.ts and
 // threaded through every handler, instead of mutable module state. `rooms` mirrors the
-// prototype's ROOMS -- host username to pending (not yet started) session, a subset of the
-// memberships also tracked in `sessions` -- so the lobby's "open rooms" browse list never has
+// prototype's ROOMS, host username to pending (not yet started) session, a subset of the
+// memberships also tracked in `sessions`, so the lobby's "open rooms" browse list never has
 // to filter `sessions` for `!started` on every render.
 export interface ServerState {
   users: UserStore;

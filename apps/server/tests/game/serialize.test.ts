@@ -71,7 +71,7 @@ describe('serializePlayerGame', () => {
   });
 
   // The Procure UI must never show a stale sticker price once a boon or module discounts a
-  // purchase -- see costCalculations.getCardFinalCost/getCardResourceUnitPrices.
+  // purchase. See costCalculations.getCardFinalCost/getCardResourceUnitPrices.
   it('stamps resourceCards with the discounted price boons and modules actually charge', () => {
     const game = new PlayerGame('easy');
     game.modifierFlags = { hempPriceReduction: 2, purchaseDiscount: 0.15 };
@@ -114,7 +114,7 @@ describe('serializePlayerGame', () => {
   });
 
   // The "Due This Round" sidebar must reflect every hired worker type, not just the founding
-  // three -- see production.ts's calcTotalWages, shared with the real payWages charge.
+  // three. See production.ts's calcTotalWages, shared with the real payWages charge.
   it('reports estimatedWages for the full current roster, beyond the founding worker types', () => {
     const game = new PlayerGame('standard');
     game.workers.weaver.push({ task: null, progress: 0, producedCount: 0, isSkilled: false });

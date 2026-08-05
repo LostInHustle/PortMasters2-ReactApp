@@ -17,7 +17,7 @@ function loadInitialLang(): Lang {
 
 // Ported from PortMasters2/PortMasters_online.html `tr`/`pf` (lines 1287-1289). The original
 // reads a module-global `LANG`; here `lang` is an explicit parameter since it now lives in React
-// state instead of a mutable global -- callers get it from useLang()/useTranslate().
+// state instead of a mutable global. Callers get it from useLang()/useTranslate().
 export function tr<T>(lang: Lang, zh: T, en: T): T {
   return lang === 'en' ? en : zh;
 }

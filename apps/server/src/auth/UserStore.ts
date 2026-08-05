@@ -4,7 +4,7 @@ import { generateSalt, hashPassword, verifyPassword } from './passwordHash.js';
 
 // Ported verbatim from PortMasters2/server.py UserStore (lines 1134-1182). created_at keeps its
 // snake_case spelling because it's a literal field of the on-disk users.json record, copied
-// verbatim from the original as seed data -- not cleaned up to camelCase.
+// verbatim from the original as seed data, not cleaned up to camelCase.
 export interface UserRecord {
   salt: string;
   hash: string;
@@ -46,10 +46,10 @@ export class UserStore {
 
   register(username: unknown, password: unknown): [boolean, string] {
     if (typeof username !== 'string' || username.length < 3 || username.length > 20) {
-      return [false, '用户名需为 3-20 个字符'];
+      return [false, '用户名需为 3 到 20 个字符'];
     }
     if (typeof password !== 'string' || password.length < 6 || password.length > 128) {
-      return [false, '密码需为 6-128 位'];
+      return [false, '密码需为 6 到 128 位'];
     }
     if (username in this.users) {
       return [false, '该用户名已被注册'];

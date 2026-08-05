@@ -40,7 +40,7 @@ function withCardPricing(game: PlayerGame, card: MarketCard): MarketCard {
 
 // Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the literal
 // wire contract for this player's "state" payload. Two fields are deliberately NOT raw references
-// to internal state -- intelRemaining exposes only the length of phase2DemandTags (the tags
+// to internal state, intelRemaining exposes only the length of phase2DemandTags (the tags
 // themselves are server-side fog of war), and logs sends only the last 10 entries, matching
 // self.lastLogs[-10:] exactly.
 export function serializePlayerGame(game: PlayerGame): PlayerGameState {

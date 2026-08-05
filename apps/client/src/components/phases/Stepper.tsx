@@ -16,8 +16,8 @@ export function Stepper({ currentKey }: { currentKey: Phase }) {
     <div
       className="stepper"
       title={tr(
-        '本回合流程：双方同步经过这8个阶段',
-        'Round flow: both captains move through these 8 phases in sync',
+        '本回合流程：全员同步经过这8个阶段',
+        'Round flow: everyone moves through these 8 phases in sync',
       )}
     >
       {PHASE_FLOW.map((s, i) => {

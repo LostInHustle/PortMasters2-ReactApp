@@ -9,7 +9,7 @@ export interface MarketResource {
   price: number;
   /**
    * Per-unit price after item-specific boon/module discounts (e.g. Hemp Monopoly, Kiln Cellar),
-   * filled in by the server when serializing game state -- see getCardResourceUnitPrices. Equal
+   * filled in by the server when serializing game state. See getCardResourceUnitPrices. Equal
    * to `price` when no such discount is active. Card-wide discounts (Merchant's Charm,
    * Smuggler's Hold) apply to the whole purchase rather than a single line, so they only show up
    * in MarketCard.effectiveCost, not here.

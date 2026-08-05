@@ -102,7 +102,7 @@ export function BoonsTab() {
             </tr>
             <tr>
               <td>
-                🛡️ Deep-Sea Escort Pact
+                🛡️ Deep Sea Escort Pact
                 <br />
                 <span className="muted">Ten Thousand Kingdoms Trade · Round 10+</span>
               </td>

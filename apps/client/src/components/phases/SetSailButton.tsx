@@ -16,13 +16,13 @@ export function SetSailButton() {
       className={`btn ${ready ? 'btn-grey' : 'btn-success'} btn-xl`}
       disabled={ready}
       onClick={() => send({ action: 'startBoon' })}
-      title={tr('双方都点击后进入福缘抽取', 'The fortune draw begins once both captains confirm')}
+      title={tr('全员都点击后进入福缘抽取', 'The fortune draw begins once everyone confirms')}
     >
       {ready
         ? tr('⌛ 已确认，等待伙伴', '⌛ Confirmed, waiting for partner')
         : tr('🚢 扬帆起航', '🚢 Set Sail')}
       <span className="btn-sub">
-        {tr('双方确认后抽取本程福缘', "Both confirm to draw this round's fortunes")}
+        {tr('全员确认后抽取本程福缘', "Everyone confirms to draw this round's fortunes")}
       </span>
     </button>
   );

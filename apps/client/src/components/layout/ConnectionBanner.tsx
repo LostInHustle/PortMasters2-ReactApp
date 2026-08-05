@@ -2,7 +2,7 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useWs } from '../../ws/WsContext.js';
 
 // New: a persistent indicator for "the WebSocket is currently down and WsContext is retrying."
-// A toast alone isn't enough here -- it fades after a few seconds, but a reconnect can take
+// A toast alone isn't enough here. It fades after a few seconds, but a reconnect can take
 // several backoff cycles, and the whole point of this fix is that the app should never again
 // look idle/broken with no explanation while it's actually just waiting on the network. This
 // stays on screen for as long as `connected` is false, on every screen (including the login

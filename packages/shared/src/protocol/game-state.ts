@@ -14,7 +14,7 @@ import type { TradeOrder } from '../domain/trade.js';
 import type { Worker } from '../domain/worker.js';
 
 // Ported verbatim from PortMasters2/server.py PlayerGame.__init__ (line 467): a deliberately
-// mixed int/string enum, preserved as-is rather than cleaned into a string union -- see the
+// mixed int/string enum, preserved as-is rather than cleaned into a string union. See the
 // plan's "phase encoding" decision.
 export type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 'trade' | 'worker_mgmt' | 'bankruptcy' | 'endgame';
 
@@ -37,7 +37,7 @@ export interface RoundSummary {
 // Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the
 // literal wire contract sent to the client as this player's "state" payload. Field names and
 // order mirror the Python dict exactly, including the two snake_case keys (monsoon_state,
-// pirate_immunity) the original frontend reads literally -- this is not a typo to "fix".
+// pirate_immunity) the original frontend reads literally. This is not a typo to "fix".
 export interface PlayerGameState {
   inventory: Record<ItemId, number>;
   money: number;
@@ -103,7 +103,7 @@ export interface PlayerGameState {
   slot: number | null;
 }
 
-// A captain's entry in the room roster -- name, online status, and whether they're the host (who
+// A captain's entry in the room roster, name, online status, and whether they're the host (who
 // alone may start the voyage while the room hasn't launched yet).
 export interface RosterPlayer {
   name: string;
@@ -143,7 +143,7 @@ export interface RoomRosterMessage {
   players: RosterPlayer[];
 }
 
-// One row of the lobby's "Open rooms" browse list -- every online player sees this for every
+// One row of the lobby's "Open rooms" browse list. Every online player sees this for every
 // room that hasn't started yet, so they can pick one to join.
 export interface OpenRoomSummary {
   host: string;
@@ -152,7 +152,7 @@ export interface OpenRoomSummary {
   maxPlayers: number;
 }
 
-// Reply to the unauthenticated `resume_token` action -- a separate message type from
+// Reply to the unauthenticated `resume_token` action, a separate message type from
 // login_result (rather than reusing it) so the client can tell a silent, automatic resume
 // attempt apart from an interactive login the player actually typed: a failed interactive login
 // should show "wrong password," but a failed silent resume (an unknown/expired/already-revoked

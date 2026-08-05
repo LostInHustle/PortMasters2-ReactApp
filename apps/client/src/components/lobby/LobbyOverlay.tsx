@@ -31,8 +31,13 @@ export function LobbyOverlay() {
           {tr('欢迎，', 'Welcome, ')}
           <strong>{currentUser}</strong>
           {tr(
-            '！邀请一名在线玩家即可开始双人共享航程，或招募一支 2-5 人的船队：',
-            '! Invite a player for a two-captain voyage, or host a room and recruit a 2-5 player crew:',
+            <>
+              ！邀请一名在线玩家即可开始<strong>共享航程</strong>，或招募一支 2 到 5 人的船队：
+            </>,
+            <>
+              ! Invite a player for a <strong>shared voyage</strong>, or host a room and recruit a 2
+              to 5 player crew:
+            </>,
           )}
           <br />
           {tr(
@@ -87,8 +92,8 @@ export function LobbyOverlay() {
                 className="btn btn-gold"
                 onClick={() => openModal(<CreateRoomComposer />)}
                 title={tr(
-                  '创建一个 2-5 人的房间，其他玩家可自由加入',
-                  'Create a 2-5 player room that others can freely join',
+                  '创建一个 2 到 5 人的房间，其他玩家可自由加入',
+                  'Create a 2 to 5 player room that others can freely join',
                 )}
               >
                 {tr('➕ 招募船队', '➕ Host a Voyage')}

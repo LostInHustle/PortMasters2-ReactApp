@@ -26,7 +26,7 @@ export function createAppServer(
   const wss = new WebSocketServer({ server, verifyClient });
   wss.on('connection', (ws) => handleConnection(state, ws));
   // Keeps idle connections alive through Railway's (or any reverse proxy's) idle timeout and
-  // reaps genuinely dead ones -- see heartbeat.ts for why this is the fix for "the page stops
+  // reaps genuinely dead ones. See heartbeat.ts for why this is the fix for "the page stops
   // working after sitting open for a while." Tied to the http server's own close, not just
   // process exit, so tests that spin up/tear down a server per case (fullFlow.test.ts) don't
   // leak one interval per run.

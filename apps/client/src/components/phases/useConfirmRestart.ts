@@ -9,8 +9,8 @@ export function useConfirmRestart(): () => void {
   return () => {
     const confirmed = window.confirm(
       tr(
-        '重新起航将把双方的进度全部重置为第1程，确定继续吗？\n（需对方也已结束本局才会生效）',
-        "Setting sail again resets both captains to Round 1. Continue?\n(Takes effect only once your partner's game is also over.)",
+        '重新起航将把全员的进度都重置为第1程，确定继续吗？\n（需其他玩家也已结束本局才会生效）',
+        "Setting sail again resets everyone to Round 1. Continue?\n(Takes effect only once every other player's game is also over.)",
       ),
     );
     if (!confirmed) return;

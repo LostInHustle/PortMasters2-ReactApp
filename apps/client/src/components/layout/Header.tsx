@@ -39,8 +39,8 @@ export function Header() {
           </h1>
           <div className="subtitle">
             {tr(
-              '海上丝绸之路 · 双人联机贸易战略：采购 · 互市 · 生产 · 远航',
-              'Maritime Silk Road · 2-Player Co-op Trading: Procure · Barter · Produce · Voyage',
+              '海上丝绸之路 · 联机贸易战略：采购 · 互市 · 生产 · 远航',
+              'Maritime Silk Road · Online Trading: Procure · Barter · Produce · Voyage',
             )}
           </div>
         </div>

@@ -4,7 +4,7 @@ import { pf } from './LangContext.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html ICONS/COLORS/ITEM_TIPS
 // (lines 1401-1449): per-item emoji, swatch color, and the bilingual tooltip shown on hover.
-// RESOURCES/PRODUCTS/WAGES from the same block aren't re-ported here -- they duplicate
+// RESOURCES/PRODUCTS/WAGES from the same block aren't re-ported here. They duplicate
 // packages/shared/src/data (resources.ts/products.ts/wages-workers.ts), the single source of
 // truth both client and server already import.
 export const ITEM_ICONS: Record<ItemId | typeof GOLD, string> = {
@@ -55,7 +55,7 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   茶叶: {
     zh: '香囊原料（×2）。也可直接完成原料订单出售',
-    en: 'Sachet ingredient (×2). Can also be sold directly on raw-material orders',
+    en: 'Sachet ingredient (×2). Can also be sold directly on raw material orders',
   },
   麻衣: {
     zh: '成品 · 基准产值 15。由织女 / 大师制作（麻布×2）',

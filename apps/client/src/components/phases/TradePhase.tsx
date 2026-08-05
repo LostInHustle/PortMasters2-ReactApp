@@ -142,7 +142,7 @@ export function TradePhase() {
           );
         })}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 22 }}>
+      <div style={{ textAlign: 'center', marginTop: 20 }}>
         <button
           className="btn btn-lg"
           onClick={() => send({ action: 'ready_for_next_phase' })}
@@ -151,8 +151,10 @@ export function TradePhase() {
             'Confirm to enter Upkeep: production arrives, wages and upkeep are paid',
           )}
         >
-          {tr('✅ 完成交易，进入结算', '✅ Done Trading, to Upkeep')}
-          <span className="btn-sub">{tr('双方确认后同步推进', 'Advances when both confirm')}</span>
+          {tr('✅ 完成交易，进入结算', '✅ Done Trading → Upkeep')}
+          <span className="btn-sub">
+            {tr('全员确认后同步推进', 'Advances when everyone confirms')}
+          </span>
         </button>
       </div>
     </>

@@ -24,8 +24,8 @@ export function FortunePhase() {
         extraChips={
           <span className="chip">
             {tr(
-              '🧭 罗盘随机：双方各自抽到不同的4张',
-              '🧭 Compass draw: each captain gets a different 4',
+              '🧭 罗盘随机：每人各自抽到不同的4张',
+              '🧭 Compass draw: everyone gets a different 4',
             )}
           </span>
         }

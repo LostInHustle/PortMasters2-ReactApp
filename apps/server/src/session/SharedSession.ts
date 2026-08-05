@@ -19,8 +19,8 @@ const CHAT_HISTORY_LIMIT = 200;
 // Generalizes PortMasters2/server.py's GameSession (the prototype's own merge of its earlier
 // SharedSession with room hosting for 2-5 players): one object covers both the pre-voyage lobby
 // (`started === false`, players free to join/leave, no PlayerGame instances yet) and the live
-// voyage (`started === true`). A 1:1 invite is just the degenerate case -- a room of size 2 that
-// calls start() immediately instead of waiting in the lobby -- so the two flows share this one
+// voyage (`started === true`). A 1:1 invite is just the degenerate case, a room of size 2 that
+// calls start() immediately instead of waiting in the lobby, so the two flows share this one
 // class rather than duplicating session construction. The phase state-machine
 // (_active_phase/_set_phase/advance), the monsoon resync, and the barter-order bookkeeping each
 // live in their own module in apps/server/src/game (phaseAdvance.ts, monsoonSync.ts,
@@ -40,6 +40,9 @@ export class SharedSession {
   endVotes = new Set<number>();
   chatHistory: ChatMessage[] = [];
   monsoonCycleCache: Record<number, MonsoonState> = {};
+  // Set while every member is offline, counting down to recycling the voyage. A page refresh
+  // briefly takes the last player offline, so the session has to outlive that gap.
+  reapTimer: ReturnType<typeof setTimeout> | null = null;
   rng: Rng;
 
   constructor(
@@ -134,7 +137,7 @@ export class SharedSession {
   }
 
   // ---------- End-session vote ----------
-  // Unlike gateComplete, a bankrupt/finished player is NOT auto-counted here -- disbanding the
+  // Unlike gateComplete, a bankrupt/finished player is NOT auto-counted here, disbanding the
   // room is a bigger decision than advancing a phase, so every single player must explicitly
   // opt in, matching the prototype's stricter quorum.
   endVoteComplete(): boolean {

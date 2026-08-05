@@ -18,8 +18,8 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     icon: '⚓',
     name: { zh: '启航', en: 'Set Sail' },
     brief: {
-      zh: '新回合开始，双方确认后抽取福缘。',
-      en: "A new round begins. Once both captains confirm, you'll draw your fortunes.",
+      zh: '新回合开始，全员确认后抽取福缘。',
+      en: "A new round begins. Once everyone confirms, you'll draw your fortunes.",
     },
   },
   {
@@ -27,8 +27,8 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     icon: '🧭',
     name: { zh: '福缘', en: 'Fortune' },
     brief: {
-      zh: '航海家的罗盘从福缘池中为你随机抽出4张（双方抽到的组合不同），选择一项仅本回合生效的增益。要采购多就选折扣，要生产多就选匠人灵感。',
-      en: "The Navigator's Compass deals you 4 random fortunes (each captain gets a different draw). Pick one buff for this round only, discounts if you plan to buy big, Artisan's Inspiration if you plan to produce.",
+      zh: '航海家的罗盘从福缘池中为你随机抽出4张（每人抽到的组合不同），选择一项仅本回合生效的增益。要采购多就选折扣，要生产多就选匠人灵感。',
+      en: "The Navigator's Compass deals you 4 random fortunes (everyone gets a different draw). Pick one buff for this round only: discounts if you plan to buy big, or Artisan's Inspiration if you plan to produce.",
     },
   },
   {
@@ -45,8 +45,8 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     icon: '🤝',
     name: { zh: '互市', en: 'Barter' },
     brief: {
-      zh: '与伙伴自由交易：发布「我出售 × 换取 ×」的订单，对方接受即成交。双方都点「准备就绪」后进入下一阶段。',
-      en: 'Trade freely with your partner: post an offer of "I give × for ×" and it executes when accepted. Both captains must click Ready to move on.',
+      zh: '与同行自由交易：发布「我出售 × 换取 ×」的订单，对方接受即成交。全员都点「准备就绪」后进入下一阶段。',
+      en: 'Trade freely with the room: post an offer of "I give × for ×" and it executes when accepted. Everyone must click Ready to move on.',
     },
   },
   {
@@ -73,7 +73,7 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
     name: { zh: '结算', en: 'Upkeep' },
     brief: {
       zh: '工匠产出入库、自动支付工资，然后支付维护费。现金不足以支付即破产，务必提前规划！',
-      en: "Production arrives, wages are paid automatically, then you pay fleet upkeep. If you can't cover it, you go bankrupt, plan ahead!",
+      en: "Production arrives, wages are paid automatically, then you pay fleet upkeep. If you can't cover it, you go bankrupt, so plan ahead!",
     },
   },
   {

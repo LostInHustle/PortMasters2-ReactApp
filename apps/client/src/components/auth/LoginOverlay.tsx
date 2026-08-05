@@ -21,7 +21,7 @@ export function LoginOverlay() {
           <div className="logo">⚓</div>
           <h2>PortMasters 2</h2>
           <div className="tagline">
-            {tr('海上丝绸之路 · 双人联机贸易战略', 'Maritime Silk Road · Online Trading for Two')}
+            {tr('海上丝绸之路 · 联机贸易战略', 'Maritime Silk Road · Online Trading Strategy')}
           </div>
         </div>
         {mode === 'login' ? (

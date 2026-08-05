@@ -34,13 +34,10 @@ export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChi
         <DifficultyChip difficulty={serverState.yourGame.difficulty} />
         <span
           className={`chip ${readyCount >= readyTotal ? 'green' : ''}`}
-          title={tr(
-            '双方都确认后才进入下一阶段',
-            'The next phase starts once both captains confirm',
-          )}
+          title={tr('全员确认后才进入下一阶段', 'The next phase starts once everyone confirms')}
         >
           {tr(
-            `🔄 双方就绪 ${readyCount} / ${readyTotal}`,
+            `🔄 全员就绪 ${readyCount} / ${readyTotal}`,
             `🔄 Ready ${readyCount} / ${readyTotal}`,
           )}
         </span>

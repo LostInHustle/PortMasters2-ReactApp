@@ -1,7 +1,7 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
 // Split out of expansionTab.tsx (originally 663 lines, well past the file-size ceiling) to keep
-// each manual-tab file within the project's soft 200 / hard 350 line discipline -- this tab's
+// each manual-tab file within the project's soft 200 / hard 350 line discipline. This tab's
 // source content is unusually table-heavy (7 unlock-category tables), so it's split by category
 // group rather than forced into one oversized file.
 export function ExpansionUnlockGoods() {

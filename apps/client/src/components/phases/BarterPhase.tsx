@@ -28,7 +28,7 @@ export function BarterPhase() {
   const otherIndices = serverState.players.map((_, i) => i).filter((i) => i !== mySlot - 1);
   const othersReadyCount = otherIndices.filter((i) => serverState.tradeReady[i]).length;
   const nameOf = (sellerSlot: number) =>
-    serverState.players[sellerSlot]?.name ?? tr('对方', 'Partner');
+    serverState.players[sellerSlot]?.name ?? tr('对方', 'Someone');
   const sep = tr('、', ', ');
 
   const options: TradeItemType[] = [GOLD, ...g.unlockedResources, ...g.unlockedProducts];
@@ -205,7 +205,10 @@ export function BarterPhase() {
           <button
             className="btn btn-gold"
             onClick={submitOrder}
-            title={tr('发布后对方会立即看到此订单', 'Your partner sees the offer immediately')}
+            title={tr(
+              '发布后房间内其他人会立即看到此订单',
+              'Everyone else in the room sees the offer immediately',
+            )}
           >
             {tr('📨 发布订单', '📨 Post Offer')}
           </button>
@@ -246,10 +249,10 @@ export function BarterPhase() {
           )}
         >
           {myReady
-            ? tr('⏳ 已准备，等待其他船长就绪', '⏳ Ready, waiting for others')
-            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering, ready')}
+            ? tr('⏳ 已准备，等待其他船长就绪', '⏳ Ready: waiting for others')
+            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering · Ready')}
           <span className="btn-sub">
-            {myReady ? '' : tr('双方就绪后进入工匠管理', 'Advances when both are ready')}
+            {myReady ? '' : tr('全员就绪后进入工匠管理', 'Advances once everyone is ready')}
           </span>
         </button>
       </div>

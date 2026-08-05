@@ -85,11 +85,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   stateRef.current = state;
 
   // A fresh WebSocket connection (WsContext's auto-reconnect after an idle-timeout drop, a
-  // laptop sleep, a server redeploy -- or just an actual page refresh) is, by itself, a
+  // laptop sleep, a server redeploy, or just an actual page refresh) is, by itself, a
   // connection the server has never seen: there is no session tied to the TCP connection itself.
-  // What makes a reconnect resumable is the token from sessionToken.ts -- if one is stored,
+  // What makes a reconnect resumable is the token from sessionToken.ts, if one is stored,
   // fire it off immediately and wait for `resume_result` instead of assuming the worst. Only
-  // when there's no token (or the server doesn't recognize it -- see the resume_result handler
+  // when there's no token (or the server doesn't recognize it. See the resume_result handler
   // below) do we fall back to telling a previously-logged-in player they need to log in again.
   // `wasConnectedRef` distinguishes a real reconnect from the initial connection on first mount.
   const wasConnectedRef = useRef(false);
@@ -143,7 +143,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           break;
 
         // Reply to the silent resume_token attempt fired by the connected-effect above. Never
-        // shown as an interactive "wrong password"-style error -- a failure here just means the
+        // shown as an interactive "wrong password"-style error, a failure here just means the
         // token is unknown (expired, already revoked by an explicit logout, or the server
         // restarted and lost it), so the fallback is the ordinary login screen, with a heads-up
         // toast only if this player had actually been mid-session when it happened.

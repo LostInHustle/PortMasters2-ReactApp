@@ -9,7 +9,7 @@ import {
 } from '@pm2/shared';
 import { getHireCost } from './costCalculations.js';
 import { unlockedWorkerTypes } from './poolSelectors.js';
-import type { BoonModifiers } from '@pm2/shared';
+import type { BoonModifiers, ShipModule } from '@pm2/shared';
 
 export interface WorkerActionContext {
   workers: Record<WorkerTypeId, Worker[]>;
@@ -17,6 +17,7 @@ export interface WorkerActionContext {
   tierUnlock: Record<number, number>;
   money: number;
   modifierFlags: BoonModifiers;
+  equippedModules: readonly ShipModule[];
   inventory: Record<ItemId, number>;
   log(message: string): void;
 }

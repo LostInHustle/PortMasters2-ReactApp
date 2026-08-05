@@ -1,12 +1,11 @@
 import {
-  WAGES,
   type BoonModifiers,
   type ItemId,
   type ShipModule,
   type Worker,
   type WorkerTypeId,
 } from '@pm2/shared';
-import { hasModule } from './costCalculations.js';
+import { effectiveWage, hasModule } from './costCalculations.js';
 import { resolvePirateHazard, type ResolvePirateHazardContext } from './pirateHazard.js';
 import type { Rng } from './randomUtil.js';
 
@@ -41,19 +40,17 @@ export function processProduction(ctx: ProcessProductionContext): void {
 export interface WageContext {
   workers: Record<WorkerTypeId, Worker[]>;
   equippedModules: readonly ShipModule[];
+  modifierFlags: BoonModifiers;
 }
 
 // The wage bill the current roster will actually owe at the next Upkeep, across every worker
-// type (not just the founding three) and any module that scales wages (artisans_workshop).
-// payWages charges exactly this; the Procure/Artisans UI's "Due This Round" preview calls this
-// same function so the two can never disagree.
+// type (not just the founding three). payWages charges exactly this; the Procure/Artisans UI's
+// "Due This Round" preview reads the same figure off the broadcast state.
 export function calcTotalWages(ctx: WageContext): number {
   let total = 0;
   for (const [wtype, list] of Object.entries(ctx.workers) as [WorkerTypeId, Worker[]][]) {
     if (list.length === 0) continue;
-    let wage = WAGES[wtype];
-    if (hasModule(ctx, 'artisans_workshop')) wage = Math.trunc(wage * 1.2);
-    total += wage * list.length;
+    total += effectiveWage(ctx, wtype) * list.length;
   }
   return total;
 }

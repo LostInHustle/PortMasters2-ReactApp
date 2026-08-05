@@ -45,7 +45,7 @@ describe('startHeartbeat', () => {
 
   it('terminates a client that stops responding to pings (network gone, no clean close)', async () => {
     stop = startHeartbeat(wss, 20, 2);
-    // autoPong: false simulates a connection whose other end can no longer respond -- the
+    // autoPong: false simulates a connection whose other end can no longer respond, the
     // exact "laptop asleep / wifi dropped" case this heartbeat is meant to detect.
     const client = new WebSocket(`ws://127.0.0.1:${port}`, { autoPong: false });
     await new Promise<void>((resolve) => client.once('open', () => resolve()));
@@ -62,7 +62,7 @@ describe('startHeartbeat', () => {
     // Regression test: the original version of this heartbeat terminated on the very first
     // missed pong, which made a backgrounded tab or a moment of network jitter indistinguishable
     // from a dead connection. With maxMissedPings=3, two missed ticks (40ms at this interval)
-    // must NOT be enough to terminate -- the old single-miss heartbeat would have already killed
+    // must NOT be enough to terminate, the old single-miss heartbeat would have already killed
     // this connection by now.
     stop = startHeartbeat(wss, 20, 3);
     const client = new WebSocket(`ws://127.0.0.1:${port}`, { autoPong: false });

@@ -5,7 +5,7 @@ import { ChatMessageList } from './ChatMessageList.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html's chat window markup
 // (lines 1258-1268) and toggleChat/sendChat/updateChatSendState (lines 2191-2222). `onkeypress`
-// is replaced with the non-deprecated `onKeyDown` -- same Enter-to-send behavior, modern API.
+// is replaced with the non-deprecated `onKeyDown`, same Enter-to-send behavior, modern API.
 export function ChatWindow() {
   const { tr } = useTranslate();
   const { chatOpen, currentUser, serverState, sendChat, closeChat } = useSession();

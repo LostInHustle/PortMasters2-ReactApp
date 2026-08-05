@@ -1,7 +1,5 @@
 import type { ResourceId } from './resources.js';
-import { RESOURCES } from './resources.js';
 import type { ProductId } from './products.js';
-import { PRODUCTS } from './products.js';
 import type { PortId } from './ports.js';
 
 export type PriceRange = readonly [number, number];
@@ -47,4 +45,3 @@ export const RESOURCE_PROBS: Record<ResourceId, number> = {
 
 /** Union of every tradable item id (resources + products), i.e. RESOURCES + PRODUCTS. */
 export type ItemId = ResourceId | ProductId;
-export const ITEM_IDS: readonly ItemId[] = [...RESOURCES, ...PRODUCTS];

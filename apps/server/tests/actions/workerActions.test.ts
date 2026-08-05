@@ -9,7 +9,7 @@ import { SharedSession } from '../../src/session/SharedSession.js';
 // Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
 // hireWorker/fireWorker/assignTask branches (lines 1661-1672). Worker type ids are the English
 // keys in WAGES (e.g. 'weaver'); product task ids are the Chinese keys in RECIPES (e.g. '布衣',
-// which costs 麻布:2 + 丝绸:1 -- both present in a fresh game's starting inventory).
+// which costs 麻布:2 + 丝绸:1, both present in a fresh game's starting inventory).
 describe('handleHireWorker', () => {
   it('rejects an unknown worker type or the wrong phase', () => {
     const sess = SharedSession.createPair('alice', 'bob');

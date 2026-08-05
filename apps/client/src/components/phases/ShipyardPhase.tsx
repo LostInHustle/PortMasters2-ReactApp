@@ -129,14 +129,11 @@ export function ShipyardPhase() {
           <button
             className="btn btn-success btn-lg"
             onClick={() => send({ action: 'ready_for_next_phase' })}
-            title={tr(
-              '双方确认后开始下一航程',
-              'The next voyage begins once both captains confirm',
-            )}
+            title={tr('全员确认后开始下一航程', 'The next voyage begins once everyone confirms')}
           >
             {tr('⏭️ 结束本航程', '⏭️ End This Voyage')}
             <span className="btn-sub">
-              {tr('双方确认后开启下一程', 'Advances when both confirm')}
+              {tr('全员确认后开启下一程', 'Advances when everyone confirms')}
             </span>
           </button>
         </div>

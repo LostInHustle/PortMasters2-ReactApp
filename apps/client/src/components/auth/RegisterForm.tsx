@@ -44,7 +44,7 @@ export function RegisterForm({ onShowLogin }: RegisterFormProps) {
       <input
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder={tr('用户名（3-20 字符）', 'Username (3-20 characters)')}
+        placeholder={tr('用户名（3 到 20 字符）', 'Username (3 to 20 characters)')}
         autoComplete="username"
       />
       <input
