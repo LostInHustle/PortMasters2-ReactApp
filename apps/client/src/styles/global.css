@@ -1945,16 +1945,114 @@ a {
   flex: 1;
   min-width: 0;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 14px;
-  align-items: start;
 }
-.sp-detail .sp-col {
+
+/* ---- Spectator detail pane ----
+   Composed for this window's width instead of reusing the 300px sidebar's .status-section
+   widgets. Six glass boxes of equal weight gave the scout no hierarchy, so the numbers that
+   actually matter when sizing up a rival (gold, renown, ship) were buried among the rest.
+   Here they lead as tiles, the round reads as a progress track, and everything below is a
+   quiet pane separated by a hairline rather than another competing border. */
+.sp-hero {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 11px;
+}
+.sp-tile {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(20, 184, 166, 0.1));
+  border: 1px solid rgba(14, 165, 233, 0.22);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
   min-width: 0;
 }
-.sp-detail .sp-wide {
-  grid-column: 1 / -1;
+.sp-tile .k {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.sp-tile .v {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--ocean-900);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp-tile.gold .v {
+  color: #b45309;
+}
+.sp-tile.renown .v {
+  color: #047857;
+}
+.sp-voyage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 15px;
+}
+.sp-track {
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.3);
+  overflow: hidden;
+}
+.sp-track-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--grad-primary);
+  transition: width 0.35s ease;
+}
+.sp-pane {
+  margin-bottom: 15px;
+  min-width: 0;
+}
+.sp-pane > h4 {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--ocean-700);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(14, 165, 233, 0.18);
+}
+.sp-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+  align-items: start;
+}
+.sp-feed-item {
+  position: relative;
+  padding: 5px 0 5px 15px;
+  border-left: 1px solid rgba(14, 165, 233, 0.22);
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.sp-feed-item::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 11px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ocean-300);
+}
+/* Newest entry sits on top, so it gets the live accent. */
+.sp-feed-item:first-child::before {
+  background: var(--ocean-500);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.16);
 }
 .spectate-foot {
   flex: none;
@@ -1977,7 +2075,7 @@ a {
     padding-right: 0;
     padding-bottom: 10px;
   }
-  .sp-detail {
+  .sp-split {
     grid-template-columns: 1fr;
   }
 }
