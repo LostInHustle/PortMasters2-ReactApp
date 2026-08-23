@@ -12,10 +12,14 @@ export function ToastStack() {
   const { tr } = useTranslate();
   const { toasts, dismissToast, dismissAllToasts } = useToast();
   const dismissLabel = tr('关闭此通知', 'Dismiss this notification');
+  // Counts only the notices still standing. Toasts already on their way out are visually gone,
+  // so leaving them in the count kept the pill hovering over an empty corner for the length of
+  // the fade, and offered to clear a burst that had just been cleared.
+  const liveCount = toasts.filter((t) => !t.fading).length;
 
   return (
     <div id="toast-stack">
-      {toasts.length > 1 && (
+      {liveCount > 1 && (
         <button className="toast-clear-all" type="button" onClick={dismissAllToasts}>
           {tr('✕ 全部清除', '✕ Clear all')}
         </button>

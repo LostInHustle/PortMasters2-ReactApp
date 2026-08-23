@@ -15,6 +15,14 @@ import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCa
 // equally weighted glass boxes side by side gave a scout no hierarchy, so the figures that
 // decide whether a rival is a threat were no more prominent than their cargo list. Gold, renown
 // and ship now lead as tiles, voyage progress reads as a track, and the rest are quiet panes.
+//
+// Invariant, and the reason this window is pleasant to watch: .spectate-overlay and
+// .spectate-window carry entrance animations (fadeIn and fadeUp in global.css), so they must
+// stay mounted for as long as the window is open. React reconciles this tree in place on every
+// broadcast, which is what keeps a captain's clicks from making the watcher's window flash. The
+// prototype rebuilt the whole window on each broadcast instead and did flash, several times a
+// round. Never give this overlay a key that varies with game state, and never swap it for a
+// different component at the same position, or that behavior comes straight back.
 export function SpectateView() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();

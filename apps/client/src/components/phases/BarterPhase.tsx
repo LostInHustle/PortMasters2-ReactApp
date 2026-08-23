@@ -17,6 +17,17 @@ export function BarterPhase() {
   const { serverState } = useSession();
   const { send } = useWs();
   const { showNotification } = useToast();
+  // Every hook this component owns is declared here, above the guard below. React identifies
+  // hooks by call order, so a useState sitting under a conditional return silently changes
+  // that order the first time the condition flips. The linter now enforces this (see
+  // eslint.config.js), but the ordering is the reason, not the rule.
+  const [sellType, setSellType] = useState<TradeItemType>(GOLD);
+  const [sellQty, setSellQty] = useState('1');
+  const [buyType, setBuyType] = useState<TradeItemType>(GOLD);
+  const [buyQty, setBuyQty] = useState('1');
+  // '' means the offer is open to the whole room, which stays the default.
+  const [targetSlot, setTargetSlot] = useState('');
+
   const g = serverState?.yourGame;
   if (!g || !serverState) return null;
 
@@ -37,13 +48,6 @@ export function BarterPhase() {
 
   const options: TradeItemType[] = [GOLD, ...g.unlockedResources, ...g.unlockedProducts];
   const stockOf = (t: TradeItemType) => (t === GOLD ? g.money : g.inventory[t as ItemId] || 0);
-
-  const [sellType, setSellType] = useState<TradeItemType>(GOLD);
-  const [sellQty, setSellQty] = useState('1');
-  const [buyType, setBuyType] = useState<TradeItemType>(GOLD);
-  const [buyQty, setBuyQty] = useState('1');
-  // '' means the offer is open to the whole room, which stays the default.
-  const [targetSlot, setTargetSlot] = useState('');
 
   const submitOrder = () => {
     const sq = parseInt(sellQty, 10);

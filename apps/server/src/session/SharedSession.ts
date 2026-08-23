@@ -80,6 +80,17 @@ export class SharedSession {
       this.host = this.players[0]!;
     }
   }
+  // Builds fresh per player game state from the current roster and moves the room from lobby to
+  // live play. Every field that describes progress through a voyage is reset here, so this is
+  // also the whole of what a restart needs to do.
+  //
+  // The end session votes matter most: they are the one piece of session state that decides
+  // whether the room is disbanded, and they used to survive a restart. In a room of three where
+  // two captains had voted to end before the last game finished, the very first vote in the new
+  // game completed the quorum and threw everyone back to the lobby mid voyage.
+  //
+  // The monsoon cache is cleared before the sync below rather than after it, so the new voyage
+  // rolls its own weather instead of reading a cycle the previous one had already decided.
   start(): void {
     this.games = this.players.map((_, i) => {
       const game = new PlayerGame(this.difficulty);
@@ -87,6 +98,10 @@ export class SharedSession {
       return game;
     });
     this.tradeReady = this.players.map(() => false);
+    this.tradeOrders = [];
+    this.ready.clear();
+    this.endVotes.clear();
+    this.monsoonCycleCache = {};
     this.started = true;
     syncMonsoonState(this, this.rng);
   }
@@ -128,12 +143,11 @@ export class SharedSession {
     this.ready.clear();
   }
 
+  // A restart keeps the difficulty and roster the room originally agreed on, and is otherwise
+  // exactly a fresh start. Keeping the reset list in one place is the point: the previous split
+  // between the two is how the end session votes came to be missed.
   restart(): void {
-    // A restart keeps the difficulty and roster the room originally agreed on.
     this.start();
-    this.tradeOrders = [];
-    this.ready.clear();
-    this.monsoonCycleCache = {};
   }
 
   // ---------- End-session vote ----------

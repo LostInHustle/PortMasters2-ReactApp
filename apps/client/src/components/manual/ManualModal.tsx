@@ -1,4 +1,4 @@
-import { useState, type JSX } from 'react';
+import { useCallback, useState, type JSX } from 'react';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useModal } from '../modal/ModalContext.js';
 import { BoonsTab } from './content/boonsTab.js';
@@ -12,7 +12,15 @@ import { TradeTab } from './content/tradeTab.js';
 import { WorkersTab } from './content/workersTab.js';
 
 export type ManualTabId =
-  'start' | 'flow' | 'economy' | 'workers' | 'trade' | 'boons' | 'ship' | 'expansion' | 'faq';
+  | 'start'
+  | 'flow'
+  | 'economy'
+  | 'workers'
+  | 'trade'
+  | 'boons'
+  | 'ship'
+  | 'expansion'
+  | 'faq';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html MANUAL_TABS_I18N (lines 3426-3450).
 const TAB_IDS: ManualTabId[] = [
@@ -99,10 +107,15 @@ export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
 // Ported verbatim from PortMasters2/PortMasters_online.html showInstructions (line 3949) and
 // every showManual()/showManual(tab) call site: opens the manual modal, remembering the last
 // tab viewed if none is specified.
+// Memoized because useKeyboardShortcuts lists it as an effect dependency: an unstable identity
+// there rebinds the global keydown listener on every render.
 export function useOpenManual(): (tab?: ManualTabId) => void {
   const { openModal } = useModal();
-  return (tab) => {
-    if (tab) lastActiveTab = tab;
-    openModal(<ManualModal initialTab={tab ?? lastActiveTab} />, true);
-  };
+  return useCallback(
+    (tab?: ManualTabId) => {
+      if (tab) lastActiveTab = tab;
+      openModal(<ManualModal initialTab={tab ?? lastActiveTab} />, true);
+    },
+    [openModal],
+  );
 }

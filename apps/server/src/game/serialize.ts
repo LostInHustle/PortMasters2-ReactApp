@@ -1,11 +1,13 @@
 import {
   WORKER_TYPES_BACKEND,
+  type CustomerOrder,
   type MarketCard,
   type PlayerGameState,
   type Worker,
 } from '@pm2/shared';
 import type { PlayerGame } from './PlayerGame.js';
 import { difficultyBrokerCorruption, pirateLossPct } from './difficultyRules.js';
+import { orderTransportCost } from './marketActions.js';
 import { charterEvent } from './poolSelectors.js';
 
 type WorkerRosterFields = Pick<
@@ -38,6 +40,14 @@ function withCardPricing(game: PlayerGame, card: MarketCard): MarketCard {
   };
 }
 
+// Stamps each customer order with what delivering it will actually charge in shipping, for the
+// same reason withCardPricing stamps purchase cards: the number on the board should be the
+// number that gets charged, not the client's approximation of it. game.customerCards itself is
+// left untouched, this only shapes the copy that goes out over the wire.
+function withOrderPricing(game: PlayerGame, order: CustomerOrder): CustomerOrder {
+  return { ...order, transportCost: orderTransportCost(game, order) };
+}
+
 // Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the literal
 // wire contract for this player's "state" payload. Two fields are deliberately NOT raw references
 // to internal state, intelRemaining exposes only the length of phase2DemandTags (the tags
@@ -63,7 +73,7 @@ export function serializePlayerGame(game: PlayerGame): PlayerGameState {
     draftRerolled: game.draftRerolled,
     phase: game.phase,
     resourceCards: game.resourceCards.map((card) => withCardPricing(game, card)),
-    customerCards: game.customerCards,
+    customerCards: game.customerCards.map((order) => withOrderPricing(game, order)),
     purchaseCount: game.purchaseCount,
     orderCount: game.orderCount,
     purchasedCards: [...game.purchasedCards],

@@ -39,6 +39,20 @@ export const DIFFICULTIES: Record<Difficulty, DifficultyConfig> = {
 
 export const DEFAULT_DIFFICULTY: Difficulty = 'easy';
 
+/**
+ * The round carrying the last Emperor Mandate of a voyage, which the Trade board marks out as
+ * the closing imperial commission.
+ *
+ * Derived from the table above rather than written down a second time. It used to be a literal
+ * 8 on the client, which is right for Easy and lands correctly on Standard by coincidence, but
+ * on Hard, where the mandates fall on rounds 6, 12 and 16, it decorated the round 12 order as
+ * the final one and then did it again four rounds later.
+ */
+export function finalMandateRound(difficulty: Difficulty): number {
+  const rounds = Object.keys(DIFFICULTIES[difficulty].mandates).map(Number);
+  return rounds.length > 0 ? Math.max(...rounds) : 0;
+}
+
 // Raid severity as a fraction of current gold (server.py lines 137-141).
 export const PIRATE_LOSS_TIERS: Record<PirateLossTier, number> = {
   medium: 0.15,

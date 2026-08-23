@@ -43,6 +43,95 @@ describe('sanitizeTradeItems', () => {
     expect(sanitizeTradeItems('not an array')).toEqual([]);
     expect(sanitizeTradeItems(undefined)).toEqual([]);
   });
+
+  it('merges repeated entries for the same good into one total', () => {
+    expect(
+      sanitizeTradeItems([
+        { type: '麻布', quantity: 5 },
+        { type: '金币', quantity: 2 },
+        { type: '麻布', quantity: 5 },
+        { type: '金币', quantity: 3 },
+      ]),
+    ).toEqual([
+      { type: '麻布', quantity: 10 },
+      { type: '金币', quantity: 5 },
+    ]);
+  });
+});
+
+// acceptTrade checks affordability one entry at a time against the whole balance, then applies
+// every entry. Repeated entries for one good therefore used to be charged more than once, which
+// let a captain hand over goods and gold they did not have.
+describe('the repeated item exploit', () => {
+  const gameWith = (money: number, hemp: number): TradeGame => ({
+    money,
+    inventory: { 麻布: hemp } as Record<ItemId, number>,
+    log: () => {},
+  });
+
+  it('refuses an order that would take more goods than the seller owns', () => {
+    const seller = gameWith(100, 5);
+    const buyer = gameWith(100, 0);
+    const ctx = { tradeOrders: [] as TradeOrder[], tradeIdCounter: 0, players: ['a', 'b'] };
+    const order = createTradeOrder(
+      ctx,
+      0,
+      [
+        { type: '麻布', quantity: 5 },
+        { type: '麻布', quantity: 5 },
+      ],
+      [],
+    );
+    expect(order!.sell).toEqual([{ type: '麻布', quantity: 10 }]);
+
+    expect(
+      acceptTrade({ tradeOrders: ctx.tradeOrders, games: [seller, buyer] }, order!.id, 1),
+    ).toBe(false);
+    expect(seller.inventory['麻布']).toBe(5);
+    expect(buyer.inventory['麻布']).toBe(0);
+  });
+
+  it('never lets a balance go negative through a repeated gold entry', () => {
+    const seller = gameWith(100, 0);
+    const buyer = gameWith(100, 0);
+    const ctx = { tradeOrders: [] as TradeOrder[], tradeIdCounter: 0, players: ['a', 'b'] };
+    const order = createTradeOrder(
+      ctx,
+      0,
+      [
+        { type: '金币', quantity: 100 },
+        { type: '金币', quantity: 100 },
+      ],
+      [],
+    );
+
+    expect(
+      acceptTrade({ tradeOrders: ctx.tradeOrders, games: [seller, buyer] }, order!.id, 1),
+    ).toBe(false);
+    expect(seller.money).toBe(100);
+    expect(buyer.money).toBe(100);
+  });
+
+  it('still settles a repeated entry the seller can actually cover', () => {
+    const seller = gameWith(100, 10);
+    const buyer = gameWith(100, 0);
+    const ctx = { tradeOrders: [] as TradeOrder[], tradeIdCounter: 0, players: ['a', 'b'] };
+    const order = createTradeOrder(
+      ctx,
+      0,
+      [
+        { type: '麻布', quantity: 4 },
+        { type: '麻布', quantity: 6 },
+      ],
+      [],
+    );
+
+    expect(
+      acceptTrade({ tradeOrders: ctx.tradeOrders, games: [seller, buyer] }, order!.id, 1),
+    ).toBe(true);
+    expect(seller.inventory['麻布']).toBe(0);
+    expect(buyer.inventory['麻布']).toBe(10);
+  });
 });
 
 describe('createTradeOrder', () => {
