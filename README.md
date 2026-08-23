@@ -113,7 +113,7 @@ A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Har
 | Phase           | What happens                                                                                                                        |
 | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
 | **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went.                                     |
-| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and every captain gets a different hand. Lock one in; it lasts this round only.   |
+| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and every captain gets a different hand. Lock one in; it lasts this round only.  |
 | **🛒 Procure**  | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand.      |
 | **🤝 Barter**   | Trade with the room. Post an offer like "I give this for that" and it settles the moment someone accepts.                           |
 | **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                          |

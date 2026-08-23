@@ -20,6 +20,15 @@ const ModalContext = createContext<ModalContextValue | null>(null);
 // outside the box, or by Escape (wired centrally in useKeyboardShortcuts, since the original's
 // Escape handler checks modal/spectate/chat in a fixed priority order, not three independent
 // listeners).
+//
+// Invariant worth keeping: the overlay and the box belong to this provider, and a dialog's own
+// content is held as an element in `modal`. A dialog that tracks its own state (the difficulty
+// pickers in CreateRoomComposer and InviteComposer, the manual's tabs) therefore renders again
+// entirely on its own, and the overlay is never touched. That matters because .modal-overlay
+// covers the viewport and carries a fadeIn, and .modal carries a fadeUp: rebuilding either one
+// replays those, which in the prototype made the whole screen fade out and back in on every
+// difficulty click. Keep dialog state inside the dialog. Do not push it up here and reopen the
+// modal to show a change.
 export function ModalProvider({ children }: { children: ReactNode }) {
   const { tr } = useTranslate();
   const [modal, setModal] = useState<ModalState | null>(null);

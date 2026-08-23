@@ -12,7 +12,15 @@ import { TradeTab } from './content/tradeTab.js';
 import { WorkersTab } from './content/workersTab.js';
 
 export type ManualTabId =
-  'start' | 'flow' | 'economy' | 'workers' | 'trade' | 'boons' | 'ship' | 'expansion' | 'faq';
+  | 'start'
+  | 'flow'
+  | 'economy'
+  | 'workers'
+  | 'trade'
+  | 'boons'
+  | 'ship'
+  | 'expansion'
+  | 'faq';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html MANUAL_TABS_I18N (lines 3426-3450).
 const TAB_IDS: ManualTabId[] = [

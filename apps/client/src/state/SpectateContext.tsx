@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -30,13 +31,19 @@ export function SpectateProvider({ children }: { children: ReactNode }) {
   const { serverState } = useSession();
   const wasBankrupt = useRef(false);
 
-  const openSpectate = useCallback(
-    (requested?: string) => {
-      setTargetState(requested ?? Object.keys(serverState?.otherGames ?? {})[0] ?? null);
-      setIsSpectating(true);
-    },
-    [serverState],
-  );
+  // A state broadcast arrives every time any captain touches anything, and each one is a fresh
+  // object off the wire. openSpectate only needs the roster at the moment it is called, so it
+  // reads it from a ref rather than closing over it: listing serverState as a dependency would
+  // hand every consumer a new callback, and a new context value, on every broadcast in the
+  // session. Nothing below renders again now unless the window itself actually opens, closes,
+  // or switches captain.
+  const serverStateRef = useRef(serverState);
+  serverStateRef.current = serverState;
+
+  const openSpectate = useCallback((requested?: string) => {
+    setTargetState(requested ?? Object.keys(serverStateRef.current?.otherGames ?? {})[0] ?? null);
+    setIsSpectating(true);
+  }, []);
   const closeSpectate = useCallback(() => {
     setIsSpectating(false);
     setTargetState(null);
@@ -56,13 +63,12 @@ export function SpectateProvider({ children }: { children: ReactNode }) {
     wasBankrupt.current = isBankrupt;
   }, [isSpectating, serverState]);
 
-  return (
-    <SpectateContext.Provider
-      value={{ isSpectating, target, openSpectate, closeSpectate, setTarget }}
-    >
-      {children}
-    </SpectateContext.Provider>
+  const value = useMemo(
+    () => ({ isSpectating, target, openSpectate, closeSpectate, setTarget }),
+    [isSpectating, target, openSpectate, closeSpectate, setTarget],
   );
+
+  return <SpectateContext.Provider value={value}>{children}</SpectateContext.Provider>;
 }
 
 export function useSpectate(): SpectateContextValue {
