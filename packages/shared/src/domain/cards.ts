@@ -53,4 +53,16 @@ export interface CustomerOrder {
   isProductOrder: boolean;
   /** Set by gen_mixed_order when this order resolved a purchased intel clue. */
   fromIntel?: boolean;
+  /**
+   * What delivering this order will actually charge in shipping, given the fleet's ship level,
+   * boons and modules. Filled in by the server when serializing game state, the same way
+   * MarketCard.effectiveCost is, so the figure on the Trade board is the figure that gets
+   * charged rather than an approximation of it. See orderTransportCost.
+   */
+  transportCost?: number;
+  /**
+   * True on the one mandate that closes the voyage. Decided by the server because the mandate
+   * schedule is difficulty data, not something the board should infer from the round number.
+   */
+  isFinalMandate?: boolean;
 }

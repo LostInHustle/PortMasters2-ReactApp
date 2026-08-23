@@ -8,7 +8,13 @@ import {
   type ProductId,
   type ShipModule,
 } from '@pm2/shared';
-import { calcTransportCost, calcVat, getCardFinalCost, hasModule } from './costCalculations.js';
+import {
+  calcTransportCost,
+  calcVat,
+  getCardFinalCost,
+  hasModule,
+  type TransportCostContext,
+} from './costCalculations.js';
 import type { Rng } from './randomUtil.js';
 
 const HIGHER_TIER_PRODUCTS: readonly ItemId[] = [...PRODUCTS_TIER1, ...PRODUCTS_TIER2];
@@ -62,6 +68,23 @@ export interface CompleteOrderContext {
   log(message: string): void;
 }
 
+// What delivering this order actually charges in shipping, given the fleet's ship level, boons
+// and modules.
+//
+// Exported so serialize.ts can stamp the same number onto the order it sends the client. The
+// Trade board used to estimate it locally as max(5, items * 2 - level * 5), which matches only
+// a captain with no transport module and no transport boon. A Bulk Hauler saw 7 gold quoted on
+// an order that charged 1, and Silk Monopoly quoted 7 on a delivery that shipped free. The
+// server already stamps purchase cards with their real cost the same way, so this closes the
+// last place where the client did pricing arithmetic of its own.
+export function orderTransportCost(
+  ctx: TransportCostContext,
+  order: Pick<CustomerOrder, 'resources' | 'totalItems'>,
+): number {
+  const hasSilk = order.resources.some((r) => SILK_FAMILY.includes(r.type));
+  return calcTransportCost(ctx, order.totalItems, hasSilk, order.resources);
+}
+
 // Ported verbatim from PortMasters2/server.py complete_order (lines 729-769).
 export function completeOrder(
   ctx: CompleteOrderContext,
@@ -75,7 +98,7 @@ export function completeOrder(
     }
   }
   const hasSilk = order.resources.some((r) => SILK_FAMILY.includes(r.type));
-  const transport = calcTransportCost(ctx, order.totalItems, hasSilk, order.resources);
+  const transport = orderTransportCost(ctx, order);
   for (const r of order.resources) {
     ctx.inventory[r.type] -= r.required;
   }

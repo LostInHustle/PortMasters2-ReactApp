@@ -6,11 +6,6 @@ import { useWs } from '../../ws/WsContext.js';
 import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html estimateTransport (lines 3020-3022).
-function estimateTransport(shipLevel: number, totalItems: number): number {
-  return Math.max(5, totalItems * 2 - shipLevel * 5);
-}
-
 // Ported verbatim from PortMasters2/PortMasters_online.html ordersHTML (lines 3024-3083):
 // phase 2, fulfilling port orders from cargo for gold (the original calls this phase "贸易" /
 // "Trade", distinct from the 'trade' phase key which is Barter).
@@ -29,11 +24,15 @@ export function TradePhase() {
         {g.customerCards.map((o) => {
           const canComplete = o.resources.every((r) => (g.inventory[r.type] || 0) >= r.required);
           const completed = g.completedOrders.includes(o.id!);
-          const est = estimateTransport(g.shipLevel, o.totalItems);
+          // The server sends the real figure (see orderTransportCost). This used to be worked
+          // out here as max(5, items * 2 - level * 5), which only matches a captain carrying no
+          // transport module and no transport boon: a Bulk Hauler was quoted 7 on a delivery
+          // that charged 1, and Silk Monopoly was quoted 7 on one that shipped free.
+          const shipping = o.transportCost ?? 0;
           const isGolden = o.kind === 'EmperorMandate';
           const cardClass = [
             isGolden && 'golden-order-card',
-            isGolden && g.currentRound >= 8 && 'final-mandate',
+            isGolden && o.isFinalMandate && 'final-mandate',
           ]
             .filter(Boolean)
             .join(' ');
@@ -103,14 +102,14 @@ export function TradePhase() {
                   <span
                     className="tip"
                     data-tip={tr(
-                      '运费 = max(5, 件数×2 − 船级×5)，福缘可进一步减免；成品另缴约5%增值税',
-                      'Shipping = max(5, items ×2 − ship level ×5); fortunes can reduce it further. Product orders also pay ~5% VAT',
+                      '交付本单实际扣除的运费，已计入船级、福缘与已装模块的全部减免；成品另缴约5%增值税',
+                      'The shipping this delivery actually costs, with your ship level, fortunes and installed modules already counted. Product orders also pay ~5% VAT',
                     )}
                   >
-                    {tr('📦 预计运费', '📦 Est. shipping')}
+                    {tr('📦 运费', '📦 Shipping')}
                   </span>
                   <span className="muted">
-                    ≈ {est} 💰{o.isProductOrder ? tr(' + 增值税', ' + VAT') : ''}
+                    {shipping} 💰{o.isProductOrder ? tr(' + 增值税', ' + VAT') : ''}
                   </span>
                 </div>
               </div>

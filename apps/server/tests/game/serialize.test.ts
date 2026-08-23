@@ -1,4 +1,4 @@
-import type { Worker } from '@pm2/shared';
+import { MODULES, type Worker } from '@pm2/shared';
 import { describe, expect, it } from 'vitest';
 import { PlayerGame } from '../../src/game/PlayerGame.js';
 import { serializePlayerGame } from '../../src/game/serialize.js';
@@ -122,5 +122,57 @@ describe('serializePlayerGame', () => {
     const state = serializePlayerGame(game);
     expect(state.estimatedWages).toBe(8 + 24); // WAGES.weaver + WAGES.jeweler
     expect(state.estimatedWages).toBe(game.estimatedWages());
+  });
+});
+
+// The Trade board shows what the server sends, so what the server sends has to be the figure
+// the delivery is actually charged, not an approximation of it.
+describe('customer order pricing on the wire', () => {
+  it('stamps each order with the shipping the delivery will really cost', () => {
+    const game = new PlayerGame('hard');
+    game.shipLevel = 1;
+    game.customerCards = [
+      {
+        id: 0,
+        demandPort: '泉州港',
+        resources: [{ type: '麻布', required: 6 }],
+        reward: 60,
+        totalItems: 6,
+        isProductOrder: false,
+      },
+    ] as never;
+
+    const plain = serializePlayerGame(game).customerCards[0]!;
+    expect(plain.transportCost).toBe(
+      game.calcTransportCost(6, false, game.customerCards[0]!.resources),
+    );
+
+    // A transport module has to move the quoted figure. The old client side estimate could not
+    // see modules at all, so it quoted the same number either way.
+    game.equippedModules = [MODULES.find((m) => m.id === 'bulk_hauler')!] as never;
+    const hauled = serializePlayerGame(game).customerCards[0]!;
+    expect(hauled.transportCost).toBeLessThan(plain.transportCost!);
+    expect(hauled.transportCost).toBe(
+      game.calcTransportCost(6, false, game.customerCards[0]!.resources),
+    );
+  });
+
+  it('marks only the closing mandate of the voyage, on every difficulty', () => {
+    const finals: Record<string, number> = { easy: 8, standard: 12, hard: 16 };
+    const mandateRounds: Record<string, number[]> = {
+      easy: [3, 6, 8],
+      standard: [3, 7, 12],
+      hard: [6, 12, 16],
+    };
+    for (const difficulty of ['easy', 'standard', 'hard'] as const) {
+      for (const round of mandateRounds[difficulty]!) {
+        const game = new PlayerGame(difficulty);
+        game.currentRound = round;
+        const order = game.genEmperorMandateOrder(0);
+        expect(order.isFinalMandate, `${difficulty} round ${round}`).toBe(
+          round === finals[difficulty],
+        );
+      }
+    }
   });
 });

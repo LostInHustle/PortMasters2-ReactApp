@@ -5,7 +5,9 @@ import {
   RECIPES,
   RESOURCE_PROBS,
   RESOURCES,
+  finalMandateRound,
   type CustomerOrder,
+  type Difficulty,
   type IntelClue,
   type ItemId,
   type MarketCard,
@@ -62,7 +64,7 @@ export function envReward(
 
 // Ported verbatim from PortMasters2/server.py gen_emperor_mandate_order (lines 598-610).
 export function genEmperorMandateOrder(
-  ctx: { monsoonState: MonsoonState | null },
+  ctx: { monsoonState: MonsoonState | null; difficulty: Difficulty; currentRound: number },
   size: number,
 ): CustomerOrder {
   const tpl = EMPEROR_MANDATE_TEMPLATES[size]!;
@@ -75,6 +77,11 @@ export function genEmperorMandateOrder(
     reward: envReward(ctx, tpl.port, tpl.reward),
     totalItems: total,
     isProductOrder: resources.some((r) => !isResourceId(r.type)),
+    // Decided here because the mandate schedule is difficulty data and this is where it lives.
+    // The Trade board used to test `currentRound >= 8`, which is right on Easy and lands on
+    // Standard by coincidence, but on Hard the mandates fall on rounds 6, 12 and 16, so it
+    // crowned the round 12 order as the finale and then did it again four rounds later.
+    isFinalMandate: ctx.currentRound === finalMandateRound(ctx.difficulty),
   };
 }
 
