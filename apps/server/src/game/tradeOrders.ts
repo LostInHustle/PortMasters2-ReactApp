@@ -10,15 +10,24 @@ import {
 
 const TRADEABLE_TYPES = new Set<string>([...RESOURCES, ...PRODUCTS, GOLD]);
 
-// Ported verbatim from PortMasters2/server.py sanitize_trade_items (lines 1193-1205): the
-// barter-exploit guard. A well-formed entry is a known tradeable good (or gold) with a positive
-// integer quantity; anything else is dropped so a crafted order can't add goods/gold to the
-// proposer while subtracting from the accepter. Python additionally excludes bool (an int
-// subclass there); typeof quantity === 'number' already excludes JS booleans, so no separate
-// check is needed here.
+// Ported from PortMasters2/server.py sanitize_trade_items (lines 1193-1205): the barter exploit
+// guard. A well formed entry is a known tradeable good (or gold) with a positive integer
+// quantity; anything else is dropped so a crafted order cannot add goods or gold to the proposer
+// while subtracting from the accepter. Python additionally excludes bool (an int subclass
+// there); typeof quantity === 'number' already excludes JS booleans, so no separate check is
+// needed here.
+//
+// Entries naming the same good are merged into one. Without that, the guard had a hole big
+// enough to mint goods from nothing: acceptTrade checks affordability one entry at a time
+// against the full balance, then applies every entry, so an order selling the same good twice
+// passed both checks and was charged twice. A captain holding 5 bolts of hemp could send
+// [hemp x5, hemp x5], finish on minus 5 hemp, and hand the other captain 10. The same trick on
+// gold pushed a balance below zero, which is the number bankruptcy is judged on. Merging first
+// makes each entry the true total for its good, which is exactly what the affordability check
+// already assumes.
 export function sanitizeTradeItems(items: unknown): TradeItem[] {
-  const clean: TradeItem[] = [];
-  if (!Array.isArray(items)) return clean;
+  const totals = new Map<TradeItemType, number>();
+  if (!Array.isArray(items)) return [];
   for (const it of items) {
     if (typeof it !== 'object' || it === null) continue;
     const { type, quantity } = it as { type?: unknown; quantity?: unknown };
@@ -29,10 +38,11 @@ export function sanitizeTradeItems(items: unknown): TradeItem[] {
       Number.isInteger(quantity) &&
       quantity > 0
     ) {
-      clean.push({ type: type as TradeItemType, quantity });
+      const key = type as TradeItemType;
+      totals.set(key, (totals.get(key) ?? 0) + quantity);
     }
   }
-  return clean;
+  return [...totals].map(([type, quantity]) => ({ type, quantity }));
 }
 
 export interface TradeOrderContext {

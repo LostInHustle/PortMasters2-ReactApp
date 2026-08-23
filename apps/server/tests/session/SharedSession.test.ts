@@ -149,6 +149,39 @@ describe('barter delegation', () => {
   });
 });
 
+describe('restart', () => {
+  it('clears the end session votes, so votes cast in the previous game cannot disband the new one', () => {
+    const session = SharedSession.createPair('alice', 'bob');
+    session.endVotes.add(0);
+    expect(session.endVoteComplete()).toBe(false);
+
+    session.restart();
+
+    expect(session.endVotes.size).toBe(0);
+    // Without the reset, bob voting alone here would have completed the quorum and thrown the
+    // whole room back to the lobby one action into a brand new voyage.
+    session.endVotes.add(1);
+    expect(session.endVoteComplete()).toBe(false);
+  });
+
+  it('clears every other trace of the finished voyage', () => {
+    const session = SharedSession.createPair('alice', 'bob');
+    session.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], [{ type: '丝绸', quantity: 1 }]);
+    session.ready.add(0);
+    session.tradeReady[0] = true;
+    session.monsoonCycleCache[3] = MONSOON_TIER0[0];
+
+    session.restart();
+
+    expect(session.tradeOrders).toEqual([]);
+    expect(session.ready.size).toBe(0);
+    expect(session.tradeReady).toEqual([false, false]);
+    expect(session.monsoonCycleCache).toEqual({});
+    expect(session.games[0]!.currentRound).toBe(1);
+    expect(session.games[1]!.currentRound).toBe(1);
+  });
+});
+
 describe('addChat', () => {
   it('appends messages and caps history at 200, dropping the oldest first', () => {
     const session = SharedSession.createPair('alice', 'bob');

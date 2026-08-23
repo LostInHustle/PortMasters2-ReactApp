@@ -1,3 +1,4 @@
+import type { ResumeResultMessage } from '@pm2/shared';
 import type WebSocket from 'ws';
 import { handleGameAction } from '../actions/handleGameAction.js';
 import { issueToken, resolveToken, revokeToken } from '../auth/sessionTokens.js';
@@ -14,17 +15,17 @@ import {
 import { broadcastSessionState } from '../session/broadcastState.js';
 import { broadcastOnlineUsers, sendJson, sendToUser } from './send.js';
 
-// Shared tail of both `login` and `resume_token` once the online slot is claimed: tell everyone
-// else this username is online, and, if a live (started) session already exists for them --
-// push the full game state right away so a reconnect lands back in the game, not just the
-// lobby. Claiming `state.online` itself stays in each caller, before it sends its response (see
-// the comment at each call site for why).
 // How long a voyage survives with nobody connected. A page refresh drops the socket for a
 // fraction of a second, so recycling the moment the last player goes offline destroyed the game
 // the player was about to resume into. Long enough to cover a reload or a brief network drop,
 // short enough that genuinely abandoned rooms do not pile up.
 const SESSION_REAP_GRACE_MS = 90_000;
 
+// Shared tail of both `login` and `resume_token` once the online slot is claimed: tell everyone
+// else this username is online, and, when a live (started) session already exists for them,
+// push the full game state right away so a reconnect lands back in the game rather than in the
+// lobby. Claiming `state.online` itself stays in each caller, before it sends its response, see
+// the comment at each call site for why.
 function completeAuthentication(state: ServerState, ws: Sendable, username: string): void {
   broadcastOnlineUsers(state);
   broadcastOpenRooms(state);
@@ -87,7 +88,10 @@ function processUnauthenticated(
   if (action === 'resume_token') {
     const username = resolveToken(state, data.token);
     if (username === undefined) {
-      sendJson(ws, { type: 'resume_result', success: false });
+      sendJson(ws, {
+        type: 'resume_result',
+        ...({ success: false } satisfies ResumeResultMessage),
+      });
       return null;
     }
     // A valid token is itself proof of identity, so this is the same account re-identifying
@@ -99,7 +103,10 @@ function processUnauthenticated(
     // the stale close cannot tear down this new connection or its live session.
     // Same ordering as login above: claim before responding.
     state.online.set(username, ws);
-    sendJson(ws, { type: 'resume_result', success: true, username });
+    sendJson(ws, {
+      type: 'resume_result',
+      ...({ success: true, username } satisfies ResumeResultMessage),
+    });
     completeAuthentication(state, ws, username);
     return username;
   }

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslate } from '../../i18n/useTranslate.js';
 
@@ -41,8 +41,13 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   );
   const closeModal = useCallback(() => setModal(null), []);
 
+  const value = useMemo(
+    () => ({ isOpen: modal !== null, openModal, closeModal }),
+    [modal, openModal, closeModal],
+  );
+
   return (
-    <ModalContext.Provider value={{ isOpen: modal !== null, openModal, closeModal }}>
+    <ModalContext.Provider value={value}>
       {children}
       {modal &&
         createPortal(

@@ -7,10 +7,19 @@ function randomToken(): string {
   return randomBytes(16).toString('hex');
 }
 
-// Issued on every successful login, interactive or resumed. It lets the next fresh connection
-// re-identify itself silently instead of forcing the player to type their password again,
-// whether that connection follows an idle-timeout drop, a brief network blip, or a page refresh.
+// Issued on every successful login. It lets the next fresh connection identify itself again
+// silently instead of forcing the player to type their password again, whether that connection
+// follows an idle timeout drop, a brief network blip, or a page refresh.
+//
+// One token per account, because that is already the rule everywhere else: login refuses an
+// account that is online elsewhere, so a second live token for the same player could only ever
+// be a leftover. Retiring the previous one on each login keeps the two rules in agreement, makes
+// logging out on the last device genuinely final, and stops this map from growing by one dead
+// entry per login for as long as the process runs.
 export function issueToken(state: ServerState, username: string): string {
+  for (const [existing, owner] of state.sessionTokens) {
+    if (owner === username) state.sessionTokens.delete(existing);
+  }
   const token = randomToken();
   state.sessionTokens.set(token, username);
   return token;
