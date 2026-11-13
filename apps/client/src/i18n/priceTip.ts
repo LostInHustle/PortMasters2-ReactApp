@@ -8,8 +8,8 @@ import {
 import { tr, type Lang } from './LangContext.js';
 
 // Explains how a supply card's unit price is derived, so a player can see the calculation behind
-// the number rather than just the result. Mirrors the existing shipping-cost formula tooltip.
-// Raw materials carry a base-price band; finished products are priced from their material cost
+// the number rather than just the result. Mirrors the existing shipping cost formula tooltip.
+// Raw materials carry a base price band; finished products are priced from their material cost
 // times a markup, clamped to the product's range. Both are then shifted by the home port, the
 // weather and any active fortunes or modules, which is why the shown price varies.
 export function priceTip(r: MarketResource, lang: Lang): string {

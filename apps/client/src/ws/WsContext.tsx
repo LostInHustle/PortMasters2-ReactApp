@@ -21,9 +21,9 @@ const WsContext = createContext<WsContextValue | null>(null);
 
 // VITE_WS_URL points at a backend deployed on a different origin than the client (e.g. client on
 // Vercel, server on Railway), Vercel can't host the persistent WebSocket process itself, so
-// same-origin is no longer a safe assumption in production. Unset, this falls back to /ws on the
-// page's own origin, which is what the dev-time Vite proxy (vite.config.ts) forwards to the local
-// backend, and what a single-process same-origin deploy would also serve.
+// same origin is no longer a safe assumption in production. Unset, this falls back to /ws on the
+// page's own origin, which is what the development time Vite proxy (vite.config.ts) forwards to the local
+// backend, and what a single process same origin deploy would also serve.
 function wsUrl(): string {
   const override = import.meta.env.VITE_WS_URL;
   if (override) return override;
@@ -34,19 +34,19 @@ function wsUrl(): string {
 const RECONNECT_BASE_DELAY_MS = 1000;
 const RECONNECT_MAX_DELAY_MS = 30_000;
 
-// Ported from PortMasters2/PortMasters_online.html's single global `ws` plus
-// setupWebSocketHandlers' onmessage dispatch (lines 1807, 1940-2052): one connection per app
+// Mirrors PortMasters2/PortMasters_online.html's single global `ws` plus
+// setupWebSocketHandlers' onmessage dispatch: one connection per app
 // session, fanned out to any number of subscribers (SessionContext is the main one) instead of
-// a single hard-coded onmessage handler, since React components mount/unmount independently of
+// a single hard coded onmessage handler, since React components mount/unmount independently of
 // the socket's lifetime.
 //
-// Root-caused from the production symptom "leave the tab open for a while and login stops
+// Traced from the production symptom "leave the tab open for a while and login stops
 // working": this app has no token or expiring session of any kind, the connection itself was
 // dying silently (idle WebSocket connections get dropped by Railway's edge proxy, and most
-// reverse proxies, well before anything app-level is involved), and there was no reconnect
+// reverse proxies, well before anything app level is involved), and there was no reconnect
 // logic at all, so a dropped socket just sat there forever looking like a frozen page. The
-// matching server-side half of this fix is heartbeat.ts, which keeps the connection from going
-// idle in the first place; this auto-reconnect is the fallback for when a drop happens anyway
+// matching on the server half of this fix is heartbeat.ts, which keeps the connection from going
+// idle in the first place; this automatic reconnect is the fallback for when a drop happens anyway
 // (laptop sleep, wifi blip, a Railway redeploy).
 export function WsProvider({ children }: { children: ReactNode }) {
   const [connected, setConnected] = useState(false);
@@ -95,9 +95,9 @@ export function WsProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Stable across re-renders (refs, not state) so consumers can safely list them as effect
-  // dependencies without re-subscribing on every unrelated render of this provider. Guards on
-  // readyState, not just nullness: a socket mid-reconnect (CONNECTING) or on its way out
+  // Stable across renders (refs, not state) so consumers can safely list them as effect
+  // dependencies without subscribing again on every unrelated render of this provider. Guards on
+  // readyState, not just nullness: a socket during reconnect (CONNECTING) or on its way out
   // (CLOSING) throws or silently drops on send anyway, so this just makes that explicit instead
   // of leaking a raw DOMException out of an arbitrary call site. The dropped action isn't
   // retried, the disconnected state is already visible via `connected` (SessionContext resets

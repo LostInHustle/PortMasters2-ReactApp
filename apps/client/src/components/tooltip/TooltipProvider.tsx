@@ -4,11 +4,11 @@ import { createPortal } from 'react-dom';
 const GAP = 9; // breathing room between the element and the bubble
 const MARGIN = 8; // minimum distance the bubble keeps from any viewport edge
 
-// Ported verbatim from PortMasters2/PortMasters_online.html initTooltips (lines 4020-4092): one
-// shared, viewport-aware bubble. Delegated from `document` (via [data-tip] + closest()), so
-// re-rendered phase panels never need re-binding and every current/future data-tip element is
+// Mirrors PortMasters2/PortMasters_online.html initTooltips: one
+// shared, aware of the viewport bubble. Delegated from `document` (via [data-tip] + closest()), so
+// rendered again phase panels never need binding again and every current/future data-tip element is
 // covered with zero markup churn. Callers just write `data-tip="..."` like the original, no
-// hook or wrapper needed. The bubble is portal-rendered to document.body (no transform/filter
+// hook or wrapper needed. The bubble is rendered in a portal to document.body (no transform/filter
 // ancestor), so position:fixed is measured against the viewport and nothing can clip it. DOM
 // is manipulated directly via the ref, exactly like the original's imperative style.top/left
 // writes, rather than routing every pointer move through React state.

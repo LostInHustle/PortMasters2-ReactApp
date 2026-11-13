@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Phase 3 exit criterion (plan.md): an integration test driving a full round (and a full game)
+// Integration coverage: an integration test driving a full round (and a full game)
 // through SharedSession's real advance()/completeTradeGate(), asserting the exact phase sequence
 // from PortMasters2/server.py's mixed int/string phase enum (server.py:467).
 function driveOneRound(session: SharedSession): unknown[] {

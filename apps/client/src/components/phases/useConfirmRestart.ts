@@ -1,7 +1,7 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useWs } from '../../ws/WsContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html confirmRestart (lines 3341-3345),
+// Mirrors PortMasters2/PortMasters_online.html confirmRestart,
 // shared by BankruptcyView and EndgameView exactly as in the original.
 export function useConfirmRestart(): () => void {
   const { tr } = useTranslate();

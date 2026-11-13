@@ -33,7 +33,7 @@ describe('startHeartbeat', () => {
     client.close();
   });
 
-  it('keeps a normally-responsive client alive (ws auto-pongs by default)', async () => {
+  it('keeps a normally responsive client alive (ws responds with pong automatically by default)', async () => {
     stop = startHeartbeat(wss, 20);
     const client = new WebSocket(`ws://127.0.0.1:${port}`);
     await new Promise<void>((resolve) => client.once('open', () => resolve()));
@@ -58,11 +58,11 @@ describe('startHeartbeat', () => {
     );
   });
 
-  it('does not terminate before reaching the missed-ping threshold', async () => {
+  it('does not terminate before reaching the missed ping threshold', async () => {
     // Regression test: the original version of this heartbeat terminated on the very first
     // missed pong, which made a backgrounded tab or a moment of network jitter indistinguishable
     // from a dead connection. With maxMissedPings=3, two missed ticks (40ms at this interval)
-    // must NOT be enough to terminate, the old single-miss heartbeat would have already killed
+    // must NOT be enough to terminate, the old single missed pong heartbeat would have already killed
     // this connection by now.
     stop = startHeartbeat(wss, 20, 3);
     const client = new WebSocket(`ws://127.0.0.1:${port}`, { autoPong: false });

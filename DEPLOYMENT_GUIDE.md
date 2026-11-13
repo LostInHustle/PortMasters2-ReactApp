@@ -18,19 +18,19 @@ after clicking "Log In" or "Create Account."
 A quick scan of the code turns up `localhost:8080` in two places
 ([apps/client/vite.config.ts](apps/client/vite.config.ts) and
 [apps/server/src/main.ts](apps/server/src/main.ts)), so it's tempting to assume that's
-the bug. It isn't. Those are dev-only defaults: the Vite dev proxy target and the local
+the bug. It isn't. Those are defaults for development only: the Vite dev proxy target and the local
 fallback port. Neither one is reachable in production anyway, so fixing them wouldn't
 have changed anything.
 
 The actual problem is architectural, not a typo.
 
-The backend ([apps/server](apps/server)) is a single long-running Node process. It opens
+The backend ([apps/server](apps/server)) is a single long running Node process. It opens
 one `http.createServer`, attaches a `ws` `WebSocketServer` to that same socket, and keeps
 all game state (rooms, sessions, who's online) in memory for as long as the process stays
 alive. See [createHttpServer.ts](apps/server/src/http/createHttpServer.ts).
 
-Vercel cannot run that kind of process. Vercel Functions are short-lived and stateless:
-they spin up per request and don't hold a persistent socket connection or in-memory
+Vercel cannot run that kind of process. Vercel Functions are short lived and stateless:
+they spin up per request and don't hold a persistent socket connection or in memory
 state between requests. There's no setting that makes a `ws.WebSocketServer` work there;
 it's a platform limitation, not a misconfiguration.
 
@@ -57,19 +57,19 @@ code changes:
 
 | File                                                            | Change                                                                                                                            | Why                                                                                                                                                                                                                                                                 |
 | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [WsContext.tsx](apps/client/src/ws/WsContext.tsx)               | `wsUrl()` now reads `import.meta.env.VITE_WS_URL` if it's set, otherwise falls back to same-origin `/ws` as before                | The client needs to know the server's address now that it isn't the same domain. Falling back to same-origin keeps local dev working exactly like before.                                                                                                           |
+| [WsContext.tsx](apps/client/src/ws/WsContext.tsx)               | `wsUrl()` now reads `import.meta.env.VITE_WS_URL` if it's set, otherwise falls back to same origin `/ws` as before                | The client needs to know the server's address now that it isn't the same domain. Falling back to same origin keeps local dev working exactly like before.                                                                                                           |
 | [main.ts](apps/server/src/main.ts)                              | Added a `USERS_FILE_PATH` env var, falling back to the old local path                                                             | Railway wipes the container disk on every redeploy. Accounts need to live on a mounted persistent volume instead, so the path to that volume has to be configurable.                                                                                                |
 | [createHttpServer.ts](apps/server/src/http/createHttpServer.ts) | Added an `ALLOWED_ORIGINS` env var that restricts which origins can open a WebSocket connection, via `ws`'s `verifyClient` option | Once the server has its own public origin, anyone could otherwise point a browser at it from any site. Locking it to your own domain is the safer production default. Leaving it unset allows any origin, which matches the old behavior and is fine for local dev. |
-| `railway.json` (new)                                            | Pins Railway's build to `npm install` and the start command to `npm run start -w @pm2/server`                                     | Without this, Railway's auto-detection tried to also build the client, which was wasteful and, as it turned out, also wrong (see Problem 3 below).                                                                                                                  |
+| `railway.json` (new)                                            | Pins Railway's build to `npm install` and the start command to `npm run start -w @pm2/server`                                     | Without this, Railway's automatic detection tried to also build the client, which was wasteful and, as it turned out, also wrong (see Problem 3 below).                                                                                                             |
 | `apps/client/.env.example` (new)                                | Documents `VITE_WS_URL`                                                                                                           | So nobody has to rediscover this from scratch later.                                                                                                                                                                                                                |
 
-All 246 existing tests, typecheck, and lint passed unchanged. This was purely additive
-config, no game logic was touched.
+The full suite, now at 413 tests, plus typecheck and lint, all pass unchanged. This was
+purely additive config, no game logic was touched.
 
 ## 4. Problem: "the branch already merged, where did my changes go?"
 
-**What happened:** while these code changes were being made, a different, already
-in-progress release branch (`release/pm2-react-v1.0.0b2`) got merged into `main` through
+**What happened:** while these code changes were being made, a different, already in
+progress release branch (`release/pm2-react-v1.0.0b2`) got merged into `main` through
 PR #5. The deployment fix changes were uncommitted edits sitting in the working tree at
 the time, so they belonged to neither branch.
 
@@ -81,7 +81,7 @@ stashed or discarded.
 
 **The fix:** checked out `main` fresh (`git checkout main && git pull`), created a new
 branch off of it (`fix/vercel-railway-split`), and the uncommitted edits came along
-automatically (git carries working-tree changes across a checkout as long as they don't
+automatically (git carries working tree changes across a checkout as long as they don't
 conflict with the files changing). Committed there, pushed, opened PR #6, merged into
 `main`. Nothing was lost; it was never tied to a branch in the first place.
 
@@ -103,9 +103,9 @@ real project with a service that actually started building.
 
 ## 6. Problem: Railway created two services instead of one
 
-**What happened:** Railway auto-detected the npm-workspaces monorepo and split it into
+**What happened:** Railway auto detected the npm workspaces monorepo and split it into
 two separate services, one rooted at `apps/client` and one at `apps/server`, instead of
-using the root-level `railway.json`.
+using the root level `railway.json`.
 
 This mattered for two reasons. The `apps/client` service is pure waste: Vercel already
 serves the client, so this extra copy on Railway doesn't connect to anything real. More
@@ -154,7 +154,7 @@ redesigned since written instructions were last accurate.
 instructions to add `VITE_WS_URL`, it had never actually been saved.
 
 This caused the exact original symptom for a different reason. With no env var, the
-client fell back to its default same-origin `/ws` behavior, meaning it tried to talk to
+client fell back to its default same origin `/ws` behavior, meaning it tried to talk to
 `wss://www.portmasters2.guru/ws`, which (per Section 2) has no server behind it.
 
 **The fix:** added the variable for real, scoped to the Production environment
@@ -230,7 +230,7 @@ One catch: forcing this over HTTP/2 (curl's default when a server's TLS advertis
 gives a misleading `404`, because the `Upgrade` header doesn't carry the same meaning
 over HTTP/2. Always force `--http1.1` when testing a WebSocket handshake this way.
 
-## 12. Current status and what's still worth double-checking
+## 12. Current status and what's still worth double checking
 
 - Done: code merged to `main` (PR #6, commit `73f39d9`).
 - Done: Railway server confirmed live and responding correctly to WS handshakes.
@@ -245,7 +245,7 @@ over HTTP/2. Always force `--http1.1` when testing a WebSocket handshake this wa
   `https://www.portmasters2.guru,https://portmasters2.guru`). Without it, the server
   currently accepts WebSocket connections from any origin. Functionally fine, just not
   locked down.
-- Cleanup: the redundant Railway service auto-created for `apps/client` should be
+- Cleanup: the redundant Railway service automatically created for `apps/client` should be
   deleted if that hasn't happened yet. It does nothing useful and just burns Railway
   usage and build minutes.
 
@@ -257,7 +257,7 @@ over HTTP/2. Always force `--http1.1` when testing a WebSocket handshake this wa
 - **Railway** (or similar: Render, Fly.io) runs a real, persistent process. Good for
   WebSocket servers, background workers, anything stateful.
 - When a client and server live on different domains, the client needs to be told the
-  server's address explicitly (`VITE_WS_URL` here). Same-origin assumptions silently
+  server's address explicitly (`VITE_WS_URL` here). Same origin assumptions silently
   stop working.
 - Vite environment variables get baked in at build time, not read at runtime. Changing
   one always needs a fresh deploy to take effect.

@@ -23,8 +23,8 @@ export interface BrokerIntelContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py _reveal_intel (lines 837-848). Exported because
-// SharedSession.advance() (server.py's phase 5->1 branch) calls this directly for free-intel
+// Mirrors PortMasters2/server.py _reveal_intel. Exported because
+// SharedSession.advance() (server.py's phase 5->1 branch) calls this directly for free intel
 // boons, not only purchaseIntel below.
 export function revealIntel(ctx: BrokerIntelContext, rng: Rng, count: number): number {
   let revealed = 0;
@@ -40,7 +40,7 @@ export function revealIntel(ctx: BrokerIntelContext, rng: Rng, count: number): n
   return revealed;
 }
 
-// Ported verbatim from PortMasters2/server.py purchase_intel (lines 850-864): Broker's Network
+// Mirrors PortMasters2/server.py purchase_intel: Broker's Network
 // reveals 2 clues per purchase instead of 1, and Ocean Going Interpreter adds 1 more on top.
 export function purchaseIntel(ctx: BrokerIntelContext, rng: Rng): boolean {
   if (ctx.phase2DemandTags.length === 0) {
@@ -59,7 +59,7 @@ export function purchaseIntel(ctx: BrokerIntelContext, rng: Rng): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py _maybe_corrupt_broker (lines 866-874): in modes
+// Mirrors PortMasters2/server.py _maybe_corrupt_broker: in modes
 // with the hazard enabled, a paid whisper may come from a corrupt broker who tips off pirates,
 // raising this round's raid chance. Tips stack across the round.
 function maybeCorruptBroker(ctx: BrokerIntelContext, rng: Rng): void {

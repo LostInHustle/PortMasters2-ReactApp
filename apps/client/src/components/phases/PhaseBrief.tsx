@@ -8,7 +8,7 @@ import { DifficultyChip } from './DifficultyChip.js';
 
 const PHASE_META = new Map(PHASE_FLOW.map((p) => [p.key, p]));
 
-// Ported verbatim from PortMasters2/PortMasters_online.html phaseBriefHTML (lines 2522-2542).
+// Mirrors PortMasters2/PortMasters_online.html phaseBriefHTML.
 export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChips?: ReactNode }) {
   const { tr, pf, lang } = useTranslate();
   const { serverState } = useSession();

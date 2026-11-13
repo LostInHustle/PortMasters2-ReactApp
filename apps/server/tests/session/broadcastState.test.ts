@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { buildSessionState } from '../../src/session/broadcastState.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py SharedSession.broadcast_state
-// (lines 1450-1470): one state payload per recipient slot, "yours" vs "the other player's".
+// Expected behavior derived manually from PortMasters2/server.py SharedSession.broadcast_state:
+// one state payload per recipient slot, "yours" vs "the other player's".
 describe('buildSessionState', () => {
   it('puts the requested slot under yourGame/yourSlot and the other under otherGames/players', () => {
     const session = SharedSession.createPair('alice', 'bob');
@@ -31,7 +31,7 @@ describe('buildSessionState', () => {
     const forAlice = buildSessionState(session, 0, isOnline);
     expect(forAlice.youReady).toBe(true);
     expect(forAlice.players.find((p) => p.name === 'bob')!.online).toBe(true);
-    expect(forAlice.waitingForOther).toBe('已准备，等待对方点击继续...');
+    expect(forAlice.waitingForOther).toBe('已准备，等待其他玩家点击继续...');
     expect(forAlice.tradeOrders).toHaveLength(1);
     expect(forAlice.phaseReadyCount).toBe(1);
 

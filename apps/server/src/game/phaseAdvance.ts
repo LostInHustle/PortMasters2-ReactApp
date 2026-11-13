@@ -15,8 +15,8 @@ import { syncMonsoonState, type MonsoonSyncContext, type MonsoonSyncGame } from 
 import { boonPool } from './poolSelectors.js';
 import type { Rng } from './randomUtil.js';
 
-// The per-game surface advance() needs, layered on the two narrower contexts it delegates to
-// (BrokerIntelContext for the free-intel reveal, MonsoonSyncGame for the weather resync).
+// The for each game surface advance() needs, layered on the two narrower contexts it delegates to
+// (BrokerIntelContext for the free intel reveal, MonsoonSyncGame for the weather resync).
 export interface PhaseAdvanceGame extends BrokerIntelContext, MonsoonSyncGame {
   bankrupt: boolean;
   phase: Phase;
@@ -43,7 +43,7 @@ export interface PhaseAdvanceContext extends MonsoonSyncContext {
   ready: Set<number>;
 }
 
-// Ported verbatim from PortMasters2/server.py SharedSession._active_phase (lines 1236-1240):
+// Mirrors PortMasters2/server.py SharedSession._active_phase:
 // the session follows whichever player is still playing; if everyone has finished, it doesn't
 // matter which, so it falls back to games[0].
 export function activePhase(games: readonly PhaseAdvanceGame[]): Phase {
@@ -53,8 +53,8 @@ export function activePhase(games: readonly PhaseAdvanceGame[]): Phase {
   return games[0]!.phase;
 }
 
-// Ported verbatim from PortMasters2/server.py SharedSession._set_phase (lines 1242-1246):
-// players in an end state (bankrupt/finished) stay on their own end-game page and stop
+// Mirrors PortMasters2/server.py SharedSession._set_phase:
+// players in an end state (bankrupt/finished) stay on their own end game page and stop
 // following the session's phase progression.
 export function setPhase(games: readonly PhaseAdvanceGame[], phase: Phase): void {
   for (const g of games) {
@@ -62,10 +62,10 @@ export function setPhase(games: readonly PhaseAdvanceGame[], phase: Phase): void
   }
 }
 
-// Ported verbatim from PortMasters2/server.py SharedSession.advance (lines 1275-1345): once
-// both players are ready, the whole session advances to the next phase together. This is the
-// plan's named file-size-ceiling exception, one linear phase-sequencing function, kept as a
-// single if/else-if chain mirroring the Python if/elif chain branch-for-branch, since splitting
+// Mirrors PortMasters2/server.py SharedSession.advance: once
+// every captain is ready, the whole session advances to the next phase together. This is the
+// one linear phase sequencing function, kept as a
+// single if/else if chain mirroring the Python if/elif chain branch for branch, since splitting
 // it further would scatter genuinely cohesive sequencing logic across files.
 export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
   const phase = activePhase(ctx.games);
@@ -82,7 +82,7 @@ export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
       g.boonChoices = pool.slice(0, 4);
     }
   } else if (phase === 5) {
-    // Procure: deal this round's resource hand, roll fresh demand-intel tags, and reveal any
+    // Procure: deal this round's resource hand, roll fresh demand intel tags, and reveal any
     // free intel a boon granted.
     setPhase(ctx.games, 1);
     for (const g of ctx.games) {
@@ -149,7 +149,7 @@ export function advance(ctx: PhaseAdvanceContext, rng: Rng): void {
       if (!g.gameOver) g.phase = 4;
     }
   } else if (phase === 4) {
-    // Shipyard closes the round: settle income tax and reset per-round counters, then either
+    // Shipyard closes the round: settle income tax and reset each round counters, then either
     // start the next round or end the game.
     for (const g of ctx.games) {
       if (!g.gameOver) {

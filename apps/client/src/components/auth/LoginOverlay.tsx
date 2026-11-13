@@ -6,8 +6,8 @@ import { LangToggle } from '../layout/LangToggle.js';
 import { LoginForm } from './LoginForm.js';
 import { RegisterForm } from './RegisterForm.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html's #login-overlay markup
-// (lines 1216-1239) and applyLanguage's login section (lines 1759-1773). The original toggled
+// Mirrors PortMasters2/PortMasters_online.html's #login-overlay markup
+// and applyLanguage's login section. The original toggled
 // the inner login-form/register-form via display:none; here LoginOverlay swaps the rendered
 // form. The language toggle lives here (the original's btn-lang-login) so a player can switch to
 // Chinese before ever logging in.

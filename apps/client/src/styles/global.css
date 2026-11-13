@@ -124,7 +124,7 @@ a {
   background: rgba(56, 189, 248, 0.3);
 }
 
-/* ---- Main layout: left = me, center = stage, right = partner ---- */
+/* ---- Main layout: left = me, center = stage, right = fellow captains ---- */
 #app {
   max-width: 1720px;
   margin: 0 auto;
@@ -228,7 +228,7 @@ a {
   font-weight: 600;
 }
 
-/* ---- Sidebars (both players' fleet status) ---- */
+/* ---- Sidebars (every captain's fleet status) ---- */
 .side-panel {
   padding: 14px;
   overflow-y: auto;
@@ -502,7 +502,7 @@ a {
 }
 
 /* ---- Center stage ---- */
-/* Top inset matches .side-panel so the three panels sharing this grid row (me / main / partner)
+/* Top inset matches .side-panel so the three panels sharing this grid row (me / main / fellows)
    start their first line of content on the same baseline. */
 .phase-panel {
   grid-area: main;

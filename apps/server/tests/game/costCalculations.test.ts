@@ -24,10 +24,10 @@ describe('hasModule', () => {
   });
 });
 
-// Expected values hand-derived from calc_transport_cost (server.py lines 515-529):
-// base = totalItems * 2; discount = shipLevel * 5 (+ flat-discount flag); floored at 5/0.
+// Expected values derived manually from calc_transport_cost:
+// base = totalItems * 2; discount = shipLevel * 5 (+ flat discount flag); floored at 5/0.
 describe('calcTransportCost', () => {
-  it('is totalItems * 2 minus ship-level discount, floored at 5', () => {
+  it('is totalItems * 2 minus ship level discount, floored at 5', () => {
     const ctx = { shipLevel: 0, modifierFlags: {}, equippedModules: [] };
     expect(calcTransportCost(ctx, 10)).toBe(20);
     expect(calcTransportCost(ctx, 2)).toBe(5); // 4 - 0 floored up to the 5 minimum
@@ -50,11 +50,11 @@ describe('calcTransportCost', () => {
   });
 });
 
-// Expected value hand-derived from calc_vat (server.py lines 531-544) for 麻衣
+// Expected value derived manually from calc_vat for 麻衣
 // (materials {麻布: 2}, weaver): matCost = avg(3,6)*2 = 9, workerCost = WAGES.weaver = 8.
 // sellingPrice 50 -> taxable 33 -> vat = trunc(33 * 0.05) = 1.
 describe('calcVat', () => {
-  it('matches the hand-derived VAT for 麻衣 at sellingPrice 50', () => {
+  it('matches the derived manually VAT for 麻衣 at sellingPrice 50', () => {
     const ctx = { equippedModules: [], modifierFlags: {} };
     expect(calcVat(ctx, '麻衣', 50)).toBe(1);
   });
@@ -71,10 +71,10 @@ describe('calcVat', () => {
   });
 });
 
-// Expected values hand-derived from calc_income_tax (server.py lines 546-552): rate defaults
+// Expected values derived manually from calc_income_tax: rate defaults
 // to 0.1, smugglers_hold multiplies by 1.2, tax_evasion multiplies by 0.5, both truncated.
 describe('calcIncomeTax', () => {
-  it('is 0 for non-positive pre-tax income', () => {
+  it('is 0 for nonpositive pretax income', () => {
     const ctx = { equippedModules: [], modifierFlags: {} };
     expect(calcIncomeTax(ctx, 0)).toBe(0);
     expect(calcIncomeTax(ctx, -50)).toBe(0);
@@ -96,7 +96,7 @@ describe('calcIncomeTax', () => {
   });
 });
 
-// Expected values hand-derived from get_card_final_cost (server.py lines 557-575).
+// Expected values derived manually from get_card_final_cost.
 describe('getCardFinalCost', () => {
   it('applies purchase_discount, floored at 0', () => {
     const ctx = { equippedModules: [], modifierFlags: { purchaseDiscount: 0.15 } };
@@ -129,10 +129,10 @@ describe('getCardFinalCost', () => {
   });
 });
 
-// The per-line prices a Procure card should display must reflect the same item-specific
+// The for each line prices a Procure card should display must reflect the same item specific
 // discounts getCardFinalCost charges, so the two can never tell the player different numbers.
 describe('getCardResourceUnitPrices', () => {
-  it('matches the unit price unchanged when no item-specific discount is active', () => {
+  it('matches the unit price unchanged when no item specific discount is active', () => {
     const ctx = { equippedModules: [], modifierFlags: {} };
     const card = {
       port: '泉州港' as const,
@@ -162,7 +162,7 @@ describe('getCardResourceUnitPrices', () => {
     expect(getCardResourceUnitPrices(ctx, card)).toEqual([3, 2, 7, 10]);
   });
 
-  it('does not distribute card-wide discounts (purchaseDiscount, smugglers_hold) onto a line', () => {
+  it('does not distribute card wide discounts (purchaseDiscount, smugglers_hold) onto a line', () => {
     const ctx = {
       equippedModules: withModules('smugglers_hold'),
       modifierFlags: { purchaseDiscount: 0.15 },
@@ -188,7 +188,7 @@ describe('getCardResourceUnitPrices', () => {
   });
 });
 
-// Expected values hand-derived from get_hire_cost (server.py lines 577-581): WAGES.weaver = 8.
+// Expected values derived manually from get_hire_cost: WAGES.weaver = 8.
 describe('getHireCost', () => {
   it('returns the base wage with no modifiers', () => {
     expect(getHireCost({ modifierFlags: {}, equippedModules: [] }, 'weaver')).toBe(8);
@@ -201,7 +201,7 @@ describe('getHireCost', () => {
   });
 });
 
-// Expected values hand-derived from escort_cost (server.py lines 972-977):
+// Expected values derived manually from escort_cost:
 // fee = max(ESCORT_COST_MIN=10, trunc(money * 0.10)).
 describe('escortCost', () => {
   it('floors at ESCORT_COST_MIN for low balances', () => {

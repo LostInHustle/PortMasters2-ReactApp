@@ -7,7 +7,7 @@ function makeWorker(overrides: Partial<Worker> = {}): Worker {
   return { task: null, progress: 0, producedCount: 0, isSkilled: false, ...overrides };
 }
 
-// Expected shape hand-derived from PlayerGame.to_dict() (PortMasters2/server.py lines 1073-1129).
+// Expected shape derived manually from PlayerGame.to_dict().
 describe('serializePlayerGame', () => {
   it('sends monsoon_state and pirate_immunity in snake_case, matching the original frontend', () => {
     const game = new PlayerGame('easy');
@@ -65,7 +65,7 @@ describe('serializePlayerGame', () => {
     expect(serializePlayerGame(game).charterEvent?.id).toBe('tier1');
   });
 
-  it('reports brokerCorruption from the difficulty config, not per-instance state', () => {
+  it('reports brokerCorruption from the difficulty config, not state stored per instance', () => {
     expect(serializePlayerGame(new PlayerGame('easy')).brokerCorruption).toBe(false);
     expect(serializePlayerGame(new PlayerGame('hard')).brokerCorruption).toBe(true);
   });
@@ -94,7 +94,7 @@ describe('serializePlayerGame', () => {
     expect(card.effectiveCost).toBeLessThan(card.totalCost);
     expect(card.resources[0]!.price).toBe(5); // sticker unit price is untouched
     expect(card.resources[0]!.effectivePrice).toBe(3); // hemp: -2/unit
-    expect(card.resources[1]!.effectivePrice).toBe(10); // silk: no item-specific discount
+    expect(card.resources[1]!.effectivePrice).toBe(10); // silk: no item specific discount
   });
 
   it('leaves effectiveCost equal to totalCost when no discount is active', () => {

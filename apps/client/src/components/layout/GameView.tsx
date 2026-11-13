@@ -8,11 +8,10 @@ import { RosterPanel } from '../panels/RosterPanel.js';
 import { StatusPanel } from '../panels/StatusPanel.js';
 import { Header } from './Header.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html #app's panel layout
-// (lines 1208-1213): side-by-side status/phase/roster panels, with the control bar and log
-// below. maybeShowOnboarding() (lines 1968, 1976) fires once, the first time a session is
+// Mirrors PortMasters2/PortMasters_online.html #app's panel layout: status/phase/roster panels
+// side by side, with the control bar and log below. maybeShowOnboarding() fires once, the first time a session is
 // entered; this component only ever mounts as a result of that same transition (serverState
-// becoming set), so a mount-time effect is the equivalent trigger point.
+// becoming set), so a mount time effect is the equivalent trigger point.
 export function GameView() {
   const { openModal } = useModal();
 

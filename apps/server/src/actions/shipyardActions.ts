@@ -4,9 +4,9 @@ function isInt(value: unknown): value is number {
   return typeof value === 'number' && Number.isInteger(value);
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's upgradeShip branch
-// (lines 1693-1699): changed is set whenever the player is in Shipyard with levels remaining,
-// regardless of whether they could actually afford the upgrade.
+// Mirrors PortMasters2/server.py handle_game_action's upgradeShip branch: changed is set whenever
+// the player is in Shipyard with levels remaining, regardless of whether they could actually
+// afford the upgrade.
 export function handleUpgradeShip(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 4 || game.shipLevel >= 3) return false;
@@ -18,8 +18,7 @@ export function handleUpgradeShip(sess: SharedSession, slot: number): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's draftModules branch
-// (lines 1700-1703).
+// Mirrors PortMasters2/server.py handle_game_action's draftModules branch
 export function handleDraftModules(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 4) return false;
@@ -27,8 +26,7 @@ export function handleDraftModules(sess: SharedSession, slot: number): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's equipModule branch
-// (lines 1704-1713).
+// Mirrors PortMasters2/server.py handle_game_action's equipModule branch
 export function handleEquipModule(
   sess: SharedSession,
   slot: number,
@@ -46,8 +44,7 @@ export function handleEquipModule(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's cancelModuleDraft branch
-// (lines 1714-1717): hides the panel; the batch persists so reopening can't reroll.
+// Mirrors PortMasters2/server.py handle_game_action's cancelModuleDraft branch hides the panel; the batch persists so reopening can't reroll.
 export function handleCancelModuleDraft(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 4) return false;
@@ -55,8 +52,7 @@ export function handleCancelModuleDraft(sess: SharedSession, slot: number): bool
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's rerollModuleDraft branch
-// (lines 1718-1721).
+// Mirrors PortMasters2/server.py handle_game_action's rerollModuleDraft branch
 export function handleRerollModuleDraft(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 4) return false;

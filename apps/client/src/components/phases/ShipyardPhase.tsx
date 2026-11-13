@@ -5,7 +5,7 @@ import { Modules } from '../panels/FleetCard.js';
 import { ModuleDraft } from './ModuleDraft.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html shipyardHTML (lines 3129-3167).
+// Mirrors PortMasters2/PortMasters_online.html shipyardHTML.
 export function ShipyardPhase() {
   const { tr } = useTranslate();
   const { serverState } = useSession();

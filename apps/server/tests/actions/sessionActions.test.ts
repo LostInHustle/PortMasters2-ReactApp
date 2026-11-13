@@ -17,8 +17,8 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// join_game/ready_for_next_phase/restart branches (lines 1597-1598, 1616-1621, 1722-1730).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// join_game/ready_for_next_phase/restart branches.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -68,17 +68,17 @@ describe('handleRestart', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("refuses to restart while the partner's game is still in progress", () => {
+  it('refuses to restart while another game is still in progress', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
     const sess = SharedSession.createPair('alice', 'bob');
     expect(handleRestart(state, sess, 0, 'alice')).toBe(false);
     expect(alice.sent).toEqual([
-      { type: 'system_message', message: '需等待对方完成本局后才能重新起航' },
+      { type: 'system_message', message: '需等待其他玩家完成本局后才能重新起航' },
     ]);
   });
 
-  it("restarts once the partner's game has ended, notifying the partner", () => {
+  it('restarts once every other game has ended, notifying the others', () => {
     const bob = new FakeSocket();
     state.online.set('bob', bob);
     const sess = SharedSession.createPair('alice', 'bob');
@@ -88,11 +88,11 @@ describe('handleRestart', () => {
     expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
     expect(sess.games[0]!.money).toBe(100);
     expect(bob.sent).toEqual([
-      { type: 'system_message', message: '对方重新开始了游戏，双方进度已重置' },
+      { type: 'system_message', message: '其他玩家重新开始了游戏，本局进度已重置' },
     ]);
   });
 
-  it('in a 3-player room, requires every other player (not just one) to have finished', () => {
+  it('in a room of 3, requires every other player (not just one) to have finished', () => {
     const sess = new SharedSession('alice', 'easy', 3);
     sess.addPlayer('bob');
     sess.addPlayer('carol');
@@ -127,7 +127,7 @@ describe('handleEndSessionVote / endGameSession', () => {
     expect(sess.endVoteComplete()).toBe(true);
   });
 
-  it('does not auto-count a bankrupt/finished player, everyone must vote explicitly', () => {
+  it('does not count automatically a bankrupt/finished player, everyone must vote explicitly', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[1]!.gameOver = true;
     sess.games[1]!.bankrupt = true;

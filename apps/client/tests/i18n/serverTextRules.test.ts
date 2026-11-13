@@ -7,16 +7,16 @@ import { lst } from '../../src/i18n/serverTextRules.js';
 // Root cause of "log messages appear only in Mandarin": the server always emits its log/system
 // messages in canonical Chinese (see serverTextRules.ts's header comment for why, the two
 // players in a session may have different language settings, so translation has to happen on
-// each client, not the server). SERVER_TEXT_RULES is a hand-maintained, flat regex table that
+// each client, not the server). SERVER_TEXT_RULES is a maintained by hand, flat regex table that
 // has to be kept in sync, by a human remembering, with every Chinese string literal scattered
 // across a dozen server files. Nothing enforced that sync; a new or edited server log line
 // silently had no translation until a player happened to notice raw Chinese in an English UI.
 // This test closes that gap: it statically scans the actual server source for every
 // `ctx.log(...)`/`message: ...` string that contains Chinese text, and asserts lst() produces
-// fully-English output for each one. A future server log line with no matching rule now fails
+// fully English output for each one. A future server log line with no matching rule now fails
 // `npm test` immediately, in the same change that introduced it, instead of shipping silently.
 //
-// This is a source-text scan, not a full TypeScript AST analysis. It covers the two call
+// This is a source text scan, not a full TypeScript AST analysis. It covers the two call
 // shapes every translated message actually goes through in this codebase (verified by grep when
 // this test was written), not arbitrary code. If a future message is constructed some other way,
 // add its shape to MESSAGE_PATTERN below.
@@ -39,13 +39,13 @@ function listTsFiles(dir: string): string[] {
 
 // `${...}` placeholders get replaced with a representative dummy value, the regex rules in
 // serverTextRules.ts match the surrounding literal text, not the interpolated value, so any
-// non-empty placeholder exercises the same rule the real value would.
+// nonempty placeholder exercises the same rule the real value would.
 function withDummyValues(template: string): string {
   return template.replace(/\$\{[^}]*\}/g, '7');
 }
 
 function findChineseMessageTemplates(): Map<string, string> {
-  const templates = new Map<string, string>(); // template -> relative file path, de-duplicated
+  const templates = new Map<string, string>(); // template -> relative file path, deduplicated
   for (const file of listTsFiles(SERVER_SRC)) {
     const source = readFileSync(file, 'utf-8');
     for (const match of source.matchAll(MESSAGE_PATTERN)) {
@@ -58,7 +58,7 @@ function findChineseMessageTemplates(): Map<string, string> {
   return templates;
 }
 
-describe('every server-emitted message has an English translation', () => {
+describe('every server emitted message has an English translation', () => {
   const templates = findChineseMessageTemplates();
 
   // Sanity check on the scanner itself: if this drops to 0, MESSAGE_PATTERN or SERVER_SRC broke,

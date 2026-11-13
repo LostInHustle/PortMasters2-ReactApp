@@ -3,7 +3,7 @@
 // reaches the server, and each captain in a room can choose differently.
 //
 // The mode lives in React state (LangContext owns it, so every component that already
-// re-renders on a language change also re-renders on an icon change). This module keeps a
+// renders on a language change also renders on an icon change). This module keeps a
 // mirror of that state for the icon tables, which are plain objects read during render: a
 // table built with modeAware() answers each lookup from the emoji set or the character set
 // according to the mirror, so the many existing `ITEM_ICONS[item]` call sites need no change.

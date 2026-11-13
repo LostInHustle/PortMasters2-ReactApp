@@ -31,8 +31,8 @@ export interface SessionMessageDeps {
 }
 
 /**
- * Ported from PortMasters2/PortMasters_online.html setupWebSocketHandlers' onmessage dispatch
- * (lines 1940-2052). The original mutates module globals and then manually redraws
+ * Mirrors PortMasters2/PortMasters_online.html setupWebSocketHandlers' onmessage dispatch
+ *. The original mutates module globals and then manually redraws
  * (renderOnlineUsers/renderAll/...); here each branch produces a state transition and React
  * redraws whatever depends on it.
  *
@@ -113,7 +113,7 @@ export function handleServerMessage(deps: SessionMessageDeps, msg: ServerMessage
       setState((s) => ({ ...s, lastInviteTo: null }));
       send({ action: 'join_game' });
       showNotification(
-        say(`已加入游戏，伙伴: ${msg.partner}`, `Joined the game, partner: ${msg.partner}`),
+        say(`已加入航程，同行: ${msg.partner}`, `Joined the voyage with ${msg.partner}`),
       );
       break;
 
@@ -183,7 +183,7 @@ export function handleServerMessage(deps: SessionMessageDeps, msg: ServerMessage
 
     case 'chat_message': {
       // Generalized from PortMasters2/PortMasters_online.html's chat_message handler
-      // (lines 2014-2021) from a 1:1 DM to a room broadcast: the server only ever relays this
+      // from a 1:1 DM to a room broadcast: the server only ever relays this
       // to genuine room members, so the client trusts it rather than checking again against a
       // single "chatPartner" that no longer exists in a room of up to 5.
       const from = msg.from as string;
@@ -212,8 +212,8 @@ export function handleServerMessage(deps: SessionMessageDeps, msg: ServerMessage
 }
 
 /**
- * Ported verbatim from PortMasters2/PortMasters_online.html maybeToastNewLogs
- * (lines 1844-1859): logSeq is a monotonic count of this game's log lines, so only lines added
+ * Mirrors PortMasters2/PortMasters_online.html maybeToastNewLogs
+ *: logSeq is a monotonic count of this game's log lines, so only lines added
  * since the last state get toasted, and a restart (where the counter drops) resyncs silently
  * instead of replaying the whole backlog.
  */

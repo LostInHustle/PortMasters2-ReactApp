@@ -8,10 +8,10 @@ import { CrewSections } from './FleetCard.js';
 
 const NO_DUE_PHASES = new Set<unknown>([0, 5, 'endgame', 'bankruptcy']);
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderStatus (lines 2410-2448):
+// Mirrors PortMasters2/PortMasters_online.html renderStatus:
 // your own fleet card, plus a "due this round" breakdown once wages/upkeep are pending. Wages
-// and upkeep are both read straight off the server-computed estimatedWages/fixedCost/
-// maintenancePenalty fields rather than re-derived here, so this can never drift from what
+// and upkeep are both read straight off the server computed estimatedWages/fixedCost/
+// maintenancePenalty fields rather than derived again here, so this can never drift from what
 // payWages/payMaintenance actually charge at settlement (see costCalculations.ts/production.ts).
 export function StatusPanel() {
   const { tr } = useTranslate();
@@ -35,7 +35,7 @@ export function StatusPanel() {
         <div className="who">
           <div className="nm">{currentUser || tr('我', 'Me')}</div>
           <div className="role">
-            {tr('我的商队', 'My fleet')}
+            {tr('我的船队', 'My fleet')}
             {tr(' · ', ', ')}
             {g.slot ? tr('玩家', 'Player ') + g.slot : ''}
           </div>

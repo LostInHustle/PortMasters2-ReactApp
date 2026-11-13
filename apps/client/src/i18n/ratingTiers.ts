@@ -2,17 +2,17 @@ import type { Difficulty } from '@pm2/shared';
 import type { Bilingual, Lang } from './LangContext.js';
 import { pf } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html RATING_TIERS (lines 1331-1353):
+// Mirrors PortMasters2/PortMasters_online.html RATING_TIERS:
 // endgame rating thresholds per difficulty, lowest to highest. Renown (cumulative net profit of
 // delivered orders) scales with voyage length and goods value, so each difficulty needs its own
-// thresholds, a 16-round hard voyage earns far more than an 8-round easy one.
+// thresholds, a hard voyage of 16 rounds earns far more than an easy one of 8 rounds.
 export interface RatingTier {
   min: number;
   full: Bilingual;
   short: Bilingual;
 }
 
-export const RATING_TIERS: Record<Difficulty, RatingTier[]> = {
+const RATING_TIERS: Record<Difficulty, RatingTier[]> = {
   easy: [
     {
       min: 0,
@@ -101,7 +101,7 @@ export function ratingTiers(difficulty: Difficulty): RatingTier[] {
 }
 
 // The highest tier whose threshold the score has reached.
-export function ratingTierFor(score: number, difficulty: Difficulty): RatingTier {
+function ratingTierFor(score: number, difficulty: Difficulty): RatingTier {
   let chosen = ratingTiers(difficulty)[0]!;
   for (const t of ratingTiers(difficulty)) {
     if (score >= t.min) chosen = t;

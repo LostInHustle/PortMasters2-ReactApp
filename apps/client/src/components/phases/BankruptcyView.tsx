@@ -4,7 +4,7 @@ import { useSpectate } from '../../state/SpectateContext.js';
 import { Pm1Hint } from './Pm1Hint.js';
 import { useConfirmRestart } from './useConfirmRestart.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html bankruptcyHTML (lines 3295-3319).
+// Mirrors PortMasters2/PortMasters_online.html bankruptcyHTML.
 export function BankruptcyView() {
   const { tr } = useTranslate();
   const { serverState } = useSession();
@@ -26,7 +26,7 @@ export function BankruptcyView() {
       </div>
       <p style={{ color: 'var(--ink-soft)', margin: '8px 0' }}>
         {tr(
-          '现金无法覆盖工资或维护费，商队被迫清算。',
+          '现金无法覆盖工资或维护费，船队被迫清算。',
           'Your gold could not cover wages or upkeep, so the fleet has been liquidated.',
         )}
       </p>

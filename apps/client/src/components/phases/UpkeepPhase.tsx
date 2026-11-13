@@ -4,7 +4,7 @@ import { useWs } from '../../ws/WsContext.js';
 import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html maintenanceHTML (lines 3085-3127).
+// Mirrors PortMasters2/PortMasters_online.html maintenanceHTML.
 export function UpkeepPhase() {
   const { tr } = useTranslate();
   const { serverState } = useSession();

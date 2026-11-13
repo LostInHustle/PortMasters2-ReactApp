@@ -5,7 +5,7 @@ import { handleConnection } from '../ws/connectionHandler.js';
 import { startHeartbeat } from '../ws/heartbeat.js';
 import { resolveStaticFile } from './staticFileHandler.js';
 
-// Ported from PortMasters2/server.py main()/process_request (lines 1821-1856): one server
+// Mirrors PortMasters2/server.py main()/process_request: one server
 // shares the web port between static file serving and the WebSocket endpoint, the same dual
 // role the original gets from a single `websockets.serve(..., process_request=...)` call.
 export function createAppServer(
@@ -19,7 +19,7 @@ export function createAppServer(
     res.end(body);
   });
 
-  // No allow-list (local dev) accepts any origin, same as before this option existed.
+  // No allow list (local dev) accepts any origin, same as before this option existed.
   const verifyClient: VerifyClientCallbackSync | undefined = allowedOrigins
     ? (info) => allowedOrigins.includes(info.origin)
     : undefined;

@@ -4,10 +4,9 @@ import { useModal } from '../components/modal/ModalContext.js';
 import { useSession } from '../state/SessionContext.js';
 import { useSpectate } from '../state/SpectateContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html's global keydown listener
-// (lines 4005-4018): F1 opens the manual; Escape closes whichever of modal/spectate/chat is
-// currently on top, in that fixed priority order, so a single press only ever closes one
-// layer.
+// Mirrors PortMasters2/PortMasters_online.html's global keydown listener: F1 opens the manual,
+// and Escape closes whichever of modal/spectate/chat is currently on top, in that fixed priority
+// order, so a single press only ever closes one layer.
 export function useKeyboardShortcuts(): void {
   const openManual = useOpenManual();
   const { isOpen: modalOpen, closeModal } = useModal();

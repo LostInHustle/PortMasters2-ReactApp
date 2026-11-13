@@ -1,17 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { PlayerGame } from '../../src/game/PlayerGame.js';
 
-// Expected values hand-derived from PlayerGame.__init__ (PortMasters2/server.py lines 442-493).
+// Expected values derived manually from PlayerGame.__init__ behavior.
 describe('PlayerGame constructor', () => {
-  it('defaults to easy difficulty with its rounds/tier-unlock schedule', () => {
+  it('defaults to a fresh easy voyage with the founding loadout', () => {
     const game = new PlayerGame();
+
     expect(game.difficulty).toBe('easy');
     expect(game.maxRounds).toBe(8);
     expect(game.tierUnlock).toEqual({});
-  });
-
-  it('sets the starting money/score/round and fixed costs', () => {
-    const game = new PlayerGame();
     expect(game.money).toBe(100);
     expect(game.score).toBe(0);
     expect(game.currentRound).toBe(1);
@@ -21,37 +18,25 @@ describe('PlayerGame constructor', () => {
     expect(game.phase).toBe(0);
     expect(game.intelCost).toBe(5);
     expect(game.slot).toBeNull();
-  });
 
-  it('seeds the starting inventory with 8 hemp / 5 silk / 3 tea and 0 everything else', () => {
-    const game = new PlayerGame();
     expect(game.inventory['麻布']).toBe(8);
     expect(game.inventory['丝绸']).toBe(5);
     expect(game.inventory['茶叶']).toBe(3);
     expect(game.inventory['瓷土']).toBe(0);
     expect(game.inventory['麻衣']).toBe(0);
-  });
 
-  it('starts on the spring_current monsoon state (MONSOON_STATES[0])', () => {
-    const game = new PlayerGame();
     expect(game.monsoonState?.id).toBe('spring_current');
     expect(game.monsoonState?.pirateRisk).toBeCloseTo(0.1);
-  });
-
-  it('starts every worker roster empty', () => {
-    const game = new PlayerGame();
     expect(game.workers.weaver).toEqual([]);
     expect(game.workers.master).toEqual([]);
     expect(game.workers.jeweler).toEqual([]);
   });
 
-  it('normalizes an unknown difficulty to easy', () => {
+  it('normalizes an unknown difficulty and honors the harder schedules', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const game = new PlayerGame('bogus' as any);
     expect(game.difficulty).toBe('easy');
-  });
 
-  it('honors standard/hard difficulty schedules', () => {
     const standard = new PlayerGame('standard');
     expect(standard.maxRounds).toBe(12);
     expect(standard.tierUnlock).toEqual({ 1: 4, 2: 8 });
@@ -62,7 +47,7 @@ describe('PlayerGame constructor', () => {
   });
 });
 
-// Expected values hand-derived from end_round (PortMasters2/server.py lines 1025-1071).
+// Expected values derived manually from end_round behavior.
 describe('PlayerGame.endRound', () => {
   it('settles income tax, snapshots lastRoundSummary, and resets round counters', () => {
     const game = new PlayerGame('easy');
@@ -70,17 +55,18 @@ describe('PlayerGame.endRound', () => {
     game.roundCosts = 50;
     game.maintenanceCosts = 15;
     game.workerWages = 10;
-    // preTax = 200 - 50 - 15 - 10 = 125 -> tax = trunc(125 * 0.1) = 12
+    // roundCosts already includes wages and maintenance: preTax = 200 - 50 = 150
+    // tax = trunc(150 * 0.1) = 15
     game.endRound();
 
-    expect(game.money).toBe(88); // 100 - 12
-    expect(game.incomeTaxPaid).toBe(12);
+    expect(game.money).toBe(85); // 100 - 15
+    expect(game.incomeTaxPaid).toBe(15);
     expect(game.lastRoundSummary).toEqual({
       round: 1,
       revenue: 200,
       costs: 50,
-      incomeTax: 12,
-      money: 88,
+      incomeTax: 15,
+      money: 85,
       score: 0,
     });
     expect(game.currentRound).toBe(2);
@@ -103,7 +89,7 @@ describe('PlayerGame.endRound', () => {
     expect(game.lastRoundSummary?.incomeTax).toBe(5);
   });
 
-  it('flags gameOver once currentRound passes maxRounds, skipping the next-round reset', () => {
+  it('flags gameOver once currentRound passes maxRounds, skipping the next round reset', () => {
     const game = new PlayerGame('easy');
     game.currentRound = game.maxRounds; // 8
     game.phase = 3;

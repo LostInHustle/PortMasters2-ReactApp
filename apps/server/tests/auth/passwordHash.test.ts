@@ -5,7 +5,7 @@ describe('hashPassword', () => {
   // Test vector computed independently with Python's actual hashlib.pbkdf2_hmac (not this
   // port): hashlib.pbkdf2_hmac('sha256', b'correct horse battery staple',
   // bytes.fromhex('0123456789abcdef0123456789abcdef'), 100000).hex(). Confirms this port
-  // produces a byte-identical digest to PortMasters2/server.py's UserStore._hash.
+  // produces a byte identical digest to PortMasters2/server.py's UserStore._hash.
   it('matches a PBKDF2-HMAC-SHA256 digest computed by Python hashlib', () => {
     const salt = '0123456789abcdef0123456789abcdef';
     const hash = hashPassword('correct horse battery staple', salt);

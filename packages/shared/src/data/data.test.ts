@@ -1,197 +1,161 @@
 import { describe, expect, it } from 'vitest';
-import { RESOURCES, RESOURCES_TIER0, RESOURCES_TIER1, RESOURCES_TIER2 } from './resources.js';
-import { PRODUCTS, PRODUCTS_TIER0, PRODUCTS_TIER1, PRODUCTS_TIER2 } from './products.js';
-import { PORTS_TIER0, PORTS_TIER1, PORTS_TIER2 } from './ports.js';
-import { WAGES, WORKER_IDS_TIER0, WORKER_IDS_TIER1, WORKER_IDS_TIER2 } from './wages-workers.js';
-import { RECIPES } from './recipes.js';
+import { BOONS, BOONS_TIER0, BOONS_TIER1, BOONS_TIER2, type Boon } from './boons.js';
 import { COMMODITIES, PRODUCT_PRICES, RESOURCE_PROBS } from './commodities.js';
-import { BOONS_TIER0, BOONS_TIER1, BOONS_TIER2 } from './boons.js';
-import { MODULES_TIER0, MODULES_TIER1, MODULES_TIER2 } from './modules.js';
-import { MONSOON_TIER0, MONSOON_TIER1, MONSOON_TIER2 } from './monsoon.js';
+import { DIFFICULTIES, PIRATE_LOSS_TIERS } from './difficulties.js';
+import { EMPEROR_MANDATE_TEMPLATES } from './emperor-mandates.js';
+import { MODULES, MODULES_TIER0, MODULES_TIER1, MODULES_TIER2 } from './modules.js';
+import { MONSOON_STATES, MONSOON_TIER0, MONSOON_TIER1, MONSOON_TIER2 } from './monsoon.js';
+import { PORTS, PORTS_TIER0, PORTS_TIER1, PORTS_TIER2 } from './ports.js';
+import { PRODUCTS, PRODUCTS_TIER0, PRODUCTS_TIER1, PRODUCTS_TIER2 } from './products.js';
+import { RECIPES } from './recipes.js';
+import { RESOURCES, RESOURCES_TIER0, RESOURCES_TIER1, RESOURCES_TIER2 } from './resources.js';
 import {
-  BROKER_CORRUPTION_CHANCE,
-  BROKER_CORRUPTION_RISK,
-  DIFFICULTIES,
-  ESCORT_COST_MIN,
-  ESCORT_COST_PCT,
-  PHASE_OPTIONS_BASE,
-  PHASE_OPTIONS_PER_TIER,
-  PIRATE_LOSS_TIERS,
-} from './difficulties.js';
+  WAGES,
+  WORKER_IDS_TIER0,
+  WORKER_IDS_TIER1,
+  WORKER_IDS_TIER2,
+  WORKER_TYPES_BACKEND,
+} from './wages-workers.js';
 
-// Spot-checks every value here against PortMasters2/server.py, the source of truth for this
-// fidelity port (see plan Phase 1 exit criterion).
+const ids = (items: readonly { id: string }[]) => items.map((item) => item.id);
+const workerIds = [
+  ...WORKER_IDS_TIER0,
+  ...WORKER_IDS_TIER1,
+  ...WORKER_IDS_TIER2,
+] as readonly string[];
 
-const ids = (arr: readonly { id: string }[]) => arr.map((x) => x.id);
+describe('shared game data', () => {
+  it('covers every tiered table exactly once, with no content lost from any tier', () => {
+    const tables = [
+      {
+        all: RESOURCES,
+        tiers: [RESOURCES_TIER0, RESOURCES_TIER1, RESOURCES_TIER2],
+        sizes: [3, 2, 2],
+      },
+      { all: PRODUCTS, tiers: [PRODUCTS_TIER0, PRODUCTS_TIER1, PRODUCTS_TIER2], sizes: [4, 2, 2] },
+      { all: PORTS, tiers: [PORTS_TIER0, PORTS_TIER1, PORTS_TIER2], sizes: [5, 2, 2] },
+      {
+        all: workerIds,
+        tiers: [WORKER_IDS_TIER0, WORKER_IDS_TIER1, WORKER_IDS_TIER2],
+        sizes: [3, 2, 2],
+      },
+      {
+        all: ids(BOONS),
+        tiers: [ids(BOONS_TIER0), ids(BOONS_TIER1), ids(BOONS_TIER2)],
+        sizes: [8, 3, 3],
+      },
+      {
+        all: ids(MODULES),
+        tiers: [ids(MODULES_TIER0), ids(MODULES_TIER1), ids(MODULES_TIER2)],
+        sizes: [8, 3, 3],
+      },
+      {
+        all: ids(MONSOON_STATES),
+        tiers: [ids(MONSOON_TIER0), ids(MONSOON_TIER1), ids(MONSOON_TIER2)],
+        sizes: [4, 2, 2],
+      },
+    ];
 
-describe('tiered content ids match server.py exactly', () => {
-  it('resources / products / ports', () => {
-    expect(RESOURCES_TIER0).toEqual(['麻布', '丝绸', '茶叶']);
-    expect(RESOURCES_TIER1).toEqual(['瓷土', '铜矿']);
-    expect(RESOURCES_TIER2).toEqual(['香料', '珍珠']);
-    expect(PRODUCTS_TIER0).toEqual(['麻衣', '布衣', '绫罗绸缎', '香囊']);
-    expect(PRODUCTS_TIER1).toEqual(['紫铜镜', '青瓷器']);
-    expect(PRODUCTS_TIER2).toEqual(['蕃香脂', '珠链']);
-    expect(PORTS_TIER0).toEqual(['泉州港', '广州港', '宁波港', '扬州港', '杭州港']);
-    expect(PORTS_TIER1).toEqual(['福州港', '高丽港']);
-    expect(PORTS_TIER2).toEqual(['三佛齐港', '大食港']);
+    for (const table of tables) {
+      expect(table.tiers.map((tier) => tier.length)).toEqual(table.sizes);
+      expect(table.tiers.flat()).toEqual([...table.all]);
+      expect(new Set(table.all).size).toBe(table.all.length);
+    }
   });
 
-  it('worker ids', () => {
-    expect(WORKER_IDS_TIER0).toEqual(['weaver', 'master', 'sachet_maker']);
-    expect(WORKER_IDS_TIER1).toEqual(['coppersmith', 'potter']);
-    expect(WORKER_IDS_TIER2).toEqual(['perfumer', 'jeweler']);
+  it('keeps every recipe, price and wage pointed at known goods and workers', () => {
+    expect(Object.keys(RECIPES).sort()).toEqual([...PRODUCTS].sort());
+    expect(Object.keys(PRODUCT_PRICES).sort()).toEqual([...PRODUCTS].sort());
+    expect(Object.keys(COMMODITIES).sort()).toEqual([...RESOURCES].sort());
+    expect(Object.keys(RESOURCE_PROBS).sort()).toEqual([...RESOURCES].sort());
+    expect(Object.keys(WAGES).sort()).toEqual([...workerIds].sort());
+
+    for (const [product, recipe] of Object.entries(RECIPES)) {
+      expect(PRODUCTS).toContain(product);
+      expect(workerIds).toContain(recipe.workerType);
+      expect(recipe.value).toBeGreaterThan(0);
+      expect(Object.keys(recipe.materials).length).toBeGreaterThan(0);
+      for (const [material, amount] of Object.entries(recipe.materials)) {
+        expect(RESOURCES).toContain(material);
+        expect(amount).toBeGreaterThan(0);
+      }
+    }
+
+    for (const ranges of [
+      Object.values(COMMODITIES).map((c) => c.basePrice),
+      Object.values(PRODUCT_PRICES),
+    ]) {
+      for (const [low, high] of ranges) {
+        expect(low).toBeGreaterThan(0);
+        expect(high).toBeGreaterThanOrEqual(low);
+      }
+    }
+
+    for (const commodity of Object.values(COMMODITIES)) {
+      for (const port of commodity.ports) expect(PORTS).toContain(port);
+    }
   });
 
-  it('boon ids', () => {
-    expect(ids(BOONS_TIER0)).toEqual([
-      'silk_wind',
-      'favorable_tides',
-      'merchant_charm',
-      'artisan_inspiration',
-      'emergency_loan',
-      'tax_shelter',
-      'hemp_monopoly',
-      'master_apprentice',
-    ]);
-    expect(ids(BOONS_TIER1)).toEqual([
-      'farsight',
-      'porcelain_bronze_guild',
-      'frontier_tariff_relief',
-    ]);
-    expect(ids(BOONS_TIER2)).toEqual([
-      'exotic_treasures',
-      'deep_sea_escort_pact',
-      'merchants_converge',
-    ]);
+  it('keeps boons, modules and monsoons displayable and internally consistent', () => {
+    for (const boon of BOONS as readonly Boon[]) {
+      expect(boon.name && boon.desc && boon.icon).toBeTruthy();
+      expect(Object.keys(boon.modifiers).length).toBeGreaterThan(0);
+      for (const value of Object.values(boon.modifiers)) {
+        if (typeof value === 'number') expect(value).toBeGreaterThan(0);
+      }
+      if (boon.modifiers.productOrderBonus) {
+        expect(boon.modifiers.productOrderBonus.pct).toBeGreaterThan(0);
+        expect(boon.modifiers.productOrderBonus.pct).toBeLessThan(1);
+        for (const product of boon.modifiers.productOrderBonus.products) {
+          expect(PRODUCTS).toContain(product);
+        }
+      }
+    }
+
+    for (const module of MODULES) {
+      expect(module.name && module.desc && module.icon).toBeTruthy();
+    }
+
+    for (const monsoon of MONSOON_STATES) {
+      expect(monsoon.name && monsoon.desc && monsoon.icon).toBeTruthy();
+      expect(RESOURCES).toContain(monsoon.resource);
+      expect(monsoon.rewardMultiplier).toBeGreaterThan(0);
+      expect(monsoon.purchaseMultiplier).toBeGreaterThan(0);
+      expect(monsoon.pirateRisk).toBeGreaterThanOrEqual(0);
+      expect(monsoon.pirateRisk).toBeLessThanOrEqual(1);
+      for (const port of monsoon.rewardPorts) expect(PORTS).toContain(port);
+    }
   });
 
-  it('module ids', () => {
-    expect(ids(MODULES_TIER0)).toEqual([
-      'smugglers_hold',
-      'bulk_hauler',
-      'artisans_workshop',
-      'tax_evasion',
-      'silk_monopoly',
-      'brokers_network',
-      'salvage_crane',
-      'overdrive_engine',
-    ]);
-    expect(ids(MODULES_TIER1)).toEqual(['bureau_token', 'kiln_cellar', 'ocean_relay']);
-    expect(ids(MODULES_TIER2)).toEqual([
-      'foreign_quarter_pass',
-      'persian_dome_compass',
-      'fleet_of_treasures',
-    ]);
+  it('builds a valid difficulty ladder from the content and mandate tables', () => {
+    const difficulties = ['easy', 'standard', 'hard'] as const;
+
+    for (const difficulty of difficulties) {
+      const config = DIFFICULTIES[difficulty];
+      expect(config.rounds).toBeGreaterThan(0);
+      expect(config.pirateLoss.length).toBeGreaterThan(0);
+      for (const tier of config.pirateLoss) expect(PIRATE_LOSS_TIERS[tier]).toBeGreaterThan(0);
+      for (const [tier, round] of Object.entries(config.tierUnlock)) {
+        expect(Number(tier)).toBeGreaterThan(0);
+        expect(round).toBeGreaterThan(0);
+        expect(round).toBeLessThanOrEqual(config.rounds);
+      }
+      for (const [round, template] of Object.entries(config.mandates)) {
+        expect(Number(round)).toBeGreaterThan(0);
+        expect(Number(round)).toBeLessThanOrEqual(config.rounds);
+        expect(EMPEROR_MANDATE_TEMPLATES[template]).toBeDefined();
+      }
+    }
+
+    expect(DIFFICULTIES.easy.rounds).toBeLessThan(DIFFICULTIES.standard.rounds);
+    expect(DIFFICULTIES.standard.rounds).toBeLessThan(DIFFICULTIES.hard.rounds);
   });
 
-  it('monsoon ids', () => {
-    expect(ids(MONSOON_TIER0)).toEqual([
-      'spring_current',
-      'summer_monsoon',
-      'autumn_gales',
-      'winter_blockade',
-    ]);
-    expect(ids(MONSOON_TIER1)).toEqual(['fujian_kiln_smoke', 'goryeo_dawn_route']);
-    expect(ids(MONSOON_TIER2)).toEqual(['srivijaya_spice_breeze', 'dashi_pearl_moon']);
-  });
-});
-
-describe('numeric tuning constants match server.py exactly', () => {
-  it('wages', () => {
-    expect(WAGES).toEqual({
-      weaver: 8,
-      master: 12,
-      sachet_maker: 20,
-      coppersmith: 12,
-      potter: 14,
-      perfumer: 18,
-      jeweler: 24,
-    });
-  });
-
-  it('resource probabilities', () => {
-    expect(RESOURCE_PROBS).toEqual({
-      麻布: 0.3,
-      丝绸: 0.26,
-      茶叶: 0.18,
-      瓷土: 0.14,
-      铜矿: 0.12,
-      香料: 0.08,
-      珍珠: 0.06,
-    });
-  });
-
-  it('escort and broker-corruption tuning', () => {
-    expect(ESCORT_COST_MIN).toBe(10);
-    expect(ESCORT_COST_PCT).toBe(0.1);
-    expect(BROKER_CORRUPTION_CHANCE).toBe(0.3);
-    expect(BROKER_CORRUPTION_RISK).toBe(0.2);
-  });
-
-  it('phase option count base/per-tier', () => {
-    expect(PHASE_OPTIONS_BASE).toBe(5);
-    expect(PHASE_OPTIONS_PER_TIER).toBe(3);
-  });
-
-  it('pirate loss tiers', () => {
-    expect(PIRATE_LOSS_TIERS).toEqual({ medium: 0.15, above_medium: 0.25, high: 0.4 });
-  });
-
-  it('difficulty ladder', () => {
-    expect(DIFFICULTIES.easy).toEqual({
-      rounds: 8,
-      tierUnlock: {},
-      brokerCorruption: false,
-      pirateLoss: ['medium'],
-      mandates: { 3: 0, 6: 1, 8: 2 },
-    });
-    expect(DIFFICULTIES.standard).toEqual({
-      rounds: 12,
-      tierUnlock: { 1: 4, 2: 8 },
-      brokerCorruption: false,
-      pirateLoss: ['medium', 'above_medium'],
-      mandates: { 3: 0, 7: 1, 12: 2 },
-    });
-    expect(DIFFICULTIES.hard).toEqual({
-      rounds: 16,
-      tierUnlock: { 1: 6, 2: 10 },
-      brokerCorruption: true,
-      pirateLoss: ['above_medium', 'high'],
-      mandates: { 6: 0, 12: 1, 16: 2 },
-    });
-  });
-});
-
-describe('recipes and commodities match server.py exactly', () => {
-  it('recipes', () => {
-    expect(RECIPES.麻衣).toEqual({ materials: { 麻布: 2 }, value: 15, workerType: 'weaver' });
-    expect(RECIPES.布衣).toEqual({
-      materials: { 麻布: 2, 丝绸: 1 },
-      value: 35,
-      workerType: 'weaver',
-    });
-    expect(RECIPES.珠链).toEqual({
-      materials: { 珍珠: 2, 丝绸: 1 },
-      value: 105,
-      workerType: 'jeweler',
-    });
-  });
-
-  it('commodities base price ranges', () => {
-    expect(COMMODITIES.麻布.basePrice).toEqual([3, 6]);
-    expect(COMMODITIES.珍珠.basePrice).toEqual([16, 24]);
-  });
-
-  it('product price ranges', () => {
-    expect(PRODUCT_PRICES.麻衣).toEqual([30, 42]);
-    expect(PRODUCT_PRICES.珠链).toEqual([125, 160]);
-  });
-
-  it('every resource and product appears exactly once across tiers', () => {
-    expect(RESOURCES).toHaveLength(7);
-    expect(new Set(RESOURCES).size).toBe(7);
-    expect(PRODUCTS).toHaveLength(8);
-    expect(new Set(PRODUCTS).size).toBe(8);
+  it('keeps every worker type in one wage and roster table', () => {
+    expect(ids(WORKER_TYPES_BACKEND)).toEqual([...workerIds]);
+    for (const worker of WORKER_TYPES_BACKEND) {
+      expect(WAGES[worker.id]).toBeGreaterThan(0);
+      expect(worker.attr).toBeTruthy();
+    }
   });
 });

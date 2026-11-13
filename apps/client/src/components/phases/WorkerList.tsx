@@ -12,8 +12,7 @@ interface WorkerListProps {
   tasks: readonly ProductId[];
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html workerListHTML/fireWorkerConfirm
-// (lines 2981-3018).
+// Mirrors PortMasters2/PortMasters_online.html workerListHTML/fireWorkerConfirm
 export function WorkerList({ type, list, tasks }: WorkerListProps) {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();

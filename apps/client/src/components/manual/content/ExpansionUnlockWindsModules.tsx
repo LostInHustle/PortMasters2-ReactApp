@@ -1,25 +1,25 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Split out of expansionTab.tsx (originally 663 lines, well past the file-size ceiling) to keep
-// each manual-tab file within the project's soft 200 / hard 350 line discipline. This tab's
-// source content is unusually table-heavy (7 unlock-category tables), so it's split by category
+// Split out of expansionTab.tsx (originally 663 lines, well past the file size ceiling) to keep
+// each manual tab file within the project's soft 200 / hard 350 line discipline. This tab's
+// source content is unusually heavy on tables (7 unlock category tables), so it's split by category
 // group rather than forced into one oversized file.
 export function ExpansionUnlockWindsModules() {
   const { lang } = useTranslate();
   if (lang === 'en') {
     return (
       <>
-        <h4>🌬️ New Trade Winds</h4>
+        <h4>🌬️ New Monsoons</h4>
         <p>
           Beyond the original Spring Current, Summer Monsoon, Autumn Gales and Winter Blockade, 4
-          new trade wind states join the pool. From Round 3 on, each "season" (every 2 rounds) is{' '}
+          new monsoon states join the pool. From Round 3 on, each "season" (every 2 rounds) is{' '}
           <strong>drawn at random from the currently unlocked pool</strong> instead of a fixed 4
           season cycle, though Rounds 1 to 2 are still always Spring Current, exactly as before.
         </p>
         <table>
           <thead>
             <tr>
-              <th>Trade Wind</th>
+              <th>Monsoon</th>
               <th>Unlocked by</th>
               <th>Effect summary</th>
             </tr>
@@ -115,7 +115,7 @@ export function ExpansionUnlockWindsModules() {
   }
   return (
     <>
-      <h4>🌬️ 新增季风（贸易风）</h4>
+      <h4>🌬️ 新增季风</h4>
       <p>
         除原有的「春潮顺流」「盛夏季风」「秋汛乱流」「冬海封锁」外，新增 4 种季风状态。第 3
         程起，每个"季节"（每 2 回合一变）将从
@@ -153,11 +153,11 @@ export function ExpansionUnlockWindsModules() {
           </tr>
         </tbody>
       </table>
-      <h4>🔧 新增战船改装</h4>
+      <h4>🔧 新增船舶模块</h4>
       <table>
         <thead>
           <tr>
-            <th>改装</th>
+            <th>模块</th>
             <th>解锁批次</th>
             <th>效果</th>
           </tr>

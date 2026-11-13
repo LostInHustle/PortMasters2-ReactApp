@@ -5,8 +5,8 @@ import { useSession } from '../../state/SessionContext.js';
 import { MateNote } from '../common/MateNote.js';
 import { Medal } from '../common/Medal.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderRoomLobby (lines 2426-2453):
-// shown in place of the online-users/open-voyages section once the player has created or joined
+// Mirrors PortMasters2/PortMasters_online.html renderRoomLobby:
+// shown in place of the online users and open voyages section once the player has created or joined
 // a room that hasn't started yet. Per the user's decision, the roster only changes here, once
 // the host clicks Start, it freezes for the rest of the voyage.
 export function RoomLobbyView() {

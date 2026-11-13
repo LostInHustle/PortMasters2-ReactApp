@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { handleCompleteOrder } from '../../src/actions/orderActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// completeOrder branch (lines 1673-1678).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// completeOrder branch.
 function makeOrder(id: number) {
   return {
     id,
@@ -29,7 +29,7 @@ describe('handleCompleteOrder', () => {
     expect(handleCompleteOrder(sess, 0, { orderId: 999 })).toBe(true);
   });
 
-  it('completes a matching, not-yet-completed order', () => {
+  it('completes a matching, not yet completed order', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 2;
     sess.games[0]!.customerCards = [makeOrder(0)];
@@ -40,7 +40,7 @@ describe('handleCompleteOrder', () => {
     expect(sess.games[0]!.money).toBeGreaterThan(moneyBefore);
   });
 
-  it('does not re-complete an already-completed order', () => {
+  it('does not complete an already completed order again', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 2;
     sess.games[0]!.customerCards = [makeOrder(0)];

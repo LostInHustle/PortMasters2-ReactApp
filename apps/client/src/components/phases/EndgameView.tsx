@@ -4,7 +4,7 @@ import { useSession } from '../../state/SessionContext.js';
 import { Pm1Hint } from './Pm1Hint.js';
 import { useConfirmRestart } from './useConfirmRestart.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html endgameHTML (lines 3321-3339).
+// Mirrors PortMasters2/PortMasters_online.html endgameHTML.
 export function EndgameView() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();

@@ -42,11 +42,11 @@ function isFile(path: string): boolean {
   }
 }
 
-// Ported verbatim from PortMasters2/server.py process_request (lines 1827-1850), adapted to
+// Mirrors PortMasters2/server.py process_request, adapted to
 // serve the built React client's index.html instead of the original's single HTML file as the
-// SPA entry point for "/". The WebSocket-upgrade passthrough check is dropped: Node's `http`
+// SPA entry point for "/". The WebSocket upgrade passthrough check is dropped: Node's `http`
 // server already routes upgrade requests to a separate 'upgrade' event rather than 'request', so
-// they never reach this handler at all, a library-shape simplification, not a behavior change.
+// they never reach this handler at all, a library shape simplification, not a behavior change.
 export function resolveStaticFile(webRoot: string, requestPath: string): StaticFileResponse {
   let path = requestPath.split('?', 2)[0]!;
   if (path === '/' || path === '') path = '/index.html';

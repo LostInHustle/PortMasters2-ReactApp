@@ -12,11 +12,11 @@ import { OnlineUsersList } from './OnlineUsersList.js';
 import { OpenRoomsList } from './OpenRoomsList.js';
 import { RoomLobbyView } from './RoomLobbyView.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html's #lobby-overlay markup
-// (lines 1309-1331) and applyLanguage's lobby section (lines 1877-1887): #room-browse-view
+// Mirrors PortMasters2/PortMasters_online.html's #lobby-overlay markup
+// and applyLanguage's lobby section: #room-browse-view
 // (online players, then open voyages with the host button inline on that heading's row) versus
 // #room-waiting-view (RoomLobbyView) once pendingRoom is set. The language toggle and logout
-// button share one row right under the welcome text, both ported verbatim from btn-lang-lobby/
+// button share one row right under the welcome text, both mirrors btn-lang-lobby/
 // btn-logout-lobby.
 export function LobbyOverlay() {
   const { tr, lang } = useTranslate();

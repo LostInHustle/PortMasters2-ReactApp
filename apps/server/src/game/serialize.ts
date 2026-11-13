@@ -28,7 +28,7 @@ function flattenWorkerRosters(game: PlayerGame): WorkerRosterFields {
 }
 
 // Stamps each Procure card with what it actually costs right now, given this player's active
-// boons and modules, so the client never has to re-derive (and risk drifting from) the discount
+// boons and modules, so the client never has to derive again (and risk drifting from) the discount
 // math that already lives in costCalculations.ts. game.resourceCards itself is left untouched --
 // this only shapes the copy that goes out over the wire.
 function withCardPricing(game: PlayerGame, card: MarketCard): MarketCard {
@@ -48,10 +48,10 @@ function withOrderPricing(game: PlayerGame, order: CustomerOrder): CustomerOrder
   return { ...order, transportCost: orderTransportCost(game, order) };
 }
 
-// Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the literal
+// Mirrors PortMasters2/server.py PlayerGame.to_dict(): the literal
 // wire contract for this player's "state" payload. Two fields are deliberately NOT raw references
 // to internal state, intelRemaining exposes only the length of phase2DemandTags (the tags
-// themselves are server-side fog of war), and logs sends only the last 10 entries, matching
+// themselves are on the server fog of war), and logs sends only the last 10 entries, matching
 // self.lastLogs[-10:] exactly.
 export function serializePlayerGame(game: PlayerGame): PlayerGameState {
   return {

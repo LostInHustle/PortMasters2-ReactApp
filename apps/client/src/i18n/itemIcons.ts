@@ -3,9 +3,9 @@ import type { Bilingual, Lang } from './LangContext.js';
 import { modeAware } from './iconMode.js';
 import { pf } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html ICONS/COLORS/ITEM_TIPS
-// (lines 1401-1449): per-item emoji, swatch color, and the bilingual tooltip shown on hover.
-// RESOURCES/PRODUCTS/WAGES from the same block aren't re-ported here. They duplicate
+// Mirrors PortMasters2/PortMasters_online.html ICONS/COLORS/ITEM_TIPS: per item emoji, swatch
+// color, and the bilingual tooltip shown on hover. RESOURCES/PRODUCTS/WAGES from the same block
+// aren't repeated here. They duplicate
 // packages/shared/src/data (resources.ts/products.ts/wages-workers.ts), the single source of
 // truth both client and server already import.
 const ITEM_EMOJI: Record<ItemId | typeof GOLD, string> = {
@@ -70,7 +70,7 @@ export const ITEM_COLORS: Record<ItemId, string> = {
   珠链: '#D4AF37',
 };
 
-export const ITEM_TIPS: Record<ItemId, Bilingual> = {
+const ITEM_TIPS: Record<ItemId, Bilingual> = {
   麻布: {
     zh: '基础原料。可由织女制成麻衣（×2）或布衣（×2，另需丝绸×1）',
     en: 'Basic material. Weavers turn it into Hemp Garb (×2) or Cloth Tunics (×2, plus Silk ×1)',

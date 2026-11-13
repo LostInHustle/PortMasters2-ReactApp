@@ -8,10 +8,10 @@ import { useToast } from '../../state/ToastContext.js';
 import { useWs } from '../../ws/WsContext.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html tradePhaseHTML/createTradeOrder
-// (lines 2827-2919). captureTradeForm/restoreTradeForm aren't ported: they exist only to work
-// around the original's full-innerHTML re-render destroying in-progress form input, which
-// React's reconciliation (this component stays mounted across re-renders) avoids for free.
+// Mirrors PortMasters2/PortMasters_online.html tradePhaseHTML/createTradeOrder.
+// captureTradeForm/restoreTradeForm aren't repeated: they exist only to work around the
+// original's full innerHTML rerender destroying form input in progress, which React's
+// reconciliation (this component stays mounted across rerenders) avoids for free.
 export function BarterPhase() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();

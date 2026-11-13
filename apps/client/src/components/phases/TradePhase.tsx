@@ -6,7 +6,7 @@ import { useWs } from '../../ws/WsContext.js';
 import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html ordersHTML (lines 3024-3083):
+// Mirrors PortMasters2/PortMasters_online.html ordersHTML:
 // phase 2, fulfilling port orders from cargo for gold (the original calls this phase "贸易" /
 // "Trade", distinct from the 'trade' phase key which is Barter).
 export function TradePhase() {

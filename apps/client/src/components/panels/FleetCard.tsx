@@ -13,7 +13,7 @@ import { phaseName } from '../../i18n/phaseFlow.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { WORKER_TYPES } from '../../i18n/workerTypesText.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html buffChipsHTML (lines 2273-2293):
+// Mirrors PortMasters2/PortMasters_online.html buffChipsHTML:
 // one chip per active Fortune buff, productOrderBonus rendered directly from its payload since
 // it's shared by two different Fortunes.
 export function BuffChips({ g }: { g: PlayerGameState }) {
@@ -54,7 +54,7 @@ export function BuffChips({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html modulesHTML (lines 2332-2337).
+// Mirrors PortMasters2/PortMasters_online.html modulesHTML.
 // Exported standalone since the original also calls it outside the fleet card (e.g. Shipyard).
 export function Modules({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
@@ -72,7 +72,7 @@ export function Modules({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html invListHTML (lines 2339-2352).
+// Mirrors PortMasters2/PortMasters_online.html invListHTML.
 function InventoryRow({ item, count }: { item: ItemId; count: number }) {
   const { lang } = useTranslate();
   return (
@@ -108,7 +108,7 @@ export function InventoryList({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html workerTeamHTML (lines 2354-2372).
+// Mirrors PortMasters2/PortMasters_online.html workerTeamHTML.
 export function WorkerTeam({ g }: { g: PlayerGameState }) {
   const { tr, pf } = useTranslate();
   const lines = WORKER_TYPES.map((wt) => {
@@ -138,7 +138,7 @@ export function WorkerTeam({ g }: { g: PlayerGameState }) {
   return <>{lines}</>;
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html crewSectionsHTML (lines 2374-2407):
+// Mirrors PortMasters2/PortMasters_online.html crewSectionsHTML:
 // the fleet status card shared by your own status panel and the Captain Viewer (spectate), so
 // every captain's fleet is always directly comparable.
 export function CrewSections({ g }: { g: PlayerGameState }) {

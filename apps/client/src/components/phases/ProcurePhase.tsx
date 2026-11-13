@@ -9,7 +9,7 @@ import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { BrokerWhisper } from './BrokerWhisper.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html purchaseHTML (lines 2705-2755).
+// Mirrors PortMasters2/PortMasters_online.html purchaseHTML.
 export function ProcurePhase() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();

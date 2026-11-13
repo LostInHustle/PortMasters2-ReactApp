@@ -12,7 +12,7 @@ import { sendJson, sendToUser } from '../ws/send.js';
 import type { ServerState } from './onlineRegistry.js';
 
 // Generalizes PortMasters2/server.py's handle_create_room/handle_join_room/handle_leave_room/
-// handle_start_room (ROOMS-backed lobby for 2-5 players, coexisting with the 1:1 invite fast
+// handle_start_room (backed by ROOMS lobby for 2 to 5 players, coexisting with the 1:1 invite fast
 // path in inviteManager.ts). A room is just a SharedSession with `started === false`: it lives
 // in both `state.rooms` (so the lobby's "open rooms" list can find it) and `state.sessions` (so
 // every other handler that looks a player up by username keeps working unchanged).
@@ -35,7 +35,7 @@ function rosterMessage(state: ServerState, sess: SharedSession): RoomRosterMessa
   };
 }
 
-export function broadcastRoomRoster(state: ServerState, sess: SharedSession): void {
+function broadcastRoomRoster(state: ServerState, sess: SharedSession): void {
   const msg = { type: 'room_roster', ...rosterMessage(state, sess) };
   for (const player of sess.players) {
     sendToUser(state, player, msg);
@@ -97,14 +97,14 @@ export function handleJoinRoom(state: ServerState, username: string, host: strin
   broadcastOpenRooms(state);
 }
 
-// Pre-start only, matching the user's decision to freeze the roster once a voyage launches.
+// Before start only, matching the user's decision to freeze the roster once a voyage launches.
 // Also called from connectionHandler.ts's disconnect path when a player in an unstarted room
 // drops their connection, so leaving a room lobby behaves the same whether explicit or implicit.
 export function handleLeaveRoom(state: ServerState, username: string): void {
   const room = findRoomOf(state, username);
   if (!room) return;
   // state.rooms is keyed by the room's current host; capture that key before removePlayer can
-  // promote a new host, so the old entry is the one removed/re-keyed below.
+  // promote a new host, so the old entry is the one removed/keyed again below.
   const oldHostKey = room.host;
   room.removePlayer(username);
   state.sessions.delete(username);

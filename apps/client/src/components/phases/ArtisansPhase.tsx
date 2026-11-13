@@ -8,7 +8,7 @@ import { useWs } from '../../ws/WsContext.js';
 import { PhaseBrief } from './PhaseBrief.js';
 import { WorkerList } from './WorkerList.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html workerMgmtHTML (lines 2921-2979).
+// Mirrors PortMasters2/PortMasters_online.html workerMgmtHTML.
 export function ArtisansPhase() {
   const { tr, pf, lang } = useTranslate();
   const { serverState } = useSession();
@@ -34,8 +34,8 @@ export function ArtisansPhase() {
           hireDiscount && (
             <span className="chip green">
               {tr(
-                '🎓 学徒传承：本回合雇佣半价',
-                '🎓 Apprentice Legacy: hiring half price this round',
+                '🎓 学徒传承：工匠工资减半',
+                '🎓 Apprentice Legacy: artisan wages halved this round',
               )}
             </span>
           )

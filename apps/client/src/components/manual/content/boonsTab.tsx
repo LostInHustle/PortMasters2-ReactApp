@@ -1,11 +1,10 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html manualContentZh/manualContentEn
-// (lines 3452-3685 / 3687-3920 respectively), the 'boons' key of each.
-// Kept as two parallel JSX trees (one per language) rather than merged tr()-per-node, matching
-// the original's own choice to duplicate full per-language content blocks for this prose --
-// merging them would mean interleaving translation calls through dense paragraphs for no
-// real benefit.
+// Mirrors the "boons" section of the manual content in PortMasters2/PortMasters_online.html.
+// Kept as two parallel JSX trees, one per language, rather than one merged tree with a
+// translation call per node. The original also duplicates full content blocks per language for
+// this prose, since merging them would mean interleaving translation calls through dense
+// paragraphs for no real benefit.
 export function BoonsTab() {
   const { lang } = useTranslate();
   if (lang === 'en') {
@@ -26,8 +25,8 @@ export function BoonsTab() {
           <tbody>
             <tr>
               <td>🌬️ Silk Road Tailwind</td>
-              <td>Silk & product shipping halved</td>
-              <td>Delivering many product orders this round</td>
+              <td>Silk and silk woven goods shipping halved</td>
+              <td>Delivering many silk woven goods orders this round</td>
             </tr>
             <tr>
               <td>🌊 Favorable Tides</td>
@@ -41,7 +40,7 @@ export function BoonsTab() {
             </tr>
             <tr>
               <td>🔨 Artisan's Inspiration</td>
-              <td>Every worker makes +1 item</td>
+              <td>Every artisan makes +1 item</td>
               <td>Pays off most with a large crew</td>
             </tr>
             <tr>
@@ -61,7 +60,7 @@ export function BoonsTab() {
             </tr>
             <tr>
               <td>🎓 Apprentice Legacy</td>
-              <td>Hiring wages halved</td>
+              <td>Artisan wages halved</td>
               <td>Expanding the team this round</td>
             </tr>
             <tr>
@@ -107,7 +106,7 @@ export function BoonsTab() {
                 <span className="muted">Ten Thousand Kingdoms Trade, Round 10+</span>
               </td>
               <td>Escort hiring costs half price and pirate risk is halved this round</td>
-              <td>When the trade wind's pirate risk is high</td>
+              <td>When the monsoon's pirate risk is high</td>
             </tr>
             <tr>
               <td>
@@ -127,7 +126,7 @@ export function BoonsTab() {
     <>
       <h4>
         🍀 福缘图鉴（每回合「航海家的罗盘」从下表随机抽 4 张供你选 1
-        张；双方抽到的组合各不相同，仅当回合生效）
+        张；每位船长抽到的组合各不相同，仅当回合生效）
       </h4>
       <table>
         <thead>
@@ -140,8 +139,8 @@ export function BoonsTab() {
         <tbody>
           <tr>
             <td>🌬️ 丝路顺风</td>
-            <td>丝绸及成品运费减半</td>
-            <td>本回合要交付大量成品订单</td>
+            <td>丝绸与丝织品运费减半</td>
+            <td>本回合要交付大量丝织品订单</td>
           </tr>
           <tr>
             <td>🌊 顺风顺水</td>
@@ -155,7 +154,7 @@ export function BoonsTab() {
           </tr>
           <tr>
             <td>🔨 匠人灵感</td>
-            <td>所有工人多产 1 件</td>
+            <td>所有工匠多产 1 件</td>
             <td>工匠团队规模较大时收益最高</td>
           </tr>
           <tr>
@@ -175,7 +174,7 @@ export function BoonsTab() {
           </tr>
           <tr>
             <td>🎓 学徒传承</td>
-            <td>雇佣工资减半</td>
+            <td>工匠工资减半</td>
             <td>本回合计划扩编工匠团队</td>
           </tr>
           <tr>

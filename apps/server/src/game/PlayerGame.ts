@@ -53,11 +53,11 @@ function createEmptyWorkerRoster(): Record<WorkerTypeId, Worker[]> {
   ) as Record<WorkerTypeId, Worker[]>;
 }
 
-// Ported verbatim from PortMasters2/server.py PlayerGame (lines 441-1129). State fields mirror
-// __init__ (lines 442-493) exactly; methods are thin delegators onto the free functions in this
+// Mirrors PortMasters2/server.py PlayerGame. State fields mirror
+// __init__ exactly; methods are thin delegators onto the free functions in this
 // directory, each named after its Python counterpart. One deliberate addition not present in the
-// original: an injectable `rng` (defaults to real Math.random-backed randomness), the seam the
-// plan calls for so tests can run this class against a fixed sequence instead of live randomness.
+// original: an injectable `rng` (defaults to real Math.backed by Math.random randomness), the seam the
+// seam exists so tests can run this class against a fixed sequence instead of live randomness.
 export class PlayerGame {
   difficulty: Difficulty;
   tierUnlock: Record<number, number>;
@@ -120,7 +120,7 @@ export class PlayerGame {
     this.rng = rng;
   }
 
-  // Ported verbatim from PortMasters2/server.py log (lines 495-499): caps history at 100 lines;
+  // Mirrors PortMasters2/server.py log: caps history at 100 lines;
   // to_dict()/serialize.ts only ever sends the last 10 of these.
   log(message: string): void {
     this.lastLogs.push(message);
@@ -175,7 +175,7 @@ export class PlayerGame {
   }
 
   // ---------- Monsoon / environment ----------
-  // Ported verbatim from PortMasters2/server.py set_monsoon_state (lines 583-584).
+  // Mirrors PortMasters2/server.py set_monsoon_state.
   setMonsoonState(state: MonsoonState): void {
     this.monsoonState = { ...state };
   }
@@ -275,11 +275,13 @@ export class PlayerGame {
     return pirateFns.hireEscort(this);
   }
 
-  // Ported verbatim from PortMasters2/server.py end_round (lines 1025-1071): settles income tax,
-  // snapshots lastRoundSummary, then resets every per-round counter before advancing the round
+  // Mirrors PortMasters2/server.py end_round: settles income tax,
+  // snapshots lastRoundSummary, then resets every each round counter before advancing the round
   // (or flagging gameOver once currentRound exceeds maxRounds).
   endRound(): void {
-    const preTax = this.roundRevenue - this.roundCosts - this.maintenanceCosts - this.workerWages;
+    // roundCosts already includes this round's wages and maintenance, so the taxable base is
+    // revenue minus that one total. Subtracting the parts again double counted them.
+    const preTax = this.roundRevenue - this.roundCosts;
     const tax = this.calcIncomeTax(preTax);
     let paidTax = 0;
     if (tax > 0 && this.money >= tax) {

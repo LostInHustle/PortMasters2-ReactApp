@@ -9,8 +9,7 @@ function isProductId(value: unknown): value is ProductId {
   return typeof value === 'string' && value in RECIPES;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's hireWorker branch
-// (lines 1661-1664).
+// Mirrors PortMasters2/server.py handle_game_action's hireWorker branch
 export function handleHireWorker(
   sess: SharedSession,
   slot: number,
@@ -22,8 +21,7 @@ export function handleHireWorker(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's fireWorker branch
-// (lines 1665-1668).
+// Mirrors PortMasters2/server.py handle_game_action's fireWorker branch
 export function handleFireWorker(
   sess: SharedSession,
   slot: number,
@@ -36,8 +34,7 @@ export function handleFireWorker(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's assignTask branch
-// (lines 1669-1672).
+// Mirrors PortMasters2/server.py handle_game_action's assignTask branch
 export function handleAssignTask(
   sess: SharedSession,
   slot: number,

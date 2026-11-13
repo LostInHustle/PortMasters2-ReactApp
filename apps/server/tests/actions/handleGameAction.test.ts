@@ -11,8 +11,8 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's top-level
-// guards (lines 1583-1596, 1732-1733): no session is a silent no-op, a finished/bankrupt player
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's top level
+// guards: no session is a silent no operation, a finished/bankrupt player
 // may only join_game or restart, and a "state" broadcast fires only when something changed.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
@@ -80,7 +80,7 @@ describe('handleGameAction', () => {
     expect(alice.sent).toHaveLength(1);
   });
 
-  it('routes a real action end-to-end (startBoon) through to a phase change', () => {
+  it('routes a real action end to end (startBoon) through to a phase change', () => {
     const alice = new FakeSocket();
     const bob = new FakeSocket();
     state.online.set('alice', alice);

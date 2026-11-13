@@ -14,7 +14,7 @@ import { WorkersTab } from './content/workersTab.js';
 export type ManualTabId =
   'start' | 'flow' | 'economy' | 'workers' | 'trade' | 'boons' | 'ship' | 'expansion' | 'faq';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html MANUAL_TABS_I18N (lines 3426-3450).
+// Mirrors PortMasters2/PortMasters_online.html MANUAL_TABS_I18N.
 const TAB_IDS: ManualTabId[] = [
   'start',
   'flow',
@@ -51,14 +51,13 @@ const TAB_COMPONENTS: Record<ManualTabId, () => JSX.Element> = {
   faq: FaqTab,
 };
 
-// Mirrors the original's `activeManualTab` module global (line 3925): remembers the last tab
+// Mirrors the original's `activeManualTab` module global: remembers the last tab
 // viewed across opens of the modal, since this component unmounts (and a plain useState would
 // reset) every time the modal closes.
 let lastActiveTab: ManualTabId = 'start';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showManual/switchManualTab
-// (lines 3926-3946).
-export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
+// Mirrors PortMasters2/PortMasters_online.html showManual/switchManualTab
+function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
   const { tr } = useTranslate();
   const { closeModal } = useModal();
   const [activeTab, setActiveTab] = useState<ManualTabId>(initialTab ?? lastActiveTab);
@@ -96,7 +95,7 @@ export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showInstructions (line 3949) and
+// Mirrors PortMasters2/PortMasters_online.html showInstructions and
 // every showManual()/showManual(tab) call site: opens the manual modal, remembering the last
 // tab viewed if none is specified.
 // Memoized because useKeyboardShortcuts lists it as an effect dependency: an unstable identity

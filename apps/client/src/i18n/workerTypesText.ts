@@ -3,7 +3,7 @@ import type { Bilingual, Lang } from './LangContext.js';
 import { getIconMode } from './iconMode.js';
 import { pf } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html WORKER_TYPES (lines 1571-1593):
+// Mirrors PortMasters2/PortMasters_online.html WORKER_TYPES:
 // display text and the product list each artisan type can craft, in tier order.
 export interface WorkerTypeInfo {
   key: WorkerTypeId;
@@ -111,7 +111,7 @@ for (const wt of WORKER_TYPES) {
 }
 
 // Accepts a plain string (not narrowed to WorkerTypeId) since callers include values lifted
-// out of regex-matched log text (serverTextRules.ts), which can't be statically known to be a
+// out of matched by regex log text (serverTextRules.ts), which can't be statically known to be a
 // valid worker type id, falls back to the raw key, exactly like the original.
 export function wName(key: string, lang: Lang): string {
   const info = WORKER_TYPES.find((w) => w.key === key);

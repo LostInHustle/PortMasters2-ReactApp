@@ -18,7 +18,7 @@ export interface Bilingual<T = string> {
 
 const STORAGE_KEY = 'pm2_lang';
 
-// Ported from PortMasters2/PortMasters_online.html (line 1284): default language is English,
+// Mirrors PortMasters2/PortMasters_online.html: default language is English,
 // persisted to localStorage, matching the original's `localStorage.getItem('pm2_lang') || 'en'`.
 //
 // Both accessors are guarded the same way sessionToken.ts guards its own, and for a sharper
@@ -42,8 +42,8 @@ function storeLang(lang: Lang): void {
   }
 }
 
-// Ported from PortMasters2/PortMasters_online.html `tr`/`pf` (lines 1287-1289). The original
-// reads a module-global `LANG`; here `lang` is an explicit parameter since it now lives in React
+// Mirrors PortMasters2/PortMasters_online.html `tr`/`pf`. The original
+// reads a module global `LANG`; here `lang` is an explicit parameter since it now lives in React
 // state instead of a mutable global. Callers get it from useLang()/useTranslate().
 export function tr<T>(lang: Lang, zh: T, en: T): T {
   return lang === 'en' ? en : zh;
@@ -66,7 +66,7 @@ const LangContext = createContext<LangContextValue | null>(null);
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(loadInitialLang);
 
-  // Ported from PortMasters2/PortMasters_online.html toggleLang (lines 1793-1802): flips the
+  // Mirrors PortMasters2/PortMasters_online.html toggleLang: flips the
   // language and persists it. The original then manually redraws every view
   // (applyLanguage/renderOnlineUsers/renderAll/...); React's reconciliation does that
   // automatically once `lang` changes, so none of those calls are needed here.

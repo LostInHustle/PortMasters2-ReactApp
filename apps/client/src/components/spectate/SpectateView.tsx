@@ -5,7 +5,7 @@ import { useSession } from '../../state/SessionContext.js';
 import { useSpectate } from '../../state/SpectateContext.js';
 import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCard.js';
 
-// A read-only, live-updating view of another captain's fleet, kept in step with
+// A read only, updating live view of another captain's fleet, kept in step with
 // PortMasters2/PortMasters_online.html renderCaptainViewer. The name list on the left is always
 // visible (even with just one other captain) so switching never requires closing the window;
 // the detail pane on the right is what changes.
@@ -50,7 +50,7 @@ export function SpectateView() {
             {tr('实时', 'LIVE')}
           </span>
           <div className="sp-title">
-            {tr(`👀 ${target} 的商队`, `👀 ${target}'s Fleet`)}
+            {tr(`👀 ${target} 的船队`, `👀 ${target}'s Fleet`)}
             <div className="sp-sub">
               {tr(
                 `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,

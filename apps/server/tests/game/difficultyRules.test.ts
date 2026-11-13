@@ -11,9 +11,8 @@ import {
   unlockedTier,
 } from '../../src/game/difficultyRules.js';
 
-// Expected values hand-derived from PortMasters2/server.py DIFFICULTIES (lines 58-80) and
+// Expected values derived manually from PortMasters2/server.py DIFFICULTIES and
 // normalize_difficulty/difficulty_rounds/difficulty_tier_unlock/difficulty_broker_corruption
-// (lines 84-102).
 describe('normalizeDifficulty', () => {
   it('passes through known difficulties', () => {
     expect(normalizeDifficulty('hard')).toBe('hard');
@@ -46,8 +45,8 @@ describe('difficultyRounds / difficultyTierUnlock / difficultyBrokerCorruption',
   });
 });
 
-// Expected values hand-derived from pirate_loss_pct (server.py lines 144-150) and
-// PIRATE_LOSS_TIERS (lines 137-141): medium=0.15, above_medium=0.25, high=0.40.
+// Expected values derived manually from pirate_loss_pct and
+// PIRATE_LOSS_TIERS: medium=0.15, above_medium=0.25, high=0.40.
 describe('pirateLossPct', () => {
   it('easy has a single flat tier regardless of round', () => {
     expect(pirateLossPct('easy', 1, 8)).toBeCloseTo(0.15);
@@ -65,8 +64,7 @@ describe('pirateLossPct', () => {
   });
 });
 
-// Expected values hand-derived from EMPEROR_MANDATE_TEMPLATES/DIFFICULTIES.mandates
-// (server.py lines 64, 71, 78, 174-183).
+// Expected values derived manually from EMPEROR_MANDATE_TEMPLATES/DIFFICULTIES.mandates
 describe('emperorMandateSize', () => {
   it('fires the scheduled template index on each difficulty mandate round', () => {
     expect(emperorMandateSize('easy', 3)).toBe(0);
@@ -74,13 +72,12 @@ describe('emperorMandateSize', () => {
     expect(emperorMandateSize('easy', 8)).toBe(2);
   });
 
-  it('is undefined on non-mandate rounds', () => {
+  it('is undefined on nonmandate rounds', () => {
     expect(emperorMandateSize('easy', 1)).toBeUndefined();
   });
 });
 
-// Expected values hand-derived from unlocked/unlocked_tier/phase_option_count
-// (server.py lines 105-130).
+// Expected values derived manually from unlocked/unlocked_tier/phase_option_count
 describe('unlocked / unlockedTier / phaseOptionCount', () => {
   const tier0 = ['a'];
   const tier1 = ['b'];

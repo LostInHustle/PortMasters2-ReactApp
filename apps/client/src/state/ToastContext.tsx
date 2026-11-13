@@ -37,7 +37,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }, FADE_MS);
   }, []);
 
-  // Ported from PortMasters2/PortMasters_online.html pushToast (lines 1822-1835): caps visible
+  // Mirrors PortMasters2/PortMasters_online.html pushToast: caps visible
   // toasts at 6 (a burst of actions can't fill the screen), drops the oldest first, then fades
   // and removes each toast after `ttl` ms. Extended with an optional onClick so a toast can act
   // as an alert that opens a relevant view (e.g. a chat message opening the chat window).
@@ -53,7 +53,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     [fadeOut],
   );
 
-  // Ported from PortMasters2/PortMasters_online.html showNotification (lines 1837-1839).
+  // Mirrors PortMasters2/PortMasters_online.html showNotification.
   const showNotification = useCallback(
     (message: string, isError = false, onClick?: () => void) => {
       pushToast(message, isError ? 'error' : '', 3500, onClick);

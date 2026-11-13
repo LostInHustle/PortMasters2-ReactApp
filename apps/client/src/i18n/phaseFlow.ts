@@ -2,7 +2,7 @@ import type { Phase } from '@pm2/shared';
 import type { Bilingual, Lang } from './LangContext.js';
 import { pf, tr } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html PHASE_FLOW (lines 1608-1633):
+// Mirrors PortMasters2/PortMasters_online.html PHASE_FLOW:
 // metadata for the 8 phases of a round, so the phase name + goal + action hint are always
 // visible (recognition over recall).
 export interface PhaseFlowEntry {

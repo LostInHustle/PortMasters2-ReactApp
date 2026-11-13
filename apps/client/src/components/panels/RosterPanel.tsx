@@ -5,11 +5,11 @@ import { fleetGlyph } from '../../i18n/iconMode.js';
 import { useLang } from '../../i18n/LangContext.js';
 import { Medal } from '../common/Medal.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html rosterWidgetHTML/renderRoster
-// (lines 2746-2806): with up to 5 captains in a room, the side panel can no longer show one
-// fleet in full, instead each fellow captain collapses to a single-row card (online dot, host
-// crown, gold, renown, bankrupt/finished chip), and clicking it opens the shared Captain Viewer
-// (SpectateView, via SpectateContext) for full detail. Replaces PartnerPanel.
+// Mirrors PortMasters2/PortMasters_online.html rosterWidgetHTML/renderRoster. With up to 5
+// captains in a room, the side panel can no longer show one fleet in full. Instead each fellow
+// captain collapses to a single row card (online dot, host crown, gold, renown, bankrupt or
+// finished chip), and clicking it opens the shared Captain Viewer (SpectateView, via
+// SpectateContext) for full detail.
 export function RosterPanel() {
   const { tr } = useTranslate();
   const { iconMode } = useLang();

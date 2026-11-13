@@ -1,4 +1,4 @@
-// Ported verbatim from PortMasters2/PortMasters_online.html (lines 1186-1188): three fixed,
+// Mirrors PortMasters2/PortMasters_online.html: three fixed,
 // blurred, slowly drifting light patches behind everything (z-index: -1), present on every
 // screen. Styled entirely by .bg-orb / .orb-1/2/3 in global.css.
 export function BgOrbs() {

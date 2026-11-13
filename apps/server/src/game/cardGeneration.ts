@@ -36,7 +36,7 @@ function isResourceId(item: ItemId): item is ResourceId {
   return (RESOURCES as readonly ItemId[]).includes(item);
 }
 
-// Ported verbatim from PortMasters2/server.py env_purchase_price (lines 586-590).
+// Mirrors PortMasters2/server.py env_purchase_price.
 export function envPurchasePrice(
   ctx: { monsoonState: MonsoonState | null },
   item: ItemId,
@@ -49,7 +49,7 @@ export function envPurchasePrice(
   return price;
 }
 
-// Ported verbatim from PortMasters2/server.py env_reward (lines 592-596).
+// Mirrors PortMasters2/server.py env_reward.
 export function envReward(
   ctx: { monsoonState: MonsoonState | null },
   port: PortId,
@@ -62,7 +62,7 @@ export function envReward(
   return reward;
 }
 
-// Ported verbatim from PortMasters2/server.py gen_emperor_mandate_order (lines 598-610).
+// Mirrors PortMasters2/server.py gen_emperor_mandate_order.
 export function genEmperorMandateOrder(
   ctx: { monsoonState: MonsoonState | null; difficulty: Difficulty; currentRound: number },
   size: number,
@@ -85,7 +85,7 @@ export function genEmperorMandateOrder(
   };
 }
 
-// Ported verbatim from PortMasters2/server.py gen_raw_order (lines 613-634).
+// Mirrors PortMasters2/server.py gen_raw_order.
 export function genRawOrder(ctx: CardGenContext, rng: Rng, filterItem?: ResourceId): CustomerOrder {
   const num = rng.randint(1, 3);
   const resources: OrderResource[] = [];
@@ -112,7 +112,7 @@ export function genRawOrder(ctx: CardGenContext, rng: Rng, filterItem?: Resource
   return { demandPort: port, resources, reward, totalItems: total, isProductOrder: false };
 }
 
-// Ported verbatim from PortMasters2/server.py gen_product_order (lines 636-642).
+// Mirrors PortMasters2/server.py gen_product_order.
 export function genProductOrder(
   ctx: CardGenContext,
   rng: Rng,
@@ -134,9 +134,9 @@ export function genProductOrder(
   };
 }
 
-// Ported verbatim from PortMasters2/server.py gen_mixed_order (lines 644-656): each purchased
+// Mirrors PortMasters2/server.py gen_mixed_order: each purchased
 // clue resolves into exactly one order, with matching good and port. Mutates `used` on the
-// matched clue, mirroring the Python in-place dict mutation.
+// matched clue, mirroring the Python in place dict mutation.
 export function genMixedOrder(ctx: MixedOrderContext, rng: Rng): CustomerOrder {
   const intel = ctx.revealedIntel.find((i) => !i.used);
   if (intel) {
@@ -151,7 +151,7 @@ export function genMixedOrder(ctx: MixedOrderContext, rng: Rng): CustomerOrder {
   return rng.random() < 0.5 ? genRawOrder(ctx, rng) : genProductOrder(ctx, rng);
 }
 
-// Ported verbatim from PortMasters2/server.py gen_resource_card (lines 658-680).
+// Mirrors PortMasters2/server.py gen_resource_card.
 export function genResourceCard(ctx: CardGenContext, rng: Rng): MarketCard {
   if (rng.random() < 0.3) {
     return genProductPurchaseCard(ctx, rng);
@@ -181,7 +181,7 @@ export function genResourceCard(ctx: CardGenContext, rng: Rng): MarketCard {
   return { port, resources, totalCost, isProductCard: false };
 }
 
-// Ported verbatim from PortMasters2/server.py gen_product_purchase_card (lines 682-705).
+// Mirrors PortMasters2/server.py gen_product_purchase_card.
 export function genProductPurchaseCard(ctx: CardGenContext, rng: Rng): MarketCard {
   const product = rng.choice(ctx.unlockedProducts());
   const qty = rng.randint(1, 2);

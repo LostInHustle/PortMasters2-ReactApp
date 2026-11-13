@@ -3,7 +3,7 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { Medal } from '../common/Medal.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderOpenRooms (lines 2337-2356):
+// Mirrors PortMasters2/PortMasters_online.html renderOpenRooms:
 // the lobby's "browse open rooms" list, fed by open_rooms_update (roomManager.ts's
 // broadcastOpenRooms). Every room that hasn't started yet shows up here for any online player to
 // join, alongside the existing 1:1 invite flow in OnlineUsersList.

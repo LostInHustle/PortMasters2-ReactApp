@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import type { ServerState } from '../lobby/onlineRegistry.js';
 
-// Same primitive as passwordHash.ts's generateSalt (16 random bytes, hex-encoded). This only
+// Same primitive as passwordHash.ts's generateSalt (16 random bytes, encoded in hex). This only
 // needs to be unguessable, there's no password or derivation involved.
 function randomToken(): string {
   return randomBytes(16).toString('hex');

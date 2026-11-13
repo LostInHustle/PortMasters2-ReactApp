@@ -6,8 +6,8 @@ import { useWs } from '../../ws/WsContext.js';
 import { useOpenManual } from '../manual/ManualModal.js';
 import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderControls (lines 3348-3401):
-// the bottom action bar's primary call-to-action and hint, one per phase.
+// Mirrors PortMasters2/PortMasters_online.html renderControls:
+// the bottom action bar's primary call to action and hint, one per phase.
 export function ControlPanel() {
   const { tr } = useTranslate();
   const { serverState } = useSession();

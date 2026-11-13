@@ -5,10 +5,10 @@ import { ITEM_ICONS } from '../../i18n/itemIcons.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useWs } from '../../ws/WsContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html brokerWhisperHTML
-// (lines 2760-2806). The collapsed/expanded state is local UI state, not server state, so a
-// plain useState (defaulting open, matching the original's `_whisperOpen = true`) replaces the
-// original's module-global + ontoggle handler. React preserves it across re-renders for free.
+// Mirrors PortMasters2/PortMasters_online.html brokerWhisperHTML. The collapsed or expanded state
+// is local UI state, not server state, so a plain useState (defaulting open, matching the
+// original's `_whisperOpen = true`) replaces the original's module global and ontoggle handler.
+// React preserves it across rerenders for free.
 export function BrokerWhisper({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
   const { send } = useWs();

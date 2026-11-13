@@ -2,26 +2,26 @@
 
 > 🌐 **Bilingual Documentation** | [🇨🇳 查看中文文档](README_zh-CN.md)
 
-A full rebuild of PortMasters 2 on a modern TypeScript stack. The Python and single file HTML original has been rewritten end to end into a typed Node backend and a React frontend, with the same game, the same rules, and the same bilingual interface, now organized as a tidy monorepo instead of two giant files.
+A full rebuild of PortMasters 2 on a modern TypeScript stack. The Python and single file HTML original have been rewritten end to end into a typed Node backend and a React frontend, with the same game, the same rules, and the same bilingual interface, now organized as a tidy monorepo instead of two giant files.
 
 ---
 
 ## 📖 1. Overview
 
-Welcome back to the Maritime Silk Road. Two to five captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods, gold and rumors with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every voyage (8 rounds on Easy, 12 on Standard, 16 on Hard). The richer reputation wins.
+Welcome back to the Maritime Silk Road. Two to five captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods and gold with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every voyage (8 rounds on Easy, 12 on Standard, 16 on Hard). The highest renown wins.
 
 This edition keeps everything the original did and changes only the engine room:
 
 - 🧩 **One game, two apps, one shared core.** A Node WebSocket server holds all the authoritative game logic; a React client renders it. Both import the same `packages/shared` data tables and wire types, so the two sides can never drift apart.
 - 🔤 **TypeScript everywhere**, from the difficulty ladder to the barter exploit guard, with strict compiler settings.
-- 🧪 **A real test suite.** 348 tests cover the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip. They run in about a second.
+- 🧪 **A real test suite.** 413 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
 - 🌍 **English (default) and Simplified Chinese**, switchable any time with the 🌐 button on every screen, including the login and lobby pages.
 - 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and who is in port.
 - 🀄 Icons are emojis by default. The 🀄 button in the lobby and in the game header switches goods, artisans and captain avatars to Chinese characters, and back again. Each captain also gets a medal in a color of their own.
 - 🤲 In every pair of buttons the way back sits on the left and the action sits on the right, so Cancel and Decline are on the left and Create Room and Accept are on the right.
 - 👑 **Emperor Mandates.** At set milestones an imperial commission lands in the Trade phase, a golden order worth several ordinary ones, with the last of the voyage marked as the closing commission.
 - 🎯 **Directed barter offers.** Post to the whole room, or address an offer to one captain so only they can see and accept it. The server enforces that, not just the interface.
-- 🪶 **Small, readable files.** The original is two very large files, a Python server and one HTML page. Here the same game is 154 focused source files, each one mapping to a single piece of the original, with 36 more holding the tests.
+- 🪶 **Small, readable files.** The original is two very large files, a Python server and one HTML page. Here the same game is 158 focused source files, each one mapping to a single piece of the original, with 38 more holding the tests.
 - 🛡️ **Guardrails that hold the shape.** Strict TypeScript, ESLint with the React hooks rules switched on, and Prettier all run over the whole repo, so the class of mistake that only shows up mid session gets caught at the keyboard instead.
 
 If you have never played, the gameplay is identical to PortMasters 2. The sections below explain both how to run it and how it plays.
@@ -104,7 +104,7 @@ The project is an npm workspaces monorepo. Three packages, each with one job:
 │   │   ├── ws/           # the WebSocket connection loop and message router
 │   │   ├── http/         # static file serving for the built client
 │   │   └── main.ts       # the entry point that wires it all together
-│   ├── tests/            # 277 vitest tests mirroring the src/ tree
+│   ├── tests/            # 331 vitest tests mirroring the src/ tree
 │   └── data/users.json   # account store (created and updated at runtime)
 │
 └── apps/client/          # React frontend (Vite)
@@ -117,7 +117,7 @@ The project is an npm workspaces monorepo. Three packages, each with one job:
     │   ├── components/   # layout, auth, lobby, the panels, the phase screens,
     │   │                 # the modal/manual/chat/tooltip/spectate systems
     │   └── styles/       # the global stylesheet
-    └── tests/            # 71 vitest tests, no browser needed
+    └── tests/            # 77 vitest tests, no browser needed
 ```
 
 The guiding rule is that anything which must be identical on both sides lives in `packages/shared` and is imported, never copied. That is the main defense against the client and server ever disagreeing about a price or a rule.
@@ -128,16 +128,16 @@ The guiding rule is that anything which must be identical on both sides lives in
 
 A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Hard, and each voyage runs through **8 phases**. No phase advances until every captain confirms.
 
-| Phase           | What happens                                                                                                                        |
-| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
-| **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went.                                     |
-| **🧭 Fortune**  | The compass deals you 4 of the fortunes at random, and every captain gets a different hand. Lock one in; it lasts this round only.  |
-| **🛒 Procure**  | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand.      |
-| **🤝 Barter**   | Trade with the room. Post an offer like "I give this for that" and it settles the moment someone accepts.                           |
-| **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                          |
-| **📦 Trade**    | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️.                                  |
-| **🔧 Upkeep**   | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt. |
-| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the voyage.                                                   |
+| Phase           | What happens                                                                                                                                       |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **⚓ Set Sail** | Confirm the start of the round. From round 2 on, this page also recaps how the last round went.                                                    |
+| **🧭 Fortune**  | The compass deals you 4 fortunes from the unlocked pool at random, and every captain gets a different hand. Lock one in; it lasts this round only. |
+| **🛒 Procure**  | Buy materials and goods from the supply cards. The Broker's Whisper panel sits at the top and sells intel about coming demand.                     |
+| **🤝 Barter**   | Trade with the room. Post an offer like "I give this for that" and it settles the moment someone accepts.                                          |
+| **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                                         |
+| **📦 Trade**    | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️.                                                 |
+| **🔧 Upkeep**   | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt.                |
+| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the voyage.                                                                  |
 
 ### ⚖️ Difficulty Modes
 
@@ -157,7 +157,7 @@ Each round the Navigator's Compass deals you a private hand of 4 random buffs an
 
 ### 🔧 Ship Modules
 
-Upgrade your ship to unlock module slots (one per level, up to 3). Each Shipyard phase you can draft a fixed batch of three modules and install one, from the Smuggler's Hold to the Overdrive Engine. You get one re roll of the batch per round.
+Upgrade your ship to unlock module slots (one per level, up to 3). Each Shipyard phase you can draft a fixed batch of three modules and install one, from the Smuggler's Hold to the Overdrive Engine. You get one reroll of the batch per round.
 
 ### 💰 Taxes & Finance
 
@@ -212,17 +212,19 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 
 ## 🔧 9. Useful Commands
 
-| Command              | What it does                                            |
-| :------------------- | :------------------------------------------------------ |
-| `npm install`        | Install every workspace.                                |
-| `npm run serve`      | Build the client and serve the whole game on port 8080. |
-| `npm run dev:server` | Run the backend, auto restarting on :8080.              |
-| `npm run dev:client` | Run the Vite dev server with hot reload on :5173.       |
-| `npm run build`      | Build the client into `apps/client/dist`.               |
-| `npm run start`      | Serve a prebuilt client on :8080.                       |
-| `npm test`           | Run all 348 tests, server then client.                  |
-| `npm run typecheck`  | Type check all three workspaces.                        |
-| `npm run lint`       | Lint the whole repo.                                    |
+| Command                | What it does                                                       |
+| :--------------------- | :----------------------------------------------------------------- |
+| `npm install`          | Install every workspace.                                           |
+| `npm run serve`        | Build the client and serve the whole game on port 8080.            |
+| `npm run dev:server`   | Run the backend, auto restarting on :8080.                         |
+| `npm run dev:client`   | Run the Vite dev server with hot reload on :5173.                  |
+| `npm run build`        | Build the client into `apps/client/dist`.                          |
+| `npm run start`        | Serve a prebuilt client on :8080.                                  |
+| `npm test`             | Run all 413 tests across the shared, server and client workspaces. |
+| `npm run typecheck`    | Type check all three workspaces.                                   |
+| `npm run lint`         | Lint the whole repo.                                               |
+| `npm run format`       | Format the whole repo with Prettier.                               |
+| `npm run format:check` | Check formatting without writing changes.                          |
 
 ---
 

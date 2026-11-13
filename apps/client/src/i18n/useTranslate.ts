@@ -8,7 +8,7 @@ export interface Translate {
 }
 
 // Binds tr()/pf() to the current language, so call sites read the same as the original's
-// `tr('中文', 'English')` / `pf(obj)` without re-passing lang everywhere.
+// `tr('中文', 'English')` / `pf(obj)` without passing again lang everywhere.
 //
 // Memoized on the language, which is the only thing these close over. Almost every component
 // in the app calls this hook, so handing back a fresh object with fresh closures on every

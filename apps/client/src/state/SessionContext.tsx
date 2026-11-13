@@ -148,7 +148,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     [send],
   );
 
-  // Generalized from PortMasters2/PortMasters_online.html sendChat (lines 2214-2222) from a 1:1
+  // Generalized from PortMasters2/PortMasters_online.html sendChat from a 1:1
   // partner check to "is anyone else in the room online": the server relays to every other
   // online room member (lobby/chat.ts), so the sender echoes their own message locally rather
   // than waiting for it to come back over the wire.
@@ -171,7 +171,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     send({ action: 'get_chat_history' });
   }, [send]);
 
-  // Ported verbatim from PortMasters2/PortMasters_online.html toggleChat (lines 2200-2212):
+  // Mirrors PortMasters2/PortMasters_online.html toggleChat:
   // opening the window also refetches history; closing is just a visibility flip.
   const toggleChat = useCallback(() => {
     const { chatOpen, serverState } = stateRef.current;

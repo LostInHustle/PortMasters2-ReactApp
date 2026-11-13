@@ -2,16 +2,15 @@ import { EN_NAMES, tn } from './enNames.js';
 import { wName } from './workerTypesText.js';
 import type { Lang } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html SERVER_TEXT_RULES
-// (lines 1652-1713): the server outputs log/system messages in canonical Chinese; language
-// belongs to the presentation layer, and the two players in a session may use different
-// languages, so each client translates independently. This table maps message templates one by
-// one; any string that doesn't match falls back to per-noun substitution (lstNames). This file
-// is one of the plan's named file-size-ceiling exceptions: a flat, append-only regex table,
-// kept as one file so a new server log line only ever needs one new entry in one place.
+// Mirrors PortMasters2/PortMasters_online.html SERVER_TEXT_RULES. The server outputs log and
+// system messages in canonical Chinese. Language belongs to the presentation layer, and the
+// captains in a session may use different languages, so each client translates independently.
+// This table maps message templates one by one; any string that doesn't match falls back to
+// per noun substitution (lstNames). The regex table stays in one file so a new server log line
+// only ever needs one new entry in one place.
 type ServerTextRule = [RegExp, (m: RegExpMatchArray) => string];
 
-export const SERVER_TEXT_RULES: ServerTextRule[] = [
+const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^💰 福缘：获得 (\d+) 金币$/, (m) => `💰 Fortune: gained ${m[1]!} gold`],
   [/^❌ 资金不足！需要(\d+)金币$/, (m) => `❌ Not enough gold! ${m[1]!} needed`],
   [/^🛒 采购完成，花费(\d+)金币$/, (m) => `🛒 Purchase complete, ${m[1]!} gold spent`],
@@ -68,21 +67,21 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^🤝 互市成功！$/, () => `🤝 Barter complete!`],
   /* Sync waiting hints */
   [/^请点击“准备就绪”以进入工匠管理$/, () => `Click "Ready" to proceed to artisan management`],
-  [/^等待对方也点击准备就绪\.\.\.$/, () => `Waiting for your partner to click Ready...`],
-  [/^已准备，等待对方点击继续\.\.\.$/, () => `Ready, waiting for your partner to continue...`],
+  [/^等待其他玩家也点击准备就绪\.\.\.$/, () => `Waiting for everyone else to click Ready...`],
+  [/^已准备，等待其他玩家点击继续\.\.\.$/, () => `Ready: waiting for everyone else to continue...`],
   /* System messages */
   [
-    /^对方重新开始了游戏，双方进度已重置$/,
-    () => `Your partner restarted the game, both voyages have been reset`,
+    /^其他玩家重新开始了游戏，本局进度已重置$/,
+    () => `Another captain restarted the game. The voyage has been reset`,
   ],
   [
-    /^需等待对方完成本局后才能重新起航$/,
-    () => `You can set sail again once your partner finishes this game`,
+    /^需等待其他玩家完成本局后才能重新起航$/,
+    () => `You can set sail again once everyone else finishes this game`,
   ],
   [
     /^❌ 对方拒绝了你的互市提案（出 (.+) ⇄ 换 (.+)）$/,
     (m) =>
-      `❌ Your partner declined your barter offer (give ${lstNames(m[1]!)} ⇄ get ${lstNames(m[2]!)})`,
+      `❌ The other captain declined your barter offer (give ${lstNames(m[1]!)} ⇄ get ${lstNames(m[2]!)})`,
   ],
   [/^该邀请已失效$/, () => `That invitation has expired`],
   [/^对方已离线，邀请失效$/, () => `The other player went offline, invitation void`],
@@ -91,10 +90,13 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
     () => `Cannot start a session: one of you is already in a game`,
   ],
   [
-    /^你还没有游戏伙伴，无法发送消息$/,
-    () => `You don't have a partner yet, so messages can't be sent`,
+    /^你还没有加入航程，无法发送消息$/,
+    () => `You're not in a voyage yet, so messages can't be sent`,
   ],
-  [/^对方已离线，无法发送消息$/, () => `Your partner is offline, message not sent`],
+  [
+    /^其他玩家都已离线，无法发送消息$/,
+    () => `Everyone else is offline, so the message wasn't sent`,
+  ],
   /* Rooms (recruit flow) */
   [
     /^你已在游戏会话中，无法创建房间$/,
@@ -139,7 +141,7 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
 ];
 
 // Replace canonical names in a string one by one with English (fallback path).
-export function lstNames(s: string): string {
+function lstNames(s: string): string {
   const out = Object.keys(EN_NAMES).reduce((acc, k) => acc.split(k).join(EN_NAMES[k]!), s);
   return out.split('、').join(', ');
 }

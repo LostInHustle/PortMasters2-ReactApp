@@ -9,9 +9,9 @@ interface RegisterFormProps {
   onShowLogin: () => void;
 }
 
-// Ported from PortMasters2/PortMasters_online.html register() (lines 1871-1897): the only
-// client-side check is password confirmation matching; everything else (length, uniqueness) is
-// validated server-side. register_result is handled here (not in SessionContext) since it only
+// Mirrors PortMasters2/PortMasters_online.html register(): the only
+// on the client check is password confirmation matching; everything else (length, uniqueness) is
+// validated on the server. register_result is handled here (not in SessionContext) since it only
 // ever affects this form: a toast, plus switching back to the login view on success.
 export function RegisterForm({ onShowLogin }: RegisterFormProps) {
   const { tr, lang } = useTranslate();

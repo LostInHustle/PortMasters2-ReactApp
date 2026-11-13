@@ -8,13 +8,13 @@ import {
   type DifficultyConfig,
 } from '@pm2/shared';
 
-// Ported verbatim from PortMasters2/server.py normalize_difficulty/difficulty_cfg/
-// difficulty_rounds/difficulty_tier_unlock/difficulty_broker_corruption (lines 84-102).
+// Mirrors PortMasters2/server.py normalize_difficulty/difficulty_cfg/
+// difficulty_rounds/difficulty_tier_unlock/difficulty_broker_corruption.
 export function normalizeDifficulty(value: unknown): Difficulty {
   return value === 'easy' || value === 'standard' || value === 'hard' ? value : DEFAULT_DIFFICULTY;
 }
 
-export function difficultyCfg(difficulty: unknown): DifficultyConfig {
+function difficultyCfg(difficulty: unknown): DifficultyConfig {
   return DIFFICULTIES[normalizeDifficulty(difficulty)];
 }
 
@@ -30,7 +30,7 @@ export function difficultyBrokerCorruption(difficulty: unknown): boolean {
   return difficultyCfg(difficulty).brokerCorruption;
 }
 
-// Ported verbatim from PortMasters2/server.py unlocked()/unlocked_tier() (lines 105-118).
+// Mirrors PortMasters2/server.py unlocked()/unlocked_tier().
 export function unlocked<T>(
   tier0: readonly T[],
   tier1: readonly T[],
@@ -58,12 +58,12 @@ export function unlockedTier(roundNo: number, tierUnlock: Record<number, number>
   return highest;
 }
 
-// Ported verbatim from PortMasters2/server.py phase_option_count (lines 129-130).
+// Mirrors PortMasters2/server.py phase_option_count.
 export function phaseOptionCount(roundNo: number, tierUnlock: Record<number, number>): number {
   return PHASE_OPTIONS_BASE + PHASE_OPTIONS_PER_TIER * unlockedTier(roundNo, tierUnlock);
 }
 
-// Ported verbatim from PortMasters2/server.py pirate_loss_pct (lines 144-150).
+// Mirrors PortMasters2/server.py pirate_loss_pct.
 export function pirateLossPct(difficulty: unknown, roundNo: number, maxRounds: number): number {
   const curve = difficultyCfg(difficulty).pirateLoss;
   const secondHalfTier = curve.length === 2 ? curve[1] : curve[0];
@@ -71,7 +71,7 @@ export function pirateLossPct(difficulty: unknown, roundNo: number, maxRounds: n
   return PIRATE_LOSS_TIERS[tier];
 }
 
-// Ported verbatim from PortMasters2/server.py emperor_mandate_size (lines 181-183).
+// Mirrors PortMasters2/server.py emperor_mandate_size.
 export function emperorMandateSize(difficulty: unknown, roundNo: number): number | undefined {
   return difficultyCfg(difficulty).mandates[roundNo];
 }

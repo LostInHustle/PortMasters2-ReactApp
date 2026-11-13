@@ -13,18 +13,17 @@ import type { IntelClue } from '../domain/intel.js';
 import type { TradeOrder } from '../domain/trade.js';
 import type { Worker } from '../domain/worker.js';
 
-// Ported verbatim from PortMasters2/server.py PlayerGame.__init__ (line 467): a deliberately
-// mixed int/string enum, preserved as-is rather than cleaned into a string union. See the
-// plan's "phase encoding" decision.
+// Mirrors PortMasters2/server.py PlayerGame.__init__: a deliberately
+// mixed int/string enum, preserved as is rather than cleaned into a string union.
 export type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 'trade' | 'worker_mgmt' | 'bankruptcy' | 'endgame';
 
-// Ported from PortMasters2/server.py's MIN_ROOM_PLAYERS/MAX_ROOM_PLAYERS module constants:
-// shared by the server (clamping/validating room size) and the client (the create-room and
+// Mirrors PortMasters2/server.py's MIN_ROOM_PLAYERS/MAX_ROOM_PLAYERS module constants:
+// shared by the server (clamping/validating room size) and the client (the create room and
 // roster UI), so the allowed range only ever needs to change in one place.
 export const MIN_ROOM_PLAYERS = 2;
 export const MAX_ROOM_PLAYERS = 5;
 
-// Ported verbatim from PortMasters2/server.py end_round (lines 1038-1045).
+// Mirrors PortMasters2/server.py end_round.
 export interface RoundSummary {
   round: number;
   revenue: number;
@@ -34,7 +33,7 @@ export interface RoundSummary {
   score: number;
 }
 
-// Ported verbatim from PortMasters2/server.py PlayerGame.to_dict() (lines 1073-1129): the
+// Mirrors PortMasters2/server.py PlayerGame.to_dict(): the
 // literal wire contract sent to the client as this player's "state" payload. Field names and
 // order mirror the Python dict exactly, including the two snake_case keys (monsoon_state,
 // pirate_immunity) the original frontend reads literally. This is not a typo to "fix".
@@ -89,9 +88,9 @@ export interface PlayerGameState {
   /**
    * Not part of the original port: what payWages will actually charge for the current roster at
    * the next Upkeep (every worker type, with artisans_workshop's wage markup applied), so the
-   * Procure/Artisans "Due This Round" preview never has to re-derive this and risk drifting from
-   * the real charge. workerWages above stays the original's post-settlement bookkeeping field
-   * (0 until Upkeep actually runs); this is the live, forward-looking figure shown before that.
+   * Procure/Artisans "Due This Round" preview never has to derive again this and risk drifting from
+   * the real charge. workerWages above stays the original's after settlement bookkeeping field
+   * (0 until Upkeep actually runs); this is the live, forward looking figure shown before that.
    */
   estimatedWages: number;
   roundRevenue: number;
@@ -111,10 +110,10 @@ export interface RosterPlayer {
   isHost: boolean;
 }
 
-// Ported from PortMasters2/server.py GameSession.broadcast_state's per-recipient state dict,
-// generalized from a single partner to a room of 2-5: otherGames/players replace the old
+// Mirrors PortMasters2/server.py GameSession.broadcast_state's for each recipient state dict,
+// generalized from a single partner to a room of 2 to 5: otherGames/players replace the old
 // singular otherGame/partnerName/partnerOnline now that there can be more than one fellow
-// captain, and the end-session vote tally rides along so every client can show live consensus.
+// captain, and the end session vote tally rides along so every client can show live consensus.
 export interface SessionStateMessage {
   tradeOrders: TradeOrder[];
   tradeReady: boolean[];
@@ -134,7 +133,7 @@ export interface SessionStateMessage {
 }
 
 // The roster of a room, broadcast to its current members both before and after it starts --
-// the pre-start "Host a voyage" lobby view and the in-game roster panel read the same shape.
+// the before the start "Host a voyage" lobby view and the in game roster panel read the same shape.
 export interface RoomRosterMessage {
   host: string;
   difficulty: Difficulty;
@@ -155,7 +154,7 @@ export interface OpenRoomSummary {
 // Reply to the unauthenticated `resume_token` action, a separate message type from
 // login_result (rather than reusing it) so the client can tell a silent, automatic resume
 // attempt apart from an interactive login the player actually typed: a failed interactive login
-// should show "wrong password," but a failed silent resume (an unknown/expired/already-revoked
+// should show "wrong password," but a failed silent resume (an unknown/expired/already revoked
 // token) should just fall back to the ordinary login screen with no alarming message.
 export interface ResumeResultMessage {
   success: boolean;

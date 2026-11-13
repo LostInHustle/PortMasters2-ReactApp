@@ -26,11 +26,11 @@ import {
 import { handleDoMaintenance, handleHireEscort } from './upkeepActions.js';
 import { handleAssignTask, handleFireWorker, handleHireWorker } from './workerActions.js';
 
-// Ported verbatim from PortMasters2/server.py handle_game_action (lines 1583-1734): the in-game
+// Mirrors PortMasters2/server.py handle_game_action: the in game
 // action dispatcher. A player with no session is silently ignored, matching the original's
 // `if sess is None: return`. Bankrupt/finished players may only join_game, restart, or
-// end_session (read-only spectator + restart + a voice in disbanding the room), matching the
-// original's end-state guard as extended by the vote-to-end feature.
+// end_session (read only spectator + restart + a voice in disbanding the room), matching the
+// original's end state guard as extended by the vote to end feature.
 export function handleGameAction(
   state: ServerState,
   username: string,

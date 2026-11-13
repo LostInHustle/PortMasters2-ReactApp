@@ -4,8 +4,7 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { UserStore } from '../../src/auth/UserStore.js';
 
-// Expected validation rules and messages hand-derived from UserStore.register/verify
-// (PortMasters2/server.py lines 1159-1182).
+// Expected validation rules and messages derived manually from UserStore.register/verify
 describe('UserStore', () => {
   let dir: string;
   let path: string;

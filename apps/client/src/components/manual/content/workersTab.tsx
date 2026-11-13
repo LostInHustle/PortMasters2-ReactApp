@@ -1,11 +1,10 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html manualContentZh/manualContentEn
-// (lines 3452-3685 / 3687-3920 respectively), the 'workers' key of each.
-// Kept as two parallel JSX trees (one per language) rather than merged tr()-per-node, matching
-// the original's own choice to duplicate full per-language content blocks for this prose --
-// merging them would mean interleaving translation calls through dense paragraphs for no
-// real benefit.
+// Mirrors the "workers" section of the manual content in PortMasters2/PortMasters_online.html.
+// Kept as two parallel JSX trees, one per language, rather than one merged tree with a
+// translation call per node. The original also duplicates full content blocks per language for
+// this prose, since merging them would mean interleaving translation calls through dense
+// paragraphs for no real benefit.
 export function WorkersTab() {
   const { lang } = useTranslate();
   if (lang === 'en') {

@@ -1,7 +1,7 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useToast } from '../../state/ToastContext.js';
 
-// Ported from PortMasters2/PortMasters_online.html's toast stack element (pushToast): one
+// Mirrors PortMasters2/PortMasters_online.html's toast stack element (pushToast): one
 // stack pinned to the corner, each entry fading out before removal. A toast carrying an onClick
 // (e.g. a chat alert) also acts as a button: clicking it runs the action and dismisses it.
 //

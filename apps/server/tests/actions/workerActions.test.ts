@@ -6,8 +6,8 @@ import {
 } from '../../src/actions/workerActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// hireWorker/fireWorker/assignTask branches (lines 1661-1672). Worker type ids are the English
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// hireWorker/fireWorker/assignTask branches. Worker type ids are the English
 // keys in WAGES (e.g. 'weaver'); product task ids are the Chinese keys in RECIPES (e.g. '布衣',
 // which costs 麻布:2 + 丝绸:1, both present in a fresh game's starting inventory).
 describe('handleHireWorker', () => {
@@ -28,7 +28,7 @@ describe('handleHireWorker', () => {
 });
 
 describe('handleFireWorker', () => {
-  it('defaults to the always-invalid index -1 when none is given, so changed=true but no one is fired', () => {
+  it('defaults to the always invalid index -1 when none is given, so changed=true but no one is fired', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 'worker_mgmt';
     handleHireWorker(sess, 0, { workerType: 'weaver' });

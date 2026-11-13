@@ -5,7 +5,7 @@ export interface ShipModule {
   desc: string;
 }
 
-// Ported verbatim from PortMasters2/server.py MODULES_TIER0 (lines 375-384).
+// Mirrors PortMasters2/server.py MODULES_TIER0.
 // Module effects are implemented ad hoc in game logic via has_module(id) checks (no
 // structured "modifiers" field in the original), so this table is display data only.
 export const MODULES_TIER0 = [
@@ -16,12 +16,12 @@ export const MODULES_TIER0 = [
     icon: '🏗️',
     desc: '每件货物运费−1。船坞升级费用+15金币。',
   },
-  { id: 'artisans_workshop', name: '工匠工坊', icon: '🛠️', desc: '工人产量+1。工资+20%。' },
+  { id: 'artisans_workshop', name: '工匠工坊', icon: '🛠️', desc: '工匠产量+1。工资+20%。' },
   {
     id: 'tax_evasion',
     name: '避税账本',
     icon: '📒',
-    desc: '所得税按增值税后利润计。15%概率在订单完成时罚款20金币(稽查)。',
+    desc: '增值税与所得税减半。15%概率在订单完成时罚款20金币（稽查）。',
   },
   {
     id: 'silk_monopoly',
@@ -39,7 +39,7 @@ export const MODULES_TIER0 = [
   { id: 'overdrive_engine', name: '超载引擎', icon: '⚡', desc: '运费−5金币。维护费+10金币。' },
 ] as const satisfies readonly ShipModule[];
 
-// Ported verbatim from PortMasters2/server.py MODULES_TIER1 (lines 386-390).
+// Mirrors PortMasters2/server.py MODULES_TIER1.
 export const MODULES_TIER1 = [
   {
     id: 'bureau_token',
@@ -56,7 +56,7 @@ export const MODULES_TIER1 = [
   },
 ] as const satisfies readonly ShipModule[];
 
-// Ported verbatim from PortMasters2/server.py MODULES_TIER2 (lines 392-396).
+// Mirrors PortMasters2/server.py MODULES_TIER2.
 export const MODULES_TIER2 = [
   {
     id: 'foreign_quarter_pass',

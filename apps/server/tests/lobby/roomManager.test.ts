@@ -16,9 +16,9 @@ import {
 } from '../../src/lobby/roomManager.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_create_room/
-// handle_join_room/handle_leave_room/handle_start_room (the prototype's ROOMS-backed lobby for
-// 2-5 players), adapted to this codebase's ServerState.rooms/sessions split.
+// Expected behavior derived manually from PortMasters2/server.py handle_create_room/
+// handle_join_room/handle_leave_room/handle_start_room (the prototype's backed by ROOMS lobby for
+// 2 to 5 players), adapted to this codebase's ServerState.rooms/sessions split.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -149,7 +149,7 @@ describe('roomManager', () => {
       expect(state.sessions.has('host')).toBe(false);
     });
 
-    it('is a no-op once the room has started (roster is frozen)', () => {
+    it('is a no operation once the room has started (roster is frozen)', () => {
       const host = new FakeSocket();
       state.online.set('host', host);
       handleCreateRoom(state, 'host', 2, 'easy');

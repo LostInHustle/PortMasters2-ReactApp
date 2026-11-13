@@ -1,11 +1,10 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html manualContentZh/manualContentEn
-// (lines 3452-3685 / 3687-3920 respectively), the 'economy' key of each.
-// Kept as two parallel JSX trees (one per language) rather than merged tr()-per-node, matching
-// the original's own choice to duplicate full per-language content blocks for this prose --
-// merging them would mean interleaving translation calls through dense paragraphs for no
-// real benefit.
+// Mirrors the "economy" section of the manual content in PortMasters2/PortMasters_online.html.
+// Kept as two parallel JSX trees, one per language, rather than one merged tree with a
+// translation call per node. The original also duplicates full content blocks per language for
+// this prose, since merging them would mean interleaving translation calls through dense
+// paragraphs for no real benefit.
 export function EconomyTab() {
   const { lang } = useTranslate();
   if (lang === 'en') {
@@ -59,7 +58,8 @@ export function EconomyTab() {
             source even after VAT.
           </li>
           <li>
-            <strong>Barter</strong>: strike good deals with your partner to cover each other's gaps.
+            <strong>Barter</strong>: strike good deals with the other captains to cover each other's
+            gaps.
           </li>
         </ul>
         <h4>📈 Buying Tip</h4>
@@ -120,12 +120,12 @@ export function EconomyTab() {
         </li>
         <li>
           <strong>成品订单</strong>
-          ：按成品市价结算（麻衣 30~42 / 布衣 50~65 / 绫罗绸缎 70~90 / 香囊 95 到
-          120），扣增值税后仍是主要利润来源。
+          ：按成品市价结算（麻衣 30~42 / 布衣 50~65 / 绫罗绸缎 70~90 / 香囊
+          95~120），扣增值税后仍是主要利润来源。
         </li>
         <li>
           <strong>互市</strong>
-          ：和伙伴谈个好价钱，互补短板。
+          ：和其他船长谈个好价钱，互补短板。
         </li>
       </ul>
       <h4>📈 采购小窍门</h4>

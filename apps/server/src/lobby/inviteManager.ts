@@ -7,7 +7,7 @@ import type { ServerState } from './onlineRegistry.js';
 const INVITE_COOLDOWN_SECONDS = 60;
 const INVITE_COOLDOWN_MS = INVITE_COOLDOWN_SECONDS * 1000;
 
-// Ported verbatim from PortMasters2/server.py invite_timeout_task (lines 1497-1505). Python
+// Mirrors PortMasters2/server.py invite_timeout_task. Python
 // schedules this via asyncio.create_task + asyncio.sleep, cancelable with task.cancel(); the
 // direct Node equivalent is setTimeout/clearTimeout, stored on the pending invite as `timer`.
 function scheduleInviteTimeout(state: ServerState, sender: string, target: string): NodeJS.Timeout {
@@ -21,7 +21,7 @@ function scheduleInviteTimeout(state: ServerState, sender: string, target: strin
   }, INVITE_COOLDOWN_MS);
 }
 
-// Ported verbatim from PortMasters2/server.py handle_send_invite (lines 1507-1539).
+// Mirrors PortMasters2/server.py handle_send_invite.
 export function handleSendInvite(
   state: ServerState,
   sender: string,
@@ -88,7 +88,7 @@ export function handleSendInvite(
   });
 }
 
-// Ported verbatim from PortMasters2/server.py handle_respond_invite (lines 1541-1564).
+// Mirrors PortMasters2/server.py handle_respond_invite.
 export function handleRespondInvite(
   state: ServerState,
   responder: string,

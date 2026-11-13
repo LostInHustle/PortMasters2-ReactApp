@@ -2,8 +2,7 @@ import type { ServerState } from '../lobby/onlineRegistry.js';
 import type { SharedSession } from '../session/SharedSession.js';
 import { sendToUser } from '../ws/send.js';
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's setTradeReady branch
-// (lines 1632-1637).
+// Mirrors PortMasters2/server.py handle_game_action's setTradeReady branch
 export function handleSetTradeReady(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 'trade') return false;
@@ -14,8 +13,7 @@ export function handleSetTradeReady(sess: SharedSession, slot: number): boolean 
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's createTradeOrder branch
-// (lines 1638-1643).
+// Mirrors PortMasters2/server.py handle_game_action's createTradeOrder branch
 export function handleCreateTradeOrder(
   sess: SharedSession,
   slot: number,
@@ -27,8 +25,7 @@ export function handleCreateTradeOrder(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's acceptTrade branch
-// (lines 1644-1647).
+// Mirrors PortMasters2/server.py handle_game_action's acceptTrade branch
 export function handleAcceptTrade(
   sess: SharedSession,
   slot: number,
@@ -40,8 +37,7 @@ export function handleAcceptTrade(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's rejectTrade branch
-// (lines 1648-1660): notifies the seller only when they aren't the one who rejected their own
+// Mirrors PortMasters2/server.py handle_game_action's rejectTrade branch notifies the seller only when they aren't the one who rejected their own
 // order (a player can reject an order they themselves proposed).
 export function handleRejectTrade(
   state: ServerState,

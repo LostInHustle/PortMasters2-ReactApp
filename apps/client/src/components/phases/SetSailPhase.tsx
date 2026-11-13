@@ -11,9 +11,9 @@ import { SetSailButton } from './SetSailButton.js';
 
 const DISMISSED_KEY = 'pm2_banner_dismissed';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html welcomeHTML (lines 2600-2640):
-// the first-voyage welcome page. Phase 0 doubles as the inter-round sync gate, so round 2+
-// shows RoundStart instead (the original's "Phase 0 is both... " comment, lines 2602-2604).
+// Mirrors PortMasters2/PortMasters_online.html welcomeHTML:
+// the first voyage welcome page. Phase 0 doubles as the between rounds sync gate, so round 2+
+// shows RoundStart instead (the original's "Phase 0 is both... " comment).
 export function SetSailPhase() {
   const { tr, pf, lang } = useTranslate();
   const { serverState } = useSession();
@@ -86,7 +86,7 @@ export function SetSailPhase() {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html roundStartHTML (lines 2643-2673):
+// Mirrors PortMasters2/PortMasters_online.html roundStartHTML:
 // the round N (N>=2) Set Sail transition page, carrying the previous round's settlement recap.
 function RoundStartPhase() {
   const { tr } = useTranslate();

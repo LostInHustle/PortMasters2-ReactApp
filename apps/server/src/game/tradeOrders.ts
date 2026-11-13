@@ -10,7 +10,7 @@ import {
 
 const TRADEABLE_TYPES = new Set<string>([...RESOURCES, ...PRODUCTS, GOLD]);
 
-// Ported from PortMasters2/server.py sanitize_trade_items (lines 1193-1205): the barter exploit
+// Mirrors PortMasters2/server.py sanitize_trade_items: the barter exploit
 // guard. A well formed entry is a known tradeable good (or gold) with a positive integer
 // quantity; anything else is dropped so a crafted order cannot add goods or gold to the proposer
 // while subtracting from the accepter. Python additionally excludes bool (an int subclass
@@ -65,7 +65,7 @@ export function sanitizeTargetSlot(
   return target;
 }
 
-// Ported from PortMasters2/server.py create_trade_order, extended with an optional target so an
+// Mirrors PortMasters2/server.py create_trade_order, extended with an optional target so an
 // offer can be addressed to one captain instead of the whole room.
 export function createTradeOrder(
   ctx: TradeOrderContext,
@@ -93,7 +93,7 @@ export function createTradeOrder(
 // except its author; a directed one is strictly between its author and its target. Enforced here
 // rather than only by hiding it in the UI, so a crafted acceptTrade cannot poach someone else's
 // private deal.
-export function canActOnOrder(order: TradeOrder, slot: number): boolean {
+function canActOnOrder(order: TradeOrder, slot: number): boolean {
   if (order.targetSlot === null) return true;
   return slot === order.targetSlot || slot === order.sellerSlot;
 }
@@ -109,8 +109,8 @@ export interface AcceptTradeContext {
   games: readonly TradeGame[];
 }
 
-// Ported verbatim from PortMasters2/server.py accept_trade (lines 1393-1435): checks both
-// sides can afford their half before mutating anything, then swaps sell-for-buy in one pass.
+// Mirrors PortMasters2/server.py accept_trade: checks both
+// sides can afford their half before mutating anything, then swaps sell for buy in one pass.
 export function acceptTrade(ctx: AcceptTradeContext, orderId: unknown, buyerSlot: number): boolean {
   const order = ctx.tradeOrders.find((o) => o.id === orderId);
   if (!order || order.sellerSlot === buyerSlot) return false;
@@ -159,7 +159,7 @@ export function acceptTrade(ctx: AcceptTradeContext, orderId: unknown, buyerSlot
   return true;
 }
 
-// Ported from PortMasters2/server.py reject_trade, with the same audience rule as accepting: a
+// Mirrors PortMasters2/server.py reject_trade, with the same audience rule as accepting: a
 // captain a directed offer was never addressed to cannot make it disappear.
 export function rejectTrade(
   ctx: { tradeOrders: TradeOrder[] },

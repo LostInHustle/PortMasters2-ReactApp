@@ -7,8 +7,8 @@ interface LoginFormProps {
   onShowRegister: () => void;
 }
 
-// Ported from PortMasters2/PortMasters_online.html login() (lines 1899-1928): client-side
-// validation (both fields required) before sending the action, server-side validation messages
+// Mirrors PortMasters2/PortMasters_online.html login(): on the client
+// validation (both fields required) before sending the action, on the server validation messages
 // surface as toasts exactly as in the original.
 export function LoginForm({ onShowRegister }: LoginFormProps) {
   const { tr } = useTranslate();

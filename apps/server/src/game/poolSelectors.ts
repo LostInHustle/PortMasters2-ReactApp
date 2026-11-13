@@ -32,8 +32,8 @@ import {
 } from '@pm2/shared';
 import { unlocked } from './difficultyRules.js';
 
-// Ported verbatim from PortMasters2/server.py PlayerGame's "Silk Road Charter: content
-// unlocks" section (lines 502-512).
+// Mirrors PortMasters2/server.py PlayerGame's "Silk Road Charter: content
+// unlocks" section.
 export function unlockedResources(
   roundNo: number,
   tierUnlock: Record<number, number>,
@@ -68,7 +68,7 @@ export function unlockedWorkerTypes(
   );
 }
 
-// Ported verbatim from PortMasters2/server.py boon_pool/module_pool/monsoon_pool (lines 401-411).
+// Mirrors PortMasters2/server.py boon_pool/module_pool/monsoon_pool.
 export function boonPool(roundNo: number, tierUnlock: Record<number, number>): Boon[] {
   return unlocked<Boon>(BOONS_TIER0, BOONS_TIER1, BOONS_TIER2, roundNo, tierUnlock);
 }
@@ -81,7 +81,7 @@ export function monsoonPool(roundNo: number, tierUnlock: Record<number, number>)
   return unlocked<MonsoonState>(MONSOON_TIER0, MONSOON_TIER1, MONSOON_TIER2, roundNo, tierUnlock);
 }
 
-// Ported verbatim from PortMasters2/server.py charter_event (lines 413-419): the Set Sail
+// Mirrors PortMasters2/server.py charter_event: the Set Sail
 // announcement for whichever tier opens on exactly this round, or undefined if none does.
 export function charterEvent(
   roundNo: number,

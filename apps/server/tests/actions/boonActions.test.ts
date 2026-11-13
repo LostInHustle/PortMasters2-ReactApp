@@ -3,14 +3,14 @@ import { describe, expect, it } from 'vitest';
 import { handleSelectBoon, handleStartBoon } from '../../src/actions/boonActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// startBoon/selectBoon branches (lines 1599-1615).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// startBoon/selectBoon branches.
 describe('handleStartBoon', () => {
   it('marks ready and advances once both players are ready, returning changed=true', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     expect(handleStartBoon(sess, 0)).toBe(true);
     expect(sess.ready.has(0)).toBe(true);
-    expect(sess.games[0]!.phase).toBe(0); // not advanced yet, partner not ready
+    expect(sess.games[0]!.phase).toBe(0); // not advanced yet, another captain not ready
 
     expect(handleStartBoon(sess, 1)).toBe(true);
     expect(sess.games[0]!.phase).toBe(5); // both ready -> advanced

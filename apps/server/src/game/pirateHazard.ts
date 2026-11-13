@@ -12,15 +12,15 @@ export interface PirateRiskContext {
   equippedModules: readonly ShipModule[];
 }
 
-// Ported verbatim from PortMasters2/server.py pirate_threat (lines 994-996): the raw raid
-// chance before mitigation, the weather plus any corrupt-broker tips.
+// Mirrors PortMasters2/server.py pirate_threat: the raw raid
+// chance before mitigation, the weather plus any corrupt broker tips.
 export function pirateThreat(
   ctx: Pick<PirateRiskContext, 'monsoonState' | 'brokerPirateRisk'>,
 ): number {
   return (ctx.monsoonState?.pirateRisk ?? 0) + ctx.brokerPirateRisk;
 }
 
-// Ported verbatim from PortMasters2/server.py effective_pirate_risk (lines 998-1009): final
+// Mirrors PortMasters2/server.py effective_pirate_risk: final
 // raid probability for this upkeep after escort/compass mitigation, clamped to [0, 1].
 export function effectivePirateRisk(ctx: PirateRiskContext): number {
   if (ctx.pirateImmunity) return 0;
@@ -44,7 +44,7 @@ export interface ResolvePirateHazardContext extends PirateRiskContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py resolve_pirate_hazard (lines 1011-1023).
+// Mirrors PortMasters2/server.py resolve_pirate_hazard.
 export function resolvePirateHazard(ctx: ResolvePirateHazardContext, rng: Rng): void {
   if (pirateThreat(ctx) <= 0) return;
   if (ctx.pirateImmunity) {
@@ -70,7 +70,7 @@ export interface HireEscortContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py hire_escort (lines 979-992).
+// Mirrors PortMasters2/server.py hire_escort.
 export function hireEscort(ctx: HireEscortContext): boolean {
   if (ctx.pirateImmunity) {
     ctx.log('🛡️ 护航舰队已就位');

@@ -9,7 +9,7 @@ interface ModuleDraftProps {
   slotsFull: boolean;
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html moduleDraftHTML (lines 3169-3209).
+// Mirrors PortMasters2/PortMasters_online.html moduleDraftHTML.
 export function ModuleDraft({ g, draft, slotsFull }: ModuleDraftProps) {
   const { tr, lang } = useTranslate();
   const { send } = useWs();

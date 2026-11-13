@@ -9,8 +9,8 @@ import type {
 import type { Bilingual, Lang } from './LangContext.js';
 import { pf } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html BOON_TEXT/MONSOON_TEXT/MODULE_TEXT/
-// CHARTER_TEXT/FLAG_LABELS (lines 1455-1569): display text for Fortunes, monsoon states, ship
+// Mirrors PortMasters2/PortMasters_online.html BOON_TEXT/MONSOON_TEXT/MODULE_TEXT/
+// CHARTER_TEXT/FLAG_LABELS: display text for Fortunes, monsoon states, ship
 // modules and the Silk Road Charter is keyed by id and looked up per language, the server
 // still sends the Chinese name/desc as usual, and the client overrides it by id when rendering.
 interface BilingualPair {
@@ -22,8 +22,8 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
   silk_wind: {
     name: { zh: '丝路顺风', en: 'Silk Road Tailwind' },
     desc: {
-      zh: '本回合丝绸及成品运费减半。',
-      en: 'Shipping for silk and finished goods is halved this round.',
+      zh: '本回合丝绸与丝织品运费减半。',
+      en: 'Shipping for silk and silk woven goods is halved this round.',
     },
   },
   favorable_tides: {
@@ -36,7 +36,10 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
   },
   artisan_inspiration: {
     name: { zh: '匠人灵感', en: "Artisan's Inspiration" },
-    desc: { zh: '本回合所有工人多生产1件。', en: 'Every worker produces 1 extra item this round.' },
+    desc: {
+      zh: '本回合所有工匠多生产1件。',
+      en: 'Every artisan produces 1 extra item this round.',
+    },
   },
   emergency_loan: {
     name: { zh: '紧急钱庄', en: 'Emergency Loan' },
@@ -52,7 +55,7 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
   },
   master_apprentice: {
     name: { zh: '学徒传承', en: 'Apprentice Legacy' },
-    desc: { zh: '本回合雇佣工资减半。', en: 'Hiring wages halved this round.' },
+    desc: { zh: '本回合工匠工资减半。', en: 'Artisan wages halved this round.' },
   },
   farsight: {
     name: { zh: '千里眼', en: 'Farsight' },
@@ -107,7 +110,7 @@ export function boonDesc(b: Boon, lang: Lang): string {
   return t ? pf(t.desc, lang) : b.desc || '';
 }
 
-export const MONSOON_TEXT: Record<string, BilingualPair> = {
+const MONSOON_TEXT: Record<string, BilingualPair> = {
   spring_current: {
     name: { zh: '春潮顺流', en: 'Spring Current' },
     desc: {
@@ -175,7 +178,7 @@ export function monsoonDesc(m: MonsoonState | null | undefined, lang: Lang): str
   return t ? pf(t.desc, lang) : m?.desc || '';
 }
 
-export const MODULE_TEXT: Record<string, BilingualPair> = {
+const MODULE_TEXT: Record<string, BilingualPair> = {
   smugglers_hold: {
     name: { zh: '走私暗舱', en: "Smuggler's Hold" },
     desc: { zh: '采购成本−15%。所得税+20%。', en: 'Purchase costs −15%. Income tax +20%.' },
@@ -189,13 +192,13 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
   },
   artisans_workshop: {
     name: { zh: '工匠工坊', en: "Artisan's Workshop" },
-    desc: { zh: '工人产量+1。工资+20%。', en: 'Workers produce +1 item. Wages +20%.' },
+    desc: { zh: '工匠产量+1。工资+20%。', en: 'Artisans produce +1 item. Wages +20%.' },
   },
   tax_evasion: {
     name: { zh: '避税账本', en: 'Hidden Ledger' },
     desc: {
-      zh: '所得税按增值税后利润计。15%概率在订单完成时罚款20金币(稽查)。',
-      en: 'Income tax assessed on profit after VAT. 15% chance of a 20 gold audit fine when an order completes.',
+      zh: '增值税与所得税减半。15%概率在订单完成时罚款20金币（稽查）。',
+      en: 'VAT and income tax are both halved. 15% chance of a 20 gold audit fine when an order completes.',
     },
   },
   silk_monopoly: {
@@ -221,7 +224,7 @@ export const MODULE_TEXT: Record<string, BilingualPair> = {
   },
   overdrive_engine: {
     name: { zh: '超载引擎', en: 'Overdrive Engine' },
-    desc: { zh: '运费−5金币。维护费+10金币。', en: 'Shipping −5 gold. Maintenance +10 gold.' },
+    desc: { zh: '运费−5金币。维护费+10金币。', en: 'Shipping −5 gold. Upkeep +10 gold.' },
   },
   bureau_token: {
     name: { zh: '市舶司令牌', en: 'Trade Bureau Token' },
@@ -275,18 +278,18 @@ export function modDesc(m: ShipModule, lang: Lang): string {
 
 // Silk Road Charter: the unlock announcement shown at the start of the relevant rounds, sent by
 // the server as charterEvent={id,icon,name,desc}.
-export const CHARTER_TEXT: Record<string, BilingualPair> = {
+const CHARTER_TEXT: Record<string, BilingualPair> = {
   tier1: {
     name: { zh: '市舶新政', en: 'New Maritime Edict' },
     desc: {
-      zh: '福建市舶司新政颁布！瓷土、铜矿、青瓷器、紫铜镜加入行情；福州港、高丽港正式开埠；陶匠与铜匠加入劳务市场；新的福缘与战船改装随之而来。',
+      zh: '福建市舶司新政颁布！瓷土、铜矿、青瓷器、紫铜镜加入行情；福州港、高丽港正式开埠；陶匠与铜匠加入劳务市场；新的福缘与船舶模块随之而来。',
       en: 'A new edict from the Fujian Maritime Trade Bureau! Porcelain Clay, Copper Ore, Celadon Porcelain and Bronze Mirror enter the market; Fuzhou and Goryeo ports open; Potters and Coppersmiths join the labor market; new Fortunes and ship modules become available.',
     },
   },
   tier2: {
     name: { zh: '万国通商', en: 'Ten Thousand Kingdoms Trade' },
     desc: {
-      zh: '万国通商盛况空前！香料、珍珠、蕃香脂、珠链加入行情；三佛齐港、大食港正式开埠；香料师与珠宝匠加入劳务市场；更多福缘与战船改装随之而来。',
+      zh: '万国通商盛况空前！香料、珍珠、蕃香脂、珠链加入行情；三佛齐港、大食港正式开埠；香料师与珠宝匠加入劳务市场；更多福缘与船舶模块随之而来。',
       en: 'Trade opens with ten thousand kingdoms! Spices, Pearls, Foreign Perfume Oil and Pearl Necklaces enter the market; Srivijaya and Dashi ports open; Perfumers and Jewelers join the labor market; more Fortunes and ship modules arrive.',
     },
   },

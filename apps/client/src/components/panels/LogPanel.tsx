@@ -3,7 +3,7 @@ import { lst } from '../../i18n/serverTextRules.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 
-// Ported from PortMasters2/PortMasters_online.html renderLog: the panel rides to the bottom
+// Mirrors PortMasters2/PortMasters_online.html renderLog: the panel rides to the bottom
 // when a new line arrives.
 //
 // It must ride down only then. Every captain's action broadcasts fresh state to the whole room,
