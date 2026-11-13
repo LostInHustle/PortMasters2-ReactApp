@@ -79,7 +79,7 @@ export const CAPTAIN_HAN = [
   '鹤',
 ] as const;
 
-export function nameHash(name: string | null | undefined): number {
+function nameHash(name: string | null | undefined): number {
   let h = 0;
   for (const ch of String(name ?? '')) h = (Math.imul(h, 31) + (ch.codePointAt(0) ?? 0)) >>> 0;
   return h;

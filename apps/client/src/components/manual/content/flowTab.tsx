@@ -10,7 +10,7 @@ export function FlowTab() {
   if (lang === 'en') {
     return (
       <>
-        <h4>🔄 The 8 Phases of Every Voyage</h4>
+        <h4>🔄 The 8 Phases of Every Round</h4>
         <table>
           <thead>
             <tr>
@@ -60,8 +60,8 @@ export function FlowTab() {
             </tr>
             <tr>
               <td>🚢 Shipyard</td>
-              <td>Optional: upgrade your ship; then end the voyage</td>
-              <td>Everyone clicks "End Voyage"</td>
+              <td>Optional: upgrade your ship; then end the round</td>
+              <td>Everyone clicks "End Round"</td>
             </tr>
           </tbody>
         </table>
@@ -75,7 +75,7 @@ export function FlowTab() {
   }
   return (
     <>
-      <h4>🔄 每个航程的 8 个阶段</h4>
+      <h4>🔄 每个回合的 8 个阶段</h4>
       <table>
         <thead>
           <tr>
@@ -122,8 +122,8 @@ export function FlowTab() {
           </tr>
           <tr>
             <td>🚢 船坞</td>
-            <td>可选：升级商船；然后结束本航程</td>
-            <td>全员点击「结束航程」</td>
+            <td>可选：升级商船；然后结束本回合</td>
+            <td>全员点击「结束本回合」</td>
           </tr>
         </tbody>
       </table>

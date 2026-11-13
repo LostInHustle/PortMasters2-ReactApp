@@ -18,7 +18,7 @@ export function EndgameView() {
   return (
     <div className="center-block" style={{ textAlign: 'center' }}>
       <div style={{ fontSize: 70 }}>🎆</div>
-      <div className="hero-title">{tr('全部航程完结！', 'All Voyages Complete!')}</div>
+      <div className="hero-title">{tr('航程完结！', 'Voyage Complete!')}</div>
       <div
         className="section-box"
         style={{ maxWidth: 460, margin: '14px auto', textAlign: 'left' }}

@@ -85,17 +85,29 @@ describe('completeTradeGate', () => {
 });
 
 describe('restart', () => {
-  it('rebuilds both games on the original difficulty but keeps chat history', () => {
+  it('rebuilds both games on the original difficulty, clears session state, and keeps chat history', () => {
     const session = SharedSession.createPair('alice', 'bob', 'easy');
     session.addChat('alice', 'gg');
     session.games[0]!.money = 9999;
     session.ready.add(0);
+    session.endVotes.add(0);
+    session.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], []);
+    session.tradeReady[0] = true;
+    session.monsoonCycleCache[3] = MONSOON_TIER0[0];
+
     session.restart();
+
     expect(session.games[0]!.money).toBe(100);
     expect(session.games[0]!.difficulty).toBe('easy');
     expect(session.games[0]!.slot).toBe(1);
     expect(session.games[1]!.slot).toBe(2);
+    expect(session.games[0]!.currentRound).toBe(1);
+    expect(session.games[1]!.currentRound).toBe(1);
     expect(session.ready.size).toBe(0);
+    expect(session.endVotes.size).toBe(0);
+    expect(session.tradeOrders).toEqual([]);
+    expect(session.tradeReady).toEqual([false, false]);
+    expect(session.monsoonCycleCache).toEqual({});
     expect(session.chatHistory).toEqual([{ from: 'alice', message: 'gg' }]);
   });
 });
@@ -146,39 +158,6 @@ describe('barter delegation', () => {
     expect(session.acceptTrade(order!.id, 1)).toBe(true);
     expect(session.games[0]!.inventory['麻布']).toBe(3);
     expect(session.games[1]!.inventory['麻布']).toBe(before + 5);
-  });
-});
-
-describe('restart', () => {
-  it('clears the end session votes, so votes cast in the previous game cannot disband the new one', () => {
-    const session = SharedSession.createPair('alice', 'bob');
-    session.endVotes.add(0);
-    expect(session.endVoteComplete()).toBe(false);
-
-    session.restart();
-
-    expect(session.endVotes.size).toBe(0);
-    // Without the reset, bob voting alone here would have completed the quorum and thrown the
-    // whole room back to the lobby one action into a brand new voyage.
-    session.endVotes.add(1);
-    expect(session.endVoteComplete()).toBe(false);
-  });
-
-  it('clears every other trace of the finished voyage', () => {
-    const session = SharedSession.createPair('alice', 'bob');
-    session.createTradeOrder(0, [{ type: '麻布', quantity: 1 }], [{ type: '丝绸', quantity: 1 }]);
-    session.ready.add(0);
-    session.tradeReady[0] = true;
-    session.monsoonCycleCache[3] = MONSOON_TIER0[0];
-
-    session.restart();
-
-    expect(session.tradeOrders).toEqual([]);
-    expect(session.ready.size).toBe(0);
-    expect(session.tradeReady).toEqual([false, false]);
-    expect(session.monsoonCycleCache).toEqual({});
-    expect(session.games[0]!.currentRound).toBe(1);
-    expect(session.games[1]!.currentRound).toBe(1);
   });
 });
 

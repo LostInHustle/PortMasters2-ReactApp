@@ -60,7 +60,6 @@ describe('resolvePirateHazard', () => {
       equippedModules: [],
       money: 100,
       roundCosts: 0,
-      totalCosts: 0,
       difficulty: 'easy' as const,
       currentRound: 1,
       maxRounds: 8,
@@ -80,7 +79,6 @@ describe('resolvePirateHazard', () => {
     resolvePirateHazard(ctx, fixedRng(0.05));
     expect(ctx.money).toBe(85); // 100 - trunc(100 * 0.15)
     expect(ctx.roundCosts).toBe(15);
-    expect(ctx.totalCosts).toBe(15);
   });
 
   it('immunity skips the roll entirely and leaves money untouched', () => {

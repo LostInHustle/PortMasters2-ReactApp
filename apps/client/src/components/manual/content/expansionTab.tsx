@@ -29,7 +29,7 @@ export function ExpansionTab() {
           never on Easy. Raids bite harder as you climb the ladder too: a successful raid takes a
           share of your current gold (a larger share later in the voyage and on higher difficulties)
           and the escort fee scales with your wealth as well; and on Hard a Broker's Whisper can
-          come from a corrupt broker who tips off pirates and raises that voyage's raid chance,
+          come from a corrupt broker who tips off pirates and raises that round's raid chance,
           turning the escort call at Upkeep into a genuine tradeoff.
         </p>
         <p>
@@ -61,10 +61,10 @@ export function ExpansionTab() {
         <strong>轻松</strong>。<strong>轻松模式</strong>共 8
         个回合，让整段航程都停留在基础货物之内，只包含麻布、丝绸、茶叶三种原料、四种入门成品、前三类工匠，以及与之相关的福缘、船舶模块、港口和季风。棋盘始终不会过度拥挤，你有充足的余裕慢慢熟悉每个回合的节奏。
         <strong>标准模式</strong>共 12 个回合，是中间一档：同样开放完整贸易，丝路特许在第 4、8
-        程分批解锁，但不会出现暗通海盗的牙行。
+        回合分批解锁，但不会出现可疑牙行。
         <strong>高难模式</strong>共 16 个回合，开放完整的海上贸易并加入可疑牙行机制，丝路特许在第
         6、10
-        程分批解锁，需要打理的事务多得多，对舱位与金币的竞争也激烈许多。下文「丝路特许」的分批解锁在标准与高难模式中都会发生，轻松模式则不会。海盗机制对所有难度都已加强：海盗一旦得手会掠走当前财富的一定比例（越往后、难度越高比例越大），雇佣护航的费用也随财富浮动；在高难模式中，购买牙行密语还可能遇到可疑牙行暗通海盗、抬高本程袭扰概率，让结算阶段是否雇佣护航成为真正的取舍。
+        回合分批解锁，需要打理的事务多得多，对舱位与金币的竞争也激烈许多。下文「丝路特许」的分批解锁在标准与高难模式中都会发生，轻松模式则不会。海盗机制对所有难度都已加强：海盗一旦得手会掠走当前财富的一定比例（越往后、难度越高比例越大），雇佣护航的费用也随财富浮动；在高难模式中，购买牙行密语还可能遇到可疑牙行暗通海盗、抬高本回合袭扰概率，让结算阶段是否雇佣护航成为真正的取舍。
       </p>
       <p>
         难度在航程开始前就已商定。发出邀请的一方先选择本局难度，受邀船长会在确认窗口看到一段说明，了解它会改变什么之后再同意，所以所有船长始终在同一难度下经营同一段航程。
@@ -74,9 +74,9 @@ export function ExpansionTab() {
         <span>
           下面这份分批解锁清单以
           <strong>高难模式</strong>
-          （第 6、10 程）为例。
+          （第 6、10 回合）为例。
           <strong>标准模式</strong>
-          解锁的内容相同，只是更早到来（第 4、8 程）；
+          解锁的内容相同，只是更早到来（第 4、8 回合）；
           <strong>轻松模式</strong>
           则全程停留在基础内容，这些扩展不会出现。
         </span>

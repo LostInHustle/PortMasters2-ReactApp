@@ -124,12 +124,12 @@ export function ControlPanel() {
           className="btn btn-success btn-lg"
           onClick={() => send({ action: 'ready_for_next_phase' })}
         >
-          {tr('⏭️ 结束航程', '⏭️ End Voyage')}
+          {tr('⏭️ 结束本回合', '⏭️ End Round')}
         </button>
       );
       hint = tr(
-        '可先升级商船，再结束本航程',
-        'Upgrade your ship first if you like, then end the voyage',
+        '可先升级商船，再结束本回合',
+        'Upgrade your ship first if you like, then end the round',
       );
       break;
   }

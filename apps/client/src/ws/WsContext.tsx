@@ -41,10 +41,10 @@ const RECONNECT_MAX_DELAY_MS = 30_000;
 // the socket's lifetime.
 //
 // Traced from the production symptom "leave the tab open for a while and login stops
-// working": this app has no token or expiring session of any kind, the connection itself was
-// dying silently (idle WebSocket connections get dropped by Railway's edge proxy, and most
-// reverse proxies, well before anything app level is involved), and there was no reconnect
-// logic at all, so a dropped socket just sat there forever looking like a frozen page. The
+// working": the connection itself was dying silently (idle WebSocket connections get dropped
+// by Railway's edge proxy, and most reverse proxies, well before anything app level is
+// involved), and there was no reconnect logic at all, so a dropped socket just sat there
+// forever looking like a frozen page. The
 // matching on the server half of this fix is heartbeat.ts, which keeps the connection from going
 // idle in the first place; this automatic reconnect is the fallback for when a drop happens anyway
 // (laptop sleep, wifi blip, a Railway redeploy).
@@ -100,8 +100,8 @@ export function WsProvider({ children }: { children: ReactNode }) {
   // readyState, not just nullness: a socket during reconnect (CONNECTING) or on its way out
   // (CLOSING) throws or silently drops on send anyway, so this just makes that explicit instead
   // of leaking a raw DOMException out of an arbitrary call site. The dropped action isn't
-  // retried, the disconnected state is already visible via `connected` (SessionContext resets
-  // to the login screen on reconnect), so there's nothing more to tell the caller per send.
+  // retried. The disconnected state is already visible via `connected`, and SessionContext
+  // attempts resume_token on reconnect, so there's nothing more to tell the caller per send.
   const send = useCallback((action: Record<string, unknown>): void => {
     const socket = wsRef.current;
     if (socket?.readyState === WebSocket.OPEN) {

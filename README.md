@@ -8,13 +8,13 @@ A full rebuild of PortMasters 2 on a modern TypeScript stack. The Python and sin
 
 ## 📖 1. Overview
 
-Welcome back to the Maritime Silk Road. Two to five captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods and gold with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every voyage (8 rounds on Easy, 12 on Standard, 16 on Hard). The highest renown wins.
+Welcome back to the Maritime Silk Road. Two to five captains sail one shared voyage, always on the same round and the same phase. You compete for renown, and along the way you barter goods and gold with each other. Draw a fortune from the Navigator's Compass, buy whispers from the brokers, fit your flagship with modules, and keep enough cash on hand for wages, upkeep and taxes every round (8 rounds on Easy, 12 on Standard, 16 on Hard). The highest renown wins.
 
 This edition keeps everything the original did and changes only the engine room:
 
 - 🧩 **One game, two apps, one shared core.** A Node WebSocket server holds all the authoritative game logic; a React client renders it. Both import the same `packages/shared` data tables and wire types, so the two sides can never drift apart.
 - 🔤 **TypeScript everywhere**, from the difficulty ladder to the barter exploit guard, with strict compiler settings.
-- 🧪 **A real test suite.** 414 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
+- 🧪 **A real test suite.** 386 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
 - 🌍 **English (default) and Simplified Chinese**, switchable any time with the 🌐 button on every screen, including the login and lobby pages.
 - 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and who is in port.
 - 🀄 Icons are emojis by default. The 🀄 button in the lobby and in the game header switches goods, artisans and captain avatars to Chinese characters, and back again. Each captain also gets a medal in a color of their own.
@@ -104,7 +104,7 @@ The project is an npm workspaces monorepo. Three packages, each with one job:
 │   │   ├── ws/           # the WebSocket connection loop and message router
 │   │   ├── http/         # static file serving for the built client
 │   │   └── main.ts       # the entry point that wires it all together
-│   ├── tests/            # 331 vitest tests mirroring the src/ tree
+│   ├── tests/            # 308 vitest tests mirroring the src/ tree
 │   └── data/users.json   # account store (created and updated at runtime)
 │
 └── apps/client/          # React frontend (Vite)
@@ -117,7 +117,7 @@ The project is an npm workspaces monorepo. Three packages, each with one job:
     │   ├── components/   # layout, auth, lobby, the panels, the phase screens,
     │   │                 # the modal/manual/chat/tooltip/spectate systems
     │   └── styles/       # the global stylesheet
-    └── tests/            # 77 vitest tests, no browser needed
+    └── tests/            # 73 vitest tests, no browser needed
 ```
 
 The guiding rule is that anything which must be identical on both sides lives in `packages/shared` and is imported, never copied. That is the main defense against the client and server ever disagreeing about a price or a rule.
@@ -126,7 +126,7 @@ The guiding rule is that anything which must be identical on both sides lives in
 
 ## 🎮 4. Gameplay Mechanics
 
-A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Hard, and each voyage runs through **8 phases**. No phase advances until every captain confirms.
+A game lasts **8 rounds** on Easy, **12** on Standard or **16** on Hard, and every round runs through **8 phases**. No phase advances until every captain confirms.
 
 | Phase           | What happens                                                                                                                                       |
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -137,19 +137,19 @@ A game lasts **8 voyages** (rounds) on Easy, **12** on Standard or **16** on Har
 | **👥 Artisans** | Hire or dismiss artisans and hand out production tasks. Materials are consumed right away.                                                         |
 | **📦 Trade**    | Deliver port orders from your stock. Clues you bought show up here as guaranteed orders marked 🗣️.                                                 |
 | **🔧 Upkeep**   | Production arrives and wages are paid automatically, then you pay 15 gold of fleet upkeep. If you cannot, your fleet goes bankrupt.                |
-| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the voyage.                                                                  |
+| **🚢 Shipyard** | Upgrade the ship if you like (levels 0 to 3), draft modules, then end the round.                                                                   |
 
 ### ⚖️ Difficulty Modes
 
 Every session starts on **Easy**. Whoever sends the invitation or opens the room chooses the level, and an invited captain reads what it means and confirms before the voyage begins, so everyone always sails the same difficulty.
 
-- **Easy (8 rounds)** keeps the whole voyage on the founding set of goods: three raw materials, four starter products, the first three artisan guilds, and their matching fortunes, modules, ports and weather. The market never gets crowded, which makes it the gentle place to start.
+- **Easy (8 rounds)** keeps the whole voyage on the founding set of goods: three raw materials, four starter products, the first three artisan guilds, and their matching fortunes, modules, ports and monsoons. The market never gets crowded, which makes it the gentle place to start.
 - **Standard (12 rounds)** opens the full trade at a brisker pace, with the Silk Road Charter expanding on Rounds 4 and 8, but no corrupt brokers.
 - **Hard (16 rounds)** is the full challenge with the corrupt broker hazard switched on, expanding on Rounds 6 and 10. There is far more to manage and the competition for cargo and coin is fierce.
 
 ### 📦 Resources & Products
 
-You buy raw materials, turn them into finished products with artisans, then deliver products on orders. Finished goods are worth far more than raw materials, so the buy → craft → sell loop is where the money is. Prices are lower at a commodity's home port and shift with the weather.
+You buy raw materials, turn them into finished products with artisans, then deliver products on orders. Finished goods are worth far more than raw materials, so the buy → craft → sell loop is where the money is. Prices are lower at a commodity's home port and shift with the monsoon. Unit prices for the three starting materials: Hemp Cloth 2 to 5 gold at Quanzhou or Ningbo and 4 to 7 gold elsewhere, Silk 5 to 9 gold at Hangzhou or Yangzhou and 7 to 11 gold elsewhere, Tea 9 to 13 gold at Guangzhou or Quanzhou and 11 to 15 gold elsewhere.
 
 ### 🧭 Fortunes
 
@@ -187,14 +187,14 @@ Everything else is point and click. Hover any underlined hint for a tooltip, and
 - **Cash flow is everything.** Wages plus upkeep are due every round, and failing to pay them is far worse than earning a little less. The left panel tallies what you owe this round; keep an eye on it.
 - **Sell finished goods, not raw materials.** A Scented Sachet is worth far more than the materials inside it.
 - **Buy whispers.** Every clue becomes a guaranteed order later in the round, so stock up early for a sure sale, and the Broker's Network module makes whispers even cheaper.
-- **Watch the weather.** The monsoon turns over every two rounds, raising some ports' payouts, lowering some prices, and moving the pirate risk with it. Everyone in the room sails the same weather, so it is worth planning a pair of rounds around it.
+- **Watch the monsoon.** It turns over every two rounds, raising some ports' payouts, lowering some prices, and moving the pirate risk with it. Everyone in the room sails the same monsoon, so it is worth planning a pair of rounds around it.
 - **Talk to your fellow captains.** You can see each other's cargo and gold, so use the barter phase and the chat to cover each other's gaps.
 
 ---
 
 ## 🏆 7. Game End & Rankings
 
-When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish. The host can set sail again at any time, replacing the current game with a brand new run at the same difficulty; other captains can do so once every captain is done. The host can also open their own fleet in the spectator window by clicking their own fleet card on the left.
+When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish. The host can set sail again at any time, replacing the current game with a brand new run at the same difficulty; other captains can do so once every other captain's game has ended. The host can also open their own fleet in the spectator window by clicking their own fleet card on the left.
 
 ---
 
@@ -220,7 +220,7 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 | `npm run dev:client`   | Run the Vite dev server with hot reload on :5173.                  |
 | `npm run build`        | Build the client into `apps/client/dist`.                          |
 | `npm run start`        | Serve a prebuilt client on :8080.                                  |
-| `npm test`             | Run all 414 tests across the shared, server and client workspaces. |
+| `npm test`             | Run all 386 tests across the shared, server and client workspaces. |
 | `npm run typecheck`    | Type check all three workspaces.                                   |
 | `npm run lint`         | Lint the whole repo.                                               |
 | `npm run format`       | Format the whole repo with Prettier.                               |

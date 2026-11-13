@@ -12,7 +12,7 @@ interface Harness {
   toasts: { message: string; isError: boolean }[];
   sent: Record<string, unknown>[];
   chatOpened: number;
-  /** Counts how many times each updater was invoked, to prove they carry no side effects. */
+  /** Replays each updater twice, to prove they carry no side effects. */
   runUpdaterTwice: boolean;
 }
 

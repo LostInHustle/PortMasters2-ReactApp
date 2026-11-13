@@ -58,7 +58,7 @@ export function SpectateView() {
             {tr(`👀 ${target} 的船队`, `👀 ${target}'s Fleet`)}
             <div className="sp-sub">
               {tr(
-                `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
+                `第 ${og.currentRound} / ${og.maxRounds} 回合 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
                 `Round ${og.currentRound} / ${og.maxRounds}, ${phaseName(og.phase, lang)} phase, read only, updates live`,
               )}
             </div>
@@ -113,7 +113,7 @@ export function SpectateView() {
             <div className="sp-voyage">
               <span>
                 {tr(
-                  `第 ${og.currentRound} / ${og.maxRounds} 程`,
+                  `第 ${og.currentRound} / ${og.maxRounds} 回合`,
                   `Round ${og.currentRound} of ${og.maxRounds}`,
                 )}
               </span>
@@ -163,8 +163,8 @@ export function SpectateView() {
         </div>
         <div className="spectate-foot">
           {tr(
-            '💡 此窗口可随时关闭再打开；房主可随时重新起航，其他船长需等全员结束本局。',
-            '💡 Open or close this window any time. The host can set sail again at any moment; other captains can do so once every game has ended.',
+            '💡 此窗口可随时关闭再打开；房主可随时重新起航，其他船长需等其他船长的本局都结束后才能重新起航。',
+            "💡 Open or close this window any time. The host can set sail again at any moment; other captains can do so once every other captain's game has ended.",
           )}
         </div>
       </div>

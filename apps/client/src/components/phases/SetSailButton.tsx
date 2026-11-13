@@ -22,7 +22,7 @@ export function SetSailButton() {
         ? tr('⌛ 已确认，等待其他船长', '⌛ Confirmed, waiting for others')
         : tr('🚢 扬帆起航', '🚢 Set Sail')}
       <span className="btn-sub">
-        {tr('全员确认后抽取本程福缘', "Everyone confirms to draw this round's fortunes")}
+        {tr('全员确认后抽取本回合福缘', "Everyone confirms to draw this round's fortunes")}
       </span>
     </button>
   );

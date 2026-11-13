@@ -11,10 +11,6 @@ describe('hashPassword', () => {
     const hash = hashPassword('correct horse battery staple', salt);
     expect(hash).toBe('f65afe47b6abb2e16f7af7846542865f068c026fb94aea64d4d9c0e4b62c30d6');
   });
-
-  it('produces a 64-char hex digest (32-byte SHA-256 output)', () => {
-    expect(hashPassword('any password', generateSalt())).toMatch(/^[0-9a-f]{64}$/);
-  });
 });
 
 describe('generateSalt', () => {

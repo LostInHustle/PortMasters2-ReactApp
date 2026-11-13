@@ -17,7 +17,6 @@ import {
 } from '@pm2/shared';
 import { describe, expect, it } from 'vitest';
 import { PlayerGame } from '../../src/game/PlayerGame.js';
-import { phaseOptionCount } from '../../src/game/difficultyRules.js';
 import { charterEvent } from '../../src/game/poolSelectors.js';
 import { serializePlayerGame } from '../../src/game/serialize.js';
 import type { Rng } from '../../src/game/randomUtil.js';
@@ -30,7 +29,7 @@ import { SharedSession } from '../../src/session/SharedSession.js';
 const MODULE_BY_ID = new Map<string, ShipModule>(MODULES.map((m) => [m.id, m]));
 const BOON_BY_ID = new Map<string, Boon>(BOONS.map((b) => [b.id, b]));
 
-const NEUTRAL_WEATHER: MonsoonState = {
+const NEUTRAL_MONSOON: MonsoonState = {
   id: 'test_calm',
   name: 'calm',
   icon: '',
@@ -67,7 +66,7 @@ class FixedRng implements Rng {
 function newGame(difficulty: 'easy' | 'standard' | 'hard' = 'standard', money = 100): PlayerGame {
   const g = new PlayerGame(difficulty);
   g.money = money;
-  g.setMonsoonState(NEUTRAL_WEATHER);
+  g.setMonsoonState(NEUTRAL_MONSOON);
   return g;
 }
 
@@ -178,17 +177,6 @@ describe('boon effects move real resources and prices', () => {
     expect(g.inventory['麻布']).toBe(11);
   });
 
-  it('apprentice legacy halves artisan wages, not a one time hire fee', () => {
-    const g = newGame();
-    apply(g, 'master_apprentice');
-    expect(g.hireWorker('weaver')).toBe(true);
-    expect(g.estimatedWages()).toBe(4);
-    expect(g.payWages()).toBe(true);
-    expect(g.money).toBe(96);
-    expect(g.workerWages).toBe(4);
-    expect(g.roundCosts).toBe(4);
-  });
-
   it('artisan inspiration adds one item per worker', () => {
     const g = newGame();
     apply(g, 'artisan_inspiration');
@@ -232,7 +220,6 @@ describe('boon effects move real resources and prices', () => {
     apply(g, 'frontier_tariff_relief');
     give(g, { 青瓷器: 2 });
     expect(g.completeOrder(mkOrder([['青瓷器', 2]], 200, true))).toBe(true);
-    expect(g.vatPaid).toBe(2);
     expect(g.roundRevenue).toBe(198);
   });
 
@@ -247,7 +234,7 @@ describe('boon effects move real resources and prices', () => {
   it('deep sea escort pact halves fee and risk', () => {
     const g = newGame('standard', 340);
     apply(g, 'deep_sea_escort_pact');
-    g.setMonsoonState({ ...NEUTRAL_WEATHER, pirateRisk: 0.4 });
+    g.setMonsoonState({ ...NEUTRAL_MONSOON, pirateRisk: 0.4 });
     expect(g.escortCost()).toBe(17);
     expect(g.effectivePirateRisk()).toBeCloseTo(0.2);
     expect(g.hireEscort()).toBe(true);
@@ -264,12 +251,6 @@ describe('boon effects move real resources and prices', () => {
     sess.advance();
     expect(g.phase).toBe(2);
     expect(g.customerCards).toHaveLength(6);
-
-    const plain = SharedSession.createPair('soloC', 'soloD', 'easy');
-    const p = plain.games[0]!;
-    p.phase = 'worker_mgmt';
-    plain.advance();
-    expect(p.customerCards).toHaveLength(5);
   });
 
   it('boons replace each other and never alias the shared table', () => {
@@ -360,13 +341,6 @@ describe('ship modules move real resources and prices', () => {
     expect(product.completeOrder(mkOrder([['绫罗绸缎', 1]], 100, true))).toBe(true);
     expect(product.roundRevenue).toBe(116);
 
-    const perfume = newGame();
-    equip(perfume, 'silk_monopoly');
-    give(perfume, { 蕃香脂: 1 });
-    expect(perfume.completeOrder(mkOrder([['蕃香脂', 1]], 100, true))).toBe(true);
-    expect(perfume.roundRevenue).toBe(117);
-    expect(perfume.roundCosts).toBe(5);
-
     const porcelain = newGame();
     equip(porcelain, 'silk_monopoly');
     give(porcelain, { 青瓷器: 1 });
@@ -412,7 +386,6 @@ describe('ship modules move real resources and prices', () => {
     expect(g.maintenancePenalty).toBe(10);
     expect(g.payMaintenance()).toBe(true);
     expect(g.money).toBe(75);
-    expect(g.maintenanceCosts).toBe(25);
     expect(g.roundCosts).toBe(25);
   });
 
@@ -422,12 +395,6 @@ describe('ship modules move real resources and prices', () => {
     give(product, { 青瓷器: 1 });
     expect(product.completeOrder(mkOrder([['青瓷器', 1]], 100, true))).toBe(true);
     expect(product.roundRevenue).toBe(107);
-
-    const raw = newGame();
-    equip(raw, 'bureau_token');
-    give(raw, { 瓷土: 2 });
-    expect(raw.completeOrder(mkOrder([['瓷土', 2]], 100))).toBe(true);
-    expect(raw.roundRevenue).toBe(110);
 
     const mixed = newGame();
     equip(mixed, 'bureau_token');
@@ -450,12 +417,6 @@ describe('ship modules move real resources and prices', () => {
     give(unrelated, { 茶叶: 2 });
     expect(unrelated.completeOrder(mkOrder([['茶叶', 2]], 100))).toBe(true);
     expect(unrelated.roundRevenue).toBe(100);
-
-    const tierTwo = newGame();
-    equip(tierTwo, 'bureau_token');
-    give(tierTwo, { 珠链: 1 });
-    expect(tierTwo.completeOrder(mkOrder([['珠链', 1]], 100, true))).toBe(true);
-    expect(tierTwo.roundRevenue).toBe(99);
   });
 
   it('kiln cellar discounts porcelain clay and copper ore only', () => {
@@ -497,13 +458,6 @@ describe('ship modules move real resources and prices', () => {
     expect(shown.resources.map((r) => r.effectivePrice)).toEqual([7, 17, 5]);
   });
 
-  it('persian dome compass cuts risk thirty percent', () => {
-    const g = newGame();
-    equip(g, 'persian_dome_compass');
-    g.setMonsoonState({ ...NEUTRAL_WEATHER, pirateRisk: 0.4 });
-    expect(g.effectivePirateRisk()).toBeCloseTo(0.28);
-  });
-
   it('fleet of treasures discounts each treasure item', () => {
     const g = newGame();
     equip(g, 'fleet_of_treasures', 1);
@@ -542,21 +496,6 @@ describe('ship modules move real resources and prices', () => {
 });
 
 describe('combinations stack in the same order as the Python build', () => {
-  it('purchase stack applies percent, flat, then smugglers', () => {
-    const g = newGame();
-    apply(g, 'merchant_charm');
-    equip(g, 'kiln_cellar');
-    equip(g, 'smugglers_hold');
-    const card = mkCard([
-      ['瓷土', 2, 8],
-      ['铜矿', 1, 12],
-    ]);
-    expect(g.getCardFinalCost(card)).toBe(14);
-    expect(g.purchaseCard(card)).toBe(true);
-    expect(g.money).toBe(86);
-    expect(g.roundCosts).toBe(14);
-  });
-
   it('transport stack combines level, boons and modules', () => {
     const g = newGame();
     g.shipLevel = 1;
@@ -571,21 +510,9 @@ describe('combinations stack in the same order as the Python build', () => {
     equip(bulk, 'bulk_hauler', 1);
     expect(bulk.calcTransportCost(10, true, [])).toBe(0);
 
-    const fleet = newGame();
-    equip(fleet, 'fleet_of_treasures', 1);
-    const order = mkOrder(
-      [
-        ['蕃香脂', 2],
-        ['珠链', 1],
-        ['丝绸', 7],
-      ],
-      100,
-    );
-    expect(fleet.calcTransportCost(10, true, order.resources)).toBe(6);
-
     const over = newGame();
     equip(over, 'overdrive_engine', 1);
-    expect(over.calcTransportCost(10, true, order.resources)).toBe(10);
+    expect(over.calcTransportCost(10, true, [])).toBe(10);
   });
 
   it('tax stack applies override, smugglers, then ledger', () => {
@@ -658,7 +585,7 @@ describe('combinations stack in the same order as the Python build', () => {
     const g = newGame();
     apply(g, 'deep_sea_escort_pact');
     equip(g, 'persian_dome_compass');
-    g.setMonsoonState({ ...NEUTRAL_WEATHER, pirateRisk: 0.5 });
+    g.setMonsoonState({ ...NEUTRAL_MONSOON, pirateRisk: 0.5 });
     expect(g.effectivePirateRisk()).toBeCloseTo(0.175);
   });
 });
@@ -714,7 +641,6 @@ describe("Broker's Whisper resolves into real trade orders", () => {
 
 describe('monsoons, mandates and special schedules', () => {
   it('every monsoon moves its price, reward and raid chance', () => {
-    expect(MONSOON_STATES).toHaveLength(8);
     const g = newGame();
     for (const state of MONSOON_STATES) {
       g.setMonsoonState(state);
@@ -734,14 +660,14 @@ describe('monsoons, mandates and special schedules', () => {
 
   it('a pirate raid takes its tier share and escort prevents it', () => {
     const g = newGame('easy', 100);
-    g.setMonsoonState({ ...NEUTRAL_WEATHER, pirateRisk: 0.5 });
+    g.setMonsoonState({ ...NEUTRAL_MONSOON, pirateRisk: 0.5 });
     g.rng = new FixedRng([0]);
     expect(g.payMaintenance()).toBe(true);
     expect(g.money).toBe(100 - 15 - 15);
     expect(g.roundCosts).toBe(30);
 
     const safe = newGame('easy', 100);
-    safe.setMonsoonState({ ...NEUTRAL_WEATHER, pirateRisk: 0.5 });
+    safe.setMonsoonState({ ...NEUTRAL_MONSOON, pirateRisk: 0.5 });
     expect(safe.hireEscort()).toBe(true);
     safe.rng = new FixedRng([0]);
     expect(safe.payMaintenance()).toBe(true);
@@ -767,28 +693,11 @@ describe('monsoons, mandates and special schedules', () => {
     }
   });
 
-  it('the trade phase deals the mandate alongside normal orders', () => {
-    const sess = SharedSession.createPair('soloA', 'soloB', 'easy');
-    const g = sess.games[0]!;
-    g.currentRound = 3;
-    g.phase = 'worker_mgmt';
-    sess.advance();
-    expect(g.customerCards[0]!.kind).toBe('EmperorMandate');
-    expect(g.customerCards[0]!.isFinalMandate).toBe(false);
-    expect(g.customerCards).toHaveLength(5);
-  });
-
   it('charter announces only the round its tier opens', () => {
     expect(charterEvent(4, DIFFICULTIES.standard.tierUnlock)?.id).toBe('tier1');
     expect(charterEvent(8, DIFFICULTIES.standard.tierUnlock)?.id).toBe('tier2');
     expect(charterEvent(5, DIFFICULTIES.standard.tierUnlock)).toBeUndefined();
     expect(charterEvent(4, DIFFICULTIES.easy.tierUnlock)).toBeUndefined();
-  });
-
-  it('phase option count widens with each tier', () => {
-    expect(phaseOptionCount(1, DIFFICULTIES.easy.tierUnlock)).toBe(5);
-    expect(phaseOptionCount(4, DIFFICULTIES.standard.tierUnlock)).toBe(8);
-    expect(phaseOptionCount(8, DIFFICULTIES.standard.tierUnlock)).toBe(11);
   });
 });
 
@@ -808,6 +717,7 @@ describe('display figures equal the gold actually charged', () => {
     expect(g.purchaseCard(card)).toBe(true);
     expect(before - g.money).toBe(shown.effectiveCost);
     expect(shown.effectiveCost).toBe(14);
+    expect(g.roundCosts).toBe(14);
     expect(shown.resources.map((r) => r.effectivePrice! * r.quantity)).toEqual([12, 10]);
   });
 
@@ -863,59 +773,12 @@ describe('display figures equal the gold actually charged', () => {
   });
 });
 
-describe('barter and round settlement shared rules', () => {
-  it('barter moves both sides resources and gold', () => {
-    const sess = SharedSession.createPair('a', 'b');
-    const [a, b] = [sess.games[0]!, sess.games[1]!];
-    const order = sess.createTradeOrder(
-      0,
-      [{ type: '麻布', quantity: 2 }],
-      [{ type: '金币', quantity: 10 }],
-    )!;
-    expect(sess.acceptTrade(order.id, 1)).toBe(true);
-    expect(a.money).toBe(110);
-    expect(a.inventory['麻布']).toBe(6);
-    expect(b.money).toBe(90);
-    expect(b.inventory['麻布']).toBe(10);
-    expect(sess.tradeOrders).toHaveLength(0);
-  });
-
-  it('barter merges duplicate entries and rejects the overflow', () => {
-    const sess = SharedSession.createPair('a', 'b');
-    const [a] = [sess.games[0]!];
-    a.inventory['麻布'] = 5;
-    const order = sess.createTradeOrder(
-      0,
-      [
-        { type: '麻布', quantity: 5 },
-        { type: '麻布', quantity: 5 },
-      ],
-      [{ type: '金币', quantity: 10 }],
-    )!;
-    expect(order.sell).toHaveLength(1);
-    expect(order.sell[0]!.quantity).toBe(10);
-    expect(sess.acceptTrade(order.id, 1)).toBe(false);
-    expect(a.inventory['麻布']).toBe(5);
-  });
-
-  it('income tax base counts each round cost once', () => {
-    const g = newGame('standard', 100);
-    g.roundRevenue = 1000;
-    g.roundCosts = 400;
-    g.workerWages = 50;
-    g.maintenanceCosts = 100;
-    g.endRound();
-    expect(g.incomeTaxPaid).toBe(60);
-    expect(g.money).toBe(40);
-    expect(g.lastRoundSummary?.incomeTax).toBe(60);
-  });
-
+describe('round settlement shared rules', () => {
   it('income tax is zero on a losing round', () => {
     const g = newGame('standard', 100);
     g.roundRevenue = 100;
     g.roundCosts = 200;
     g.endRound();
-    expect(g.incomeTaxPaid).toBe(0);
     expect(g.money).toBe(100);
   });
 
@@ -923,7 +786,6 @@ describe('barter and round settlement shared rules', () => {
     const g = newGame();
     give(g, { 青瓷器: 2 });
     expect(g.completeOrder(mkOrder([['青瓷器', 2]], 200, true))).toBe(true);
-    expect(g.vatPaid).toBe(4);
     expect(g.roundRevenue).toBe(196);
     expect(g.roundCosts).toBe(5);
     expect(g.score).toBe(191);

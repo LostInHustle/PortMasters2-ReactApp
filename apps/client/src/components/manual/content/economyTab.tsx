@@ -64,9 +64,42 @@ export function EconomyTab() {
         </ul>
         <h4>📈 Buying Tip</h4>
         <p>
-          Every material has home ports (Hemp Cloth: Quanzhou/Ningbo; Silk: Hangzhou/Yangzhou; Tea:
-          Guangzhou/Quanzhou) where unit prices run about 1 gold lower. Ports and prices are printed
-          on each supply card, so compare before you buy.
+          Hemp Cloth, Silk and Tea cost the following per unit. Home ports charge 1 gold below the
+          base range; other ports charge 1 gold above it.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Home ports</th>
+              <th>Unit price at home ports</th>
+              <th>Unit price elsewhere</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🧶 Hemp Cloth</td>
+              <td>Quanzhou, Ningbo</td>
+              <td>2 to 5 gold</td>
+              <td>4 to 7 gold</td>
+            </tr>
+            <tr>
+              <td>👘 Silk</td>
+              <td>Hangzhou, Yangzhou</td>
+              <td>5 to 9 gold</td>
+              <td>7 to 11 gold</td>
+            </tr>
+            <tr>
+              <td>🍵 Tea</td>
+              <td>Guangzhou, Quanzhou</td>
+              <td>9 to 13 gold</td>
+              <td>11 to 15 gold</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Monsoons, fortunes and ship modules can move the price further; the supply card always
+          prints the final per unit price, so compare before you buy.
         </p>
       </>
     );
@@ -130,9 +163,39 @@ export function EconomyTab() {
       </ul>
       <h4>📈 采购小窍门</h4>
       <p>
-        每种原料都有特产港（麻布：泉州/宁波；丝绸：杭州/扬州；茶叶：广州/泉州），特产港进货单价低 1
-        金币上下；进货卡上的港口与价格都已列明，对比后再买。
+        麻布、丝绸、茶叶的每单位价格见下表。特产港比基础价低 1 金币，其他港口比基础价高 1 金币。
       </p>
+      <table>
+        <thead>
+          <tr>
+            <th>原料</th>
+            <th>特产港</th>
+            <th>特产港单价</th>
+            <th>其他港口单价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🧶 麻布</td>
+            <td>泉州港、宁波港</td>
+            <td>2~5 金币</td>
+            <td>4~7 金币</td>
+          </tr>
+          <tr>
+            <td>👘 丝绸</td>
+            <td>杭州港、扬州港</td>
+            <td>5~9 金币</td>
+            <td>7~11 金币</td>
+          </tr>
+          <tr>
+            <td>🍵 茶叶</td>
+            <td>广州港、泉州港</td>
+            <td>9~13 金币</td>
+            <td>11~15 金币</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>季风、福缘与船舶模块还会进一步改变单价；进货卡上标出的价格才是最终价，对比后再买。</p>
     </>
   );
 }

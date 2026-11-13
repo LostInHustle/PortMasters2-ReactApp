@@ -9,7 +9,7 @@ export interface Rng {
   randint(a: number, b: number): number;
   choice<T>(arr: readonly T[]): T;
   weightedChoice<T>(items: ReadonlyArray<readonly [T, number]>): T;
-  /** In place, Fisher-Yates, mirrors Python's random.shuffle(). */
+  /** In place, Fisher Yates, mirrors Python's random.shuffle(). */
   shuffle<T>(arr: T[]): void;
 }
 

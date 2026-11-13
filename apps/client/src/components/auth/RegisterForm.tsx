@@ -51,7 +51,7 @@ export function RegisterForm({ onShowLogin }: RegisterFormProps) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
-        placeholder={tr('密码（至少 6 位）', 'Password (6+ characters)')}
+        placeholder={tr('密码（6 到 128 位）', 'Password (6 to 128 characters)')}
         autoComplete="new-password"
       />
       <input

@@ -102,7 +102,7 @@ export interface CardFinalCostContext {
 // The flat per unit discount (boon or module) that targets one specific resource type inside a
 // purchase card, e.g. Hemp Monopoly or Kiln Cellar knock a fixed amount off specific goods,
 // independent of the rest of the card. Shared by getCardFinalCost (the authoritative total a
-// purchase charges) and getCardResourceUnitPrices (the for each line price a card should display) so
+// purchase charges) and getCardResourceUnitPrices (the per line price a card should display) so
 // the two can never disagree about which goods are discounted or by how much.
 function flatItemDiscount(ctx: CardFinalCostContext, type: ItemId): number {
   let reduction = 0;

@@ -11,6 +11,22 @@ import { SetSailButton } from './SetSailButton.js';
 
 const DISMISSED_KEY = 'pm2_banner_dismissed';
 
+function loadBannerDismissed(): boolean {
+  try {
+    return localStorage.getItem(DISMISSED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function storeBannerDismissed(): void {
+  try {
+    localStorage.setItem(DISMISSED_KEY, '1');
+  } catch {
+    // storage unavailable: the banner will show again next time, which is not fatal
+  }
+}
+
 // Mirrors PortMasters2/PortMasters_online.html welcomeHTML:
 // the first voyage welcome page. Phase 0 doubles as the between rounds sync gate, so round 2+
 // shows RoundStart instead (the original's "Phase 0 is both... " comment).
@@ -18,7 +34,7 @@ export function SetSailPhase() {
   const { tr, pf, lang } = useTranslate();
   const { serverState } = useSession();
   const openManual = useOpenManual();
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem(DISMISSED_KEY) === '1');
+  const [dismissed, setDismissed] = useState(loadBannerDismissed);
   const g = serverState?.yourGame;
   if (!g) return null;
 
@@ -50,7 +66,7 @@ export function SetSailPhase() {
           <button
             className="pm-close"
             onClick={() => {
-              localStorage.setItem(DISMISSED_KEY, '1');
+              storeBannerDismissed();
               setDismissed(true);
             }}
             title={tr('不再显示此提示', "Don't show this again")}
@@ -105,12 +121,12 @@ function RoundStartPhase() {
         <EnvironmentBanner g={g} />
         <div style={{ fontSize: 54 }}>🌅</div>
         <div className="hero-title">
-          {tr(`第 ${g.currentRound} 程 · 整装启航`, `Round ${g.currentRound}, Ready to Sail`)}
+          {tr(`第 ${g.currentRound} 回合 · 整装启航`, `Round ${g.currentRound}, Ready to Sail`)}
         </div>
         <div className="subtitle-text">
           {tr(
-            `航程进度 ${g.currentRound} / ${g.maxRounds} · 与其他船长确认后抽取本程福缘`,
-            `Voyage ${g.currentRound} of ${g.maxRounds}, confirm with your fellow captains to draw this round's fortunes`,
+            `回合进度 ${g.currentRound} / ${g.maxRounds} · 与其他船长确认后抽取本回合福缘`,
+            `Round ${g.currentRound} of ${g.maxRounds}, confirm with your fellow captains to draw this round's fortunes`,
           )}
         </div>
         {s && (
@@ -118,9 +134,9 @@ function RoundStartPhase() {
             className="section-box"
             style={{ maxWidth: 460, margin: '14px auto', textAlign: 'left' }}
           >
-            <h3>{tr(`📜 第 ${s.round} 程结算回顾`, `📜 Round ${s.round} Settlement Recap`)}</h3>
+            <h3>{tr(`📜 第 ${s.round} 回合结算回顾`, `📜 Round ${s.round} Settlement Recap`)}</h3>
             <div className="stat-row" style={{ fontSize: 13 }}>
-              <span>{tr('💰 本程营收', '💰 Revenue')}</span>
+              <span>{tr('💰 本回合营收', '💰 Revenue')}</span>
               <span className="profit-positive">
                 +{s.revenue} {gold}
               </span>
@@ -128,7 +144,7 @@ function RoundStartPhase() {
             <div className="stat-row" style={{ fontSize: 13 }}>
               <span>
                 {tr(
-                  '💸 本程支出（采购 / 运费 / 工资 / 维护）',
+                  '💸 本回合支出（采购 / 运费 / 工资 / 维护）',
                   '💸 Expenses (purchases / shipping / wages / upkeep)',
                 )}
               </span>
@@ -152,7 +168,7 @@ function RoundStartPhase() {
               }}
             >
               <span>
-                <strong>{tr('程末净利', 'Net result')}</strong>
+                <strong>{tr('回合净利', 'Net result')}</strong>
               </span>
               <span className={net >= 0 ? 'profit-positive' : 'profit-negative'}>
                 {net >= 0 ? '+' : ''}

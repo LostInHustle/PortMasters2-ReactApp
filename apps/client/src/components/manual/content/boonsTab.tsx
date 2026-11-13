@@ -30,7 +30,7 @@ export function BoonsTab() {
             </tr>
             <tr>
               <td>🌊 Favorable Tides</td>
-              <td>Base shipping −4 gold</td>
+              <td>Base shipping 4 gold lower</td>
               <td>Many small deliveries planned</td>
             </tr>
             <tr>
@@ -55,7 +55,7 @@ export function BoonsTab() {
             </tr>
             <tr>
               <td>🧶 Hemp Monopoly</td>
-              <td>Hemp Cloth −2 gold per unit</td>
+              <td>Hemp Cloth 2 gold lower per unit</td>
               <td>Running a garb/tunic production line</td>
             </tr>
             <tr>
@@ -169,7 +169,7 @@ export function BoonsTab() {
           </tr>
           <tr>
             <td>🧶 麻布专营</td>
-            <td>麻布采购单价 −2 金币</td>
+            <td>麻布采购单价降低2金币</td>
             <td>主打麻衣/布衣生产线</td>
           </tr>
           <tr>
@@ -181,7 +181,7 @@ export function BoonsTab() {
             <td>
               🔮 千里眼
               <br />
-              <span className="muted">市舶新政 · 第6程起</span>
+              <span className="muted">市舶新政 · 第 6 回合起</span>
             </td>
             <td>本回合免费获得 1 条牙行密语线索</td>
             <td>想提前锁定贸易阶段订单</td>
@@ -190,7 +190,7 @@ export function BoonsTab() {
             <td>
               🏮 陶铜联号
               <br />
-              <span className="muted">市舶新政 · 第6程起</span>
+              <span className="muted">市舶新政 · 第 6 回合起</span>
             </td>
             <td>本回合「青瓷器」与「紫铜镜」订单报酬 +15%</td>
             <td>库存中已有大量青瓷器/紫铜镜待交付</td>
@@ -199,7 +199,7 @@ export function BoonsTab() {
             <td>
               🧾 拓商减负
               <br />
-              <span className="muted">市舶新政 · 第6程起</span>
+              <span className="muted">市舶新政 · 第 6 回合起</span>
             </td>
             <td>本回合交付成品订单的增值税减半</td>
             <td>本回合计划大量交付成品</td>
@@ -208,7 +208,7 @@ export function BoonsTab() {
             <td>
               💎 蕃国奇珍
               <br />
-              <span className="muted">万国通商 · 第10程起</span>
+              <span className="muted">万国通商 · 第 10 回合起</span>
             </td>
             <td>本回合「蕃香脂」与「珠链」订单报酬 +15%</td>
             <td>库存中已有大量蕃香脂/珠链待交付</td>
@@ -217,7 +217,7 @@ export function BoonsTab() {
             <td>
               🛡️ 远洋护航
               <br />
-              <span className="muted">万国通商 · 第10程起</span>
+              <span className="muted">万国通商 · 第 10 回合起</span>
             </td>
             <td>本回合雇佣护航费用减半，海盗风险减半</td>
             <td>季风海盗风险较高时</td>
@@ -226,7 +226,7 @@ export function BoonsTab() {
             <td>
               🛍️ 万商云集
               <br />
-              <span className="muted">万国通商 · 第10程起</span>
+              <span className="muted">万国通商 · 第 10 回合起</span>
             </td>
             <td>本回合贸易阶段额外出现 1 张订单</td>
             <td>想要更多交付机会</td>

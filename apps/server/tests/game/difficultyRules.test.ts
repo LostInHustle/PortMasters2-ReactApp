@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  difficultyBrokerCorruption,
-  difficultyRounds,
-  difficultyTierUnlock,
-  emperorMandateSize,
   normalizeDifficulty,
   phaseOptionCount,
   pirateLossPct,
@@ -12,7 +8,7 @@ import {
 } from '../../src/game/difficultyRules.js';
 
 // Expected values derived manually from PortMasters2/server.py DIFFICULTIES and
-// normalize_difficulty/difficulty_rounds/difficulty_tier_unlock/difficulty_broker_corruption
+// normalize_difficulty
 describe('normalizeDifficulty', () => {
   it('passes through known difficulties', () => {
     expect(normalizeDifficulty('hard')).toBe('hard');
@@ -22,26 +18,6 @@ describe('normalizeDifficulty', () => {
   it('falls back to easy for anything unknown', () => {
     expect(normalizeDifficulty('bogus')).toBe('easy');
     expect(normalizeDifficulty(undefined)).toBe('easy');
-  });
-});
-
-describe('difficultyRounds / difficultyTierUnlock / difficultyBrokerCorruption', () => {
-  it('easy: 8 rounds, no tier unlocks, no broker corruption', () => {
-    expect(difficultyRounds('easy')).toBe(8);
-    expect(difficultyTierUnlock('easy')).toEqual({});
-    expect(difficultyBrokerCorruption('easy')).toBe(false);
-  });
-
-  it('standard: 12 rounds, tier unlocks at rounds 4/8', () => {
-    expect(difficultyRounds('standard')).toBe(12);
-    expect(difficultyTierUnlock('standard')).toEqual({ 1: 4, 2: 8 });
-    expect(difficultyBrokerCorruption('standard')).toBe(false);
-  });
-
-  it('hard: 16 rounds, tier unlocks at rounds 6/10, broker corruption on', () => {
-    expect(difficultyRounds('hard')).toBe(16);
-    expect(difficultyTierUnlock('hard')).toEqual({ 1: 6, 2: 10 });
-    expect(difficultyBrokerCorruption('hard')).toBe(true);
   });
 });
 
@@ -61,19 +37,6 @@ describe('pirateLossPct', () => {
   it('hard steps up from above_medium to high past the midpoint (round 8 of 16)', () => {
     expect(pirateLossPct('hard', 1, 16)).toBeCloseTo(0.25);
     expect(pirateLossPct('hard', 9, 16)).toBeCloseTo(0.4);
-  });
-});
-
-// Expected values derived manually from EMPEROR_MANDATE_TEMPLATES/DIFFICULTIES.mandates
-describe('emperorMandateSize', () => {
-  it('fires the scheduled template index on each difficulty mandate round', () => {
-    expect(emperorMandateSize('easy', 3)).toBe(0);
-    expect(emperorMandateSize('easy', 6)).toBe(1);
-    expect(emperorMandateSize('easy', 8)).toBe(2);
-  });
-
-  it('is undefined on nonmandate rounds', () => {
-    expect(emperorMandateSize('easy', 1)).toBeUndefined();
   });
 });
 

@@ -157,6 +157,7 @@ describe('advance: phase 5 -> 1 (Procure dealt)', () => {
     expect(g1.resourceCards.map((c) => c.id)).toEqual([0, 1, 2, 3, 4]);
     expect(g1.phase2DemandTags.length).toBeGreaterThan(0);
     expect(g1.phase2DemandTags.every((t) => ['麻布', '丝绸'].includes(t))).toBe(true);
+    expect(g1.revealedIntel).toHaveLength(0);
   });
 
   it('reveals free intel from a boon and removes the revealed tag from the demand pool', () => {
@@ -172,18 +173,6 @@ describe('advance: phase 5 -> 1 (Procure dealt)', () => {
     expect(g1.revealedIntel).toHaveLength(1);
     expect(g1.revealedIntel[0]).toMatchObject({ item: '麻布', port: PORT, used: false });
     expect(g1.phase2DemandTags).toHaveLength(0);
-  });
-
-  it('does not reveal intel when no boon grants free_intel', () => {
-    const g1 = makeGame({
-      phase: 5,
-      unlockedResources: () => ['麻布'],
-      unlockedProducts: () => [],
-      modifierFlags: {},
-    });
-    const g2 = makeGame({ phase: 5, gameOver: true });
-    advance(makeCtx(g1, g2), noShuffleRng());
-    expect(g1.revealedIntel).toHaveLength(0);
   });
 });
 

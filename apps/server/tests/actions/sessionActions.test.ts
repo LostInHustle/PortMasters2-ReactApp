@@ -5,7 +5,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   endGameSession,
   handleEndSessionVote,
-  handleJoinGame,
   handleReadyForNextPhase,
   handleRestart,
 } from '../../src/actions/sessionActions.js';
@@ -25,12 +24,6 @@ class FakeSocket implements Sendable {
     this.sent.push(JSON.parse(data));
   }
 }
-
-describe('handleJoinGame', () => {
-  it('always returns true', () => {
-    expect(handleJoinGame()).toBe(true);
-  });
-});
 
 describe('handleReadyForNextPhase', () => {
   it('returns false outside the gated phases or once already ready', () => {
@@ -97,21 +90,9 @@ describe('handleRestart', () => {
     ]);
   });
 
-  it('lets a non host restart once every other game has ended, notifying the others', () => {
+  it('lets a non host restart only once every other player has finished, notifying the others', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
-    const sess = SharedSession.createPair('alice', 'bob');
-    sess.games[0]!.gameOver = true;
-    sess.games[1]!.money = 9999;
-
-    expect(handleRestart(state, sess, 1, 'bob')).toBe(true);
-    expect(sess.games[1]!.money).toBe(100);
-    expect(alice.sent).toEqual([
-      { type: 'system_message', message: '其他玩家重新开始了游戏，本局进度已重置' },
-    ]);
-  });
-
-  it('in a room of 3, a non host needs every other player to have finished', () => {
     const sess = new SharedSession('alice', 'easy', 3);
     sess.addPlayer('bob');
     sess.addPlayer('carol');
@@ -119,9 +100,13 @@ describe('handleRestart', () => {
     sess.games[0]!.gameOver = true;
     // carol (slot 2) hasn't finished yet, so bob still can't restart.
     expect(handleRestart(state, sess, 1, 'bob')).toBe(false);
+    expect(alice.sent).toEqual([]);
 
     sess.games[2]!.gameOver = true;
     expect(handleRestart(state, sess, 1, 'bob')).toBe(true);
+    expect(alice.sent).toEqual([
+      { type: 'system_message', message: '其他玩家重新开始了游戏，本局进度已重置' },
+    ]);
   });
 });
 

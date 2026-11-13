@@ -23,17 +23,17 @@ export function ShipTab() {
             <tr>
               <td>Lv.0 → Lv.1</td>
               <td>15 gold</td>
-              <td>Shipping −5/order, 1 module slot</td>
+              <td>Shipping 5 gold/order lower, 1 module slot</td>
             </tr>
             <tr>
               <td>Lv.1 → Lv.2</td>
               <td>25 gold</td>
-              <td>Shipping −10/order, 2 module slots</td>
+              <td>Shipping 10 gold/order lower, 2 module slots</td>
             </tr>
             <tr>
               <td>Lv.2 → Lv.3</td>
               <td>40 gold</td>
-              <td>Shipping −15/order, 3 module slots</td>
+              <td>Shipping 15 gold/order lower, 3 module slots</td>
             </tr>
           </tbody>
         </table>
@@ -71,17 +71,17 @@ export function ShipTab() {
           <tr>
             <td>0 级 → 1 级</td>
             <td>15 金币</td>
-            <td>每单运费 −5 · 1 个模块槽</td>
+            <td>每单运费降低5 · 1 个模块槽</td>
           </tr>
           <tr>
             <td>1 级 → 2 级</td>
             <td>25 金币</td>
-            <td>每单运费 −10 · 2 个模块槽</td>
+            <td>每单运费降低10 · 2 个模块槽</td>
           </tr>
           <tr>
             <td>2 级 → 3 级</td>
             <td>40 金币</td>
-            <td>每单运费 −15 · 3 个模块槽</td>
+            <td>每单运费降低15 · 3 个模块槽</td>
           </tr>
         </tbody>
       </table>
@@ -90,9 +90,9 @@ export function ShipTab() {
         <li>
           升级是
           <strong>永久投资</strong>
-          ：交付订单越频繁，回本越快。一般建议第 2~4 程内升至 1~2 级。
+          ：交付订单越频繁，回本越快。一般建议第 2~4 回合内升至 1~2 级。
         </li>
-        <li>临近尾声的最后一两程再升级往往回不了本，把现金留给进货更划算。</li>
+        <li>临近尾声的最后一两回合再升级往往回不了本，把现金留给进货更划算。</li>
         <li>
           升级解锁槽位后，可在船坞「选择船舶模块」。每回合的 3 个候选
           <strong>固定不变</strong>

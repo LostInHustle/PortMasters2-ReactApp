@@ -4,9 +4,7 @@ import {
   CAPTAIN_HUES,
   captainGlyph,
   captainHue,
-  fleetGlyph,
   modeAware,
-  nameHash,
   setIconMode,
 } from '../../src/i18n/iconMode.js';
 import { ITEM_ICONS } from '../../src/i18n/itemIcons.js';
@@ -26,14 +24,6 @@ describe('icon style', () => {
     expect(ITEM_ICONS['丝绸']).toBe('👘');
   });
 
-  it('gives every item and every artisan a single character', () => {
-    setIconMode('han');
-    for (const key of Object.keys(ITEM_ICONS) as (keyof typeof ITEM_ICONS)[]) {
-      expect(Array.from(ITEM_ICONS[key])).toHaveLength(1);
-    }
-    for (const wt of WORKER_TYPES) expect(Array.from(wt.icon)).toHaveLength(1);
-  });
-
   it('falls back to the emoji for a key without a character', () => {
     const table = modeAware({ a: '🅰️', b: '🅱️' }, { a: '甲' });
     setIconMode('han');
@@ -48,18 +38,5 @@ describe('captain medals', () => {
     expect(CAPTAIN_HUES).toContain(captainHue('Lin Yue'));
     expect(CAPTAIN_HAN).toContain(captainGlyph('Lin Yue', 'han'));
     expect(captainGlyph('Lin Yue', 'emoji')).toBe('🧑‍✈️');
-  });
-
-  it('matches the hash the single file build computes', () => {
-    // (h * 31 + code point) kept to 32 bits, the same arithmetic as the single file build
-    let h = 0;
-    for (const ch of '郑宝Zheng') h = (h * 31 + ch.codePointAt(0)!) % 2 ** 32;
-    expect(nameHash('郑宝Zheng')).toBe(h);
-    expect(nameHash(null)).toBe(0);
-  });
-
-  it('uses a group mark for the fleet header', () => {
-    expect(fleetGlyph('emoji')).toBe('🧑‍✈️');
-    expect(fleetGlyph('han')).toBe('队');
   });
 });

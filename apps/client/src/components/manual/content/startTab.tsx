@@ -26,7 +26,7 @@ export function StartTab() {
           gentler place to start; see the "Difficulty & Expansion" section for exactly what changes
           between them.
         </p>
-        <h4>🧭 Your First Voyage (recommended route)</h4>
+        <h4>🧭 Your First Round (recommended route)</h4>
         <ol>
           <li>
             <strong>Fortune</strong>: in round 1, Emergency Loan (+40 gold) or Merchant's Charm (15%
@@ -95,11 +95,11 @@ export function StartTab() {
       <p className="muted">
         每一局有轻松、标准、高难三档难度，构成由易到难的阶梯，默认是轻松。难度在邀请时商定：发出邀请的一方选择，另一方在确认窗口看过说明并同意后开局。轻松只包含基础货物，更适合新手起步；想了解各档难度的差别，可查看「难度与拓展」一节。
       </p>
-      <h4>🧭 第一程怎么玩（推荐路线）</h4>
+      <h4>🧭 第一回合怎么玩（推荐路线）</h4>
       <ol>
         <li>
           <strong>福缘</strong>
-          ：第一程建议选「紧急钱庄」（+40金币）或「商贾魅力」（采购85折），缓解开局现金压力。
+          ：第一回合建议选「紧急钱庄」（+40金币）或「商贾魅力」（采购85折），缓解开局现金压力。
         </li>
         <li>
           <strong>采购</strong>

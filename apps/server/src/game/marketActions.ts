@@ -24,10 +24,8 @@ export interface PurchaseCardContext {
   equippedModules: readonly ShipModule[];
   money: number;
   roundCosts: number;
-  totalCosts: number;
   inventory: Record<ItemId, number>;
   purchasedCards: Set<number>;
-  purchaseCount: number;
   log(message: string): void;
 }
 
@@ -40,12 +38,10 @@ export function purchaseCard(ctx: PurchaseCardContext, card: MarketCard & { id: 
   }
   ctx.money -= cost;
   ctx.roundCosts += cost;
-  ctx.totalCosts += cost;
   for (const r of card.resources) {
     ctx.inventory[r.type] += r.quantity;
   }
   ctx.purchasedCards.add(card.id);
-  ctx.purchaseCount += 1;
   ctx.log(`🛒 采购完成，花费${cost}金币`);
   return true;
 }
@@ -57,13 +53,9 @@ export interface CompleteOrderContext {
   equippedModules: readonly ShipModule[];
   money: number;
   roundCosts: number;
-  totalCosts: number;
-  vatPaid: number;
   roundRevenue: number;
-  totalRevenue: number;
   score: number;
   completedOrders: Set<number>;
-  orderCount: number;
   log(message: string): void;
 }
 
@@ -107,11 +99,9 @@ export function completeOrder(
     const unitVat = calcVat(ctx, first.type as ProductId, Math.floor(reward / first.required));
     const totalVat = unitVat * first.required;
     reward -= totalVat;
-    ctx.vatPaid += totalVat;
   }
   ctx.money -= transport;
   ctx.roundCosts += transport;
-  ctx.totalCosts += transport;
   if (
     hasModule(ctx, 'silk_monopoly') &&
     order.isProductOrder &&
@@ -139,10 +129,8 @@ export function completeOrder(
   }
   ctx.money += reward;
   ctx.roundRevenue += reward;
-  ctx.totalRevenue += reward;
   ctx.score += Math.max(0, reward - transport);
   ctx.completedOrders.add(order.id);
-  ctx.orderCount += 1;
   ctx.log(`📦 订单完成，净利润${reward - transport}金币`);
   return true;
 }

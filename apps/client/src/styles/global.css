@@ -1,11 +1,12 @@
-/* Ported verbatim from PortMasters2/PortMasters_online.html <style> block (lines 8-1180).
+/* Ported verbatim from PortMasters2/PortMasters_online.html <style> block (lines 8 to 1180).
    Kept as one global stylesheet (not CSS Modules) because every component references the
    original's global class names directly (className="btn btn-success", "stat-row", etc.);
-   transcribing the stylesheet 1:1 is the highest-fidelity, lowest-risk port. Imported once in
-   main.tsx so it applies app-wide, exactly as the original <style> applied document-wide. */
+   transcribing the stylesheet 1:1 is the closest match and the lowest risk. Imported once in
+   main.tsx so it applies across the app, exactly as the original <style> covered the whole
+   document. */
 /* ============================================================
    PortMasters 2 Design System
-   Bright and natural, ocean-glass feel, smooth gradients, near-future (~2030) aesthetic
+   Bright and natural, ocean glass feel, smooth gradients, near future (~2030) aesthetic
    Layer hierarchy (low to high): background decor < chat window < fullscreen overlay < dialogs < notifications
    ============================================================ */
 :root {
@@ -75,7 +76,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- Background ambient glow (slowly drifting light patches) ---- */
+/* ===== Background ambient glow (slowly drifting light patches) ===== */
 .bg-orb {
   position: fixed;
   border-radius: 50%;
@@ -124,7 +125,7 @@ a {
   background: rgba(56, 189, 248, 0.3);
 }
 
-/* ---- Main layout: left = me, center = stage, right = fellow captains ---- */
+/* ===== Main layout: left = me, center = stage, right = fellow captains ===== */
 #app {
   max-width: 1720px;
   margin: 0 auto;
@@ -150,7 +151,7 @@ a {
   box-shadow: var(--shadow-soft);
 }
 
-/* ---- Header ---- */
+/* ===== Header ===== */
 /* The header, the control bar and the log all span the full grid width and stack down the page,
    so they share one horizontal inset (20px). They used to run 22 / 16 / 14, which left the page
    with a visibly ragged left edge from top to bottom. */
@@ -228,7 +229,7 @@ a {
   font-weight: 600;
 }
 
-/* ---- Sidebars (every captain's fleet status) ---- */
+/* ===== Sidebars (every captain's fleet status) ===== */
 .side-panel {
   padding: 14px;
   overflow-y: auto;
@@ -386,7 +387,7 @@ a {
   border-color: rgba(16, 185, 129, 0.35);
   color: #047857;
 }
-/* ---- Roster widgets: every other player in the room, collapsed by default ---- */
+/* ===== Roster widgets: every other player in the room, collapsed by default ===== */
 .roster-widget {
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(14, 165, 233, 0.18);
@@ -432,21 +433,21 @@ a {
   font-size: 11px;
 }
 
-/* ---- Tooltips (recognition over recall: bring the explanation to the user) ----
+/* ===== Tooltips (recognition over recall: bring the explanation to the user) =====
    One shared bubble is appended to <body> and positioned by JS (see initTooltips).
-   The old `.tip::after` pseudo-element was structurally trapped, which is why hints
+   The old `.tip::after` pseudo element was structurally trapped, which is why hints
    were cut off no matter how the copy was tuned:
      • clipped by every scrolling/clipping ancestor: .side-panel, .phase-panel and
-       .card all set `overflow` other than visible, and an absolutely-positioned
+       .card all set `overflow` other than visible, and an absolutely positioned
        descendant cannot escape an ancestor's overflow box (no z-index fixes this);
      • pinned beneath ancestor stacking contexts (.phase-view animation, .card:hover
        transform), so even where it wasn't clipped it could render behind siblings;
-     • hard-centered (left:50%) with a fixed max-width and no edge detection, so a
+     • hard centered (left:50%) with a fixed max-width and no edge detection, so a
        hint near any viewport edge overflowed, and a width that fit English spilled
-       over in 中文 (and vice-versa), which is the "works in one language only" symptom.
-   A body-level position:fixed bubble is measured against the viewport instead: no
+       over in 中文 (and vice versa), which is the "works in one language only" symptom.
+   A body level position:fixed bubble is measured against the viewport instead: no
    ancestor can clip it or trap its stacking, and runtime collision detection
-   (flip above/below + horizontal clamp) keeps every hint fully on-screen in both
+   (flip above/below + horizontal clamp) keeps every hint fully on screen in both
    languages. Markup is unchanged: any current or future [data-tip] is covered. */
 .tip {
   cursor: help;
@@ -501,7 +502,7 @@ a {
   top: -4px;
 }
 
-/* ---- Center stage ---- */
+/* ===== Center stage ===== */
 /* Top inset matches .side-panel so the three panels sharing this grid row (me / main / fellows)
    start their first line of content on the same baseline. */
 .phase-panel {
@@ -529,7 +530,7 @@ a {
   }
 }
 
-/* ---- Phase progress (the flow at a glance) ---- */
+/* ===== Phase progress (the flow at a glance) ===== */
 .stepper {
   display: flex;
   align-items: flex-start;
@@ -615,7 +616,7 @@ a {
   color: #0f766e;
 }
 
-/* ---- Phase info card (what this step is / what to do) ---- */
+/* ===== Phase info card (what this step is / what to do) ===== */
 .phase-brief {
   display: flex;
   gap: 14px;
@@ -653,7 +654,7 @@ a {
   gap: 4px;
 }
 
-/* ---- Buttons ---- */
+/* ===== Buttons ===== */
 .btn {
   --btn-bg: var(--grad-primary);
   --btn-shadow: rgba(2, 132, 199, 0.28);
@@ -719,7 +720,7 @@ a {
   color: #334155;
 }
 /* Ghost buttons adapt their color to the surface they sit on:
-   default (light glass panel) -> ocean-colored text + ocean-colored outline;
+   default (light glass panel) -> ocean colored text + ocean colored outline;
    dark containers (header / bottom action bar) -> white text + white outline.
    No button variant should assume it will only ever appear on one kind of background. */
 .btn-ghost {
@@ -765,7 +766,7 @@ a {
   color: #fff;
 }
 
-/* ---- Cards ---- */
+/* ===== Cards ===== */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -933,7 +934,7 @@ a {
   font-weight: 700;
 }
 
-/* ---- Titles ---- */
+/* ===== Titles ===== */
 .hero-title {
   font-size: 30px;
   font-weight: 900;
@@ -956,7 +957,7 @@ a {
   padding: 10px 6px;
 }
 
-/* ---- PortMasters 2 / previous-game hint ---- */
+/* ===== PortMasters 2 / previous game hint ===== */
 .pm-banner {
   background: linear-gradient(135deg, #fffbeb, #fef3c7);
   border: 1px solid rgba(245, 158, 11, 0.45);
@@ -994,7 +995,7 @@ a {
   flex: none;
 }
 
-/* ---- Generic sections ---- */
+/* ===== Generic sections ===== */
 .section-box {
   background: var(--glass-strong);
   border: 1px solid rgba(14, 165, 233, 0.16);
@@ -1070,7 +1071,7 @@ a {
   font-weight: 800;
 }
 
-/* ---- Fortune cards ---- */
+/* ===== Fortune cards ===== */
 .boon-card {
   background: var(--glass-strong);
   border: 1px solid rgba(14, 165, 233, 0.2);
@@ -1107,7 +1108,7 @@ a {
   line-height: 1.6;
 }
 
-/* ---- Artisans ---- */
+/* ===== Artisans ===== */
 .worker-row {
   display: flex;
   align-items: center;
@@ -1132,7 +1133,7 @@ a {
   font-weight: 700;
 }
 
-/* ---- Broker's Whisper (collapsible panel) ---- */
+/* ===== Broker's Whisper (collapsible panel) ===== */
 .whisper-panel {
   background: linear-gradient(135deg, rgba(254, 243, 199, 0.6), rgba(255, 251, 235, 0.85));
   border: 1px solid rgba(245, 158, 11, 0.45);
@@ -1186,7 +1187,7 @@ a {
   gap: 8px;
 }
 
-/* ---- Barter ---- */
+/* ===== Barter ===== */
 .trade-section {
   background: linear-gradient(135deg, rgba(254, 243, 199, 0.55), rgba(255, 251, 235, 0.8));
   border: 1px solid rgba(245, 158, 11, 0.35);
@@ -1232,7 +1233,7 @@ a {
   outline: 2px solid rgba(14, 165, 233, 0.4);
 }
 
-/* ---- Bottom action bar ---- */
+/* ===== Bottom action bar ===== */
 .control-panel {
   grid-area: actions;
   background: var(--grad-deep);
@@ -1264,7 +1265,7 @@ a {
   font-size: 11.5px;
 }
 
-/* ---- Log ---- */
+/* ===== Log ===== */
 .log-panel {
   grid-area: log;
   padding: 10px 20px;
@@ -1294,7 +1295,7 @@ a {
   border-bottom: none;
 }
 
-/* ---- Dialogs ---- */
+/* ===== Dialogs ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1356,7 +1357,7 @@ a {
   background: rgba(148, 163, 184, 0.3);
 }
 
-/* ---- Difficulty chooser (invite composer + invite confirmation) ---- */
+/* ===== Difficulty chooser (invite composer + invite confirmation) ===== */
 .diff-options {
   display: flex;
   gap: 12px;
@@ -1431,7 +1432,7 @@ a {
   color: #b91c1c;
 }
 
-/* ---- Manual ---- */
+/* ===== Manual ===== */
 .manual-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1511,7 +1512,7 @@ a {
   font-weight: 700;
 }
 
-/* ---- Login / Lobby ---- */
+/* ===== Login / Lobby ===== */
 #login-overlay,
 #lobby-overlay {
   position: fixed;
@@ -1637,7 +1638,7 @@ a {
   gap: 8px;
 }
 
-/* ---- Chat ---- */
+/* ===== Chat ===== */
 #chat-window {
   position: fixed;
   bottom: 22px;
@@ -1720,7 +1721,7 @@ a {
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
 }
 
-/* ---- Connection banner: persistent, unlike a toast, for as long as the socket is down ---- */
+/* ===== Connection banner: persistent, unlike a toast, for as long as the socket is down ===== */
 .connection-banner {
   position: fixed;
   top: 14px;
@@ -1748,8 +1749,8 @@ a {
   animation: livePulse 1.6s ease-in-out infinite;
 }
 
-/* ---- Notifications / toast stack ---- */
-/* All toasts live in a fixed top-right column so multiple can stack instead of overlapping. */
+/* ===== Notifications / toast stack ===== */
+/* All toasts live in a fixed top right column so multiple can stack instead of overlapping. */
 #toast-stack {
   position: fixed;
   top: 20px;
@@ -1873,7 +1874,7 @@ a {
   }
 }
 
-/* ---- Spectator window (a separate floating window, doesn't take up the main stage) ---- */
+/* ===== Spectator window (a separate floating window, doesn't take up the main stage) ===== */
 .spectate-overlay {
   position: fixed;
   inset: 0;
@@ -2018,7 +2019,7 @@ a {
   overflow-y: auto;
 }
 
-/* ---- Spectator detail pane ----
+/* ===== Spectator detail pane =====
    Composed for this window's width instead of reusing the 300px sidebar's .status-section
    widgets. Six glass boxes of equal weight gave the scout no hierarchy, so the numbers that
    actually matter when sizing up a rival (gold, renown, ship) were buried among the rest.
@@ -2151,7 +2152,7 @@ a {
   }
 }
 
-/* ---- Responsive ---- */
+/* ===== Responsive ===== */
 @media (max-width: 1280px) {
   #app {
     grid-template-columns: 260px minmax(0, 1fr) 260px;

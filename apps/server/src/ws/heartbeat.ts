@@ -9,7 +9,7 @@ const DEFAULT_MAX_MISSED_PINGS = 3;
 // a socket sees any data during a quiet stretch in the lobby or between rounds, and idle
 // WebSocket connections get silently dropped by Railway's edge proxy (and most reverse
 // proxies/load balancers fronting a long lived socket) well before any "session" concept is
-// even involved. This app has no token or expiring session at all, so that diagnosis was a
+// even involved. A stored session token does not keep the socket alive, so that diagnosis was a
 // red herring. The dropped connection just sits there looking alive to the client until it
 // tries to send something, at which point nothing ever responds.
 //
@@ -18,8 +18,8 @@ const DEFAULT_MAX_MISSED_PINGS = 3;
 // connection, a backgrounded/throttled browser tab, or ordinary jitter over the public path
 // to Railway, can easily delay one pong past one interval without the connection actually being
 // dead. The first version of this heartbeat terminated on the very first miss, which made it
-// too eager enough to be a *bigger* source of disconnects than the idle timeout it was
-// fixing. Tracking a for each connection miss count and only terminating once it crosses
+// too eager and a *bigger* source of disconnects than the idle timeout it was
+// fixing. Tracking a per connection miss count and only terminating once it crosses
 // `maxMissedPings` gives a connection several intervals of grace to recover before being reaped,
 // while still reliably clearing genuinely dead connections (laptop asleep, wifi gone, tab killed
 // without a clean close) within a couple of minutes. `ws.terminate()` still emits `close` on the

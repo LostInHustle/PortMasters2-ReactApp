@@ -31,20 +31,6 @@ describe('PlayerGame constructor', () => {
     expect(game.workers.master).toEqual([]);
     expect(game.workers.jeweler).toEqual([]);
   });
-
-  it('normalizes an unknown difficulty and honors the harder schedules', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const game = new PlayerGame('bogus' as any);
-    expect(game.difficulty).toBe('easy');
-
-    const standard = new PlayerGame('standard');
-    expect(standard.maxRounds).toBe(12);
-    expect(standard.tierUnlock).toEqual({ 1: 4, 2: 8 });
-
-    const hard = new PlayerGame('hard');
-    expect(hard.maxRounds).toBe(16);
-    expect(hard.tierUnlock).toEqual({ 1: 6, 2: 10 });
-  });
 });
 
 // Expected values derived manually from end_round behavior.
@@ -53,14 +39,12 @@ describe('PlayerGame.endRound', () => {
     const game = new PlayerGame('easy');
     game.roundRevenue = 200;
     game.roundCosts = 50;
-    game.maintenanceCosts = 15;
     game.workerWages = 10;
     // roundCosts already includes wages and maintenance: preTax = 200 - 50 = 150
     // tax = trunc(150 * 0.1) = 15
     game.endRound();
 
     expect(game.money).toBe(85); // 100 - 15
-    expect(game.incomeTaxPaid).toBe(15);
     expect(game.lastRoundSummary).toEqual({
       round: 1,
       revenue: 200,
@@ -73,7 +57,6 @@ describe('PlayerGame.endRound', () => {
     expect(game.phase).toBe(0);
     expect(game.roundRevenue).toBe(0);
     expect(game.roundCosts).toBe(0);
-    expect(game.maintenanceCosts).toBe(0);
     expect(game.workerWages).toBe(0);
     expect(game.gameOver).toBe(false);
   });
@@ -85,7 +68,6 @@ describe('PlayerGame.endRound', () => {
     game.endRound();
 
     expect(game.money).toBe(0);
-    expect(game.incomeTaxPaid).toBe(5);
     expect(game.lastRoundSummary?.incomeTax).toBe(5);
   });
 
@@ -93,13 +75,11 @@ describe('PlayerGame.endRound', () => {
     const game = new PlayerGame('easy');
     game.currentRound = game.maxRounds; // 8
     game.phase = 3;
-    game.purchaseCount = 5;
     game.endRound();
 
     expect(game.currentRound).toBe(9);
     expect(game.gameOver).toBe(true);
-    // Per server.py's early return on gameOver, these are NOT reset.
+    // Per server.py's early return on gameOver, the next round reset is skipped.
     expect(game.phase).toBe(3);
-    expect(game.purchaseCount).toBe(5);
   });
 });

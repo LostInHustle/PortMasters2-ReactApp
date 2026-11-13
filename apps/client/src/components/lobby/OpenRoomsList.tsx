@@ -45,7 +45,7 @@ export function OpenRoomsList() {
             disabled={r.count >= r.maxPlayers}
             onClick={() => joinRoom(r.host)}
           >
-            {tr('加入', '➕ Join')}
+            {tr('➕ 加入', '➕ Join')}
           </button>
         </div>
       ))}

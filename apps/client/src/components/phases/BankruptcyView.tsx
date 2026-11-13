@@ -56,8 +56,8 @@ export function BankruptcyView() {
               'Your game is over. As the host, you can set sail again at any time for a brand new voyage.',
             )
           : tr(
-              '本局已结束，需等待其他船长都完成或结束比赛后才能重新起航。',
-              'Your game is over. Once every other captain finishes their voyage, you can all set sail again.',
+              '本局已结束，需等待其他玩家全部完成或结束比赛后才能重新起航。',
+              'Your game is over. Once everyone else finishes their voyage, you can all set sail again.',
             )}
       </p>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>

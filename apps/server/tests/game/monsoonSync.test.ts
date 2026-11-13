@@ -63,6 +63,7 @@ describe('syncMonsoonState', () => {
     const ctx = { games: [g1, g2] as const, tierUnlock: {}, monsoonCycleCache: emptyCache() };
     syncMonsoonState(ctx, throwingRng());
     expect(g1.applied[0]).toEqual(MONSOON_TIER0[0]);
+    expect(g2.applied[0]).toEqual(MONSOON_TIER0[0]);
     expect(ctx.monsoonCycleCache).toEqual({});
   });
 
@@ -110,14 +111,5 @@ describe('syncMonsoonState', () => {
     syncMonsoonState(ctx, fixedRng(chosen));
     // round clamps to maxRounds=8 -> cycle = floor((8-1)/2) = 3
     expect(ctx.monsoonCycleCache[3]).toBe(chosen);
-  });
-
-  it('propagates the resolved state to both games', () => {
-    const g1 = makeGame(1, 8);
-    const g2 = makeGame(1, 8);
-    const ctx = { games: [g1, g2] as const, tierUnlock: {}, monsoonCycleCache: emptyCache() };
-    syncMonsoonState(ctx, throwingRng());
-    expect(g1.applied).toHaveLength(1);
-    expect(g2.applied).toHaveLength(1);
   });
 });

@@ -14,9 +14,8 @@ interface PendingInvite {
 
 /**
  * Everything the client knows about the current session, replacing the module globals the
- * prototype. Lives in its own
- * module so the protocol dispatcher in sessionMessages.ts can name it without importing the
- * React provider that owns it.
+ * original prototype used. Lives in its own module so the protocol dispatcher in
+ * sessionMessages.ts can name it without importing the React provider that owns it.
  */
 export interface SessionState {
   currentUser: string | null;

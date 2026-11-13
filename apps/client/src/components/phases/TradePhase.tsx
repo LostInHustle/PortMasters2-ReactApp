@@ -74,7 +74,7 @@ export function TradePhase() {
                   <div className="section-hint" style={{ color: '#92400e' }}>
                     {tr(
                       '帝国使节只在关键航程现身。提前囤好指定货物，可换取足以改写本局的报酬。',
-                      'Imperial envoys appear only at milestone voyages. Hoard the requested goods early for a payout that can redefine the game.',
+                      'Imperial envoys appear only at milestone rounds. Hoard the requested goods early for a payout that can redefine the game.',
                     )}
                   </div>
                 )}

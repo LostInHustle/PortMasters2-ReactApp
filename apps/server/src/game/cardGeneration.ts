@@ -86,7 +86,7 @@ export function genEmperorMandateOrder(
 }
 
 // Mirrors PortMasters2/server.py gen_raw_order.
-export function genRawOrder(ctx: CardGenContext, rng: Rng, filterItem?: ResourceId): CustomerOrder {
+function genRawOrder(ctx: CardGenContext, rng: Rng, filterItem?: ResourceId): CustomerOrder {
   const num = rng.randint(1, 3);
   const resources: OrderResource[] = [];
   const unlockedRes = ctx.unlockedResources();
@@ -113,11 +113,7 @@ export function genRawOrder(ctx: CardGenContext, rng: Rng, filterItem?: Resource
 }
 
 // Mirrors PortMasters2/server.py gen_product_order.
-export function genProductOrder(
-  ctx: CardGenContext,
-  rng: Rng,
-  filterItem?: ProductId,
-): CustomerOrder {
+function genProductOrder(ctx: CardGenContext, rng: Rng, filterItem?: ProductId): CustomerOrder {
   const unlockedProd = ctx.unlockedProducts();
   const product =
     filterItem && unlockedProd.includes(filterItem) ? filterItem : rng.choice(unlockedProd);
@@ -182,7 +178,7 @@ export function genResourceCard(ctx: CardGenContext, rng: Rng): MarketCard {
 }
 
 // Mirrors PortMasters2/server.py gen_product_purchase_card.
-export function genProductPurchaseCard(ctx: CardGenContext, rng: Rng): MarketCard {
+function genProductPurchaseCard(ctx: CardGenContext, rng: Rng): MarketCard {
   const product = rng.choice(ctx.unlockedProducts());
   const qty = rng.randint(1, 2);
   const port = rng.choice(ctx.unlockedPorts());

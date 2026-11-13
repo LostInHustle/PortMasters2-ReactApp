@@ -28,7 +28,7 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
   },
   favorable_tides: {
     name: { zh: '顺风顺水', en: 'Favorable Tides' },
-    desc: { zh: '本回合基础运费减4金币。', en: 'Base shipping cost −4 gold this round.' },
+    desc: { zh: '本回合基础运费减4金币。', en: 'Base shipping cost 4 gold lower this round.' },
   },
   merchant_charm: {
     name: { zh: '商贾魅力', en: "Merchant's Charm" },
@@ -51,7 +51,7 @@ export const BOON_TEXT: Record<string, BilingualPair> = {
   },
   hemp_monopoly: {
     name: { zh: '麻布专营', en: 'Hemp Monopoly' },
-    desc: { zh: '麻布采购单价降低2金币。', en: 'Hemp Cloth purchase price −2 gold per unit.' },
+    desc: { zh: '麻布采购单价降低2金币。', en: 'Hemp Cloth purchase price 2 gold lower per unit.' },
   },
   master_apprentice: {
     name: { zh: '学徒传承', en: 'Apprentice Legacy' },
@@ -181,13 +181,16 @@ export function monsoonDesc(m: MonsoonState | null | undefined, lang: Lang): str
 const MODULE_TEXT: Record<string, BilingualPair> = {
   smugglers_hold: {
     name: { zh: '走私暗舱', en: "Smuggler's Hold" },
-    desc: { zh: '采购成本−15%。所得税+20%。', en: 'Purchase costs −15%. Income tax +20%.' },
+    desc: {
+      zh: '采购成本降低15%。所得税提高20%。',
+      en: 'Purchase costs 15% lower. Income tax 20% higher.',
+    },
   },
   bulk_hauler: {
     name: { zh: '散货索具', en: 'Bulk Rigging' },
     desc: {
-      zh: '每件货物运费−1。船坞升级费用+15金币。',
-      en: 'Shipping −1 gold per item. Ship upgrades cost +15 gold.',
+      zh: '每件货物运费减少1金币。船坞升级费用增加15金币。',
+      en: 'Shipping costs 1 gold less per item. Ship upgrades cost 15 gold more.',
     },
   },
   artisans_workshop: {
@@ -224,7 +227,10 @@ const MODULE_TEXT: Record<string, BilingualPair> = {
   },
   overdrive_engine: {
     name: { zh: '超载引擎', en: 'Overdrive Engine' },
-    desc: { zh: '运费−5金币。维护费+10金币。', en: 'Shipping −5 gold. Upkeep +10 gold.' },
+    desc: {
+      zh: '运费减少5金币。维护费增加10金币。',
+      en: 'Shipping costs 5 gold less. Upkeep costs 10 gold more.',
+    },
   },
   bureau_token: {
     name: { zh: '市舶司令牌', en: 'Trade Bureau Token' },
@@ -237,7 +243,7 @@ const MODULE_TEXT: Record<string, BilingualPair> = {
     name: { zh: '陶土窖', en: 'Kiln Cellar' },
     desc: {
       zh: '瓷土与铜矿采购单价各降低2金币。',
-      en: 'Porcelain Clay and Copper Ore purchase price −2 gold per unit.',
+      en: 'Porcelain Clay and Copper Ore purchase price 2 gold lower per unit.',
     },
   },
   ocean_relay: {
@@ -251,7 +257,7 @@ const MODULE_TEXT: Record<string, BilingualPair> = {
     name: { zh: '蕃坊行会证', en: 'Foreign Quarter Guild Pass' },
     desc: {
       zh: '香料与珍珠采购单价各降低3金币。',
-      en: 'Spices and Pearls purchase price −3 gold per unit.',
+      en: 'Spices and Pearls purchase price 3 gold lower per unit.',
     },
   },
   persian_dome_compass: {

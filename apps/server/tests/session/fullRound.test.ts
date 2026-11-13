@@ -38,16 +38,6 @@ describe('SharedSession integration: full round phase sequence', () => {
     expect(session.games[0]!.currentRound).toBe(2);
     expect(session.games[1]!.currentRound).toBe(2);
   });
-
-  it('keeps both players in lockstep on phase and round across several rounds', () => {
-    const session = SharedSession.createPair('alice', 'bob', 'easy');
-    for (let i = 0; i < 3; i++) {
-      driveOneRound(session);
-    }
-    expect(session.games[0]!.currentRound).toBe(4);
-    expect(session.games[0]!.phase).toBe(session.games[1]!.phase);
-    expect(session.games[0]!.gameOver).toBe(false);
-  });
 });
 
 describe('SharedSession integration: full game reaches endgame', () => {

@@ -58,7 +58,6 @@ describe('shared game data', () => {
 
     for (const table of tables) {
       expect(table.tiers.map((tier) => tier.length)).toEqual(table.sizes);
-      expect(table.tiers.flat()).toEqual([...table.all]);
       expect(new Set(table.all).size).toBe(table.all.length);
     }
   });

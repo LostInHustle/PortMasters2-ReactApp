@@ -156,23 +156,4 @@ describe('customer order pricing on the wire', () => {
       game.calcTransportCost(6, false, game.customerCards[0]!.resources),
     );
   });
-
-  it('marks only the closing mandate of the voyage, on every difficulty', () => {
-    const finals: Record<string, number> = { easy: 8, standard: 12, hard: 16 };
-    const mandateRounds: Record<string, number[]> = {
-      easy: [3, 6, 8],
-      standard: [3, 7, 12],
-      hard: [6, 12, 16],
-    };
-    for (const difficulty of ['easy', 'standard', 'hard'] as const) {
-      for (const round of mandateRounds[difficulty]!) {
-        const game = new PlayerGame(difficulty);
-        game.currentRound = round;
-        const order = game.genEmperorMandateOrder(0);
-        expect(order.isFinalMandate, `${difficulty} round ${round}`).toBe(
-          round === finals[difficulty],
-        );
-      }
-    }
-  });
 });

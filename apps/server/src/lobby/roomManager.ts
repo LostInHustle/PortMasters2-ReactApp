@@ -3,10 +3,9 @@ import {
   MIN_ROOM_PLAYERS,
   type OpenRoomSummary,
   type RoomRosterMessage,
-  type RosterPlayer,
 } from '@pm2/shared';
 import { normalizeDifficulty } from '../game/difficultyRules.js';
-import { broadcastSessionState } from '../session/broadcastState.js';
+import { broadcastSessionState, buildRoster } from '../session/broadcastState.js';
 import { SharedSession } from '../session/SharedSession.js';
 import { sendJson, sendToUser } from '../ws/send.js';
 import type { ServerState } from './onlineRegistry.js';
@@ -17,21 +16,13 @@ import type { ServerState } from './onlineRegistry.js';
 // in both `state.rooms` (so the lobby's "open rooms" list can find it) and `state.sessions` (so
 // every other handler that looks a player up by username keeps working unchanged).
 
-function rosterOf(state: ServerState, sess: SharedSession): RosterPlayer[] {
-  return sess.players.map((name) => ({
-    name,
-    online: state.online.has(name),
-    isHost: name === sess.host,
-  }));
-}
-
 function rosterMessage(state: ServerState, sess: SharedSession): RoomRosterMessage {
   return {
     host: sess.host,
     difficulty: sess.difficulty,
     maxPlayers: sess.maxPlayers,
     started: sess.started,
-    players: rosterOf(state, sess),
+    players: buildRoster(sess, (name) => state.online.has(name)),
   };
 }
 

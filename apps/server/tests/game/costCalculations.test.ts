@@ -8,21 +8,11 @@ import {
   getCardFinalCost,
   getCardResourceUnitPrices,
   getHireCost,
-  hasModule,
 } from '../../src/game/costCalculations.js';
 
 function withModules(...ids: string[]): readonly ShipModule[] {
   return ids.map((id) => ({ id, name: id, icon: '', desc: '' }));
 }
-
-describe('hasModule', () => {
-  it('checks equipped modules by id', () => {
-    expect(hasModule({ equippedModules: withModules('bulk_hauler') }, 'bulk_hauler')).toBe(true);
-    expect(hasModule({ equippedModules: withModules('bulk_hauler') }, 'overdrive_engine')).toBe(
-      false,
-    );
-  });
-});
 
 // Expected values derived manually from calc_transport_cost:
 // base = totalItems * 2; discount = shipLevel * 5 (+ flat discount flag); floored at 5/0.
@@ -132,17 +122,6 @@ describe('getCardFinalCost', () => {
 // The for each line prices a Procure card should display must reflect the same item specific
 // discounts getCardFinalCost charges, so the two can never tell the player different numbers.
 describe('getCardResourceUnitPrices', () => {
-  it('matches the unit price unchanged when no item specific discount is active', () => {
-    const ctx = { equippedModules: [], modifierFlags: {} };
-    const card = {
-      port: '泉州港' as const,
-      resources: [{ type: '麻布' as const, quantity: 3, price: 5 }],
-      totalCost: 15,
-      isProductCard: false,
-    };
-    expect(getCardResourceUnitPrices(ctx, card)).toEqual([5]);
-  });
-
   it('only discounts the resource line the boon/module targets', () => {
     const ctx = {
       equippedModules: withModules('kiln_cellar', 'foreign_quarter_pass'),

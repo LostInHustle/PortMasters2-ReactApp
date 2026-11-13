@@ -13,7 +13,7 @@ export interface PirateRiskContext {
 }
 
 // Mirrors PortMasters2/server.py pirate_threat: the raw raid
-// chance before mitigation, the weather plus any corrupt broker tips.
+// chance before mitigation, the monsoon plus any corrupt broker tips.
 export function pirateThreat(
   ctx: Pick<PirateRiskContext, 'monsoonState' | 'brokerPirateRisk'>,
 ): number {
@@ -37,7 +37,6 @@ export function effectivePirateRisk(ctx: PirateRiskContext): number {
 export interface ResolvePirateHazardContext extends PirateRiskContext {
   money: number;
   roundCosts: number;
-  totalCosts: number;
   difficulty: unknown;
   currentRound: number;
   maxRounds: number;
@@ -48,7 +47,7 @@ export interface ResolvePirateHazardContext extends PirateRiskContext {
 export function resolvePirateHazard(ctx: ResolvePirateHazardContext, rng: Rng): void {
   if (pirateThreat(ctx) <= 0) return;
   if (ctx.pirateImmunity) {
-    ctx.log('🛡️ 护航舰队震慑海盗，本程无损');
+    ctx.log('🛡️ 护航舰队震慑海盗，本回合无损');
     return;
   }
   if (rng.random() < effectivePirateRisk(ctx)) {
@@ -56,7 +55,6 @@ export function resolvePirateHazard(ctx: ResolvePirateHazardContext, rng: Rng): 
     const loss = Math.trunc(ctx.money * pct);
     ctx.money -= loss;
     ctx.roundCosts += loss;
-    ctx.totalCosts += loss;
     ctx.log(`🏴‍☠️ 海盗袭扰，损失${loss}金币（财富的${pythonRound(pct * 100)}%）`);
   }
 }
@@ -65,7 +63,6 @@ export interface HireEscortContext {
   pirateImmunity: boolean;
   money: number;
   roundCosts: number;
-  totalCosts: number;
   modifierFlags: BoonModifiers;
   log(message: string): void;
 }
@@ -83,7 +80,6 @@ export function hireEscort(ctx: HireEscortContext): boolean {
   }
   ctx.money -= cost;
   ctx.roundCosts += cost;
-  ctx.totalCosts += cost;
   ctx.pirateImmunity = true;
   ctx.log(`🛡️ 雇佣护航，花费${cost}金币`);
   return true;

@@ -57,8 +57,6 @@ export interface PlayerGameState {
   phase: Phase;
   resourceCards: MarketCard[];
   customerCards: CustomerOrder[];
-  purchaseCount: number;
-  orderCount: number;
   purchasedCards: number[];
   completedOrders: number[];
   weavers: Worker[];
@@ -110,7 +108,7 @@ export interface RosterPlayer {
   isHost: boolean;
 }
 
-// Mirrors PortMasters2/server.py GameSession.broadcast_state's for each recipient state dict,
+// Mirrors PortMasters2/server.py GameSession.broadcast_state's per recipient state dict,
 // generalized from a single partner to a room of 2 to 5: otherGames/players replace the old
 // singular otherGame/partnerName/partnerOnline now that there can be more than one fellow
 // captain, and the end session vote tally rides along so every client can show live consensus.
@@ -132,8 +130,9 @@ export interface SessionStateMessage {
   youVotedEnd: boolean;
 }
 
-// The roster of a room, broadcast to its current members both before and after it starts --
-// the before the start "Host a voyage" lobby view and the in game roster panel read the same shape.
+// The roster of a room, broadcast to its current members both before and after it starts.
+// The "Host a voyage" lobby view shown before the start and the in game roster panel read the
+// same shape.
 export interface RoomRosterMessage {
   host: string;
   difficulty: Difficulty;

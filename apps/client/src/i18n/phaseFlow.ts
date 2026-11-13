@@ -88,12 +88,20 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
 ];
 
 const PHASE_INDEX = new Map<Phase, number>(PHASE_FLOW.map((p, i) => [p.key, i]));
+const PHASE_META = new Map<Phase, PhaseFlowEntry>(PHASE_FLOW.map((p) => [p.key, p]));
+
+export function phaseIndexOf(key: Phase): number | undefined {
+  return PHASE_INDEX.get(key);
+}
+
+export function phaseMeta(key: Phase): PhaseFlowEntry | undefined {
+  return PHASE_META.get(key);
+}
 
 export function phaseName(key: Phase, lang: Lang): string {
   if (key === 'endgame') return tr(lang, '航程结束', 'Voyage Complete');
   if (key === 'bankruptcy') return tr(lang, '破产清算', 'Bankrupt');
-  const idx = PHASE_INDEX.get(key);
-  const meta = idx === undefined ? undefined : PHASE_FLOW[idx];
+  const meta = phaseMeta(key);
   return meta ? pf(meta.name, lang) : tr(lang, '准备中', 'Preparing');
 }
 

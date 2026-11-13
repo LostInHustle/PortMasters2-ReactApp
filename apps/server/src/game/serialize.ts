@@ -29,8 +29,8 @@ function flattenWorkerRosters(game: PlayerGame): WorkerRosterFields {
 
 // Stamps each Procure card with what it actually costs right now, given this player's active
 // boons and modules, so the client never has to derive again (and risk drifting from) the discount
-// math that already lives in costCalculations.ts. game.resourceCards itself is left untouched --
-// this only shapes the copy that goes out over the wire.
+// math that already lives in costCalculations.ts. game.resourceCards itself is left untouched.
+// This only shapes the copy that goes out over the wire.
 function withCardPricing(game: PlayerGame, card: MarketCard): MarketCard {
   const unitPrices = game.getCardResourceUnitPrices(card);
   return {
@@ -74,8 +74,6 @@ export function serializePlayerGame(game: PlayerGame): PlayerGameState {
     phase: game.phase,
     resourceCards: game.resourceCards.map((card) => withCardPricing(game, card)),
     customerCards: game.customerCards.map((order) => withOrderPricing(game, order)),
-    purchaseCount: game.purchaseCount,
-    orderCount: game.orderCount,
     purchasedCards: [...game.purchasedCards],
     completedOrders: [...game.completedOrders],
     ...flattenWorkerRosters(game),

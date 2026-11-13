@@ -79,7 +79,6 @@ export function payWages(ctx: PayWagesContext): boolean {
 export interface PayMaintenanceContext extends ResolvePirateHazardContext {
   fixedCost: number;
   maintenancePenalty: number;
-  maintenanceCosts: number;
 }
 
 // Mirrors PortMasters2/server.py pay_maintenance.
@@ -88,9 +87,7 @@ export function payMaintenance(ctx: PayMaintenanceContext, rng: Rng): boolean {
   resolvePirateHazard(ctx, rng);
   if (ctx.money >= cost) {
     ctx.money -= cost;
-    ctx.maintenanceCosts += cost;
     ctx.roundCosts += cost;
-    ctx.totalCosts += cost;
     return true;
   }
   ctx.money = 0;

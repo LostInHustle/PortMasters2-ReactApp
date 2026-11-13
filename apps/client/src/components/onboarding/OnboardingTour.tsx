@@ -9,7 +9,19 @@ const ONBOARDED_KEY = 'pm2_onboarded';
 // finishOnboarding: a one time tour shown the first time a session is
 // entered, skipped on every later visit once `pm2_onboarded` is set.
 export function shouldShowOnboarding(): boolean {
-  return localStorage.getItem(ONBOARDED_KEY) !== '1';
+  try {
+    return localStorage.getItem(ONBOARDED_KEY) !== '1';
+  } catch {
+    return true;
+  }
+}
+
+function markOnboarded(): void {
+  try {
+    localStorage.setItem(ONBOARDED_KEY, '1');
+  } catch {
+    // storage unavailable: the tour will show again next time, which is not fatal
+  }
 }
 
 export function OnboardingTour() {
@@ -18,7 +30,7 @@ export function OnboardingTour() {
   const openManual = useOpenManual();
 
   const finish = (openManualAfter: boolean) => {
-    localStorage.setItem(ONBOARDED_KEY, '1');
+    markOnboarded();
     closeModal();
     if (openManualAfter) openManual('start');
   };

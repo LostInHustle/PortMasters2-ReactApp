@@ -151,15 +151,15 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <span
             className="tip"
             data-tip={tr(
-              `全程共${g.maxRounds}个航程（回合），结束后按声望评级`,
-              `${g.maxRounds} voyages (rounds) in total; final rating is based on renown`,
+              `全程共 ${g.maxRounds} 个回合，结束后按声望评级`,
+              `${g.maxRounds} rounds in total; final rating is based on renown`,
             )}
           >
-            {tr('🌊 航程进度', '🌊 Voyage')}
+            {tr('🌊 回合进度', '🌊 Round')}
           </span>
           <span className="stat-value">
             {tr(
-              `第 ${g.currentRound} / ${g.maxRounds} 程`,
+              `第 ${g.currentRound} / ${g.maxRounds} 回合`,
               `Round ${g.currentRound} / ${g.maxRounds}`,
             )}
           </span>

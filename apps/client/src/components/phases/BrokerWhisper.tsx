@@ -73,12 +73,12 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
               <>
                 {' '}
                 ⚠️ 高难航路上并非每个牙行都可信：每次打探都有可能遇到<strong>可疑牙行</strong>
-                走漏你的行踪，抬高本程海盗袭扰概率，记得在结算阶段权衡是否雇佣护航。
+                走漏你的行踪，抬高本回合海盗袭扰概率，记得在结算阶段权衡是否雇佣护航。
               </>,
               <>
                 {' '}
                 ⚠️ On the hard route not every broker is trustworthy: each purchase risks a{' '}
-                <strong>shady broker</strong> leaking your route and raising this voyage&apos;s
+                <strong>shady broker</strong> leaking your route and raising this round&apos;s
                 pirate raid chance, so weigh hiring an escort at Upkeep.
               </>,
             )}

@@ -7,7 +7,6 @@ import {
   type Worker,
   type WorkerTypeId,
 } from '@pm2/shared';
-import { getHireCost } from './costCalculations.js';
 import { unlockedWorkerTypes } from './poolSelectors.js';
 import type { BoonModifiers, ShipModule } from '@pm2/shared';
 
@@ -26,11 +25,6 @@ export interface WorkerActionContext {
 export function hireWorker(ctx: WorkerActionContext, wtype: WorkerTypeId): boolean {
   if (!unlockedWorkerTypes(ctx.currentRound, ctx.tierUnlock).includes(wtype)) {
     ctx.log('❌ 该工种尚未开放');
-    return false;
-  }
-  const wage = getHireCost(ctx, wtype);
-  if (ctx.money < wage) {
-    ctx.log('❌ 资金不足，无法雇佣');
     return false;
   }
   ctx.workers[wtype].push({ task: null, progress: 0, producedCount: 0, isSkilled: false });

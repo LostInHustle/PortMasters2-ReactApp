@@ -31,7 +31,7 @@ export interface ServerState {
   pendingInvites: Map<string, PendingInvite>;
   lastInviteAt: Map<string, number>;
   // token -> username. Lets a fresh WebSocket connection (a reconnect after an idle timeout
-  // drop, a brief network blip, an actual page refresh) silently identify itself again itself without the
+  // drop, a brief network blip, an actual page refresh) silently identify itself again without the
   // player retyping a password, as long as this process is still the one that issued the token.
   // Deliberately in memory only, same lifetime as `online`/`sessions`: a real server restart
   // already wipes all in memory game state regardless, so a token surviving that wouldn't have

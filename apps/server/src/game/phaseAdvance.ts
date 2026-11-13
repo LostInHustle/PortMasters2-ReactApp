@@ -15,8 +15,8 @@ import { syncMonsoonState, type MonsoonSyncContext, type MonsoonSyncGame } from 
 import { boonPool } from './poolSelectors.js';
 import type { Rng } from './randomUtil.js';
 
-// The for each game surface advance() needs, layered on the two narrower contexts it delegates to
-// (BrokerIntelContext for the free intel reveal, MonsoonSyncGame for the weather resync).
+// The per game surface advance() needs, layered on the two narrower contexts it delegates to
+// (BrokerIntelContext for the free intel reveal, MonsoonSyncGame for the monsoon resync).
 export interface PhaseAdvanceGame extends BrokerIntelContext, MonsoonSyncGame {
   bankrupt: boolean;
   phase: Phase;

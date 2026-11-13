@@ -15,8 +15,6 @@ export function ChatWindow() {
 
   const others = serverState?.players.filter((p) => p.name !== currentUser) ?? [];
   const enabled = others.some((p) => p.online);
-  const partnerLabel =
-    others.length > 0 ? others.map((p) => p.name).join(tr('、', ', ')) : tr('无', 'none');
 
   const submit = () => {
     if (!draft.trim()) return;
@@ -27,11 +25,7 @@ export function ChatWindow() {
   return (
     <div id="chat-window" style={{ display: 'flex' }}>
       <div id="chat-header">
-        <span id="chat-title">
-          {tr(`💬 与 `, `💬 Bridge call with `)}
-          <span id="chat-partner">{partnerLabel}</span>
-          {tr(` 的船桥通话`, ``)}
-        </span>
+        <span id="chat-title">{tr('💬 船桥通话', '💬 Bridge Call')}</span>
         <button
           onClick={closeChat}
           style={{

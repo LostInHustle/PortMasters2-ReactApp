@@ -67,7 +67,7 @@ function maybeCorruptBroker(ctx: BrokerIntelContext, rng: Rng): void {
   if (rng.random() < BROKER_CORRUPTION_CHANCE) {
     ctx.brokerPirateRisk += BROKER_CORRUPTION_RISK;
     ctx.log(
-      `🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本程海盗风险上升${pythonRound(BROKER_CORRUPTION_RISK * 100)}%！`,
+      `🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本回合海盗风险上升${pythonRound(BROKER_CORRUPTION_RISK * 100)}%！`,
     );
   }
 }

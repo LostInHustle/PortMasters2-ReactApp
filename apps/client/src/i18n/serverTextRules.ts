@@ -52,17 +52,17 @@ const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^❌ 需要(\d+)金币才能雇佣护航$/, (m) => `❌ You need ${m[1]!} gold to hire an escort`],
   [/^🛡️ 雇佣护航，花费(\d+)金币$/, (m) => `🛡️ Hired an escort for ${m[1]!} gold`],
   [
-    /^🛡️ 护航舰队震慑海盗，本程无损$/,
-    () => `🛡️ Escort fleet deterred pirates, no losses this voyage`,
+    /^🛡️ 护航舰队震慑海盗，本回合无损$/,
+    () => `🛡️ Escort fleet deterred pirates, no losses this round`,
   ],
   [
     /^🏴‍☠️ 海盗袭扰，损失(\d+)金币（财富的(\d+)%）$/,
     (m) => `🏴‍☠️ Pirate raid: lost ${m[1]!} gold (${m[2]!}% of your wealth)`,
   ],
   [
-    /^🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本程海盗风险上升(\d+)%！$/,
+    /^🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本回合海盗风险上升(\d+)%！$/,
     (m) =>
-      `🕵️ This broker looked shifty and seems to have leaked your route. Pirate risk is up ${m[1]!}% this voyage.`,
+      `🕵️ This broker looked shifty and seems to have leaked your route. Pirate risk is up ${m[1]!}% this round.`,
   ],
   [/^🤝 互市成功！$/, () => `🤝 Barter complete!`],
   /* Sync waiting hints */
@@ -131,7 +131,7 @@ const SERVER_TEXT_RULES: ServerTextRule[] = [
   ],
   /* Register / Login */
   [/^用户名需为 3 到 20 个字符$/, () => `Username must be 3 to 20 characters`],
-  [/^密码至少 6 位$/, () => `Password must be at least 6 characters`],
+  [/^密码需为 6 到 128 位$/, () => `Password must be 6 to 128 characters`],
   [/^该用户名已被注册$/, () => `That username is already taken`],
   [/^注册成功，请登录$/, () => `Account created, please log in`],
   [/^用户名或密码错误$/, () => `Incorrect username or password`],

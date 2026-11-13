@@ -1,8 +1,6 @@
 import type { Phase } from '@pm2/shared';
-import { PHASE_FLOW } from '../../i18n/phaseFlow.js';
+import { PHASE_FLOW, phaseIndexOf } from '../../i18n/phaseFlow.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
-
-const PHASE_INDEX = new Map<Phase, number>(PHASE_FLOW.map((p, i) => [p.key, i]));
 
 // Mirrors PortMasters2/PortMasters_online.html stepperHTML.
 export function Stepper({ currentKey }: { currentKey: Phase }) {
@@ -10,7 +8,7 @@ export function Stepper({ currentKey }: { currentKey: Phase }) {
   const curIdx =
     currentKey === 'endgame' || currentKey === 'bankruptcy'
       ? PHASE_FLOW.length
-      : (PHASE_INDEX.get(currentKey) ?? -1);
+      : (phaseIndexOf(currentKey) ?? -1);
 
   return (
     <div

@@ -79,7 +79,10 @@ export function ShipyardPhase() {
                 `⚓ Upgrade Ship to Lv.${g.shipLevel + 1} (${upgCost}💰)`,
               )}
               <span className="btn-sub">
-                {tr('运费/单再 −5 金币 · +1 模块槽', 'Shipping −5 gold/order, +1 module slot')}
+                {tr(
+                  '每单运费再减5金币 · 增加1个模块槽',
+                  'Shipping 5 gold/order less, one more module slot',
+                )}
               </span>
             </button>
           ) : (
@@ -129,11 +132,11 @@ export function ShipyardPhase() {
           <button
             className="btn btn-success btn-lg"
             onClick={() => send({ action: 'ready_for_next_phase' })}
-            title={tr('全员确认后开始下一航程', 'The next voyage begins once everyone confirms')}
+            title={tr('全员确认后开始下一回合', 'The next round begins once everyone confirms')}
           >
-            {tr('⏭️ 结束本航程', '⏭️ End This Voyage')}
+            {tr('⏭️ 结束本回合', '⏭️ End Round')}
             <span className="btn-sub">
-              {tr('全员确认后开启下一程', 'Advances when everyone confirms')}
+              {tr('全员确认后开启下一回合', 'Advances when everyone confirms')}
             </span>
           </button>
         </div>

@@ -31,8 +31,8 @@ export interface SessionMessageDeps {
 }
 
 /**
- * Mirrors PortMasters2/PortMasters_online.html setupWebSocketHandlers' onmessage dispatch
- *. The original mutates module globals and then manually redraws
+ * Mirrors PortMasters2/PortMasters_online.html setupWebSocketHandlers' onmessage dispatch.
+ * The original mutates module globals and then manually redraws
  * (renderOnlineUsers/renderAll/...); here each branch produces a state transition and React
  * redraws whatever depends on it.
  *
@@ -212,8 +212,8 @@ export function handleServerMessage(deps: SessionMessageDeps, msg: ServerMessage
 }
 
 /**
- * Mirrors PortMasters2/PortMasters_online.html maybeToastNewLogs
- *: logSeq is a monotonic count of this game's log lines, so only lines added
+ * Mirrors PortMasters2/PortMasters_online.html maybeToastNewLogs:
+ * logSeq is a monotonic count of this game's log lines, so only lines added
  * since the last state get toasted, and a restart (where the counter drops) resyncs silently
  * instead of replaying the whole backlog.
  */
