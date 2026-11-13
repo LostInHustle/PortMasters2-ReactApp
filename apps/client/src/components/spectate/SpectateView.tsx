@@ -5,10 +5,11 @@ import { useSession } from '../../state/SessionContext.js';
 import { useSpectate } from '../../state/SpectateContext.js';
 import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCard.js';
 
-// A read-only, live-updating view of another captain's fleet, kept in step with
+// A read only, updating live view of a captain's fleet, kept in step with
 // PortMasters2/PortMasters_online.html renderCaptainViewer. The name list on the left is always
-// visible (even with just one other captain) so switching never requires closing the window;
-// the detail pane on the right is what changes.
+// visible so switching never requires closing the window; the detail pane on the right is what
+// changes. Everyone can watch the other captains, and the host can also open their own fleet
+// from the status panel, which renders it through this same layout.
 //
 // The detail pane borrows the atomic pieces from FleetCard (BuffChips/InventoryList/Modules/
 // WorkerTeam) but deliberately NOT the .status-section wrappers the 300px sidebar uses. Six
@@ -25,15 +26,19 @@ import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCa
 // different component at the same position, or that behavior comes straight back.
 export function SpectateView() {
   const { tr, lang } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const { isSpectating, target, closeSpectate, setTarget } = useSpectate();
 
   if (!isSpectating) return null;
-  const otherGames = serverState?.otherGames ?? {};
-  const og = target ? otherGames[target] : undefined;
+  const isHost = serverState?.host === currentUser;
+  const games =
+    isHost && currentUser && serverState
+      ? { ...serverState.otherGames, [currentUser]: serverState.yourGame }
+      : (serverState?.otherGames ?? {});
+  const og = target ? games[target] : undefined;
   if (!og || !target) return null;
-  const others = serverState?.players.filter((p) => p.name in otherGames) ?? [];
-  const online = others.find((p) => p.name === target)?.online ?? false;
+  const entries = serverState?.players.filter((p) => p.name in games) ?? [];
+  const online = entries.find((p) => p.name === target)?.online ?? false;
   const recentLogs = og.logs.slice(-8).reverse();
 
   return (
@@ -47,14 +52,14 @@ export function SpectateView() {
         <div className="spectate-head">
           <span className="sp-live">
             <span className="sp-live-dot" />
-            LIVE
+            {tr('实时', 'LIVE')}
           </span>
           <div className="sp-title">
-            {tr(`👀 ${target} 的商队`, `👀 ${target}'s Fleet`)}
+            {tr(`👀 ${target} 的船队`, `👀 ${target}'s Fleet`)}
             <div className="sp-sub">
               {tr(
-                `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
-                `Round ${og.currentRound} / ${og.maxRounds} · ${phaseName(og.phase, lang)} phase · read only, updates live`,
+                `第 ${og.currentRound} / ${og.maxRounds} 回合 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
+                `Round ${og.currentRound} / ${og.maxRounds}, ${phaseName(og.phase, lang)} phase, read only, updates live`,
               )}
             </div>
           </div>
@@ -69,7 +74,7 @@ export function SpectateView() {
         </div>
         <div className="spectate-body">
           <div className="sp-names">
-            {others.map((p) => (
+            {entries.map((p) => (
               <div
                 key={p.name}
                 className={`sp-name-item ${p.name === target ? 'active' : ''}`}
@@ -79,6 +84,7 @@ export function SpectateView() {
                 <span className="nm">
                   {p.name}
                   {p.isHost && ' 👑'}
+                  {p.name === currentUser && tr('（我）', ' (You)')}
                 </span>
               </div>
             ))}
@@ -96,7 +102,7 @@ export function SpectateView() {
               <div className="sp-tile">
                 <div className="k">{tr('商船', 'Flagship')}</div>
                 <div className="v">
-                  🚢 Lv.{og.shipLevel}
+                  🚢 {tr(`${og.shipLevel} 级`, `Lv.${og.shipLevel}`)}
                   <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-faint)' }}>
                     {' '}
                     {og.equippedModules.length}/{og.shipLevel}
@@ -107,7 +113,7 @@ export function SpectateView() {
             <div className="sp-voyage">
               <span>
                 {tr(
-                  `第 ${og.currentRound} / ${og.maxRounds} 程`,
+                  `第 ${og.currentRound} / ${og.maxRounds} 回合`,
                   `Round ${og.currentRound} of ${og.maxRounds}`,
                 )}
               </span>
@@ -142,7 +148,7 @@ export function SpectateView() {
             </div>
 
             <div className="sp-pane">
-              <h4>{tr('📜 近期动态 · 最新在前', '📜 Recent Activity · Newest first')}</h4>
+              <h4>{tr('📜 近期动态 · 最新在前', '📜 Recent Activity, Newest first')}</h4>
               {recentLogs.length > 0 ? (
                 recentLogs.map((m, i) => (
                   <div className="sp-feed-item" key={i}>
@@ -157,8 +163,8 @@ export function SpectateView() {
         </div>
         <div className="spectate-foot">
           {tr(
-            '💡 此窗口可随时关闭再打开；等待全员结束本局后即可一同重新起航。',
-            '💡 Open or close this window any time. Once everyone else finishes their game, you can set sail together again.',
+            '💡 此窗口可随时关闭再打开；房主可随时重新起航，其他船长需等其他船长的本局都结束后才能重新起航。',
+            "💡 Open or close this window any time. The host can set sail again at any moment; other captains can do so once every other captain's game has ended.",
           )}
         </div>
       </div>

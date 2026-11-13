@@ -12,61 +12,50 @@ import { TradeTab } from './content/tradeTab.js';
 import { WorkersTab } from './content/workersTab.js';
 
 export type ManualTabId =
-  | 'start'
-  | 'flow'
-  | 'economy'
-  | 'workers'
-  | 'trade'
-  | 'boons'
-  | 'ship'
-  | 'expansion'
-  | 'faq';
+  'start' | 'flow' | 'economy' | 'workers' | 'trade' | 'boons' | 'ship' | 'expansion' | 'faq';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html MANUAL_TABS_I18N (lines 3426-3450).
-const TAB_IDS: ManualTabId[] = [
-  'start',
-  'flow',
-  'economy',
-  'workers',
-  'trade',
-  'boons',
-  'ship',
-  'expansion',
-  'faq',
+interface ManualTab {
+  id: ManualTabId;
+  label: { zh: string; en: string };
+  component: () => JSX.Element;
+}
+
+// Mirrors PortMasters2/PortMasters_online.html MANUAL_TABS_I18N.
+const TABS: ManualTab[] = [
+  { id: 'start', label: { zh: '🚀 快速上手', en: '🚀 Quick Start' }, component: StartTab },
+  { id: 'flow', label: { zh: '🔄 回合流程', en: '🔄 Round Flow' }, component: FlowTab },
+  {
+    id: 'economy',
+    label: { zh: '💰 经济与税务', en: '💰 Economy & Taxes' },
+    component: EconomyTab,
+  },
+  {
+    id: 'workers',
+    label: { zh: '👥 工匠与生产', en: '👥 Artisans & Crafting' },
+    component: WorkersTab,
+  },
+  {
+    id: 'trade',
+    label: { zh: '🤝 互市与联机', en: '🤝 Barter & Online' },
+    component: TradeTab,
+  },
+  { id: 'boons', label: { zh: '🍀 福缘图鉴', en: '🍀 Fortune Codex' }, component: BoonsTab },
+  { id: 'ship', label: { zh: '🚢 船坞升级', en: '🚢 Ship Upgrades' }, component: ShipTab },
+  {
+    id: 'expansion',
+    label: { zh: '🗺️ 难度与拓展', en: '🗺️ Difficulty & Expansion' },
+    component: ExpansionTab,
+  },
+  { id: 'faq', label: { zh: '❓ 常见问题', en: '❓ FAQ' }, component: FaqTab },
 ];
 
-const TAB_LABELS: Record<ManualTabId, { zh: string; en: string }> = {
-  start: { zh: '🚀 快速上手', en: '🚀 Quick Start' },
-  flow: { zh: '🔄 回合流程', en: '🔄 Round Flow' },
-  economy: { zh: '💰 经济与税务', en: '💰 Economy & Taxes' },
-  workers: { zh: '👥 工匠与生产', en: '👥 Artisans & Crafting' },
-  trade: { zh: '🤝 互市与联机', en: '🤝 Barter & Online' },
-  boons: { zh: '🍀 福缘图鉴', en: '🍀 Fortune Codex' },
-  ship: { zh: '🚢 船坞升级', en: '🚢 Ship Upgrades' },
-  expansion: { zh: '🗺️ 难度与拓展', en: '🗺️ Difficulty & Expansion' },
-  faq: { zh: '❓ 常见问题', en: '❓ FAQ' },
-};
-
-const TAB_COMPONENTS: Record<ManualTabId, () => JSX.Element> = {
-  start: StartTab,
-  flow: FlowTab,
-  economy: EconomyTab,
-  workers: WorkersTab,
-  trade: TradeTab,
-  boons: BoonsTab,
-  ship: ShipTab,
-  expansion: ExpansionTab,
-  faq: FaqTab,
-};
-
-// Mirrors the original's `activeManualTab` module global (line 3925): remembers the last tab
+// Mirrors the original's `activeManualTab` module global: remembers the last tab
 // viewed across opens of the modal, since this component unmounts (and a plain useState would
 // reset) every time the modal closes.
 let lastActiveTab: ManualTabId = 'start';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showManual/switchManualTab
-// (lines 3926-3946).
-export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
+// Mirrors PortMasters2/PortMasters_online.html showManual/switchManualTab
+function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
   const { tr } = useTranslate();
   const { closeModal } = useModal();
   const [activeTab, setActiveTab] = useState<ManualTabId>(initialTab ?? lastActiveTab);
@@ -76,19 +65,19 @@ export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
     setActiveTab(tab);
   };
 
-  const ActiveTab = TAB_COMPONENTS[activeTab];
+  const ActiveTab = (TABS.find((tab) => tab.id === activeTab) ?? TABS[0]!).component;
 
   return (
     <>
-      <h2>{tr('📖 PortMasters 2 · 航海手册', "📖 PortMasters 2 · Captain's Manual")}</h2>
+      <h2>{tr('📖 PortMasters 2 · 航海手册', "📖 PortMasters 2, Captain's Manual")}</h2>
       <div className="manual-tabs">
-        {TAB_IDS.map((id) => (
+        {TABS.map((tab) => (
           <button
-            key={id}
-            className={`mtab ${id === activeTab ? 'active' : ''}`}
-            onClick={() => switchTab(id)}
+            key={tab.id}
+            className={`mtab ${tab.id === activeTab ? 'active' : ''}`}
+            onClick={() => switchTab(tab.id)}
           >
-            {tr(TAB_LABELS[id].zh, TAB_LABELS[id].en)}
+            {tr(tab.label.zh, tab.label.en)}
           </button>
         ))}
       </div>
@@ -104,7 +93,7 @@ export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showInstructions (line 3949) and
+// Mirrors PortMasters2/PortMasters_online.html showInstructions and
 // every showManual()/showManual(tab) call site: opens the manual modal, remembering the last
 // tab viewed if none is specified.
 // Memoized because useKeyboardShortcuts lists it as an effect dependency: an unstable identity

@@ -1,8 +1,8 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Split out of expansionTab.tsx (originally 663 lines, well past the file-size ceiling) to keep
-// each manual-tab file within the project's soft 200 / hard 350 line discipline. This tab's
-// source content is unusually table-heavy (7 unlock-category tables), so it's split by category
+// Split out of expansionTab.tsx (originally 663 lines, well past the file size ceiling) to keep
+// each manual tab file within the project's soft 200 / hard 350 line discipline. This tab's
+// source content is unusually heavy on tables (7 unlock category tables), so it's split by category
 // group rather than forced into one oversized file.
 export function ExpansionUnlockGoods() {
   const { lang } = useTranslate();
@@ -14,11 +14,11 @@ export function ExpansionUnlockGoods() {
           Rounds 1 to 5 play exactly like the original release, with 3 raw materials, 4 products, 3
           artisan types and 5 ports. From <strong>Round 6</strong>, the "New Maritime Edict" takes
           effect; from <strong>Round 10</strong>, "Ten Thousand Kingdoms Trade" opens. Each wave
-          adds new resources, products, ports, artisans, fortunes, ship modules and trade winds to
-          the pools you draw from, so the later the voyage, the wider the board. As the waves
-          arrive, the hands you pick from in the buying and trade phases grow too, going from 5
-          cards to 8 once the first wave opens at Round 6 and to 11 once the second opens at Round
-          10, so the new goods always have room to appear.
+          adds new resources, products, ports, artisans, fortunes, ship modules and monsoons to the
+          pools you draw from, so the later the voyage, the wider the board. As the waves arrive,
+          the hands you pick from in the buying and trade phases grow too, going from 5 cards to 8
+          once the first wave opens at Round 6 and to 11 once the second opens at Round 10, so the
+          new goods always have room to appear.
         </p>
         <table>
           <thead>
@@ -34,7 +34,7 @@ export function ExpansionUnlockGoods() {
               <td>Round 6</td>
               <td>
                 Porcelain Clay, Copper Ore, Bronze Mirror, Celadon Porcelain; Fuzhou, Goryeo;
-                Coppersmith, Potter; 3 Fortunes + 3 ship modules + 2 trade winds
+                Coppersmith, Potter; 3 Fortunes + 3 ship modules + 2 monsoons
               </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@ export function ExpansionUnlockGoods() {
               <td>Round 10</td>
               <td>
                 Spices, Pearls, Foreign Perfume Oil, Pearl Necklace; Srivijaya, Dashi; Perfumer,
-                Jeweler; 3 Fortunes + 3 ship modules + 2 trade winds
+                Jeweler; 3 Fortunes + 3 ship modules + 2 monsoons
               </td>
             </tr>
           </tbody>
@@ -138,12 +138,12 @@ export function ExpansionUnlockGoods() {
     <>
       <h4>🗺️ 丝路特许：分批解锁（高难模式）</h4>
       <p>
-        第 1 至 5 程的玩法与最初版本完全一致，包含 3 种原料、4 种成品、3 类工匠、5 座港口。从
-        <strong>第 6 程</strong>
+        第 1 至 5 回合的玩法与最初版本完全一致，包含 3 种原料、4 种成品、3 类工匠、5 座港口。从
+        <strong>第 6 回合</strong>
         起，「市舶新政」颁布；从
-        <strong>第 10 程</strong>
-        起，「万国通商」开启。两批新内容会分别加入原料、成品、港口、工匠、福缘、战船改装与季风的可选池，航路越往后，棋盘也就越宽。随着新内容解锁，采购阶段与贸易阶段可挑选的卡牌也会相应增多：基础为
-        5 张，第 6 程起增至 8 张，第 10 程起增至 11 张，让新货物有充足的出现机会。
+        <strong>第 10 回合</strong>
+        起，「万国通商」开启。两批新内容会分别加入原料、成品、港口、工匠、福缘、船舶模块与季风的可选池，航路越往后，棋盘也就越宽。随着新内容解锁，采购阶段与贸易阶段可挑选的卡牌也会相应增多：基础为
+        5 张，第 6 回合起增至 8 张，第 10 回合起增至 11 张，让新货物有充足的出现机会。
       </p>
       <table>
         <thead>
@@ -156,16 +156,16 @@ export function ExpansionUnlockGoods() {
         <tbody>
           <tr>
             <td>🗺️ 市舶新政</td>
-            <td>第 6 程起</td>
+            <td>第 6 回合起</td>
             <td>
-              瓷土、铜矿、紫铜镜、青瓷器；福州港、高丽港；铜匠、陶匠；3 福缘 + 3 战船改装 + 2 季风
+              瓷土、铜矿、紫铜镜、青瓷器；福州港、高丽港；铜匠、陶匠；3 福缘 + 3 船舶模块 + 2 季风
             </td>
           </tr>
           <tr>
             <td>🌏 万国通商</td>
-            <td>第 10 程起</td>
+            <td>第 10 回合起</td>
             <td>
-              香料、珍珠、蕃香脂、珠链；三佛齐港、大食港；香料师、珠宝匠；3 福缘 + 3 战船改装 + 2
+              香料、珍珠、蕃香脂、珠链；三佛齐港、大食港；香料师、珠宝匠；3 福缘 + 3 船舶模块 + 2
               季风
             </td>
           </tr>
@@ -186,25 +186,25 @@ export function ExpansionUnlockGoods() {
             <td>🧱 瓷土</td>
             <td>市舶新政</td>
             <td>泉州港、福州港</td>
-            <td>8 - 12</td>
+            <td>8~12</td>
           </tr>
           <tr>
             <td>⛏️ 铜矿</td>
             <td>市舶新政</td>
             <td>广州港、高丽港</td>
-            <td>10 - 15</td>
+            <td>10~15</td>
           </tr>
           <tr>
             <td>🌶️ 香料</td>
             <td>万国通商</td>
             <td>三佛齐港、大食港</td>
-            <td>14 - 20</td>
+            <td>14~20</td>
           </tr>
           <tr>
             <td>🦪 珍珠</td>
             <td>万国通商</td>
             <td>广州港、三佛齐港</td>
-            <td>16 - 24</td>
+            <td>16~24</td>
           </tr>
         </tbody>
       </table>
@@ -226,7 +226,7 @@ export function ExpansionUnlockGoods() {
             <td>市舶新政</td>
             <td>铜矿×3</td>
             <td>45</td>
-            <td>55 - 72</td>
+            <td>55~72</td>
             <td>铜匠</td>
           </tr>
           <tr>
@@ -234,7 +234,7 @@ export function ExpansionUnlockGoods() {
             <td>市舶新政</td>
             <td>瓷土×3</td>
             <td>65</td>
-            <td>78 - 100</td>
+            <td>78~100</td>
             <td>陶匠</td>
           </tr>
           <tr>
@@ -242,7 +242,7 @@ export function ExpansionUnlockGoods() {
             <td>万国通商</td>
             <td>香料×2 + 丝绸×1</td>
             <td>85</td>
-            <td>100 - 130</td>
+            <td>100~130</td>
             <td>香料师</td>
           </tr>
           <tr>
@@ -250,7 +250,7 @@ export function ExpansionUnlockGoods() {
             <td>万国通商</td>
             <td>珍珠×2 + 丝绸×1</td>
             <td>105</td>
-            <td>125 - 160</td>
+            <td>125~160</td>
             <td>珠宝匠</td>
           </tr>
         </tbody>

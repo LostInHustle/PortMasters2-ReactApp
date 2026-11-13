@@ -1,12 +1,11 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 import { pm1Url } from '../../../i18n/pm1Links.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html manualContentZh/manualContentEn
-// (lines 3452-3685 / 3687-3920 respectively), the 'start' key of each.
-// Kept as two parallel JSX trees (one per language) rather than merged tr()-per-node, matching
-// the original's own choice to duplicate full per-language content blocks for this prose --
-// merging them would mean interleaving translation calls through dense paragraphs for no
-// real benefit.
+// Mirrors the "start" section of the manual content in PortMasters2/PortMasters_online.html.
+// Kept as two parallel JSX trees, one per language, rather than one merged tree with a
+// translation call per node. The original also duplicates full content blocks per language for
+// this prose, since merging them would mean interleaving translation calls through dense
+// paragraphs for no real benefit.
 export function StartTab() {
   const { lang } = useTranslate();
   if (lang === 'en') {
@@ -14,7 +13,7 @@ export function StartTab() {
       <>
         <h4>🎯 Objective</h4>
         <p>
-          You and your partner each run a maritime trading fleet. Over the voyage (
+          You and the other captains each run a maritime trading fleet. Over the voyage (
           <strong>8 rounds on Easy, 12 on Standard, 16 on Hard</strong>
           ), build <strong>renown</strong> through the buy low → produce → sell high loop. Renown is
           the net profit of every delivered order; your final rating depends on it. You start with
@@ -27,7 +26,7 @@ export function StartTab() {
           gentler place to start; see the "Difficulty & Expansion" section for exactly what changes
           between them.
         </p>
-        <h4>🧭 Your First Voyage (recommended route)</h4>
+        <h4>🧭 Your First Round (recommended route)</h4>
         <ol>
           <li>
             <strong>Fortune</strong>: in round 1, Emergency Loan (+40 gold) or Merchant's Charm (15%
@@ -38,15 +37,15 @@ export function StartTab() {
             inputs. Leave cash for wages and the 15 gold upkeep.
           </li>
           <li>
-            <strong>Barter</strong>: trade surpluses with your partner early, for example spare Tea
-            for their Silk.
+            <strong>Barter</strong>: trade surpluses with the other captains early, for example
+            spare Tea for their Silk.
           </li>
           <li>
             <strong>Artisans</strong>: hire 1 Weaver (8 gold/round) for Hemp Garb or Cloth Tunics;
             keep the payroll small.
           </li>
           <li>
-            <strong>Trade</strong>: deliver orders marked ✅ in-stock whose reward beats the
+            <strong>Trade</strong>: deliver orders marked ✅ in stock whose reward beats the
             shipping cost.
           </li>
           <li>
@@ -65,7 +64,7 @@ export function StartTab() {
             flipping raw materials nets single digits.
           </li>
           <li>
-            <strong>Stay in sync</strong>: every phase needs both captains to confirm, so use chat
+            <strong>Stay in sync</strong>: every phase needs every captain to confirm, so use chat
             (💬) to keep the pace.
           </li>
         </ul>
@@ -87,7 +86,7 @@ export function StartTab() {
     <>
       <h4>🎯 游戏目标</h4>
       <p>
-        你与伙伴各自经营一支海上商队，在整段航程（
+        你与其他船长各自经营一支海上船队，在整段航程（
         <strong>轻松 8 回合、标准 12 回合、高难 16 回合</strong>
         ）内通过「低买 → 生产 → 高卖」积累
         <strong>声望（信誉值）</strong>
@@ -96,11 +95,11 @@ export function StartTab() {
       <p className="muted">
         每一局有轻松、标准、高难三档难度，构成由易到难的阶梯，默认是轻松。难度在邀请时商定：发出邀请的一方选择，另一方在确认窗口看过说明并同意后开局。轻松只包含基础货物，更适合新手起步；想了解各档难度的差别，可查看「难度与拓展」一节。
       </p>
-      <h4>🧭 第一程怎么玩（推荐路线）</h4>
+      <h4>🧭 第一回合怎么玩（推荐路线）</h4>
       <ol>
         <li>
           <strong>福缘</strong>
-          ：第一程建议选「紧急钱庄」（+40金币）或「商贾魅力」（采购85折），缓解开局现金压力。
+          ：第一回合建议选「紧急钱庄」（+40金币）或「商贾魅力」（采购85折），缓解开局现金压力。
         </li>
         <li>
           <strong>采购</strong>
@@ -108,7 +107,7 @@ export function StartTab() {
         </li>
         <li>
           <strong>互市</strong>
-          ：开局可与伙伴互通有无，比如用富余茶叶换对方丝绸。
+          ：开局可与其他船长互通有无，比如用富余茶叶换来丝绸。
         </li>
         <li>
           <strong>工匠</strong>
@@ -134,8 +133,8 @@ export function StartTab() {
           ：香囊基准产值 80，原料转手只有个位数差价。
         </li>
         <li>
-          <strong>双人同步</strong>
-          ：每个阶段都需双方确认才推进，多用聊天（💬）协调节奏。
+          <strong>全员同步</strong>
+          ：每个阶段都需全员确认才推进，多用聊天（💬）协调节奏。
         </li>
       </ul>
       <div className="pm-banner" style={{ marginTop: '10px' }}>

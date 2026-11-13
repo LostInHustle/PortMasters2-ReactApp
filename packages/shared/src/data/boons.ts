@@ -5,7 +5,7 @@ export interface ProductOrderBonus {
   pct: number;
 }
 
-// Every key the original's modifierFlags dict may carry (server.py BOONS_TIER0/1/2, lines 350-371).
+// Every key the original's modifierFlags dict may carry (server.py BOONS_TIER0/1/2).
 export interface BoonModifiers {
   transportSilkDiscount?: number;
   transportFlatDiscount?: number;
@@ -31,13 +31,13 @@ export interface Boon {
   modifiers: BoonModifiers;
 }
 
-// Ported verbatim from PortMasters2/server.py BOONS_TIER0 (lines 350-359).
+// Mirrors PortMasters2/server.py BOONS_TIER0.
 export const BOONS_TIER0 = [
   {
     id: 'silk_wind',
     name: '丝路顺风',
     icon: '🌬️',
-    desc: '本回合丝绸及成品运费减半。',
+    desc: '本回合丝绸与丝织品运费减半。',
     modifiers: { transportSilkDiscount: 0.5 },
   },
   {
@@ -58,7 +58,7 @@ export const BOONS_TIER0 = [
     id: 'artisan_inspiration',
     name: '匠人灵感',
     icon: '🔨',
-    desc: '本回合所有工人多生产1件。',
+    desc: '本回合所有工匠多生产1件。',
     modifiers: { workerBonusProduction: 1 },
   },
   {
@@ -86,12 +86,12 @@ export const BOONS_TIER0 = [
     id: 'master_apprentice',
     name: '学徒传承',
     icon: '🎓',
-    desc: '本回合雇佣工资减半。',
+    desc: '本回合工匠工资减半。',
     modifiers: { hireDiscount: 0.5 },
   },
 ] as const satisfies readonly Boon[];
 
-// Ported verbatim from PortMasters2/server.py BOONS_TIER1 (lines 361-365).
+// Mirrors PortMasters2/server.py BOONS_TIER1.
 export const BOONS_TIER1 = [
   {
     id: 'farsight',
@@ -116,7 +116,7 @@ export const BOONS_TIER1 = [
   },
 ] as const satisfies readonly Boon[];
 
-// Ported verbatim from PortMasters2/server.py BOONS_TIER2 (lines 367-371).
+// Mirrors PortMasters2/server.py BOONS_TIER2.
 export const BOONS_TIER2 = [
   {
     id: 'exotic_treasures',

@@ -5,6 +5,9 @@
 .env
 .env.local
 
+# Runtime account store: salted password hashes, created and updated by the server.
+apps/server/data/users.json
+
 .claude
 
 # Logs and TypeScript build info. These need the wildcard: a bare ".log" pattern matches only a

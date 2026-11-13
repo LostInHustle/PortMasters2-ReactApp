@@ -1,13 +1,14 @@
 import type { ItemId, GOLD } from '@pm2/shared';
 import type { Bilingual, Lang } from './LangContext.js';
+import { modeAware } from './iconMode.js';
 import { pf } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html ICONS/COLORS/ITEM_TIPS
-// (lines 1401-1449): per-item emoji, swatch color, and the bilingual tooltip shown on hover.
-// RESOURCES/PRODUCTS/WAGES from the same block aren't re-ported here. They duplicate
+// Mirrors PortMasters2/PortMasters_online.html ICONS/COLORS/ITEM_TIPS: per item emoji, swatch
+// color, and the bilingual tooltip shown on hover. RESOURCES/PRODUCTS/WAGES from the same block
+// aren't repeated here. They duplicate
 // packages/shared/src/data (resources.ts/products.ts/wages-workers.ts), the single source of
 // truth both client and server already import.
-export const ITEM_ICONS: Record<ItemId | typeof GOLD, string> = {
+const ITEM_EMOJI: Record<ItemId | typeof GOLD, string> = {
   麻布: '🧶',
   丝绸: '👘',
   茶叶: '🍵',
@@ -25,6 +26,31 @@ export const ITEM_ICONS: Record<ItemId | typeof GOLD, string> = {
   珠链: '📿',
   金币: '💰',
 };
+
+// The Chinese character shown for each item when a player switches the icon style. One
+// character each, the same set in both builds.
+const ITEM_HAN: Record<ItemId | typeof GOLD, string> = {
+  麻布: '麻',
+  丝绸: '丝',
+  茶叶: '茶',
+  瓷土: '瓷',
+  铜矿: '铜',
+  香料: '香',
+  珍珠: '珠',
+  麻衣: '衣',
+  布衣: '布',
+  绫罗绸缎: '绫',
+  香囊: '囊',
+  紫铜镜: '镜',
+  青瓷器: '器',
+  蕃香脂: '脂',
+  珠链: '链',
+  金币: '金',
+};
+
+// Reads as a plain table at every call site, and answers from the emoji set or the character
+// set according to the player's icon style (see iconMode.ts).
+export const ITEM_ICONS: Record<ItemId | typeof GOLD, string> = modeAware(ITEM_EMOJI, ITEM_HAN);
 
 export const ITEM_COLORS: Record<ItemId, string> = {
   麻布: '#8B7355',
@@ -44,7 +70,7 @@ export const ITEM_COLORS: Record<ItemId, string> = {
   珠链: '#D4AF37',
 };
 
-export const ITEM_TIPS: Record<ItemId, Bilingual> = {
+const ITEM_TIPS: Record<ItemId, Bilingual> = {
   麻布: {
     zh: '基础原料。可由织女制成麻衣（×2）或布衣（×2，另需丝绸×1）',
     en: 'Basic material. Weavers turn it into Hemp Garb (×2) or Cloth Tunics (×2, plus Silk ×1)',
@@ -59,19 +85,19 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   麻衣: {
     zh: '成品 · 基准产值 15。由织女 / 大师制作（麻布×2）',
-    en: 'Product · base value 15. Made by Weavers / Masters (Hemp Cloth ×2)',
+    en: 'Product, base value 15. Made by Weavers / Masters (Hemp Cloth ×2)',
   },
   布衣: {
     zh: '成品 · 基准产值 35。由织女 / 大师制作（麻布×2 + 丝绸×1）',
-    en: 'Product · base value 35. Made by Weavers / Masters (Hemp Cloth ×2 + Silk ×1)',
+    en: 'Product, base value 35. Made by Weavers / Masters (Hemp Cloth ×2 + Silk ×1)',
   },
   绫罗绸缎: {
     zh: '高级成品 · 基准产值 60。仅纺织大师可制作（丝绸×3）',
-    en: 'Premium product · base value 60. Master Weavers only (Silk ×3)',
+    en: 'Premium product, base value 60. Master Weavers only (Silk ×3)',
   },
   香囊: {
     zh: '顶级成品 · 基准产值 80。仅香囊师可制作（丝绸×1 + 茶叶×2）',
-    en: 'Top tier product · base value 80. Sachet Makers only (Silk ×1 + Tea ×2)',
+    en: 'Top tier product, base value 80. Sachet Makers only (Silk ×1 + Tea ×2)',
   },
   瓷土: {
     zh: '基础原料。可由陶匠制成青瓷器（×3）',
@@ -91,19 +117,19 @@ export const ITEM_TIPS: Record<ItemId, Bilingual> = {
   },
   紫铜镜: {
     zh: '成品 · 基准产值 45。由铜匠制作（铜矿×3）',
-    en: 'Product · base value 45. Made by Coppersmiths (Copper Ore ×3)',
+    en: 'Product, base value 45. Made by Coppersmiths (Copper Ore ×3)',
   },
   青瓷器: {
     zh: '成品 · 基准产值 65。由陶匠制作（瓷土×3）',
-    en: 'Product · base value 65. Made by Potters (Porcelain Clay ×3)',
+    en: 'Product, base value 65. Made by Potters (Porcelain Clay ×3)',
   },
   蕃香脂: {
     zh: '顶级成品 · 基准产值 85。仅香料师可制作（香料×2 + 丝绸×1）',
-    en: 'Top tier product · base value 85. Perfumers only (Spices ×2 + Silk ×1)',
+    en: 'Top tier product, base value 85. Perfumers only (Spices ×2 + Silk ×1)',
   },
   珠链: {
     zh: '顶级成品 · 基准产值 105。仅珠宝匠可制作（珍珠×2 + 丝绸×1）',
-    en: 'Top tier product · base value 105. Jewelers only (Pearls ×2 + Silk ×1)',
+    en: 'Top tier product, base value 105. Jewelers only (Pearls ×2 + Silk ×1)',
   },
 };
 

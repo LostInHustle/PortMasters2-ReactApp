@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { pm1Label, pm1Url } from '../../i18n/pm1Links.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html pm1HintHTML (lines 2544-2558).
+// Mirrors PortMasters2/PortMasters_online.html pm1HintHTML.
 export function Pm1Hint({ context }: { context: ReactNode }) {
   const { tr, lang } = useTranslate();
   return (

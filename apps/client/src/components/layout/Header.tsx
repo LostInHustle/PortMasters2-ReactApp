@@ -2,18 +2,19 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useLogout } from '../../state/useLogout.js';
 import { useOpenManual } from '../manual/ManualModal.js';
+import { IconToggle } from './IconToggle.js';
 import { LangToggle } from './LangToggle.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html's .header markup (lines 1191-1206)
-// and applyLanguage's header section (lines 1751-1757) / logout() (lines 1930-1935).
+// Mirrors PortMasters2/PortMasters_online.html's .header markup
+// and applyLanguage's header section / logout().
 export function Header() {
   const { tr } = useTranslate();
   const { currentUser, toggleChat, serverState, voteEndSession } = useSession();
   const openManual = useOpenManual();
   const logout = useLogout();
 
-  // Ported verbatim from PortMasters2/PortMasters_online.html confirmEndSession/
-  // renderEndSessionButton (lines 3668-3692): each captain votes to disband the room and return
+  // Mirrors PortMasters2/PortMasters_online.html confirmEndSession/
+  // renderEndSessionButton: each captain votes to disband the room and return
   // everyone to the lobby (sessionActions.ts's end_session action). Every player must explicitly
   // vote, so the button keeps showing the live count even after this player has clicked it --
   // a vote invisible to everyone but the voter isn't really a consensus mechanism.
@@ -40,7 +41,7 @@ export function Header() {
           <div className="subtitle">
             {tr(
               '海上丝绸之路 · 联机贸易战略：采购 · 互市 · 生产 · 远航',
-              'Maritime Silk Road · Online Trading: Procure · Barter · Produce · Voyage',
+              'Maritime Silk Road, Online Trading: Procure, Barter, Produce, Voyage',
             )}
           </div>
         </div>
@@ -48,6 +49,7 @@ export function Header() {
       <div className="header-actions">
         {currentUser && <span className="me-chip">{currentUser}</span>}
         <LangToggle />
+        <IconToggle />
         <button
           className="btn btn-ghost"
           onClick={() => openManual()}

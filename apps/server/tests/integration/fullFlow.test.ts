@@ -8,7 +8,7 @@ import { UserStore } from '../../src/auth/UserStore.js';
 import { createAppServer } from '../../src/http/createHttpServer.js';
 import { createServerState } from '../../src/lobby/onlineRegistry.js';
 
-// Phase 4 exit criterion (plan.md): "a real WS client can register/login/list/invite/accept and
+// Integration coverage: "a real WS client can register/login/list/invite/accept and
 // receive state pushes", driven here against a real http+ws server on an ephemeral port, with
 // no mocking of the network layer.
 interface Msg {
@@ -71,7 +71,7 @@ describe('full WS flow: register, login, list, invite, accept, state push', () =
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('drives the whole lobby flow end-to-end over real sockets', async () => {
+  it('drives the whole lobby flow end to end over real sockets', async () => {
     const alice = await TestClient.connect(port);
     const bob = await TestClient.connect(port);
 

@@ -4,8 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { syncMonsoonState, type MonsoonSyncGame } from '../../src/game/monsoonSync.js';
 import type { Rng } from '../../src/game/randomUtil.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py SharedSession.sync_monsoon_state
-// (lines 1248-1261).
+// Expected behavior derived manually from PortMasters2/server.py SharedSession.sync_monsoon_state
 function fixedRng(chosen: MonsoonState): Rng {
   return {
     random: () => 0,
@@ -64,6 +63,7 @@ describe('syncMonsoonState', () => {
     const ctx = { games: [g1, g2] as const, tierUnlock: {}, monsoonCycleCache: emptyCache() };
     syncMonsoonState(ctx, throwingRng());
     expect(g1.applied[0]).toEqual(MONSOON_TIER0[0]);
+    expect(g2.applied[0]).toEqual(MONSOON_TIER0[0]);
     expect(ctx.monsoonCycleCache).toEqual({});
   });
 
@@ -78,7 +78,7 @@ describe('syncMonsoonState', () => {
     expect(ctx.monsoonCycleCache[1]).toBe(chosen);
   });
 
-  it('a second sync within the same already-cached cycle reuses the cache without re-rolling', () => {
+  it('a second sync within the same cached cycle reuses the cache without rolling again', () => {
     const cached = { id: 'cached' } as unknown as MonsoonState;
     const g1 = makeGame(4, 8);
     const g2 = makeGame(4, 8);
@@ -87,7 +87,7 @@ describe('syncMonsoonState', () => {
     expect(g1.applied[0]).toBe(cached);
   });
 
-  it('uses the first non-gameOver game to determine the active round', () => {
+  it('uses the first game that is not over to determine the active round', () => {
     const finished = makeGame(99, 8, true);
     const active = makeGame(3, 8);
     const chosen = { id: 'picked' } as unknown as MonsoonState;
@@ -111,14 +111,5 @@ describe('syncMonsoonState', () => {
     syncMonsoonState(ctx, fixedRng(chosen));
     // round clamps to maxRounds=8 -> cycle = floor((8-1)/2) = 3
     expect(ctx.monsoonCycleCache[3]).toBe(chosen);
-  });
-
-  it('propagates the resolved state to both games', () => {
-    const g1 = makeGame(1, 8);
-    const g2 = makeGame(1, 8);
-    const ctx = { games: [g1, g2] as const, tierUnlock: {}, monsoonCycleCache: emptyCache() };
-    syncMonsoonState(ctx, throwingRng());
-    expect(g1.applied).toHaveLength(1);
-    expect(g2.applied).toHaveLength(1);
   });
 });

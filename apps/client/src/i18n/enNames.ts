@@ -1,4 +1,4 @@
-// Ported verbatim from PortMasters2/PortMasters_online.html EN_NAMES (lines 1377-1397):
+// Mirrors PortMasters2/PortMasters_online.html EN_NAMES:
 // canonical Chinese keys -> English display names, covering items, ports, modules, fortunes and
 // artisans. Used both for UI rendering and for translating log text sent by the server.
 export const EN_NAMES: Record<string, string> = {

@@ -29,7 +29,7 @@ const SESSION_REAP_GRACE_MS = 90_000;
 function completeAuthentication(state: ServerState, ws: Sendable, username: string): void {
   broadcastOnlineUsers(state);
   broadcastOpenRooms(state);
-  // A pending (not-yet-started) room never survives a disconnect, handleDisconnect already
+  // A pending (not yet started) room never survives a disconnect, handleDisconnect already
   // ran handleLeaveRoom for it, so any session still on record here is a live voyage.
   const sess = state.sessions.get(username);
   if (sess !== undefined) {
@@ -48,9 +48,8 @@ function completeAuthentication(state: ServerState, ws: Sendable, username: stri
   }
 }
 
-// Ported verbatim from PortMasters2/server.py handler's not-logged-in branch
-// (lines 1750-1778): only register/login are accepted before a connection has claimed a
-// username. Extended with `resume_token`, the silent counterpart to `login` a fresh connection
+// Mirrors PortMasters2/server.py handler's not logged in branch: only register/login are accepted
+// before a connection has claimed a username. Extended with `resume_token`, the silent counterpart to `login` a fresh connection
 // (a reconnect, or an actual page refresh) sends automatically when it's holding a token from a
 // previous login. See sessionTokens.ts for why this exists.
 function processUnauthenticated(
@@ -94,8 +93,8 @@ function processUnauthenticated(
       });
       return null;
     }
-    // A valid token is itself proof of identity, so this is the same account re-identifying
-    // itself, in practice, a page refresh. Do NOT reject just because the username still
+    // A valid token is itself proof of identity, so this is the same account identifying itself
+    // again, in practice, a page refresh. Do NOT reject just because the username still
     // looks online: a refreshing browser opens the new socket before the old one's close frame
     // is processed, so the stale entry is usually still in `state.online` at this exact moment.
     // Rejecting there logged players out precisely when they refreshed. Taking the slot over is
@@ -114,7 +113,7 @@ function processUnauthenticated(
   return null;
 }
 
-// Ported verbatim from PortMasters2/server.py handler's logged-in branch (lines 1780-1793).
+// Mirrors PortMasters2/server.py handler's logged in branch.
 function processAuthenticated(
   state: ServerState,
   ws: Sendable,
@@ -166,9 +165,9 @@ function processAuthenticated(
   }
 }
 
-// Ported verbatim from PortMasters2/server.py handler (lines 1736-1793): processes one parsed
+// Mirrors PortMasters2/server.py handler: processes one parsed
 // message for a connection currently identified as `username` (null before login), returning
-// the (possibly newly-claimed) username for the caller to remember on this connection.
+// the (possibly newly claimed) username for the caller to remember on this connection.
 export function processMessage(
   state: ServerState,
   ws: Sendable,
@@ -183,8 +182,8 @@ export function processMessage(
   return username;
 }
 
-// Ported verbatim from PortMasters2/server.py handler's finally block (lines 1801-1819), then
-// generalized from a single partner to a room of 2-5. The `state.online.get(username) !== ws`
+// Mirrors PortMasters2/server.py handler's finally block, then
+// generalized from a single partner to a room of 2 to 5. The `state.online.get(username) !== ws`
 // guard matches Python's `ONLINE.get(username) is websocket`: skip cleanup if this username has
 // already been reclaimed by a newer connection.
 export function handleDisconnect(state: ServerState, ws: Sendable, username: string | null): void {
@@ -199,8 +198,8 @@ export function handleDisconnect(state: ServerState, ws: Sendable, username: str
   broadcastOnlineUsers(state);
   const sess = state.sessions.get(username);
   if (sess === undefined) return;
-  // Per the user's decision, a room's roster only changes pre-start: dropping a connection
-  // mid-lobby is equivalent to an explicit leave_room, while a live voyage just flags the slot
+  // Per the user's decision, a room's roster only changes before the start: dropping a connection
+  // in the middle of the lobby is equivalent to an explicit leave_room, while a live voyage just flags the slot
   // offline and holds it open for reconnection.
   if (!sess.started) {
     handleLeaveRoom(state, username);
@@ -230,7 +229,7 @@ export function handleDisconnect(state: ServerState, ws: Sendable, username: str
 // Wires a real `ws` WebSocket connection to processMessage/handleDisconnect. Node's `ws` library
 // delivers messages via events rather than Python's `async for` + ConnectionClosed exception, so
 // the loop becomes a message/close listener pair; each message is still isolated in its own
-// try/catch so one bad message can never tear down the connection or strand a session partner.
+// try/catch so one bad message can never tear down the connection or strand other captains.
 export function handleConnection(state: ServerState, ws: WebSocket): void {
   let username: string | null = null;
 

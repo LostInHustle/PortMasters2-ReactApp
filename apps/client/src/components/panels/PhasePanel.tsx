@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { phaseHue } from '../../i18n/phaseFlow.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { ArtisansPhase } from '../phases/ArtisansPhase.js';
@@ -12,12 +14,12 @@ import { Stepper } from '../phases/Stepper.js';
 import { TradePhase } from '../phases/TradePhase.js';
 import { UpkeepPhase } from '../phases/UpkeepPhase.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderPhase (lines 2560-2587): the
-// stepper plus one phase-specific view, switched on g.phase. A bankrupt player always stays on
+// Mirrors PortMasters2/PortMasters_online.html renderPhase: the
+// stepper plus one phase specific view, switched on g.phase. A bankrupt player always stays on
 // the bankruptcy page even if the server sends a different phase value (the original's
 // defensive `g.bankrupt ? 'bankruptcy' : g.phase`). captureTradeForm/restoreTradeForm and manual
-// scroll-position preservation aren't ported. React keeps each phase component mounted and
-// preserves its own state and scroll position across re-renders for free.
+// scroll position preservation aren't ported. React keeps each phase component mounted and
+// preserves its own state and scroll position across renders for free.
 export function PhasePanel() {
   const { tr } = useTranslate();
   const { serverState } = useSession();
@@ -66,7 +68,11 @@ export function PhasePanel() {
   }
 
   return (
-    <div className="panel phase-panel" id="phase-panel">
+    <div
+      className="panel phase-panel"
+      id="phase-panel"
+      style={{ '--hue': phaseHue(phase) } as CSSProperties}
+    >
       <div className="phase-view phase-enter" key={String(phase)}>
         <Stepper currentKey={phase} />
         {inner}

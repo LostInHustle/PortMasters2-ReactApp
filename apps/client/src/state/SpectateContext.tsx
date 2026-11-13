@@ -20,11 +20,12 @@ interface SpectateContextValue {
 
 const SpectateContext = createContext<SpectateContextValue | null>(null);
 
-// Generalizes PortMasters2/PortMasters_online.html's openSpectate/closeSpectate (lines
-// 3222-3235) and the prototype's later openCaptainViewer (which doubles this same window as a
-// "click any roster widget" detail view, not just the self-bankruptcy auto-watch) into one
-// target-aware viewer: `target` names which other captain's fleet is shown, defaulting to the
-// first one available when no specific target is requested.
+// Generalizes PortMasters2/PortMasters_online.html's openSpectate/closeSpectate and the
+// prototype's later openCaptainViewer (which doubles this same window as a
+// "click any roster widget" detail view, not just the own bankruptcy automatic watch) into one
+// target aware viewer: `target` names which captain's fleet is shown, another captain for
+// everyone and the host's own fleet when opened from their status panel, defaulting to the
+// first other captain available when no specific target is requested.
 export function SpectateProvider({ children }: { children: ReactNode }) {
   const [isSpectating, setIsSpectating] = useState(false);
   const [target, setTargetState] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export function SpectateProvider({ children }: { children: ReactNode }) {
   const setTarget = useCallback((next: string) => setTargetState(next), []);
 
   // The window closes itself the moment THIS player stops being bankrupt (a restart while
-  // bankrupt-spectating), tracked as an edge on the previous bankrupt state, not the current
+  // spectating while bankrupt), tracked as an edge on the previous bankrupt state, not the current
   // level, so opening this same window from a roster click while simply not bankrupt (the
   // common case once it doubles as the Captain Viewer) doesn't immediately snap it shut.
   useEffect(() => {

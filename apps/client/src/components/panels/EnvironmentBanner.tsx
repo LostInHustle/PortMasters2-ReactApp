@@ -3,8 +3,8 @@ import { monsoonDesc, monsoonName } from '../../i18n/boonModuleMonsoonText.js';
 import { tn } from '../../i18n/enNames.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html environmentBannerHTML
-// (lines 2295-2317): the monsoon-state banner shown at the top of several phase screens.
+// Mirrors PortMasters2/PortMasters_online.html environmentBannerHTML: the monsoon state banner
+// shown at the top of several phase screens.
 export function EnvironmentBanner({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
   const m = g.monsoon_state;

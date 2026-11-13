@@ -1,7 +1,7 @@
-// Injectable RNG seam (plan decision: Python's `random` and JS's Math.random() can't be made
-// cross-language-deterministic, and nothing requires that. This lets tests substitute a fixed
-// sequence instead of asserting against live randomness). Mirrors PortMasters2/server.py's
-// rand()/choice()/weighted_choice() (lines 425-438) plus random.shuffle.
+// Injectable RNG seam. Python's `random` and JS's Math.random() cannot be made
+// across languages deterministic, and nothing requires that. This lets tests substitute a fixed
+// sequence instead of asserting against live randomness. Mirrors PortMasters2/server.py's
+// rand()/choice()/weighted_choice() plus random.shuffle.
 export interface Rng {
   /** [0, 1), mirrors Python's random.random(). */
   random(): number;
@@ -9,7 +9,7 @@ export interface Rng {
   randint(a: number, b: number): number;
   choice<T>(arr: readonly T[]): T;
   weightedChoice<T>(items: ReadonlyArray<readonly [T, number]>): T;
-  /** In place, Fisher-Yates, mirrors Python's random.shuffle(). */
+  /** In place, Fisher Yates, mirrors Python's random.shuffle(). */
   shuffle<T>(arr: T[]): void;
 }
 

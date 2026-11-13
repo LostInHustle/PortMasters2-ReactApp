@@ -16,7 +16,7 @@ export interface ProcessProductionContext {
   inventory: Record<ItemId, number>;
 }
 
-// Ported verbatim from PortMasters2/server.py process_production (lines 920-935).
+// Mirrors PortMasters2/server.py process_production.
 export function processProduction(ctx: ProcessProductionContext): void {
   const bonus = ctx.modifierFlags.workerBonusProduction ?? 0;
   for (const list of Object.values(ctx.workers)) {
@@ -62,7 +62,7 @@ export interface PayWagesContext extends WageContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py pay_wages (lines 937-956).
+// Mirrors PortMasters2/server.py pay_wages.
 export function payWages(ctx: PayWagesContext): boolean {
   const total = calcTotalWages(ctx);
   if (total === 0) return true;
@@ -79,18 +79,15 @@ export function payWages(ctx: PayWagesContext): boolean {
 export interface PayMaintenanceContext extends ResolvePirateHazardContext {
   fixedCost: number;
   maintenancePenalty: number;
-  maintenanceCosts: number;
 }
 
-// Ported verbatim from PortMasters2/server.py pay_maintenance (lines 958-970).
+// Mirrors PortMasters2/server.py pay_maintenance.
 export function payMaintenance(ctx: PayMaintenanceContext, rng: Rng): boolean {
   const cost = ctx.fixedCost + ctx.maintenancePenalty;
   resolvePirateHazard(ctx, rng);
   if (ctx.money >= cost) {
     ctx.money -= cost;
-    ctx.maintenanceCosts += cost;
     ctx.roundCosts += cost;
-    ctx.totalCosts += cost;
     return true;
   }
   ctx.money = 0;

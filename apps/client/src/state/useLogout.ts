@@ -2,11 +2,11 @@ import { useTranslate } from '../i18n/useTranslate.js';
 import { useWs } from '../ws/WsContext.js';
 import { clearStoredToken, getStoredToken } from './sessionToken.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html's logout() (lines 1930-1935):
+// Mirrors PortMasters2/PortMasters_online.html's logout():
 // confirm, then drop the connection by reloading, the server's disconnect handler does the
-// rest. Shared by the in-game header and the lobby (the lobby previously had no logout button
+// rest. Shared by the in game header and the lobby (the lobby previously had no logout button
 // of its own; the user could only get back to the login screen via the header). Now also
-// revokes the resume token server-side and clears it locally, so this is a real logout: without
+// revokes the resume token on the server and clears it locally, so this is a real logout: without
 // that, the next page load (or the next reconnect, if one happened to fire before the reload)
 // would silently log the player right back in via sessionToken.ts's resume_token flow.
 export function useLogout(): () => void {

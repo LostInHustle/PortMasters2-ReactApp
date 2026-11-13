@@ -1,9 +1,9 @@
 import type { MarketCard } from '@pm2/shared';
 import type { SharedSession } from '../session/SharedSession.js';
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's purchase branch
-// (lines 1622-1627): changed is set whenever the player is in the Procure phase, regardless of
-// whether a matching, not-yet-purchased card was actually found.
+// Mirrors PortMasters2/server.py handle_game_action's purchase branch: changed is set whenever the
+// player is in the Procure phase, regardless of whether a matching, not yet purchased card was
+// actually found.
 export function handlePurchase(
   sess: SharedSession,
   slot: number,
@@ -18,8 +18,7 @@ export function handlePurchase(
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's purchaseIntel branch
-// (lines 1628-1631).
+// Mirrors PortMasters2/server.py handle_game_action's purchaseIntel branch
 export function handlePurchaseIntel(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 1) return false;

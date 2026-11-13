@@ -16,8 +16,8 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// setTradeReady/createTradeOrder/acceptTrade/rejectTrade branches (lines 1632-1660).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// setTradeReady/createTradeOrder/acceptTrade/rejectTrade branches.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {

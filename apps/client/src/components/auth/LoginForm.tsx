@@ -7,8 +7,8 @@ interface LoginFormProps {
   onShowRegister: () => void;
 }
 
-// Ported from PortMasters2/PortMasters_online.html login() (lines 1899-1928): client-side
-// validation (both fields required) before sending the action, server-side validation messages
+// Mirrors PortMasters2/PortMasters_online.html login(): on the client
+// validation (both fields required) before sending the action, on the server validation messages
 // surface as toasts exactly as in the original.
 export function LoginForm({ onShowRegister }: LoginFormProps) {
   const { tr } = useTranslate();
@@ -42,12 +42,14 @@ export function LoginForm({ onShowRegister }: LoginFormProps) {
         placeholder={tr('密码', 'Password')}
         autoComplete="current-password"
       />
-      <button type="submit" className="btn btn-success btn-lg">
-        {tr('⛵ 登录起航', '⛵ Log In & Set Sail')}
-      </button>
-      <button type="button" className="btn btn-lg" onClick={onShowRegister}>
-        {tr('📝 注册新账号', '📝 Create Account')}
-      </button>
+      <div className="btn-pair">
+        <button type="button" className="btn btn-ghost btn-lg" onClick={onShowRegister}>
+          {tr('📝 注册新账号', '📝 Create Account')}
+        </button>
+        <button type="submit" className="btn btn-success btn-lg">
+          {tr('⛵ 登录起航', '⛵ Log In & Set Sail')}
+        </button>
+      </div>
     </form>
   );
 }

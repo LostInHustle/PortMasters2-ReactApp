@@ -4,20 +4,21 @@ import { useSession } from '../../state/SessionContext.js';
 import { Pm1Hint } from './Pm1Hint.js';
 import { useConfirmRestart } from './useConfirmRestart.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html endgameHTML (lines 3321-3339).
+// Mirrors PortMasters2/PortMasters_online.html endgameHTML.
 export function EndgameView() {
   const { tr, lang } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const confirmRestart = useConfirmRestart();
   const g = serverState?.yourGame;
   if (!g) return null;
   const rating = ratingFor(g.score, g.difficulty, lang);
   const firstTierMin = ratingTiers(g.difficulty)[1]!.min;
+  const isHost = serverState?.host === currentUser;
 
   return (
     <div className="center-block" style={{ textAlign: 'center' }}>
       <div style={{ fontSize: 70 }}>🎆</div>
-      <div className="hero-title">{tr('全部航程完结！', 'All Voyages Complete!')}</div>
+      <div className="hero-title">{tr('航程完结！', 'Voyage Complete!')}</div>
       <div
         className="section-box"
         style={{ maxWidth: 460, margin: '14px auto', textAlign: 'left' }}
@@ -49,10 +50,17 @@ export function EndgameView() {
       <button
         className="btn btn-xl"
         onClick={confirmRestart}
-        title={tr(
-          '需等待其他船长也结束本局，所有人的进度将一同重置',
-          'Requires every other captain to finish too; everyone resets together',
-        )}
+        title={
+          isHost
+            ? tr(
+                '立即为全员开启全新一局，难度保持不变',
+                'Starts a brand new voyage for everyone right away at the same difficulty',
+              )
+            : tr(
+                '需等待其他船长也结束本局，所有人的进度将一同重置',
+                'Requires every other captain to finish too; everyone resets together',
+              )
+        }
       >
         {tr('🔄 再启新航程', '🔄 Begin a New Voyage')}
       </button>

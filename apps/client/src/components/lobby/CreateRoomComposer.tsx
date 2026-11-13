@@ -1,26 +1,24 @@
 import { MAX_ROOM_PLAYERS, MIN_ROOM_PLAYERS, type Difficulty } from '@pm2/shared';
 import { useState } from 'react';
-import { difficultyInfo } from '../../i18n/difficultyInfo.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useModal } from '../modal/ModalContext.js';
+import { DifficultyPicker } from './DifficultyPicker.js';
 
-const DIFFICULTIES: Difficulty[] = ['easy', 'standard', 'hard'];
 const PLAYER_COUNTS = Array.from(
   { length: MAX_ROOM_PLAYERS - MIN_ROOM_PLAYERS + 1 },
   (_, i) => MIN_ROOM_PLAYERS + i,
 );
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderHostComposer (lines
-// 2376-2399): difficulty is chosen first (same picker as the 1:1 InviteComposer), then room
+// Mirrors PortMasters2/PortMasters_online.html renderHostComposer: difficulty is chosen
+// first (same picker as the 1:1 InviteComposer), then room
 // size as a second, narrower row of plain number buttons below it.
 export function CreateRoomComposer() {
-  const { tr, pf } = useTranslate();
+  const { tr } = useTranslate();
   const { closeModal } = useModal();
   const { createRoom } = useSession();
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [maxPlayers, setMaxPlayers] = useState(4);
-  const info = difficultyInfo(difficulty);
 
   const confirm = () => {
     createRoom(maxPlayers, difficulty);
@@ -36,23 +34,7 @@ export function CreateRoomComposer() {
           "Set the room size and difficulty. Other online players can join or leave freely, and once at least 2 are in, you can start the voyage whenever you're ready.",
         )}
       </p>
-      <div className="diff-options">
-        {DIFFICULTIES.map((key) => {
-          const optionInfo = difficultyInfo(key);
-          return (
-            <button
-              type="button"
-              key={key}
-              className={`diff-option ${difficulty === key ? 'selected' : ''}`}
-              onClick={() => setDifficulty(key)}
-            >
-              <span className={`diff-badge diff-${key}`}>{pf(optionInfo.badge)}</span>
-              <span className="diff-tagline">{pf(optionInfo.tagline)}</span>
-            </button>
-          );
-        })}
-      </div>
-      <div className="diff-summary">{pf(info.summary)}</div>
+      <DifficultyPicker difficulty={difficulty} onChange={setDifficulty} />
       <p style={{ textAlign: 'center', fontSize: 13, margin: '14px 0 0' }}>
         {tr('房间人数上限', 'Max room size')}
       </p>
@@ -78,11 +60,11 @@ export function CreateRoomComposer() {
           justifyContent: 'center',
         }}
       >
-        <button className="btn btn-gold btn-lg" onClick={confirm}>
-          {tr('📨 创建房间', '📨 Create Room')}
-        </button>
         <button className="btn btn-ghost btn-lg" onClick={closeModal}>
           {tr('取消', 'Cancel')}
+        </button>
+        <button className="btn btn-gold btn-lg" onClick={confirm}>
+          {tr('📨 创建房间', '📨 Create Room')}
         </button>
       </div>
     </>

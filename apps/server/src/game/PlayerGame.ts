@@ -53,11 +53,11 @@ function createEmptyWorkerRoster(): Record<WorkerTypeId, Worker[]> {
   ) as Record<WorkerTypeId, Worker[]>;
 }
 
-// Ported verbatim from PortMasters2/server.py PlayerGame (lines 441-1129). State fields mirror
-// __init__ (lines 442-493) exactly; methods are thin delegators onto the free functions in this
+// Mirrors PortMasters2/server.py PlayerGame. State fields mirror
+// __init__ exactly; methods are thin delegators onto the free functions in this
 // directory, each named after its Python counterpart. One deliberate addition not present in the
-// original: an injectable `rng` (defaults to real Math.random-backed randomness), the seam the
-// plan calls for so tests can run this class against a fixed sequence instead of live randomness.
+// original: an injectable `rng` (defaults to real randomness backed by Math.random), the seam
+// exists so tests can run this class against a fixed sequence instead of live randomness.
 export class PlayerGame {
   difficulty: Difficulty;
   tierUnlock: Record<number, number>;
@@ -66,13 +66,7 @@ export class PlayerGame {
   score = 0;
   currentRound = 1;
   maxRounds: number;
-  totalRevenue = 0;
-  totalCosts = 0;
-  materialCosts = 0;
   workerWages = 0;
-  maintenanceCosts = 0;
-  vatPaid = 0;
-  incomeTaxPaid = 0;
   roundRevenue = 0;
   roundCosts = 0;
   workers: Record<WorkerTypeId, Worker[]>;
@@ -86,8 +80,6 @@ export class PlayerGame {
   customerCards: CustomerOrder[] = [];
   purchasedCards = new Set<number>();
   completedOrders = new Set<number>();
-  purchaseCount = 0;
-  orderCount = 0;
   gameOver = false;
   bankrupt = false;
   modifierFlags: BoonModifiers = {};
@@ -120,7 +112,7 @@ export class PlayerGame {
     this.rng = rng;
   }
 
-  // Ported verbatim from PortMasters2/server.py log (lines 495-499): caps history at 100 lines;
+  // Mirrors PortMasters2/server.py log: caps history at 100 lines;
   // to_dict()/serialize.ts only ever sends the last 10 of these.
   log(message: string): void {
     this.lastLogs.push(message);
@@ -130,7 +122,7 @@ export class PlayerGame {
     }
   }
 
-  // ---------- Silk Road Charter: content unlocks ----------
+  // ===== Silk Road Charter: content unlocks =====
   unlockedResources(): ResourceId[] {
     return poolSelectors.unlockedResources(this.currentRound, this.tierUnlock);
   }
@@ -144,7 +136,7 @@ export class PlayerGame {
     return poolSelectors.unlockedWorkerTypes(this.currentRound, this.tierUnlock);
   }
 
-  // ---------- Cost calculations ----------
+  // ===== Cost calculations =====
   calcTransportCost(
     totalItems: number,
     hasSilk = false,
@@ -174,8 +166,8 @@ export class PlayerGame {
     return costCalc.escortCost(this);
   }
 
-  // ---------- Monsoon / environment ----------
-  // Ported verbatim from PortMasters2/server.py set_monsoon_state (lines 583-584).
+  // ===== Monsoon / environment =====
+  // Mirrors PortMasters2/server.py set_monsoon_state.
   setMonsoonState(state: MonsoonState): void {
     this.monsoonState = { ...state };
   }
@@ -186,15 +178,9 @@ export class PlayerGame {
     return cardGen.envReward(this, port, reward);
   }
 
-  // ---------- Card generation ----------
+  // ===== Card generation =====
   genEmperorMandateOrder(size: number): CustomerOrder {
     return cardGen.genEmperorMandateOrder(this, size);
-  }
-  genRawOrder(filterItem?: ResourceId): CustomerOrder {
-    return cardGen.genRawOrder(this, this.rng, filterItem);
-  }
-  genProductOrder(filterItem?: ProductId): CustomerOrder {
-    return cardGen.genProductOrder(this, this.rng, filterItem);
   }
   genMixedOrder(): CustomerOrder {
     return cardGen.genMixedOrder(this, this.rng);
@@ -202,16 +188,13 @@ export class PlayerGame {
   genResourceCard(): MarketCard {
     return cardGen.genResourceCard(this, this.rng);
   }
-  genProductPurchaseCard(): MarketCard {
-    return cardGen.genProductPurchaseCard(this, this.rng);
-  }
 
-  // ---------- Boons ----------
+  // ===== Boons =====
   applyBoon(boon: Boon): void {
     boonFx.applyBoon(this, boon);
   }
 
-  // ---------- Market actions ----------
+  // ===== Market actions =====
   purchaseCard(card: MarketCard & { id: number }): boolean {
     return market.purchaseCard(this, card);
   }
@@ -219,7 +202,7 @@ export class PlayerGame {
     return market.completeOrder(this, order, this.rng);
   }
 
-  // ---------- Shipyard modules ----------
+  // ===== Shipyard modules =====
   startModuleDraft(): boolean {
     return moduleDraftFns.startModuleDraft(this, this.rng);
   }
@@ -230,12 +213,12 @@ export class PlayerGame {
     return moduleDraftFns.equipModule(this, mod, swapIdx);
   }
 
-  // ---------- Broker intel ----------
+  // ===== Broker intel =====
   purchaseIntel(): boolean {
     return brokerFns.purchaseIntel(this, this.rng);
   }
 
-  // ---------- Workers ----------
+  // ===== Workers =====
   hireWorker(wtype: WorkerTypeId): boolean {
     return workerFns.hireWorker(this, wtype);
   }
@@ -246,7 +229,7 @@ export class PlayerGame {
     return workerFns.assignTask(this, wtype, task);
   }
 
-  // ---------- Production / wages / maintenance ----------
+  // ===== Production / wages / maintenance =====
   processProduction(): void {
     productionFns.processProduction(this);
   }
@@ -261,34 +244,31 @@ export class PlayerGame {
     return productionFns.calcTotalWages(this);
   }
 
-  // ---------- Pirates / escort ----------
+  // ===== Pirates / escort =====
   pirateThreat(): number {
     return pirateFns.pirateThreat(this);
   }
   effectivePirateRisk(): number {
     return pirateFns.effectivePirateRisk(this);
   }
-  resolvePirateHazard(): void {
-    pirateFns.resolvePirateHazard(this, this.rng);
-  }
   hireEscort(): boolean {
     return pirateFns.hireEscort(this);
   }
 
-  // Ported verbatim from PortMasters2/server.py end_round (lines 1025-1071): settles income tax,
-  // snapshots lastRoundSummary, then resets every per-round counter before advancing the round
+  // Mirrors PortMasters2/server.py end_round: settles income tax,
+  // snapshots lastRoundSummary, then resets every round counter before advancing the round
   // (or flagging gameOver once currentRound exceeds maxRounds).
   endRound(): void {
-    const preTax = this.roundRevenue - this.roundCosts - this.maintenanceCosts - this.workerWages;
+    // roundCosts already includes this round's wages and maintenance, so the taxable base is
+    // revenue minus that one total. Subtracting the parts again double counted them.
+    const preTax = this.roundRevenue - this.roundCosts;
     const tax = this.calcIncomeTax(preTax);
     let paidTax = 0;
     if (tax > 0 && this.money >= tax) {
       paidTax = tax;
       this.money -= tax;
-      this.incomeTaxPaid += tax;
     } else if (tax > 0 && this.money < tax) {
       paidTax = this.money;
-      this.incomeTaxPaid += this.money;
       this.money = 0;
     }
     this.lastRoundSummary = {
@@ -311,8 +291,6 @@ export class PlayerGame {
     this.draftRerolled = false;
     this.roundRevenue = 0;
     this.roundCosts = 0;
-    this.maintenanceCosts = 0;
-    this.materialCosts = 0;
     this.workerWages = 0;
     this.currentRound += 1;
     if (this.currentRound > this.maxRounds) {
@@ -320,8 +298,6 @@ export class PlayerGame {
       return;
     }
     this.phase = 0;
-    this.purchaseCount = 0;
-    this.orderCount = 0;
     this.resourceCards = [];
     this.customerCards = [];
     this.purchasedCards.clear();

@@ -4,12 +4,23 @@ import type { ServerState } from '../lobby/onlineRegistry.js';
 import { sendJson } from '../ws/send.js';
 import type { SharedSession } from './SharedSession.js';
 
-// Generalizes PortMasters2/server.py SharedSession.broadcast_state's per-recipient "state"
-// payload (lines 1450-1470) from a single partner to a room of 2-5: otherGames/players replace
+// Generalizes PortMasters2/server.py SharedSession.broadcast_state's per recipient "state"
+// payload from a single partner to a room of 2 to 5: otherGames/players replace
 // the old singular otherGame/partnerName/partnerOnline. Pulled out of SharedSession itself
-// because building this object is pure (no I/O); the actual per-player websocket lookup/send
+// because building this object is pure (no I/O); the actual per player websocket lookup/send
 // loop is wiring that belongs with the connection layer, not this module. isOnline is injected
 // rather than imported, keeping this function testable without the online registry.
+export function buildRoster(
+  session: SharedSession,
+  isOnline: (username: string) => boolean,
+): RosterPlayer[] {
+  return session.players.map((name) => ({
+    name,
+    online: isOnline(name),
+    isHost: name === session.host,
+  }));
+}
+
 export function buildSessionState(
   session: SharedSession,
   slot: number,
@@ -20,11 +31,7 @@ export function buildSessionState(
   for (const [i, name] of session.players.entries()) {
     if (i !== slot) otherGames[name] = serializePlayerGame(session.games[i]!);
   }
-  const players: RosterPlayer[] = session.players.map((name) => ({
-    name,
-    online: isOnline(name),
-    isHost: name === session.host,
-  }));
+  const players = buildRoster(session, isOnline);
   return {
     tradeOrders: session.tradeOrders,
     tradeReady: session.tradeReady,
@@ -44,7 +51,7 @@ export function buildSessionState(
   };
 }
 
-// Generalizes PortMasters2/server.py SharedSession.broadcast_state's send loop (lines 1450-1470)
+// Generalizes PortMasters2/server.py SharedSession.broadcast_state's send loop
 // from 2 fixed slots to the room's full roster: pushes each player their own "state" message,
 // skipping anyone not currently connected.
 export function broadcastSessionState(state: ServerState, session: SharedSession): void {

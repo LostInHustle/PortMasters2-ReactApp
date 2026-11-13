@@ -17,14 +17,14 @@ import { acceptTrade, createTradeOrder, rejectTrade } from '../game/tradeOrders.
 const CHAT_HISTORY_LIMIT = 200;
 
 // Generalizes PortMasters2/server.py's GameSession (the prototype's own merge of its earlier
-// SharedSession with room hosting for 2-5 players): one object covers both the pre-voyage lobby
+// SharedSession with room hosting for 2 to 5 players): one object covers both the lobby before the voyage
 // (`started === false`, players free to join/leave, no PlayerGame instances yet) and the live
 // voyage (`started === true`). A 1:1 invite is just the degenerate case, a room of size 2 that
 // calls start() immediately instead of waiting in the lobby, so the two flows share this one
-// class rather than duplicating session construction. The phase state-machine
-// (_active_phase/_set_phase/advance), the monsoon resync, and the barter-order bookkeeping each
+// class rather than duplicating session construction. The phase state machine
+// (_active_phase/_set_phase/advance), the monsoon resync, and the barter order bookkeeping each
 // live in their own module in apps/server/src/game (phaseAdvance.ts, monsoonSync.ts,
-// tradeOrders.ts) since none of them need anything SharedSession-specific beyond the games array.
+// tradeOrders.ts) since none of them need anything specific to SharedSession beyond the games array.
 export class SharedSession {
   players: string[];
   host: string;
@@ -61,8 +61,8 @@ export class SharedSession {
     this.rng = rng;
   }
 
-  // Convenience for the 1:1 invite fast-path (and tests exercising gameplay rather than room
-  // lifecycle): builds a 2-player room and launches it immediately, with no lobby wait.
+  // Convenience for the 1:1 invite fast path (and tests exercising gameplay rather than room
+  // lifecycle): builds a two player room and launches it immediately, with no lobby wait.
   static createPair(userA: string, userB: string, difficulty?: Difficulty): SharedSession {
     const sess = new SharedSession(userA, difficulty);
     sess.addPlayer(userB);
@@ -70,7 +70,7 @@ export class SharedSession {
     return sess;
   }
 
-  // ---------- Pre-start room lifecycle ----------
+  // ===== Before start room lifecycle =====
   addPlayer(username: string): void {
     this.players.push(username);
   }
@@ -90,7 +90,7 @@ export class SharedSession {
   // game completed the quorum and threw everyone back to the lobby mid voyage.
   //
   // The monsoon cache is cleared before the sync below rather than after it, so the new voyage
-  // rolls its own weather instead of reading a cycle the previous one had already decided.
+  // rolls its own monsoon instead of reading a cycle the previous one had already decided.
   start(): void {
     this.games = this.players.map((_, i) => {
       const game = new PlayerGame(this.difficulty);
@@ -106,9 +106,9 @@ export class SharedSession {
     syncMonsoonState(this, this.rng);
   }
 
-  // ---------- Identity ----------
-  // A session is only ever looked up by one of its own current players, so indexOf's -1-on-miss
-  // is never observed in practice.
+  // ===== Identity =====
+  // A session is only ever looked up by one of its own current players, so a miss, which indexOf
+  // reports as negative one, is never observed in practice.
   slotOf(username: string): number {
     return this.players.indexOf(username);
   }
@@ -116,7 +116,7 @@ export class SharedSession {
     return this.players.filter((p) => p !== username);
   }
 
-  // ---------- Synchronized progression ----------
+  // ===== Synchronized progression =====
   advance(): void {
     phaseAdvanceFns.advance(this, this.rng);
   }
@@ -150,29 +150,35 @@ export class SharedSession {
     this.start();
   }
 
-  // ---------- End-session vote ----------
-  // Unlike gateComplete, a bankrupt/finished player is NOT auto-counted here, disbanding the
+  // The host may reset the room at any time. Everyone else must wait until every other captain
+  // has finished (settled or bankrupt), keeping the whole roster in sync.
+  canRestart(slot: number): boolean {
+    return this.host === this.players[slot] || this.games.every((g, i) => i === slot || g.gameOver);
+  }
+
+  // ===== End session vote =====
+  // Unlike gateComplete, a bankrupt/finished player is NOT counted automatically here, disbanding the
   // room is a bigger decision than advancing a phase, so every single player must explicitly
   // opt in, matching the prototype's stricter quorum.
   endVoteComplete(): boolean {
     return this.endVotes.size === this.players.length;
   }
 
-  // ---------- Waiting hints ----------
+  // ===== Waiting hints =====
   waitingMessage(slot: number): string | null {
     const game = this.games[slot]!;
     if (game.phase === 'trade') {
       if (!this.tradeReady[slot]) return '请点击“准备就绪”以进入工匠管理';
-      if (!this.tradeGateComplete()) return '等待对方也点击准备就绪...';
+      if (!this.tradeGateComplete()) return '等待其他玩家也点击准备就绪...';
       return null;
     }
     if (this.ready.has(slot) && !this.gateComplete()) {
-      return '已准备，等待对方点击继续...';
+      return '已准备，等待其他玩家点击继续...';
     }
     return null;
   }
 
-  // ---------- Barter trades ----------
+  // ===== Barter trades =====
   createTradeOrder(
     sellerSlot: number,
     sellItems: unknown,
@@ -188,7 +194,7 @@ export class SharedSession {
     return rejectTrade(this, orderId, rejecterSlot);
   }
 
-  // ---------- Chat ----------
+  // ===== Chat =====
   addChat(sender: string, message: string): void {
     this.chatHistory.push({ from: sender, message });
     if (this.chatHistory.length > CHAT_HISTORY_LIMIT) {

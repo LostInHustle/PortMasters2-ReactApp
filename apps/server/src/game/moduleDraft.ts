@@ -18,7 +18,7 @@ export interface ModuleDraftContext {
   log(message: string): void;
 }
 
-// Ported verbatim from PortMasters2/server.py _roll_module_batch (lines 772-779): up to 3
+// Mirrors PortMasters2/server.py _roll_module_batch: up to 3
 // options, preferring modules not yet installed.
 function rollModuleBatch(ctx: ModuleDraftContext, rng: Rng): void {
   const tierPool = modulePool(ctx.currentRound, ctx.tierUnlock);
@@ -29,7 +29,7 @@ function rollModuleBatch(ctx: ModuleDraftContext, rng: Rng): void {
   ctx.draftChoices = copy.slice(0, 3);
 }
 
-// Ported verbatim from PortMasters2/server.py start_module_draft (lines 781-792): the batch is
+// Mirrors PortMasters2/server.py start_module_draft: the batch is
 // rolled once per round and then fixed, so closing and reopening shows the same options.
 export function startModuleDraft(ctx: ModuleDraftContext, rng: Rng): boolean {
   if (ctx.shipLevel === 0) {
@@ -44,8 +44,8 @@ export function startModuleDraft(ctx: ModuleDraftContext, rng: Rng): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py reroll_module_draft (lines 794-807): the
-// once-per-round "Change Batch."
+// Mirrors PortMasters2/server.py reroll_module_draft: the
+// once per round "Change Batch."
 export function rerollModuleDraft(ctx: ModuleDraftContext, rng: Rng): boolean {
   if (ctx.shipLevel === 0) {
     ctx.log('❌ 旗舰尚无模块槽位，请先升级船坞');
@@ -63,7 +63,7 @@ export function rerollModuleDraft(ctx: ModuleDraftContext, rng: Rng): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py equip_module (lines 809-835).
+// Mirrors PortMasters2/server.py equip_module.
 export function equipModule(ctx: ModuleDraftContext, mod: ShipModule, swapIdx?: number): boolean {
   if (hasModule(ctx, mod.id as ModuleId)) {
     ctx.log('❌ 已经装备了该模块');

@@ -9,8 +9,8 @@ import {
 } from '../../src/game/phaseAdvance.js';
 import type { Rng } from '../../src/game/randomUtil.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py SharedSession._active_phase/
-// _set_phase/advance (lines 1236-1345).
+// Expected behavior derived manually from PortMasters2/server.py SharedSession._active_phase/
+// _set_phase/advance.
 function noShuffleRng(): Rng {
   return {
     random: () => 0,
@@ -93,7 +93,7 @@ function makeCtx(
 }
 
 describe('activePhase', () => {
-  it('follows the first non-gameOver game', () => {
+  it('follows the first game that is not over', () => {
     const g1 = makeGame({ gameOver: true, phase: 'endgame' });
     const g2 = makeGame({ gameOver: false, phase: 2 });
     expect(activePhase([g1, g2])).toBe(2);
@@ -107,7 +107,7 @@ describe('activePhase', () => {
 });
 
 describe('setPhase', () => {
-  it('sets the phase on every non-gameOver game and skips finished ones', () => {
+  it('sets the phase on every game that is not over and skips finished ones', () => {
     const g1 = makeGame({ gameOver: false, phase: 0 });
     const g2 = makeGame({ gameOver: true, phase: 'bankruptcy' });
     setPhase([g1, g2], 5);
@@ -117,7 +117,7 @@ describe('setPhase', () => {
 });
 
 describe('advance: phase 0 -> 5 (Fortune Tides)', () => {
-  it('resyncs the monsoon and deals each non-gameOver game 4 boon choices', () => {
+  it('resyncs the monsoon and deals 4 boon choices to each game that is not over', () => {
     const applied: unknown[] = [];
     const g1 = makeGame({
       phase: 0,
@@ -134,7 +134,7 @@ describe('advance: phase 0 -> 5 (Fortune Tides)', () => {
     expect(g1.phase).toBe(5);
     expect(g1.boonChoices).toHaveLength(4);
     expect(g1.boonChoices.every((b) => BOONS_TIER0.some((t) => t.id === b.id))).toBe(true);
-    // monsoon resync touched the non-gameOver game
+    // monsoon resync touched the not gameOver game
     expect(applied.length).toBeGreaterThan(0);
     // a gameOver game is skipped: no boon draw, and setPhase left its phase untouched
     expect(g2.boonChoices).toHaveLength(0);
@@ -157,6 +157,7 @@ describe('advance: phase 5 -> 1 (Procure dealt)', () => {
     expect(g1.resourceCards.map((c) => c.id)).toEqual([0, 1, 2, 3, 4]);
     expect(g1.phase2DemandTags.length).toBeGreaterThan(0);
     expect(g1.phase2DemandTags.every((t) => ['麻布', '丝绸'].includes(t))).toBe(true);
+    expect(g1.revealedIntel).toHaveLength(0);
   });
 
   it('reveals free intel from a boon and removes the revealed tag from the demand pool', () => {
@@ -172,18 +173,6 @@ describe('advance: phase 5 -> 1 (Procure dealt)', () => {
     expect(g1.revealedIntel).toHaveLength(1);
     expect(g1.revealedIntel[0]).toMatchObject({ item: '麻布', port: PORT, used: false });
     expect(g1.phase2DemandTags).toHaveLength(0);
-  });
-
-  it('does not reveal intel when no boon grants free_intel', () => {
-    const g1 = makeGame({
-      phase: 5,
-      unlockedResources: () => ['麻布'],
-      unlockedProducts: () => [],
-      modifierFlags: {},
-    });
-    const g2 = makeGame({ phase: 5, gameOver: true });
-    advance(makeCtx(g1, g2), noShuffleRng());
-    expect(g1.revealedIntel).toHaveLength(0);
   });
 });
 
@@ -264,12 +253,12 @@ describe('advance: phase 2 -> 3 (Upkeep settles)', () => {
 });
 
 describe('advance: phase 3 -> 4 (Shipyard opens)', () => {
-  it('bumps every non-gameOver game to phase 4 and leaves finished games untouched', () => {
+  it('bumps every game that is not over to phase 4 and leaves finished games untouched', () => {
     const g1 = makeGame({ phase: 3 });
     const g2 = makeGame({ phase: 3, gameOver: true, bankrupt: true });
     advance(makeCtx(g1, g2), noShuffleRng());
     expect(g1.phase).toBe(4);
-    // unlike phase 4's branch, phase 3 has no bankruptcy re-assertion, a gameOver game
+    // unlike phase 4's branch, phase 3 has no bankruptcy reassertion, a gameOver game
     // is simply skipped, so its phase is whatever it already was.
     expect(g2.phase).toBe(3);
   });
@@ -303,7 +292,7 @@ describe('advance: phase 4 -> 0 or endgame (round settles)', () => {
     expect(g1.phase).toBe('endgame');
   });
 
-  it('re-asserts bankruptcy phase for an already-finished bankrupt game', () => {
+  it('reasserts bankruptcy phase for an finished bankrupt game', () => {
     const g1 = makeGame({ phase: 4, gameOver: true, bankrupt: true, endRound: () => {} });
     const g2 = makeGame({ phase: 4, gameOver: true, bankrupt: true, endRound: () => {} });
     advance(makeCtx(g1, g2), noShuffleRng());

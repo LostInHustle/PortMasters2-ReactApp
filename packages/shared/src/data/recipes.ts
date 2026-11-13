@@ -2,7 +2,7 @@ import type { ResourceId } from './resources.js';
 import type { ProductId } from './products.js';
 import type { WorkerTypeId } from './wages-workers.js';
 
-// Ported verbatim from PortMasters2/server.py RECIPES (lines 304-313).
+// Mirrors PortMasters2/server.py RECIPES.
 export interface Recipe {
   materials: Partial<Record<ResourceId, number>>;
   value: number;

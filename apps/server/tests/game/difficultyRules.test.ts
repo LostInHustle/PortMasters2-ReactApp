@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  difficultyBrokerCorruption,
-  difficultyRounds,
-  difficultyTierUnlock,
-  emperorMandateSize,
   normalizeDifficulty,
   phaseOptionCount,
   pirateLossPct,
@@ -11,9 +7,8 @@ import {
   unlockedTier,
 } from '../../src/game/difficultyRules.js';
 
-// Expected values hand-derived from PortMasters2/server.py DIFFICULTIES (lines 58-80) and
-// normalize_difficulty/difficulty_rounds/difficulty_tier_unlock/difficulty_broker_corruption
-// (lines 84-102).
+// Expected values derived manually from PortMasters2/server.py DIFFICULTIES and
+// normalize_difficulty
 describe('normalizeDifficulty', () => {
   it('passes through known difficulties', () => {
     expect(normalizeDifficulty('hard')).toBe('hard');
@@ -26,28 +21,8 @@ describe('normalizeDifficulty', () => {
   });
 });
 
-describe('difficultyRounds / difficultyTierUnlock / difficultyBrokerCorruption', () => {
-  it('easy: 8 rounds, no tier unlocks, no broker corruption', () => {
-    expect(difficultyRounds('easy')).toBe(8);
-    expect(difficultyTierUnlock('easy')).toEqual({});
-    expect(difficultyBrokerCorruption('easy')).toBe(false);
-  });
-
-  it('standard: 12 rounds, tier unlocks at rounds 4/8', () => {
-    expect(difficultyRounds('standard')).toBe(12);
-    expect(difficultyTierUnlock('standard')).toEqual({ 1: 4, 2: 8 });
-    expect(difficultyBrokerCorruption('standard')).toBe(false);
-  });
-
-  it('hard: 16 rounds, tier unlocks at rounds 6/10, broker corruption on', () => {
-    expect(difficultyRounds('hard')).toBe(16);
-    expect(difficultyTierUnlock('hard')).toEqual({ 1: 6, 2: 10 });
-    expect(difficultyBrokerCorruption('hard')).toBe(true);
-  });
-});
-
-// Expected values hand-derived from pirate_loss_pct (server.py lines 144-150) and
-// PIRATE_LOSS_TIERS (lines 137-141): medium=0.15, above_medium=0.25, high=0.40.
+// Expected values derived manually from pirate_loss_pct and
+// PIRATE_LOSS_TIERS: medium=0.15, above_medium=0.25, high=0.40.
 describe('pirateLossPct', () => {
   it('easy has a single flat tier regardless of round', () => {
     expect(pirateLossPct('easy', 1, 8)).toBeCloseTo(0.15);
@@ -65,22 +40,7 @@ describe('pirateLossPct', () => {
   });
 });
 
-// Expected values hand-derived from EMPEROR_MANDATE_TEMPLATES/DIFFICULTIES.mandates
-// (server.py lines 64, 71, 78, 174-183).
-describe('emperorMandateSize', () => {
-  it('fires the scheduled template index on each difficulty mandate round', () => {
-    expect(emperorMandateSize('easy', 3)).toBe(0);
-    expect(emperorMandateSize('easy', 6)).toBe(1);
-    expect(emperorMandateSize('easy', 8)).toBe(2);
-  });
-
-  it('is undefined on non-mandate rounds', () => {
-    expect(emperorMandateSize('easy', 1)).toBeUndefined();
-  });
-});
-
-// Expected values hand-derived from unlocked/unlocked_tier/phase_option_count
-// (server.py lines 105-130).
+// Expected values derived manually from unlocked/unlocked_tier/phase_option_count
 describe('unlocked / unlockedTier / phaseOptionCount', () => {
   const tier0 = ['a'];
   const tier1 = ['b'];

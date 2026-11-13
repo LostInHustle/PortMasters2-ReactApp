@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { resolveStaticFile } from '../../src/http/staticFileHandler.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py process_request (lines 1827-1850),
+// Expected behavior derived manually from PortMasters2/server.py process_request,
 // adapted to serve a built SPA's index.html instead of the original's single HTML file.
 describe('resolveStaticFile', () => {
   let webRoot: string;

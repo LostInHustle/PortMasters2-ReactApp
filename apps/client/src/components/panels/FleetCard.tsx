@@ -13,7 +13,7 @@ import { phaseName } from '../../i18n/phaseFlow.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { WORKER_TYPES } from '../../i18n/workerTypesText.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html buffChipsHTML (lines 2273-2293):
+// Mirrors PortMasters2/PortMasters_online.html buffChipsHTML:
 // one chip per active Fortune buff, productOrderBonus rendered directly from its payload since
 // it's shared by two different Fortunes.
 export function BuffChips({ g }: { g: PlayerGameState }) {
@@ -54,7 +54,7 @@ export function BuffChips({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html modulesHTML (lines 2332-2337).
+// Mirrors PortMasters2/PortMasters_online.html modulesHTML.
 // Exported standalone since the original also calls it outside the fleet card (e.g. Shipyard).
 export function Modules({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
@@ -72,7 +72,7 @@ export function Modules({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html invListHTML (lines 2339-2352).
+// Mirrors PortMasters2/PortMasters_online.html invListHTML.
 function InventoryRow({ item, count }: { item: ItemId; count: number }) {
   const { lang } = useTranslate();
   return (
@@ -108,7 +108,7 @@ export function InventoryList({ g }: { g: PlayerGameState }) {
   );
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html workerTeamHTML (lines 2354-2372).
+// Mirrors PortMasters2/PortMasters_online.html workerTeamHTML.
 export function WorkerTeam({ g }: { g: PlayerGameState }) {
   const { tr, pf } = useTranslate();
   const lines = WORKER_TYPES.map((wt) => {
@@ -126,7 +126,7 @@ export function WorkerTeam({ g }: { g: PlayerGameState }) {
           {pf(wt.name)}
         </span>
         <span className="muted" style={{ marginRight: 6 }}>
-          {detail.join(' · ')}
+          {detail.join(tr(' · ', ', '))}
         </span>
         <span className="count">×{list.length}</span>
       </div>
@@ -138,28 +138,28 @@ export function WorkerTeam({ g }: { g: PlayerGameState }) {
   return <>{lines}</>;
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html crewSectionsHTML (lines 2374-2407):
+// Mirrors PortMasters2/PortMasters_online.html crewSectionsHTML:
 // the fleet status card shared by your own status panel and the Captain Viewer (spectate), so
 // every captain's fleet is always directly comparable.
 export function CrewSections({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
   return (
     <>
-      <div className="status-section">
+      <div className="status-section ss-overview">
         <h3>{tr('📊 航海概况', '📊 Voyage Overview')}</h3>
         <div className="stat-row">
           <span
             className="tip"
             data-tip={tr(
-              `全程共${g.maxRounds}个航程（回合），结束后按声望评级`,
-              `${g.maxRounds} voyages (rounds) in total; final rating is based on renown`,
+              `全程共 ${g.maxRounds} 个回合，结束后按声望评级`,
+              `${g.maxRounds} rounds in total; final rating is based on renown`,
             )}
           >
-            {tr('🌊 航程进度', '🌊 Voyage')}
+            {tr('🌊 回合进度', '🌊 Round')}
           </span>
           <span className="stat-value">
             {tr(
-              `第 ${g.currentRound} / ${g.maxRounds} 程`,
+              `第 ${g.currentRound} / ${g.maxRounds} 回合`,
               `Round ${g.currentRound} / ${g.maxRounds}`,
             )}
           </span>
@@ -203,11 +203,11 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <span className="stat-value">{phaseName(g.phase, lang)}</span>
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-buffs">
         <h3>{tr('🪄 本回合增益', '🪄 Round Buffs')}</h3>
         <BuffChips g={g} />
       </div>
-      <div className="status-section">
+      <div className="status-section ss-env">
         <h3>{tr('🌦️ 全球环境', '🌦️ Global Environment')}</h3>
         <div style={{ fontSize: 12, color: 'var(--ink-soft)', lineHeight: 1.55 }}>
           {g.monsoon_state?.icon ?? '🌦️'} <strong>{monsoonName(g.monsoon_state, lang)}</strong>
@@ -215,7 +215,7 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           {monsoonDesc(g.monsoon_state, lang)}
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-ship">
         <h3>{tr('🚢 旗舰状态', '🚢 Flagship')}</h3>
         <div className="stat-row">
           <span
@@ -227,13 +227,13 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           >
             {tr('商船等级', 'Ship level')}
           </span>
-          <span className="stat-value">Lv.{g.shipLevel}</span>
+          <span className="stat-value">{tr(`${g.shipLevel} 级`, `Lv.${g.shipLevel}`)}</span>
         </div>
         <div className="stat-row">
           <span
             className="tip"
             data-tip={tr(
-              '运费 = max(5, 货物件数×2 − 船级×5 − 福缘减免)',
+              '运费 = 货物件数×2 − 船级×5 − 福缘减免，最低 5 金币',
               'Shipping = max(5, items ×2 − level ×5 − fortune discounts)',
             )}
           >
@@ -253,11 +253,11 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <Modules g={g} />
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-cargo">
         <h3>{tr('📦 船舱货物', '📦 Cargo Hold')}</h3>
         <InventoryList g={g} />
       </div>
-      <div className="status-section">
+      <div className="status-section ss-crew">
         <h3>{tr('👥 工匠团队', '👥 Artisan Team')}</h3>
         <WorkerTeam g={g} />
       </div>

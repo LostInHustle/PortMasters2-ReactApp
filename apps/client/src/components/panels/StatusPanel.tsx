@@ -1,19 +1,28 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { captainGlyph } from '../../i18n/iconMode.js';
+import { useLang } from '../../i18n/LangContext.js';
+import { useSpectate } from '../../state/SpectateContext.js';
+import { MateNote } from '../common/MateNote.js';
+import { captainHueStyle } from '../common/Medal.js';
 import { CrewSections } from './FleetCard.js';
 
 const NO_DUE_PHASES = new Set<unknown>([0, 5, 'endgame', 'bankruptcy']);
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderStatus (lines 2410-2448):
+// Mirrors PortMasters2/PortMasters_online.html renderStatus:
 // your own fleet card, plus a "due this round" breakdown once wages/upkeep are pending. Wages
-// and upkeep are both read straight off the server-computed estimatedWages/fixedCost/
-// maintenancePenalty fields rather than re-derived here, so this can never drift from what
+// and upkeep are both read straight off the server computed estimatedWages/fixedCost/
+// maintenancePenalty fields rather than derived again here, so this can never drift from what
 // payWages/payMaintenance actually charge at settlement (see costCalculations.ts/production.ts).
 export function StatusPanel() {
   const { tr } = useTranslate();
+  const { iconMode } = useLang();
   const { currentUser, serverState } = useSession();
+  const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   if (!g) return null;
+
+  const isHost = serverState?.host === currentUser;
 
   const showDue = !NO_DUE_PHASES.has(g.phase) && !g.gameOver;
   const pendWages = g.estimatedWages;
@@ -23,20 +32,52 @@ export function StatusPanel() {
 
   return (
     <div className="panel side-panel" id="status-panel">
-      <div className="crew-head">
-        <div className="avatar">🧑‍✈️</div>
+      <div
+        className="crew-head"
+        style={isHost ? { cursor: 'pointer' } : undefined}
+        title={
+          isHost
+            ? tr('在观战窗口中查看我的船队', 'View my fleet in the spectator window')
+            : undefined
+        }
+        onClick={isHost ? () => openSpectate(currentUser ?? undefined) : undefined}
+      >
+        <div className="avatar" style={captainHueStyle(currentUser)}>
+          {captainGlyph(currentUser, iconMode)}
+        </div>
         <div className="who">
           <div className="nm">{currentUser || tr('我', 'Me')}</div>
           <div className="role">
-            {tr('我的商队', 'My fleet')} · {g.slot ? tr('玩家', 'Player ') + g.slot : ''}
+            {tr('我的船队', 'My fleet')}
+            {tr(' · ', ', ')}
+            {g.slot ? tr('玩家', 'Player ') + g.slot : ''}
           </div>
         </div>
         <span className="dot on" title={tr('在线', 'Online')} />
+        {isHost && <span className="roster-toggle">🔍</span>}
       </div>
+      {showDue && pendTotal > 0 && (
+        <MateNote>
+          {!safe
+            ? tr(
+                `船长，本回合结算要付 ${pendTotal} 金币，我们还差 ${pendTotal - g.money} 金币，得尽快回笼资金。`,
+                `We owe ${pendTotal} gold at Upkeep this round, Captain, and we are ${pendTotal - g.money} gold short. We need to raise cash.`,
+              )
+            : Math.floor(g.money / pendTotal) >= 2
+              ? tr(
+                  `船长，本回合结算要付 ${pendTotal} 金币，存款绰绰有余。`,
+                  `We owe ${pendTotal} gold at Upkeep this round, Captain. Your gold covers it ${Math.floor(g.money / pendTotal)} times over.`,
+                )
+              : tr(
+                  `船长，本回合结算要付 ${pendTotal} 金币，存款刚好够付，花钱要留神。`,
+                  `We owe ${pendTotal} gold at Upkeep this round, Captain. Your gold just covers it, so spend with care.`,
+                )}
+        </MateNote>
+      )}
       <CrewSections g={g} />
       {showDue && (
         <div
-          className="status-section"
+          className="status-section ss-due"
           style={{ borderColor: safe ? 'rgba(14,165,233,.14)' : 'rgba(225,29,72,.5)' }}
         >
           <h3>{tr('⚠️ 本回合应付款项', '⚠️ Due This Round')}</h3>

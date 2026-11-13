@@ -1,25 +1,25 @@
 import { useTranslate } from '../../../i18n/useTranslate.js';
 
-// Split out of expansionTab.tsx (originally 663 lines, well past the file-size ceiling) to keep
-// each manual-tab file within the project's soft 200 / hard 350 line discipline. This tab's
-// source content is unusually table-heavy (7 unlock-category tables), so it's split by category
+// Split out of expansionTab.tsx (originally 663 lines, well past the file size ceiling) to keep
+// each manual tab file within the project's soft 200 / hard 350 line discipline. This tab's
+// source content is unusually heavy on tables (7 unlock category tables), so it's split by category
 // group rather than forced into one oversized file.
 export function ExpansionUnlockWindsModules() {
   const { lang } = useTranslate();
   if (lang === 'en') {
     return (
       <>
-        <h4>🌬️ New Trade Winds</h4>
+        <h4>🌬️ New Monsoons</h4>
         <p>
           Beyond the original Spring Current, Summer Monsoon, Autumn Gales and Winter Blockade, 4
-          new trade-wind states join the pool. From Round 3 on, each "season" (every 2 rounds) is{' '}
+          new monsoon states join the pool. From Round 3 on, each "season" (every 2 rounds) is{' '}
           <strong>drawn at random from the currently unlocked pool</strong> instead of a fixed 4
           season cycle, though Rounds 1 to 2 are still always Spring Current, exactly as before.
         </p>
         <table>
           <thead>
             <tr>
-              <th>Trade Wind</th>
+              <th>Monsoon</th>
               <th>Unlocked by</th>
               <th>Effect summary</th>
             </tr>
@@ -77,7 +77,7 @@ export function ExpansionUnlockWindsModules() {
             <tr>
               <td>🔥 Kiln Cellar</td>
               <td>New Maritime Edict</td>
-              <td>Porcelain Clay and Copper Ore purchase price −2 gold per unit</td>
+              <td>Porcelain Clay and Copper Ore purchase price 2 gold lower per unit</td>
             </tr>
             <tr>
               <td>📡 Ocean Going Interpreter</td>
@@ -87,7 +87,7 @@ export function ExpansionUnlockWindsModules() {
             <tr>
               <td>🪪 Foreign Quarter Guild Pass</td>
               <td>Ten Thousand Kingdoms Trade</td>
-              <td>Spices and Pearls purchase price −3 gold per unit</td>
+              <td>Spices and Pearls purchase price 3 gold lower per unit</td>
             </tr>
             <tr>
               <td>🧿 Persian Dome Compass</td>
@@ -115,12 +115,12 @@ export function ExpansionUnlockWindsModules() {
   }
   return (
     <>
-      <h4>🌬️ 新增季风（贸易风）</h4>
+      <h4>🌬️ 新增季风</h4>
       <p>
         除原有的「春潮顺流」「盛夏季风」「秋汛乱流」「冬海封锁」外，新增 4 种季风状态。第 3
-        程起，每个"季节"（每 2 回合一变）将从
+        回合起，每个"季节"（每 2 回合一变）将从
         <strong>当时已解锁的季风池中随机抽取</strong>
-        ，不再是固定的四季循环。不过第 1 至 2 程仍固定为「春潮顺流」，与最初版本完全一致。
+        ，不再是固定的四季循环。不过第 1 至 2 回合仍固定为「春潮顺流」，与最初版本完全一致。
       </p>
       <table>
         <thead>
@@ -153,11 +153,11 @@ export function ExpansionUnlockWindsModules() {
           </tr>
         </tbody>
       </table>
-      <h4>🔧 新增战船改装</h4>
+      <h4>🔧 新增船舶模块</h4>
       <table>
         <thead>
           <tr>
-            <th>改装</th>
+            <th>模块</th>
             <th>解锁批次</th>
             <th>效果</th>
           </tr>
@@ -200,7 +200,7 @@ export function ExpansionUnlockWindsModules() {
         <span>
           这些新内容会在
           <strong>「启航」</strong>
-          页以横幅公告的形式出现，记得留意第 6 程与第 10 程开局时的提示！
+          页以横幅公告的形式出现，记得留意第 6 回合与第 10 回合开局时的提示！
         </span>
       </div>
     </>

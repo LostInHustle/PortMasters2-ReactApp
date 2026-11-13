@@ -10,8 +10,8 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { handleRespondInvite, handleSendInvite } from '../../src/lobby/inviteManager.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_send_invite/
-// handle_respond_invite/invite_timeout_task (lines 1496-1564).
+// Expected behavior derived manually from PortMasters2/server.py handle_send_invite/
+// handle_respond_invite/invite_timeout_task.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -107,7 +107,7 @@ describe('inviteManager', () => {
       goOnline('carol');
       handleSendInvite(state, 'alice', 'bob');
       // Simulate the invite having already resolved (responded to / expired) without advancing
-      // wall-clock time, so lastInviteAt is still fresh.
+      // wall clock time, so lastInviteAt is still fresh.
       state.pendingInvites.delete('alice');
       alice.sent = [];
 

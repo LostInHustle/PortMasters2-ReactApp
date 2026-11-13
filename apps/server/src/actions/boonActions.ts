@@ -2,8 +2,7 @@ import { BOONS } from '@pm2/shared';
 import type { SharedSession } from '../session/SharedSession.js';
 import { readyUpAndMaybeAdvance } from './readyGate.js';
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's startBoon branch
-// (lines 1599-1604).
+// Mirrors PortMasters2/server.py handle_game_action's startBoon branch
 export function handleStartBoon(sess: SharedSession, slot: number): boolean {
   const game = sess.games[slot]!;
   if (game.phase !== 0 || sess.ready.has(slot)) return false;
@@ -11,9 +10,8 @@ export function handleStartBoon(sess: SharedSession, slot: number): boolean {
   return true;
 }
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's selectBoon branch
-// (lines 1605-1615). Falls back to the full boon pool if boonChoices is empty, matching
-// Python's `game.boonChoices or BOONS`.
+// Mirrors PortMasters2/server.py handle_game_action's selectBoon branch. Falls back to the full
+// boon pool if boonChoices is empty, matching Python's `game.boonChoices or BOONS`.
 export function handleSelectBoon(
   sess: SharedSession,
   slot: number,

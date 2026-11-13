@@ -2,16 +2,15 @@ import { EN_NAMES, tn } from './enNames.js';
 import { wName } from './workerTypesText.js';
 import type { Lang } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html SERVER_TEXT_RULES
-// (lines 1652-1713): the server outputs log/system messages in canonical Chinese; language
-// belongs to the presentation layer, and the two players in a session may use different
-// languages, so each client translates independently. This table maps message templates one by
-// one; any string that doesn't match falls back to per-noun substitution (lstNames). This file
-// is one of the plan's named file-size-ceiling exceptions: a flat, append-only regex table,
-// kept as one file so a new server log line only ever needs one new entry in one place.
+// Mirrors PortMasters2/PortMasters_online.html SERVER_TEXT_RULES. The server outputs log and
+// system messages in canonical Chinese. Language belongs to the presentation layer, and the
+// captains in a session may use different languages, so each client translates independently.
+// This table maps message templates one by one; any string that doesn't match falls back to
+// per noun substitution (lstNames). The regex table stays in one file so a new server log line
+// only ever needs one new entry in one place.
 type ServerTextRule = [RegExp, (m: RegExpMatchArray) => string];
 
-export const SERVER_TEXT_RULES: ServerTextRule[] = [
+const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^💰 福缘：获得 (\d+) 金币$/, (m) => `💰 Fortune: gained ${m[1]!} gold`],
   [/^❌ 资金不足！需要(\d+)金币$/, (m) => `❌ Not enough gold! ${m[1]!} needed`],
   [/^🛒 采购完成，花费(\d+)金币$/, (m) => `🛒 Purchase complete, ${m[1]!} gold spent`],
@@ -53,36 +52,36 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
   [/^❌ 需要(\d+)金币才能雇佣护航$/, (m) => `❌ You need ${m[1]!} gold to hire an escort`],
   [/^🛡️ 雇佣护航，花费(\d+)金币$/, (m) => `🛡️ Hired an escort for ${m[1]!} gold`],
   [
-    /^🛡️ 护航舰队震慑海盗，本程无损$/,
-    () => `🛡️ Escort fleet deterred pirates, no losses this voyage`,
+    /^🛡️ 护航舰队震慑海盗，本回合无损$/,
+    () => `🛡️ Escort fleet deterred pirates, no losses this round`,
   ],
   [
     /^🏴‍☠️ 海盗袭扰，损失(\d+)金币（财富的(\d+)%）$/,
     (m) => `🏴‍☠️ Pirate raid: lost ${m[1]!} gold (${m[2]!}% of your wealth)`,
   ],
   [
-    /^🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本程海盗风险上升(\d+)%！$/,
+    /^🕵️ 这名牙行形迹可疑，疑似走漏了你的行踪，本回合海盗风险上升(\d+)%！$/,
     (m) =>
-      `🕵️ This broker looked shifty and seems to have leaked your route. Pirate risk is up ${m[1]!}% this voyage.`,
+      `🕵️ This broker looked shifty and seems to have leaked your route. Pirate risk is up ${m[1]!}% this round.`,
   ],
   [/^🤝 互市成功！$/, () => `🤝 Barter complete!`],
   /* Sync waiting hints */
   [/^请点击“准备就绪”以进入工匠管理$/, () => `Click "Ready" to proceed to artisan management`],
-  [/^等待对方也点击准备就绪\.\.\.$/, () => `Waiting for your partner to click Ready...`],
-  [/^已准备，等待对方点击继续\.\.\.$/, () => `Ready, waiting for your partner to continue...`],
+  [/^等待其他玩家也点击准备就绪\.\.\.$/, () => `Waiting for everyone else to click Ready...`],
+  [/^已准备，等待其他玩家点击继续\.\.\.$/, () => `Ready: waiting for everyone else to continue...`],
   /* System messages */
   [
-    /^对方重新开始了游戏，双方进度已重置$/,
-    () => `Your partner restarted the game, both voyages have been reset`,
+    /^其他玩家重新开始了游戏，本局进度已重置$/,
+    () => `Another captain restarted the game. The voyage has been reset`,
   ],
   [
-    /^需等待对方完成本局后才能重新起航$/,
-    () => `You can set sail again once your partner finishes this game`,
+    /^需等待其他玩家完成本局后才能重新起航$/,
+    () => `You can set sail again once everyone else finishes this game`,
   ],
   [
     /^❌ 对方拒绝了你的互市提案（出 (.+) ⇄ 换 (.+)）$/,
     (m) =>
-      `❌ Your partner declined your barter offer (give ${lstNames(m[1]!)} ⇄ get ${lstNames(m[2]!)})`,
+      `❌ The other captain declined your barter offer (give ${lstNames(m[1]!)} ⇄ get ${lstNames(m[2]!)})`,
   ],
   [/^该邀请已失效$/, () => `That invitation has expired`],
   [/^对方已离线，邀请失效$/, () => `The other player went offline, invitation void`],
@@ -91,10 +90,13 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
     () => `Cannot start a session: one of you is already in a game`,
   ],
   [
-    /^你还没有游戏伙伴，无法发送消息$/,
-    () => `You don't have a partner yet, so messages can't be sent`,
+    /^你还没有加入航程，无法发送消息$/,
+    () => `You're not in a voyage yet, so messages can't be sent`,
   ],
-  [/^对方已离线，无法发送消息$/, () => `Your partner is offline, message not sent`],
+  [
+    /^其他玩家都已离线，无法发送消息$/,
+    () => `Everyone else is offline, so the message wasn't sent`,
+  ],
   /* Rooms (recruit flow) */
   [
     /^你已在游戏会话中，无法创建房间$/,
@@ -129,7 +131,7 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
   ],
   /* Register / Login */
   [/^用户名需为 3 到 20 个字符$/, () => `Username must be 3 to 20 characters`],
-  [/^密码至少 6 位$/, () => `Password must be at least 6 characters`],
+  [/^密码需为 6 到 128 位$/, () => `Password must be 6 to 128 characters`],
   [/^该用户名已被注册$/, () => `That username is already taken`],
   [/^注册成功，请登录$/, () => `Account created, please log in`],
   [/^用户名或密码错误$/, () => `Incorrect username or password`],
@@ -139,7 +141,7 @@ export const SERVER_TEXT_RULES: ServerTextRule[] = [
 ];
 
 // Replace canonical names in a string one by one with English (fallback path).
-export function lstNames(s: string): string {
+function lstNames(s: string): string {
   const out = Object.keys(EN_NAMES).reduce((acc, k) => acc.split(k).join(EN_NAMES[k]!), s);
   return out.split('、').join(', ');
 }

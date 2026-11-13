@@ -6,16 +6,17 @@ import { useWs } from '../../ws/WsContext.js';
 import { useOpenManual } from '../manual/ManualModal.js';
 import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html renderControls (lines 3348-3401):
-// the bottom action bar's primary call-to-action and hint, one per phase.
+// Mirrors PortMasters2/PortMasters_online.html renderControls:
+// the bottom action bar's primary call to action and hint, one per phase.
 export function ControlPanel() {
   const { tr } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const { send } = useWs();
   const confirmRestart = useConfirmRestart();
   const openManual = useOpenManual();
   const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
+  const isHost = serverState?.host === currentUser;
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
@@ -36,6 +37,9 @@ export function ControlPanel() {
           </span>
         )}
         <div className="control-spacer" />
+        <button className="btn btn-ghost" onClick={() => openManual()}>
+          {tr('📖 手册', '📖 Manual')}
+        </button>
         {isBankrupt && partnerPlaying && (
           <button className="btn btn-ghost" onClick={() => openSpectate()}>
             {tr('👀 观战同行', '👀 Spectate')}
@@ -43,9 +47,6 @@ export function ControlPanel() {
         )}
         <button className="btn btn-danger" onClick={confirmRestart}>
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
-        </button>
-        <button className="btn btn-ghost" onClick={() => openManual()}>
-          {tr('📖 手册', '📖 Manual')}
         </button>
       </>
     );
@@ -59,7 +60,7 @@ export function ControlPanel() {
     case 0:
       primary = serverState?.youReady ? (
         <button className="btn btn-grey btn-lg" disabled>
-          {tr('⌛ 已确认，等待伙伴', '⌛ Confirmed, waiting for partner')}
+          {tr('⌛ 已确认，等待其他船长', '⌛ Confirmed, waiting for others')}
         </button>
       ) : (
         <button className="btn btn-success btn-lg" onClick={() => send({ action: 'startBoon' })}>
@@ -123,12 +124,12 @@ export function ControlPanel() {
           className="btn btn-success btn-lg"
           onClick={() => send({ action: 'ready_for_next_phase' })}
         >
-          {tr('⏭️ 结束航程', '⏭️ End Voyage')}
+          {tr('⏭️ 结束本回合', '⏭️ End Round')}
         </button>
       );
       hint = tr(
-        '可先升级商船，再结束本航程',
-        'Upgrade your ship first if you like, then end the voyage',
+        '可先升级商船，再结束本回合',
+        'Upgrade your ship first if you like, then end the round',
       );
       break;
   }
@@ -146,7 +147,6 @@ export function ControlPanel() {
       </span>
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
-      {primary}
       <button
         className="btn btn-ghost"
         onClick={() => openManual()}
@@ -154,6 +154,19 @@ export function ControlPanel() {
       >
         {tr('📖 手册', '📖 Manual')}
       </button>
+      {isHost && (
+        <button
+          className="btn btn-ghost"
+          onClick={confirmRestart}
+          title={tr(
+            '立即开启全新一局，全员进度重置，难度保持不变',
+            "Start a brand new voyage now, resetting everyone's progress at the same difficulty",
+          )}
+        >
+          {tr('🔄 重新起航', '🔄 Set Sail Again')}
+        </button>
+      )}
+      {primary}
     </>
   );
 }

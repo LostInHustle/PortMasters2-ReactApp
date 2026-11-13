@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { Sendable } from '../../src/lobby/onlineRegistry.js';
 import { broadcastOnlineUsers, sendJson, sendToUser } from '../../src/ws/send.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py send_json/send_to_user/
-// broadcast_online_users (lines 1480-1494).
+// Expected behavior derived manually from PortMasters2/server.py send_json/send_to_user/
+// broadcast_online_users.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -12,7 +12,7 @@ class FakeSocket implements Sendable {
 }
 
 describe('sendJson', () => {
-  it('sends the JSON-serialized payload', () => {
+  it('sends the payload serialized as JSON', () => {
     const ws = new FakeSocket();
     sendJson(ws, { type: 'ping', n: 1 });
     expect(ws.sent).toEqual([{ type: 'ping', n: 1 }]);

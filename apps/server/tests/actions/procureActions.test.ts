@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { handlePurchase, handlePurchaseIntel } from '../../src/actions/procureActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// purchase/purchaseIntel branches (lines 1622-1631).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// purchase/purchaseIntel branches.
 describe('handlePurchase', () => {
   it('returns false outside phase 1', () => {
     const sess = SharedSession.createPair('alice', 'bob');
@@ -17,7 +17,7 @@ describe('handlePurchase', () => {
     expect(handlePurchase(sess, 0, { cardId: 999 })).toBe(true);
   });
 
-  it('purchases a matching, not-yet-purchased card', () => {
+  it('purchases a matching, not yet purchased card', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 1;
     sess.games[0]!.resourceCards = [
@@ -35,7 +35,7 @@ describe('handlePurchase', () => {
     expect(sess.games[0]!.money).toBeLessThan(before);
   });
 
-  it('does not re-purchase an already-purchased card', () => {
+  it('does not purchase an already purchased card again', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 1;
     sess.games[0]!.resourceCards = [

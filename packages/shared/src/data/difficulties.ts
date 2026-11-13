@@ -12,7 +12,7 @@ export interface DifficultyConfig {
   mandates: Record<number, number>;
 }
 
-// Ported verbatim from PortMasters2/server.py DIFFICULTIES (lines 58-81).
+// Mirrors PortMasters2/server.py DIFFICULTIES.
 export const DIFFICULTIES: Record<Difficulty, DifficultyConfig> = {
   easy: {
     rounds: 8,
@@ -53,21 +53,21 @@ export function finalMandateRound(difficulty: Difficulty): number {
   return rounds.length > 0 ? Math.max(...rounds) : 0;
 }
 
-// Raid severity as a fraction of current gold (server.py lines 137-141).
+// Raid severity as a fraction of current gold.
 export const PIRATE_LOSS_TIERS: Record<PirateLossTier, number> = {
   medium: 0.15,
   above_medium: 0.25,
   high: 0.4,
 };
 
-// Escort fee = max(ESCORT_COST_MIN, current gold * ESCORT_COST_PCT) (server.py lines 158-159).
+// Escort fee = max(ESCORT_COST_MIN, current gold * ESCORT_COST_PCT).
 export const ESCORT_COST_MIN = 10;
 export const ESCORT_COST_PCT = 0.1;
 
-// Corrupt-broker hazard, hard mode only (server.py lines 165-166).
+// Corrupt broker hazard, hard mode only.
 export const BROKER_CORRUPTION_CHANCE = 0.3;
 export const BROKER_CORRUPTION_RISK = 0.2;
 
-// Market-card hand size = BASE + PER_TIER * unlocked tier count (server.py lines 125-126).
+// Market card hand size = BASE + PER_TIER * unlocked tier count.
 export const PHASE_OPTIONS_BASE = 5;
 export const PHASE_OPTIONS_PER_TIER = 3;

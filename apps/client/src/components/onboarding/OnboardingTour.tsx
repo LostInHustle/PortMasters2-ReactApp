@@ -5,11 +5,23 @@ import { useOpenManual } from '../manual/ManualModal.js';
 
 const ONBOARDED_KEY = 'pm2_onboarded';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html maybeShowOnboarding/
-// finishOnboarding (lines 3952-3989): a one-time tour shown the first time a session is
+// Mirrors PortMasters2/PortMasters_online.html maybeShowOnboarding/
+// finishOnboarding: a one time tour shown the first time a session is
 // entered, skipped on every later visit once `pm2_onboarded` is set.
 export function shouldShowOnboarding(): boolean {
-  return localStorage.getItem(ONBOARDED_KEY) !== '1';
+  try {
+    return localStorage.getItem(ONBOARDED_KEY) !== '1';
+  } catch {
+    return true;
+  }
+}
+
+function markOnboarded(): void {
+  try {
+    localStorage.setItem(ONBOARDED_KEY, '1');
+  } catch {
+    // storage unavailable: the tour will show again next time, which is not fatal
+  }
 }
 
 export function OnboardingTour() {
@@ -18,7 +30,7 @@ export function OnboardingTour() {
   const openManual = useOpenManual();
 
   const finish = (openManualAfter: boolean) => {
-    localStorage.setItem(ONBOARDED_KEY, '1');
+    markOnboarded();
     closeModal();
     if (openManualAfter) openManual('start');
   };
@@ -52,11 +64,11 @@ export function OnboardingTour() {
             'Every round you must pay artisan wages plus 15 gold upkeep, miss it and you go bankrupt instantly. The left panel tallies "Due This Round" live; keep an eye on it.',
           )}
         </p>
-        <h4>{tr('2️⃣ 与其他船长同船同行', '2️⃣ You sail in lockstep with your fellow captains')}</h4>
+        <h4>{tr('2️⃣ 与其他船长同步航行', '2️⃣ You sail in lockstep with your fellow captains')}</h4>
         <p>
           {tr(
-            '每个阶段都需所有船长确认才推进（看底部「船长就绪 n/N」）。右侧面板列出每位船长，点击可查看其存款、声望、货物、工匠与增益；互市阶段可与任意人自由交易，💬 聊天随时沟通。',
-            "Every phase advances only when every captain confirms (see 'Ready n/N' at the bottom). The right panel lists every captain, click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
+            '每个阶段都需所有船长确认才推进（看底部「🔄 全员就绪 n / N」）。右侧面板列出每位船长，点击可查看其存款、声望、货物、工匠与增益；互市阶段可与任意人自由交易，💬 聊天随时沟通。',
+            "Every phase advances only when every captain confirms (see the '🔄 Ready n / N' chip at the bottom). The right panel lists every captain, click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
           )}
         </p>
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>
@@ -90,11 +102,11 @@ export function OnboardingTour() {
           flexWrap: 'wrap',
         }}
       >
-        <button className="btn btn-success btn-lg" onClick={() => finish(false)}>
-          {tr('⚓ 我已了解，开始航行', "⚓ Got it, let's sail")}
-        </button>
         <button className="btn btn-gold btn-lg" onClick={() => finish(true)}>
           {tr('📖 先看完整手册', '📖 Read the full manual first')}
+        </button>
+        <button className="btn btn-success btn-lg" onClick={() => finish(false)}>
+          {tr('⚓ 我已了解，开始航行', "⚓ Got it, let's sail")}
         </button>
       </div>
     </>

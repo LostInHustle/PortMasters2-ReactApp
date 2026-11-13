@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { writeFileAtomic } from '../persistence/atomicWrite.js';
 import { generateSalt, hashPassword, verifyPassword } from './passwordHash.js';
 
-// Ported verbatim from PortMasters2/server.py UserStore (lines 1134-1182). created_at keeps its
-// snake_case spelling because it's a literal field of the on-disk users.json record, copied
+// Mirrors PortMasters2/server.py UserStore. created_at keeps its
+// snake_case spelling because it's a literal field of the on disk users.json record, copied
 // verbatim from the original as seed data, not cleaned up to camelCase.
 export interface UserRecord {
   salt: string;

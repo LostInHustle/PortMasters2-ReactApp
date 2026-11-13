@@ -11,7 +11,7 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_send_chat (lines 1567-1580).
+// Expected behavior derived manually from PortMasters2/server.py handle_send_chat.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -32,21 +32,23 @@ describe('handleSendChat', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('tells a partnerless sender they have no one to message', () => {
+  it('tells a sender with no session that they have no one to message', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
     handleSendChat(state, 'alice', 'hi');
     expect(alice.sent).toEqual([
-      { type: 'system_message', message: '你还没有游戏伙伴，无法发送消息' },
+      { type: 'system_message', message: '你还没有加入航程，无法发送消息' },
     ]);
   });
 
-  it('tells the sender when their partner is offline', () => {
+  it('tells the sender when everyone else is offline', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
     state.sessions.set('alice', SharedSession.createPair('alice', 'bob'));
     handleSendChat(state, 'alice', 'hi');
-    expect(alice.sent).toEqual([{ type: 'system_message', message: '对方已离线，无法发送消息' }]);
+    expect(alice.sent).toEqual([
+      { type: 'system_message', message: '其他玩家都已离线，无法发送消息' },
+    ]);
   });
 
   it('drops a message that is empty after trimming, without notifying anyone', () => {
@@ -61,7 +63,7 @@ describe('handleSendChat', () => {
     expect(sess.chatHistory).toEqual([]);
   });
 
-  it('trims, caps at 500 chars, records history, and forwards to the partner', () => {
+  it('trims, caps at 500 chars, records history, and forwards to the room', () => {
     const alice = new FakeSocket();
     const bob = new FakeSocket();
     state.online.set('alice', alice);

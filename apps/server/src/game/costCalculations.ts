@@ -15,7 +15,7 @@ import {
   type WorkerTypeId,
 } from '@pm2/shared';
 
-// Ported verbatim from PortMasters2/server.py has_module (line 554).
+// Mirrors PortMasters2/server.py has_module.
 export function hasModule(
   ctx: { equippedModules: readonly ShipModule[] },
   moduleId: ModuleId,
@@ -29,7 +29,7 @@ export interface TransportCostContext {
   equippedModules: readonly ShipModule[];
 }
 
-// Ported verbatim from PortMasters2/server.py calc_transport_cost (lines 515-529).
+// Mirrors PortMasters2/server.py calc_transport_cost.
 export function calcTransportCost(
   ctx: TransportCostContext,
   totalItems: number,
@@ -62,7 +62,7 @@ export interface VatContext {
   modifierFlags: BoonModifiers;
 }
 
-// Ported verbatim from PortMasters2/server.py calc_vat (lines 531-544).
+// Mirrors PortMasters2/server.py calc_vat.
 export function calcVat(ctx: VatContext, product: ProductId, sellingPrice: number): number {
   const recipe = RECIPES[product];
   let matCost = 0;
@@ -84,7 +84,7 @@ export interface IncomeTaxContext {
   modifierFlags: BoonModifiers;
 }
 
-// Ported verbatim from PortMasters2/server.py calc_income_tax (lines 546-552).
+// Mirrors PortMasters2/server.py calc_income_tax.
 export function calcIncomeTax(ctx: IncomeTaxContext, preTax: number): number {
   if (preTax <= 0) return 0;
   const rate = ctx.modifierFlags.incomeTaxOverride ?? 0.1;
@@ -99,10 +99,10 @@ export interface CardFinalCostContext {
   modifierFlags: BoonModifiers;
 }
 
-// The flat per-unit discount (boon or module) that targets one specific resource type inside a
+// The flat per unit discount (boon or module) that targets one specific resource type inside a
 // purchase card, e.g. Hemp Monopoly or Kiln Cellar knock a fixed amount off specific goods,
 // independent of the rest of the card. Shared by getCardFinalCost (the authoritative total a
-// purchase charges) and getCardResourceUnitPrices (the per-line price a card should display) so
+// purchase charges) and getCardResourceUnitPrices (the per line price a card should display) so
 // the two can never disagree about which goods are discounted or by how much.
 function flatItemDiscount(ctx: CardFinalCostContext, type: ItemId): number {
   let reduction = 0;
@@ -118,7 +118,7 @@ function flatItemDiscount(ctx: CardFinalCostContext, type: ItemId): number {
   return reduction;
 }
 
-// Ported verbatim from PortMasters2/server.py get_card_final_cost (lines 557-575).
+// Mirrors PortMasters2/server.py get_card_final_cost.
 export function getCardFinalCost(ctx: CardFinalCostContext, card: MarketCard): number {
   let cost = card.totalCost;
   if (ctx.modifierFlags.purchaseDiscount) {
@@ -133,8 +133,8 @@ export function getCardFinalCost(ctx: CardFinalCostContext, card: MarketCard): n
   return Math.max(0, cost);
 }
 
-// The per-unit price each resource line on a card actually costs once item-specific discounts
-// apply, in the same order as card.resources. Card-wide discounts (Merchant's Charm, Smuggler's
+// The per unit price each resource line on a card actually costs once item specific discounts
+// apply, in the same order as card.resources. Card wide discounts (Merchant's Charm, Smuggler's
 // Hold) are not attributable to a single line. They only show up in getCardFinalCost's total.
 export function getCardResourceUnitPrices(ctx: CardFinalCostContext, card: MarketCard): number[] {
   return card.resources.map((r) => Math.max(0, r.price - flatItemDiscount(ctx, r.type)));
@@ -156,7 +156,7 @@ export function effectiveWage(
   return wage;
 }
 
-// Ported from PortMasters2/server.py get_hire_cost. Hiring itself is free; this is the
+// Mirrors PortMasters2/server.py get_hire_cost. Hiring itself is free; this is the
 // affordability gate, so it has to be the wage the roster will actually be charged at Upkeep.
 export function getHireCost(
   ctx: { modifierFlags: BoonModifiers; equippedModules: readonly ShipModule[] },
@@ -165,7 +165,7 @@ export function getHireCost(
   return effectiveWage(ctx, workerType);
 }
 
-// Ported verbatim from PortMasters2/server.py escort_cost (lines 972-977).
+// Mirrors PortMasters2/server.py escort_cost.
 export function escortCost(ctx: { money: number; modifierFlags: BoonModifiers }): number {
   let fee = Math.max(ESCORT_COST_MIN, Math.trunc(ctx.money * ESCORT_COST_PCT));
   if (ctx.modifierFlags.escortDiscount) {

@@ -1,9 +1,9 @@
 import type { CustomerOrder } from '@pm2/shared';
 import type { SharedSession } from '../session/SharedSession.js';
 
-// Ported verbatim from PortMasters2/server.py handle_game_action's completeOrder branch
-// (lines 1673-1678): changed is set whenever the player is in the Artisans phase, regardless of
-// whether a matching, not-yet-completed order was actually found.
+// Mirrors PortMasters2/server.py handle_game_action's completeOrder branch: changed is set
+// whenever the player is in the Artisans phase, regardless of whether a matching, not yet
+// completed order was actually found.
 export function handleCompleteOrder(
   sess: SharedSession,
   slot: number,

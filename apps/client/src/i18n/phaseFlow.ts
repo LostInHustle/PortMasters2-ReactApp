@@ -2,7 +2,7 @@ import type { Phase } from '@pm2/shared';
 import type { Bilingual, Lang } from './LangContext.js';
 import { pf, tr } from './LangContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html PHASE_FLOW (lines 1608-1633):
+// Mirrors PortMasters2/PortMasters_online.html PHASE_FLOW:
 // metadata for the 8 phases of a round, so the phase name + goal + action hint are always
 // visible (recognition over recall).
 export interface PhaseFlowEntry {
@@ -88,11 +88,55 @@ export const PHASE_FLOW: PhaseFlowEntry[] = [
 ];
 
 const PHASE_INDEX = new Map<Phase, number>(PHASE_FLOW.map((p, i) => [p.key, i]));
+const PHASE_META = new Map<Phase, PhaseFlowEntry>(PHASE_FLOW.map((p) => [p.key, p]));
+
+export function phaseIndexOf(key: Phase): number | undefined {
+  return PHASE_INDEX.get(key);
+}
+
+export function phaseMeta(key: Phase): PhaseFlowEntry | undefined {
+  return PHASE_META.get(key);
+}
 
 export function phaseName(key: Phase, lang: Lang): string {
   if (key === 'endgame') return tr(lang, '航程结束', 'Voyage Complete');
   if (key === 'bankruptcy') return tr(lang, '破产清算', 'Bankrupt');
-  const idx = PHASE_INDEX.get(key);
-  const meta = idx === undefined ? undefined : PHASE_FLOW[idx];
+  const meta = phaseMeta(key);
   return meta ? pf(meta.name, lang) : tr(lang, '准备中', 'Preparing');
+}
+
+// The sky and the identity hue each phase wears. A round is one day at sea: first light for
+// Set Sail and Fortune, morning for Procure, noon for Barter, Artisans and Trade, dusk for
+// Upkeep and Shipyard, night for the endings. Kept identical to the single file build.
+const PHASE_SKY: Record<string, string> = {
+  0: 'dawn',
+  5: 'dawn',
+  1: 'morning',
+  trade: 'noon',
+  worker_mgmt: 'noon',
+  2: 'noon',
+  3: 'dusk',
+  4: 'dusk',
+  endgame: 'night',
+  bankruptcy: 'night',
+};
+const PHASE_HUE: Record<string, number> = {
+  0: 68,
+  5: 325,
+  1: 154,
+  trade: 40,
+  worker_mgmt: 305,
+  2: 282,
+  3: 261,
+  4: 90,
+  endgame: 132,
+  bankruptcy: 325,
+};
+
+export function phaseSky(key: Phase): string {
+  return PHASE_SKY[String(key)] ?? 'morning';
+}
+
+export function phaseHue(key: Phase): number {
+  return PHASE_HUE[String(key)] ?? 154;
 }

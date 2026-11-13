@@ -7,16 +7,15 @@ import type {
 } from '@pm2/shared';
 
 /** An invitation this player has received and not yet answered. */
-export interface PendingInvite {
+interface PendingInvite {
   from: string;
   difficulty: Difficulty;
 }
 
 /**
  * Everything the client knows about the current session, replacing the module globals the
- * prototype kept at PortMasters2/PortMasters_online.html lines 1807-1815. Lives in its own
- * module so the protocol dispatcher in sessionMessages.ts can name it without importing the
- * React provider that owns it.
+ * original prototype used. Lives in its own module so the protocol dispatcher in
+ * sessionMessages.ts can name it without importing the React provider that owns it.
  */
 export interface SessionState {
   currentUser: string | null;

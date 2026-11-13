@@ -9,7 +9,7 @@ import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { BrokerWhisper } from './BrokerWhisper.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html purchaseHTML (lines 2705-2755).
+// Mirrors PortMasters2/PortMasters_online.html purchaseHTML.
 export function ProcurePhase() {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();
@@ -28,15 +28,18 @@ export function ProcurePhase() {
   if (flags.hempPriceReduction) {
     discountChips.push({
       key: 'hp',
-      label: tr('🧶 麻布专营：麻布单价−2', '🧶 Hemp Monopoly: −2/unit on Hemp Cloth'),
+      label: tr(
+        '🧶 麻布专营：麻布单价降低2金币',
+        '🧶 Hemp Monopoly: Hemp Cloth costs 2 gold less per unit',
+      ),
     });
   }
   if (g.equippedModules.some((m) => m.id === 'kiln_cellar')) {
     discountChips.push({
       key: 'kc',
       label: tr(
-        '🔥 陶土窖：瓷土、铜矿单价−2',
-        '🔥 Kiln Cellar: −2/unit on Porcelain Clay & Copper Ore',
+        '🔥 陶土窖：瓷土、铜矿单价降低2金币',
+        '🔥 Kiln Cellar: Porcelain Clay and Copper Ore cost 2 gold less per unit',
       ),
     });
   }
@@ -44,18 +47,15 @@ export function ProcurePhase() {
     discountChips.push({
       key: 'fq',
       label: tr(
-        '🪪 蕃坊行会证：香料、珍珠单价−3',
-        '🪪 Foreign Quarter Guild Pass: −3/unit on Spices & Pearls',
+        '🪪 蕃坊行会证：香料、珍珠单价降低3金币',
+        '🪪 Foreign Quarter Guild Pass: Spices and Pearls cost 3 gold less per unit',
       ),
     });
   }
   if (g.equippedModules.some((m) => m.id === 'smugglers_hold')) {
     discountChips.push({
       key: 'sh',
-      label: tr(
-        '🏴‍☠️ 走私暗舱：采购成本实付85折',
-        "🏴‍☠️ Smuggler's Hold: purchases at ~85% of sticker price",
-      ),
+      label: tr('🏴‍☠️ 走私暗舱：采购成本实付85折', "🏴‍☠️ Smuggler's Hold: ~15% off purchases"),
     });
   }
 
@@ -113,7 +113,7 @@ export function ProcurePhase() {
                           <>{r.price}💰</>
                         )}
                         {r.materialDetails &&
-                          ` · ${tr('用料', 'uses')} ${tnames(r.materialDetails, lang)}`}
+                          `${tr(' · 用料', ', uses')} ${tnames(r.materialDetails, lang)}`}
                       </span>
                     </div>
                   );

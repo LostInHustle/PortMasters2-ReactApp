@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { handleDoMaintenance, handleHireEscort } from '../../src/actions/upkeepActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// doMaintenance/hireEscort branches (lines 1679-1692).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// doMaintenance/hireEscort branches.
 describe('handleDoMaintenance', () => {
   it('returns false outside phase 3 or once already ready', () => {
     const sess = SharedSession.createPair('alice', 'bob');

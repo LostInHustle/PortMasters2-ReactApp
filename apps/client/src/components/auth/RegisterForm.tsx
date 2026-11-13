@@ -9,9 +9,9 @@ interface RegisterFormProps {
   onShowLogin: () => void;
 }
 
-// Ported from PortMasters2/PortMasters_online.html register() (lines 1871-1897): the only
-// client-side check is password confirmation matching; everything else (length, uniqueness) is
-// validated server-side. register_result is handled here (not in SessionContext) since it only
+// Mirrors PortMasters2/PortMasters_online.html register(): the only
+// on the client check is password confirmation matching; everything else (length, uniqueness) is
+// validated on the server. register_result is handled here (not in SessionContext) since it only
 // ever affects this form: a toast, plus switching back to the login view on success.
 export function RegisterForm({ onShowLogin }: RegisterFormProps) {
   const { tr, lang } = useTranslate();
@@ -51,7 +51,7 @@ export function RegisterForm({ onShowLogin }: RegisterFormProps) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
-        placeholder={tr('密码（至少 6 位）', 'Password (6+ characters)')}
+        placeholder={tr('密码（6 到 128 位）', 'Password (6 to 128 characters)')}
         autoComplete="new-password"
       />
       <input
@@ -61,12 +61,14 @@ export function RegisterForm({ onShowLogin }: RegisterFormProps) {
         placeholder={tr('确认密码', 'Confirm password')}
         autoComplete="new-password"
       />
-      <button type="submit" className="btn btn-success btn-lg">
-        {tr('✅ 注册', '✅ Register')}
-      </button>
-      <button type="button" className="btn btn-lg" onClick={onShowLogin}>
-        {tr('← 返回登录', '← Back to Login')}
-      </button>
+      <div className="btn-pair">
+        <button type="button" className="btn btn-ghost btn-lg" onClick={onShowLogin}>
+          {tr('← 返回登录', '← Back to Login')}
+        </button>
+        <button type="submit" className="btn btn-success btn-lg">
+          {tr('✅ 注册', '✅ Register')}
+        </button>
+      </div>
     </form>
   );
 }

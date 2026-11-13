@@ -12,7 +12,7 @@ export interface EmperorMandateTemplate {
   resources: readonly EmperorMandateResource[];
 }
 
-// Ported verbatim from PortMasters2/server.py EMPEROR_MANDATE_TEMPLATES (lines 174-178).
+// Mirrors PortMasters2/server.py EMPEROR_MANDATE_TEMPLATES.
 // Ordered small -> large; the difficulty's "mandates" schedule (data/difficulties.ts) maps a
 // round number to an index into this array.
 export const EMPEROR_MANDATE_TEMPLATES: readonly EmperorMandateTemplate[] = [

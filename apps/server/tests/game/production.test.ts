@@ -16,7 +16,7 @@ function withModules(...ids: string[]): readonly ShipModule[] {
   return ids.map((id) => ({ id, name: id, icon: '', desc: '' }));
 }
 
-// Expected values hand-derived from pay_wages (server.py lines 937-956): every worker type
+// Expected values derived manually from pay_wages: every worker type
 // counts (not just weaver/master/sachet_maker), each at WAGES[type] per head.
 describe('calcTotalWages', () => {
   it('is 0 with no hired workers', () => {
@@ -107,7 +107,7 @@ describe('payWages', () => {
     expect(logs).toHaveLength(1);
   });
 
-  it('is a no-op when nobody is hired', () => {
+  it('is a no operation when nobody is hired', () => {
     const ctx = {
       workers: emptyRoster(),
       equippedModules: [],

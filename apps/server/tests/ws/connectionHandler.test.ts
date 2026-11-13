@@ -11,7 +11,7 @@ import {
 import { SharedSession } from '../../src/session/SharedSession.js';
 import { handleDisconnect, processMessage } from '../../src/ws/connectionHandler.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handler (lines 1736-1820).
+// Expected behavior derived manually from PortMasters2/server.py handler.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
@@ -73,7 +73,7 @@ describe('connectionHandler', () => {
       expect(sent.token.length).toBeGreaterThan(0);
     });
 
-    it('refuses a second login for an already-online account', () => {
+    it('refuses a second login for an already online account', () => {
       state.users.register('alice', 'longenough');
       const ws1 = new FakeSocket();
       processMessage(state, ws1, null, {
@@ -93,7 +93,7 @@ describe('connectionHandler', () => {
       expect(state.online.get('alice')).toBe(ws1);
     });
 
-    it('on login resumes an existing session: notifies the partner and pushes session state', () => {
+    it('on login resumes an existing session: notifies the other captains and pushes session state', () => {
       state.users.register('alice', 'longenough');
       const bobWs = new FakeSocket();
       state.online.set('bob', bobWs);
@@ -133,7 +133,7 @@ describe('connectionHandler', () => {
         return sent.token;
       }
 
-      it('silently re-identifies a fresh connection holding a valid token', () => {
+      it('silently identifies again a fresh connection holding a valid token', () => {
         const token = loginAndGetToken(state, 'alice');
         state.online.delete('alice'); // the old connection is gone, as it would be by now
 
@@ -149,7 +149,7 @@ describe('connectionHandler', () => {
         });
       });
 
-      it('fails for an unknown token, with no password-style error message', () => {
+      it('fails for an unknown token, with no password style error message', () => {
         const ws = new FakeSocket();
         const result = processMessage(state, ws, null, {
           action: 'resume_token',
@@ -258,7 +258,7 @@ describe('connectionHandler', () => {
   });
 
   describe('handleDisconnect', () => {
-    it('does nothing for a not-logged-in or already-superseded connection', () => {
+    it('does nothing for a connection that is not logged in or is superseded', () => {
       const ws = new FakeSocket();
       expect(() => handleDisconnect(state, ws, null)).not.toThrow();
 
@@ -285,7 +285,7 @@ describe('connectionHandler', () => {
       expect(bobWs.sent).toContainEqual({ type: 'invite_cancelled', from: 'alice' });
     });
 
-    it('notifies an online partner and pushes session state, without dropping the session', () => {
+    it('notifies other online captains and pushes session state, without dropping the session', () => {
       const aliceWs = new FakeSocket();
       const bobWs = new FakeSocket();
       state.online.set('alice', aliceWs);

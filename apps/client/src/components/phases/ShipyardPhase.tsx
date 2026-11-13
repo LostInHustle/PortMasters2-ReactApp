@@ -5,7 +5,7 @@ import { Modules } from '../panels/FleetCard.js';
 import { ModuleDraft } from './ModuleDraft.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html shipyardHTML (lines 3129-3167).
+// Mirrors PortMasters2/PortMasters_online.html shipyardHTML.
 export function ShipyardPhase() {
   const { tr } = useTranslate();
   const { serverState } = useSession();
@@ -26,13 +26,13 @@ export function ShipyardPhase() {
           <h3>{tr('🚢 旗舰档案', '🚢 Flagship Profile')}</h3>
           <div className="stat-row" style={{ fontSize: 13 }}>
             <span>{tr('当前等级', 'Current level')}</span>
-            <strong>Lv.{g.shipLevel} / 3</strong>
+            <strong>{tr(`${g.shipLevel} 级`, `Lv.${g.shipLevel}`)} / 3</strong>
           </div>
           <div className="stat-row" style={{ fontSize: 13 }}>
             <span
               className="tip"
               data-tip={tr(
-                '每单运费 = max(5, 件数×2 − 此减免)',
+                '每单运费 = 件数×2 − 此减免，最低 5 金币',
                 'Shipping per order = max(5, items ×2 − this discount)',
               )}
             >
@@ -75,16 +75,19 @@ export function ShipyardPhase() {
               )}
             >
               {tr(
-                `⚓ 升级商船至 Lv.${g.shipLevel + 1}（${upgCost}💰）`,
+                `⚓ 升级商船至 ${g.shipLevel + 1} 级（${upgCost}💰）`,
                 `⚓ Upgrade Ship to Lv.${g.shipLevel + 1} (${upgCost}💰)`,
               )}
               <span className="btn-sub">
-                {tr('运费/单再 −5 金币 · +1 模块槽', 'Shipping −5 gold/order · +1 module slot')}
+                {tr(
+                  '每单运费再减5金币 · 增加1个模块槽',
+                  'Shipping 5 gold/order less, one more module slot',
+                )}
               </span>
             </button>
           ) : (
             <span className="chip green">
-              {tr('⚓ 旗舰已满级 Lv.3', '⚓ Flagship at max level (Lv.3)')}
+              {tr('⚓ 旗舰已满级（3 级）', '⚓ Flagship at max level (Lv.3)')}
             </span>
           )}
           {!g.draftOpen && (
@@ -104,7 +107,7 @@ export function ShipyardPhase() {
                         "View this round's fixed 3 module options and install one",
                       )
                   : tr(
-                      '商船升至 Lv.1 后解锁模块槽位，方可选择船舶模块',
+                      '商船升至 1 级后解锁模块槽位，方可选择船舶模块',
                       'Upgrade your ship to Lv.1 to unlock module slots before choosing',
                     )
               }
@@ -129,11 +132,11 @@ export function ShipyardPhase() {
           <button
             className="btn btn-success btn-lg"
             onClick={() => send({ action: 'ready_for_next_phase' })}
-            title={tr('全员确认后开始下一航程', 'The next voyage begins once everyone confirms')}
+            title={tr('全员确认后开始下一回合', 'The next round begins once everyone confirms')}
           >
-            {tr('⏭️ 结束本航程', '⏭️ End This Voyage')}
+            {tr('⏭️ 结束本回合', '⏭️ End Round')}
             <span className="btn-sub">
-              {tr('全员确认后开启下一程', 'Advances when everyone confirms')}
+              {tr('全员确认后开启下一回合', 'Advances when everyone confirms')}
             </span>
           </button>
         </div>

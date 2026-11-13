@@ -13,7 +13,7 @@ export interface MonsoonState {
   pirateRisk: number;
 }
 
-// Ported verbatim from PortMasters2/server.py MONSOON_TIER0 (lines 205-250).
+// Mirrors PortMasters2/server.py MONSOON_TIER0.
 export const MONSOON_TIER0 = [
   {
     id: 'spring_current',
@@ -61,7 +61,7 @@ export const MONSOON_TIER0 = [
   },
 ] as const satisfies readonly MonsoonState[];
 
-// Ported verbatim from PortMasters2/server.py MONSOON_TIER1 (lines 252-275).
+// Mirrors PortMasters2/server.py MONSOON_TIER1.
 export const MONSOON_TIER1 = [
   {
     id: 'fujian_kiln_smoke',
@@ -87,7 +87,7 @@ export const MONSOON_TIER1 = [
   },
 ] as const satisfies readonly MonsoonState[];
 
-// Ported verbatim from PortMasters2/server.py MONSOON_TIER2 (lines 277-300).
+// Mirrors PortMasters2/server.py MONSOON_TIER2.
 export const MONSOON_TIER2 = [
   {
     id: 'srivijaya_spice_breeze',

@@ -5,7 +5,7 @@ import { useSession } from '../../state/SessionContext.js';
 import { useWs } from '../../ws/WsContext.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html boonDraftHTML (lines 2680-2703):
+// Mirrors PortMasters2/PortMasters_online.html boonDraftHTML:
 // the Navigator's Compass deals 4 random Fortunes independently per player, so the two captains
 // see different sets.
 export function FortunePhase() {

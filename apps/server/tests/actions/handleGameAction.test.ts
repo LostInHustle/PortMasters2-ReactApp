@@ -11,8 +11,8 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's top-level
-// guards (lines 1583-1596, 1732-1733): no session is a silent no-op, a finished/bankrupt player
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's top level
+// guards: no session is a silent no operation, a finished/bankrupt player
 // may only join_game or restart, and a "state" broadcast fires only when something changed.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
@@ -37,6 +37,15 @@ describe('handleGameAction', () => {
   it('silently ignores a player with no session', () => {
     const alice = new FakeSocket();
     state.online.set('alice', alice);
+    expect(() => handleGameAction(state, 'alice', { action: 'join_game' })).not.toThrow();
+    expect(alice.sent).toEqual([]);
+  });
+
+  it('silently ignores a player whose room has not started', () => {
+    const alice = new FakeSocket();
+    state.online.set('alice', alice);
+    state.sessions.set('alice', new SharedSession('alice'));
+
     expect(() => handleGameAction(state, 'alice', { action: 'join_game' })).not.toThrow();
     expect(alice.sent).toEqual([]);
   });
@@ -78,9 +87,13 @@ describe('handleGameAction', () => {
 
     handleGameAction(state, 'alice', { action: 'join_game' });
     expect(alice.sent).toHaveLength(1);
+
+    handleGameAction(state, 'alice', { action: 'restart' });
+    expect(sess.games[0]!.money).toBe(100);
+    expect((alice.sent[1] as { type: string }).type).toBe('state');
   });
 
-  it('routes a real action end-to-end (startBoon) through to a phase change', () => {
+  it('routes a real action end to end (startBoon) through to a phase change', () => {
     const alice = new FakeSocket();
     const bob = new FakeSocket();
     state.online.set('alice', alice);

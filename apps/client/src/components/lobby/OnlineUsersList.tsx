@@ -1,12 +1,13 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useModal } from '../modal/ModalContext.js';
+import { Medal } from '../common/Medal.js';
 import { InviteComposer } from './InviteComposer.js';
 
-// Ported from PortMasters2/PortMasters_online.html renderOnlineUsers (lines 2064-2093). The
-// original tracks a separate inviteStatus map per user; since the server only ever allows one
-// outstanding invite per sender, "pending" here is just "this user is the current lastInviteTo"
-//, an equivalent, simpler derivation, not a behavior change.
+// Mirrors PortMasters2/PortMasters_online.html renderOnlineUsers. The original tracks a separate
+// inviteStatus map per user. Since the server only ever allows one outstanding invite per sender,
+// "pending" here is just "this user is the current lastInviteTo", an equivalent, simpler
+// derivation, not a behavior change.
 export function OnlineUsersList() {
   const { tr } = useTranslate();
   const { onlineUsers, lastInviteTo } = useSession();
@@ -28,8 +29,9 @@ export function OnlineUsersList() {
       {onlineUsers.map((user) => (
         <div key={user} className="online-user-item">
           <span className="u-name">
-            <span className="dot on" />
+            <Medal name={user} small />
             {user}
+            <span className="dot on" />
           </span>
           {user === lastInviteTo ? (
             <button className="btn btn-grey" disabled>
@@ -39,8 +41,8 @@ export function OnlineUsersList() {
             <button
               className="btn btn-success"
               title={tr(
-                '邀请该玩家加入双人航程（每分钟限一次，60秒内有效）',
-                'Invite this player to a shared voyage (once per minute, valid for 60s)',
+                '邀请该玩家共启一段航程（每分钟限一次，60秒内有效）',
+                'Invite this player to a voyage (once per minute, valid for 60s)',
               )}
               onClick={() => openModal(<InviteComposer to={user} />)}
             >

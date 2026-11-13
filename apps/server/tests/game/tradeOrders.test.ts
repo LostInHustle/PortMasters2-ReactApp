@@ -9,10 +9,10 @@ import {
   type TradeGame,
 } from '../../src/game/tradeOrders.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py sanitize_trade_items/
-// create_trade_order/accept_trade/reject_trade (lines 1193-1441).
+// Expected behavior derived manually from PortMasters2/server.py sanitize_trade_items/
+// create_trade_order/accept_trade/reject_trade.
 describe('sanitizeTradeItems', () => {
-  it('keeps well-formed entries: a known resource/product or gold, positive integer quantity', () => {
+  it('keeps well formed entries: a known resource/product or gold, positive integer quantity', () => {
     expect(
       sanitizeTradeItems([
         { type: '麻布', quantity: 3 },
@@ -24,7 +24,7 @@ describe('sanitizeTradeItems', () => {
     ]);
   });
 
-  it('drops the negative-quantity exploit, zero, non-integers, unknown types, and booleans', () => {
+  it('drops the negative quantity exploit, zero, nonintegers, unknown types, and booleans', () => {
     expect(
       sanitizeTradeItems([
         { type: '麻布', quantity: -5 },
@@ -39,7 +39,7 @@ describe('sanitizeTradeItems', () => {
     ).toEqual([]);
   });
 
-  it('returns empty for a non-array input', () => {
+  it('returns empty for a nonarray input', () => {
     expect(sanitizeTradeItems('not an array')).toEqual([]);
     expect(sanitizeTradeItems(undefined)).toEqual([]);
   });
@@ -161,7 +161,7 @@ function makeGame(money: number, inventory: Partial<Record<ItemId, number>> = {}
 }
 
 describe('acceptTrade', () => {
-  it('swaps sell-for-buy between seller and buyer on success', () => {
+  it('swaps sell for buy between seller and buyer on success', () => {
     const seller = makeGame(100, { 麻布: 10 } as Record<ItemId, number>);
     const buyer = makeGame(50, { 丝绸: 2, 麻布: 0 } as Record<ItemId, number>);
     const order: TradeOrder = {
@@ -210,7 +210,7 @@ describe('acceptTrade', () => {
     expect(acceptTrade(ctx, 'trade_1', 1)).toBe(false);
   });
 
-  it('rejects a self-accept (buyer slot equals seller slot) and an unknown order id', () => {
+  it('rejects a self accept (buyer slot equals seller slot) and an unknown order id', () => {
     const seller = makeGame(100, { 麻布: 10 } as Record<ItemId, number>);
     const buyer = makeGame(50);
     const order: TradeOrder = {

@@ -1,13 +1,13 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useToast } from '../../state/ToastContext.js';
 
-// Ported from PortMasters2/PortMasters_online.html's toast stack element (pushToast): one
+// Mirrors PortMasters2/PortMasters_online.html's toast stack element (pushToast): one
 // stack pinned to the corner, each entry fading out before removal. A toast carrying an onClick
 // (e.g. a chat alert) also acts as a button: clicking it runs the action and dismisses it.
 //
-// Every toast carries its own close button, and a burst of them gets a "Clear all" control.
-// Previously only toasts that happened to have an onClick could be cleared, so an ordinary log
-// or error notice simply sat in the corner blocking the view until its timer ran out.
+// Every toast carries its own close button, and a burst of them gets a "Clear all" control, so
+// an ordinary log or error notice can be cleared instead of sitting in the corner blocking the
+// view until its timer runs out.
 export function ToastStack() {
   const { tr } = useTranslate();
   const { toasts, dismissToast, dismissAllToasts } = useToast();

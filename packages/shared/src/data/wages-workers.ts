@@ -1,5 +1,5 @@
-// Ported verbatim from PortMasters2/server.py WORKER_TYPES_BACKEND/WORKER_ATTR/
-// WORKER_IDS_TIER0/1/2/WAGES (lines 333-348).
+// Mirrors PortMasters2/server.py WORKER_TYPES_BACKEND/WORKER_ATTR/
+// WORKER_IDS_TIER0/1/2/WAGES.
 
 export const WORKER_TYPES_BACKEND = [
   { id: 'weaver', attr: 'weavers' },

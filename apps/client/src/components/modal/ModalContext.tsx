@@ -15,11 +15,10 @@ interface ModalContextValue {
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showModal/closeModal
-// (lines 3992-4002): a single generic dialog, closed by its × button, by clicking the overlay
-// outside the box, or by Escape (wired centrally in useKeyboardShortcuts, since the original's
-// Escape handler checks modal/spectate/chat in a fixed priority order, not three independent
-// listeners).
+// Mirrors PortMasters2/PortMasters_online.html showModal/closeModal: a single generic dialog,
+// closed by its × button, by clicking the overlay outside the box, or by Escape (wired centrally
+// in useKeyboardShortcuts, since the original's Escape handler checks modal/spectate/chat in a
+// fixed priority order, not three independent listeners).
 //
 // Invariant worth keeping: the overlay and the box belong to this provider, and a dialog's own
 // content is held as an element in `modal`. A dialog that tracks its own state (the difficulty
@@ -33,8 +32,8 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const { tr } = useTranslate();
   const [modal, setModal] = useState<ModalState | null>(null);
 
-  // Memoized so consumers (e.g. GameView's onboarding-tour effect) can safely depend on these
-  // without re-firing every time this provider re-renders for an unrelated reason.
+  // Memoized so consumers (e.g. GameView's onboarding tour effect) can safely depend on these
+  // without firing again every time this provider renders for an unrelated reason.
   const openModal = useCallback(
     (content: ReactNode, wide = false) => setModal({ content, wide }),
     [],

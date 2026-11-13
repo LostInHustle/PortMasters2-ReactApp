@@ -4,9 +4,9 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useModal } from '../modal/ModalContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html showInviteModal/respondInvite
-// (lines 2155-2186): shown through the same generic modal system as the manual and the invite
-// composer, not as a permanent lobby fixture. The effect's cleanup closes the modal whenever
+// Mirrors PortMasters2/PortMasters_online.html showInviteModal/respondInvite. It is shown through
+// the same generic modal system as the manual and the invite composer, not as a permanent lobby
+// fixture. The effect's cleanup closes the modal whenever
 // pendingInviteFrom clears for any reason (accepted, declined, or the original sender's
 // invite_cancelled arriving), without ever touching a modal opened for something unrelated.
 export function useInviteReceivedModal(): void {
@@ -67,11 +67,11 @@ function InviteReceivedContent({
           justifyContent: 'center',
         }}
       >
-        <button className="btn btn-success btn-lg" onClick={() => respondInvite(true)}>
-          {tr('✅ 同意并接受', '✅ Agree and Accept')}
-        </button>
         <button className="btn btn-danger btn-lg" onClick={() => respondInvite(false)}>
           {tr('❌ 婉拒', '❌ Decline')}
+        </button>
+        <button className="btn btn-success btn-lg" onClick={() => respondInvite(true)}>
+          {tr('✅ 同意并接受', '✅ Agree and Accept')}
         </button>
       </div>
     </>

@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useSession } from '../../state/SessionContext.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html appendChatMessage
-// (lines 2224-2231): each bubble is "sent" or "received" depending on who wrote it, the sender's
-// name labels every received bubble, and the list auto-scrolls to the newest message.
+// Mirrors PortMasters2/PortMasters_online.html appendChatMessage: each bubble is "sent" or
+// "received" depending on who wrote it, the sender's name labels every received bubble, and the
+// list scrolls to the newest message automatically.
 export function ChatMessageList() {
   const { chatHistory, currentUser } = useSession();
   const ref = useRef<HTMLDivElement>(null);

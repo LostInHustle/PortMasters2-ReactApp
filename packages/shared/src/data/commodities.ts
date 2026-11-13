@@ -9,7 +9,7 @@ export interface Commodity {
   basePrice: PriceRange;
 }
 
-// Ported verbatim from PortMasters2/server.py COMMODITIES (lines 315-323).
+// Mirrors PortMasters2/server.py COMMODITIES.
 export const COMMODITIES: Record<ResourceId, Commodity> = {
   麻布: { ports: ['泉州港', '宁波港'], basePrice: [3, 6] },
   丝绸: { ports: ['杭州港', '扬州港'], basePrice: [6, 10] },
@@ -20,7 +20,7 @@ export const COMMODITIES: Record<ResourceId, Commodity> = {
   珍珠: { ports: ['广州港', '三佛齐港'], basePrice: [16, 24] },
 };
 
-// Ported verbatim from PortMasters2/server.py PRODUCT_PRICES (lines 325-330).
+// Mirrors PortMasters2/server.py PRODUCT_PRICES.
 export const PRODUCT_PRICES: Record<ProductId, PriceRange> = {
   麻衣: [30, 42],
   布衣: [50, 65],
@@ -32,7 +32,7 @@ export const PRODUCT_PRICES: Record<ProductId, PriceRange> = {
   珠链: [125, 160],
 };
 
-// Ported verbatim from PortMasters2/server.py RESOURCE_PROBS (line 332).
+// Mirrors PortMasters2/server.py RESOURCE_PROBS.
 export const RESOURCE_PROBS: Record<ResourceId, number> = {
   麻布: 0.3,
   丝绸: 0.26,

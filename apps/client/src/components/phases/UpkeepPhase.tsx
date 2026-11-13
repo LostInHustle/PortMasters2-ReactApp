@@ -4,7 +4,7 @@ import { useWs } from '../../ws/WsContext.js';
 import { EnvironmentBanner } from '../panels/EnvironmentBanner.js';
 import { PhaseBrief } from './PhaseBrief.js';
 
-// Ported verbatim from PortMasters2/PortMasters_online.html maintenanceHTML (lines 3085-3127).
+// Mirrors PortMasters2/PortMasters_online.html maintenanceHTML.
 export function UpkeepPhase() {
   const { tr } = useTranslate();
   const { serverState } = useSession();
@@ -84,13 +84,13 @@ export function UpkeepPhase() {
           <div className="section-hint">
             {tr(
               <>
-                本程海盗袭扰概率为 <strong>{riskPct}%</strong>
-                （含天象与可疑牙行的影响），若触发将损失当前金币的 <strong>{lossPct}%</strong>
+                本回合海盗袭扰概率为 <strong>{riskPct}%</strong>
+                （含季风与可疑牙行的影响），若触发将损失当前金币的 <strong>{lossPct}%</strong>
                 （按现有现金约为 {projectedLoss} 金币）。护航费用按当前财富计算，本次为{' '}
-                <strong>{escortCost}</strong> 金币，可完全免疫本次结算的海盗 RNG。
+                <strong>{escortCost}</strong> 金币，可完全免疫本次结算的海盗随机事件。
               </>,
               <>
-                This voyage&apos;s pirate raid chance is <strong>{riskPct}%</strong> (weather plus
+                This round&apos;s pirate raid chance is <strong>{riskPct}%</strong> (monsoon plus
                 any shady brokers); if it lands you lose <strong>{lossPct}%</strong> of your gold
                 (about {projectedLoss} gold at your current balance). The escort fee scales with
                 your wealth, <strong>{escortCost}</strong> gold right now, and fully neutralizes
@@ -104,7 +104,7 @@ export function UpkeepPhase() {
             onClick={() => send({ action: 'hireEscort' })}
             title={
               g.pirate_immunity
-                ? tr('本程已获得护航保护', 'Escort protection is already active')
+                ? tr('本回合已获得护航保护', 'Escort protection is already active')
                 : canEscort
                   ? tr(
                       '支付金币，免疫本次结算的海盗事件',

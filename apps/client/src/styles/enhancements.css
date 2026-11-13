@@ -1,13 +1,13 @@
-/* Owner-requested UX enhancements layered on top of the verbatim-ported global.css.
-   Kept in a separate file (imported after global.css in main.tsx) so the faithful port stays
-   pristine and these deliberate improvements are easy to review or revert. */
+/* UX enhancements layered on top of the global.css port, kept in a separate file (imported after
+   global.css in main.tsx) so the faithful port stays pristine and these deliberate improvements
+   are easy to review or revert. */
 
-/* Bug 1: make button feedback obvious.
-   The ported base style's press is a subtle scale(.97); on screen a click felt unacknowledged,
-   since the confirming toast appears in the far top-right corner. This deepens the press so the
-   button itself reacts unmistakably the instant it is clicked (a firm push-down with a darker,
-   inset look), regardless of where the user's eyes are. A focus ring is added for keyboard and
-   click clarity. Loaded after global.css, so these override the base :active. */
+/* Button feedback. The ported base style's press is a subtle scale(.97); on screen a click felt
+   unacknowledged, since the confirming toast appears in the far top right corner. This deepens
+   the press so the button itself reacts unmistakably the instant it is clicked (a firm press
+   down with a darker, inset look), regardless of where the user's eyes are. A focus ring is
+   added for keyboard and click clarity. Loaded after global.css, so these override the base
+   :active. */
 .btn:active:not(:disabled) {
   transform: translateY(1px) scale(0.94);
   filter: brightness(0.92) saturate(1.12);
@@ -22,8 +22,8 @@
     0 3px 10px var(--btn-shadow);
 }
 
-/* Bug 3: a chat alert toast is clickable and opens the chat window. Show that affordance so it
-   reads as an actionable alert rather than a passive notice. */
+/* Chat alert toast. It is clickable and opens the chat window, so show that affordance and let
+   it read as an actionable alert rather than a passive notice. */
 .notification.clickable {
   cursor: pointer;
 }

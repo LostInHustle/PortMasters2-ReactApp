@@ -8,9 +8,8 @@ import {
 } from '../../src/actions/shipyardActions.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
 // upgradeShip/draftModules/equipModule/cancelModuleDraft/rerollModuleDraft branches
-// (lines 1693-1721).
 describe('handleUpgradeShip', () => {
   it('returns false outside phase 4 or once shipLevel hits the cap', () => {
     const sess = SharedSession.createPair('alice', 'bob');
@@ -68,14 +67,14 @@ describe('handleEquipModule', () => {
     expect(handleEquipModule(sess, 0, { choiceIndex: 0 })).toBe(false);
   });
 
-  it('returns true within phase 4 even with an out-of-range choiceIndex', () => {
+  it('returns true within phase 4 even with a choiceIndex out of range', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 4;
     expect(handleEquipModule(sess, 0, { choiceIndex: 99 })).toBe(true);
     expect(sess.games[0]!.equippedModules).toHaveLength(0);
   });
 
-  it('equips the chosen draft module, ignoring an out-of-range swapIndex', () => {
+  it('equips the chosen draft module, ignoring a swapIndex out of range', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[0]!.phase = 4;
     sess.games[0]!.shipLevel = 1;

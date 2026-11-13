@@ -12,8 +12,7 @@ interface WorkerListProps {
   tasks: readonly ProductId[];
 }
 
-// Ported verbatim from PortMasters2/PortMasters_online.html workerListHTML/fireWorkerConfirm
-// (lines 2981-3018).
+// Mirrors PortMasters2/PortMasters_online.html workerListHTML/fireWorkerConfirm
 export function WorkerList({ type, list, tasks }: WorkerListProps) {
   const { tr, lang } = useTranslate();
   const { serverState } = useSession();
@@ -42,7 +41,8 @@ export function WorkerList({ type, list, tasks }: WorkerListProps) {
       {list.map((w, i) => (
         <div className="worker-row" key={i}>
           <span className="w-state">
-            {name} {i + 1} ·{' '}
+            {name} {i + 1}
+            {tr(' · ', ', ')}
             {w.task ? (
               <span className="busy">
                 {tr(`⚙️ 制作 ${w.task} 中`, `⚙️ crafting ${tn(w.task, lang)}`)}

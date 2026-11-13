@@ -6,9 +6,9 @@ import {
 } from '../../src/game/pirateHazard.js';
 import type { Rng } from '../../src/game/randomUtil.js';
 
-// A fixed-value Rng substitutes for live randomness so raid outcomes are asserted exactly
-// rather than against Math.random(), the seam the plan calls for (no Python-side equivalent
-// to cross-check against here, since this is a Node-only testing affordance).
+// A fixed value Rng substitutes for live randomness so raid outcomes are asserted exactly
+// rather than against Math.random(), the injectable seam (no Python side equivalent
+// to cross check against here, since this is a Node only testing affordance).
 function fixedRng(value: number): Rng {
   return {
     random: () => value,
@@ -20,7 +20,7 @@ function fixedRng(value: number): Rng {
 }
 
 describe('pirateThreat / effectivePirateRisk', () => {
-  it('threat is the monsoon pirateRisk plus any broker tip-off risk', () => {
+  it('threat is the monsoon pirateRisk plus any broker tip off risk', () => {
     const ctx = { monsoonState: { pirateRisk: 0.1 } as never, brokerPirateRisk: 0.2 };
     expect(pirateThreat(ctx)).toBeCloseTo(0.3);
   });
@@ -48,7 +48,7 @@ describe('pirateThreat / effectivePirateRisk', () => {
   });
 });
 
-// Expected values hand-derived from resolve_pirate_hazard (server.py lines 1011-1023):
+// Expected values derived manually from resolve_pirate_hazard:
 // a raid lands iff rng.random() < effectivePirateRisk(); loss = trunc(money * pirateLossPct(...)).
 describe('resolvePirateHazard', () => {
   function makeCtx() {
@@ -60,7 +60,6 @@ describe('resolvePirateHazard', () => {
       equippedModules: [],
       money: 100,
       roundCosts: 0,
-      totalCosts: 0,
       difficulty: 'easy' as const,
       currentRound: 1,
       maxRounds: 8,
@@ -80,12 +79,11 @@ describe('resolvePirateHazard', () => {
     resolvePirateHazard(ctx, fixedRng(0.05));
     expect(ctx.money).toBe(85); // 100 - trunc(100 * 0.15)
     expect(ctx.roundCosts).toBe(15);
-    expect(ctx.totalCosts).toBe(15);
   });
 
   it('immunity skips the roll entirely and leaves money untouched', () => {
     const ctx = { ...makeCtx(), pirateImmunity: true };
-    resolvePirateHazard(ctx, fixedRng(0)); // even a guaranteed-hit roll must not apply
+    resolvePirateHazard(ctx, fixedRng(0)); // even a roll that is certain to hit must not apply
     expect(ctx.money).toBe(100);
   });
 });

@@ -5,7 +5,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   endGameSession,
   handleEndSessionVote,
-  handleJoinGame,
   handleReadyForNextPhase,
   handleRestart,
 } from '../../src/actions/sessionActions.js';
@@ -17,20 +16,14 @@ import {
 } from '../../src/lobby/onlineRegistry.js';
 import { SharedSession } from '../../src/session/SharedSession.js';
 
-// Expected behavior hand-derived from PortMasters2/server.py handle_game_action's
-// join_game/ready_for_next_phase/restart branches (lines 1597-1598, 1616-1621, 1722-1730).
+// Expected behavior derived manually from PortMasters2/server.py handle_game_action's
+// join_game/ready_for_next_phase/restart branches.
 class FakeSocket implements Sendable {
   sent: unknown[] = [];
   send(data: string): void {
     this.sent.push(JSON.parse(data));
   }
 }
-
-describe('handleJoinGame', () => {
-  it('always returns true', () => {
-    expect(handleJoinGame()).toBe(true);
-  });
-});
 
 describe('handleReadyForNextPhase', () => {
   it('returns false outside the gated phases or once already ready', () => {
@@ -68,41 +61,52 @@ describe('handleRestart', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("refuses to restart while the partner's game is still in progress", () => {
-    const alice = new FakeSocket();
-    state.online.set('alice', alice);
-    const sess = SharedSession.createPair('alice', 'bob');
-    expect(handleRestart(state, sess, 0, 'alice')).toBe(false);
-    expect(alice.sent).toEqual([
-      { type: 'system_message', message: '需等待对方完成本局后才能重新起航' },
-    ]);
-  });
-
-  it("restarts once the partner's game has ended, notifying the partner", () => {
+  it('refuses a non host restart while another game is still in progress', () => {
     const bob = new FakeSocket();
     state.online.set('bob', bob);
     const sess = SharedSession.createPair('alice', 'bob');
-    sess.games[0]!.money = 9999;
-    sess.games[1]!.gameOver = true;
-
-    expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
-    expect(sess.games[0]!.money).toBe(100);
+    expect(handleRestart(state, sess, 1, 'bob')).toBe(false);
     expect(bob.sent).toEqual([
-      { type: 'system_message', message: '对方重新开始了游戏，双方进度已重置' },
+      { type: 'system_message', message: '需等待其他玩家完成本局后才能重新起航' },
     ]);
   });
 
-  it('in a 3-player room, requires every other player (not just one) to have finished', () => {
+  it('lets the host restart at any time, resetting everyone at the same difficulty', () => {
+    const bob = new FakeSocket();
+    state.online.set('bob', bob);
+    const sess = SharedSession.createPair('alice', 'bob', 'hard');
+    sess.games[0]!.money = 9999;
+    sess.games[1]!.money = 7777;
+    sess.ready.add(0);
+    sess.endVotes.add(1);
+
+    expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
+    expect(sess.difficulty).toBe('hard');
+    expect(sess.games.map((g) => g.money)).toEqual([100, 100]);
+    expect(sess.ready.size).toBe(0);
+    expect(sess.endVotes.size).toBe(0);
+    expect(bob.sent).toEqual([
+      { type: 'system_message', message: '其他玩家重新开始了游戏，本局进度已重置' },
+    ]);
+  });
+
+  it('lets a non host restart only once every other player has finished, notifying the others', () => {
+    const alice = new FakeSocket();
+    state.online.set('alice', alice);
     const sess = new SharedSession('alice', 'easy', 3);
     sess.addPlayer('bob');
     sess.addPlayer('carol');
     sess.start();
-    sess.games[1]!.gameOver = true;
-    // carol (slot 2) hasn't finished yet, so alice still can't restart.
-    expect(handleRestart(state, sess, 0, 'alice')).toBe(false);
+    sess.games[0]!.gameOver = true;
+    // carol (slot 2) hasn't finished yet, so bob still can't restart.
+    expect(handleRestart(state, sess, 1, 'bob')).toBe(false);
+    expect(alice.sent).toEqual([]);
 
     sess.games[2]!.gameOver = true;
-    expect(handleRestart(state, sess, 0, 'alice')).toBe(true);
+    expect(handleRestart(state, sess, 1, 'bob')).toBe(true);
+    expect(alice.sent).toEqual([
+      { type: 'system_message', message: '其他玩家重新开始了游戏，本局进度已重置' },
+    ]);
   });
 });
 
@@ -127,7 +131,7 @@ describe('handleEndSessionVote / endGameSession', () => {
     expect(sess.endVoteComplete()).toBe(true);
   });
 
-  it('does not auto-count a bankrupt/finished player, everyone must vote explicitly', () => {
+  it('does not count automatically a bankrupt/finished player, everyone must vote explicitly', () => {
     const sess = SharedSession.createPair('alice', 'bob');
     sess.games[1]!.gameOver = true;
     sess.games[1]!.bankrupt = true;

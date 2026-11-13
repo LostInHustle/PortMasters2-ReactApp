@@ -1,4 +1,4 @@
-// Ported verbatim from PortMasters2/server.py RESOURCES_TIER0/1/2 (lines 33-36).
+// Mirrors PortMasters2/server.py RESOURCES_TIER0/1/2.
 export const RESOURCES_TIER0 = ['麻布', '丝绸', '茶叶'] as const;
 export const RESOURCES_TIER1 = ['瓷土', '铜矿'] as const;
 export const RESOURCES_TIER2 = ['香料', '珍珠'] as const;
