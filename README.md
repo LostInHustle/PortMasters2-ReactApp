@@ -14,7 +14,7 @@ This edition keeps everything the original did and changes only the engine room:
 
 - 🧩 **One game, two apps, one shared core.** A Node WebSocket server holds all the authoritative game logic; a React client renders it. Both import the same `packages/shared` data tables and wire types, so the two sides can never drift apart.
 - 🔤 **TypeScript everywhere**, from the difficulty ladder to the barter exploit guard, with strict compiler settings.
-- 🧪 **A real test suite.** 413 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
+- 🧪 **A real test suite.** 414 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
 - 🌍 **English (default) and Simplified Chinese**, switchable any time with the 🌐 button on every screen, including the login and lobby pages.
 - 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and who is in port.
 - 🀄 Icons are emojis by default. The 🀄 button in the lobby and in the game header switches goods, artisans and captain avatars to Chinese characters, and back again. Each captain also gets a medal in a color of their own.
@@ -194,7 +194,7 @@ Everything else is point and click. Hover any underlined hint for a tooltip, and
 
 ## 🏆 7. Game End & Rankings
 
-When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish, and once every captain is done, any of them can set sail again.
+When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish. The host can set sail again at any time, replacing the current game with a brand new run at the same difficulty; other captains can do so once every captain is done. The host can also open their own fleet in the spectator window by clicking their own fleet card on the left.
 
 ---
 
@@ -220,7 +220,7 @@ When the last voyage settles, your renown (the cumulative net profit of every de
 | `npm run dev:client`   | Run the Vite dev server with hot reload on :5173.                  |
 | `npm run build`        | Build the client into `apps/client/dist`.                          |
 | `npm run start`        | Serve a prebuilt client on :8080.                                  |
-| `npm test`             | Run all 413 tests across the shared, server and client workspaces. |
+| `npm test`             | Run all 414 tests across the shared, server and client workspaces. |
 | `npm run typecheck`    | Type check all three workspaces.                                   |
 | `npm run lint`         | Lint the whole repo.                                               |
 | `npm run format`       | Format the whole repo with Prettier.                               |

@@ -2,6 +2,7 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { captainGlyph } from '../../i18n/iconMode.js';
 import { useLang } from '../../i18n/LangContext.js';
+import { useSpectate } from '../../state/SpectateContext.js';
 import { MateNote } from '../common/MateNote.js';
 import { captainHueStyle } from '../common/Medal.js';
 import { CrewSections } from './FleetCard.js';
@@ -17,8 +18,11 @@ export function StatusPanel() {
   const { tr } = useTranslate();
   const { iconMode } = useLang();
   const { currentUser, serverState } = useSession();
+  const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   if (!g) return null;
+
+  const isHost = serverState?.host === currentUser;
 
   const showDue = !NO_DUE_PHASES.has(g.phase) && !g.gameOver;
   const pendWages = g.estimatedWages;
@@ -28,7 +32,16 @@ export function StatusPanel() {
 
   return (
     <div className="panel side-panel" id="status-panel">
-      <div className="crew-head">
+      <div
+        className="crew-head"
+        style={isHost ? { cursor: 'pointer' } : undefined}
+        title={
+          isHost
+            ? tr('在观战窗口中查看我的船队', 'View my fleet in the spectator window')
+            : undefined
+        }
+        onClick={isHost ? () => openSpectate(currentUser ?? undefined) : undefined}
+      >
         <div className="avatar" style={captainHueStyle(currentUser)}>
           {captainGlyph(currentUser, iconMode)}
         </div>
@@ -41,6 +54,7 @@ export function StatusPanel() {
           </div>
         </div>
         <span className="dot on" title={tr('在线', 'Online')} />
+        {isHost && <span className="roster-toggle">🔍</span>}
       </div>
       {showDue && pendTotal > 0 && (
         <MateNote>

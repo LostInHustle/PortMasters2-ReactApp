@@ -63,7 +63,7 @@ code changes:
 | `railway.json` (new)                                            | Pins Railway's build to `npm install` and the start command to `npm run start -w @pm2/server`                                     | Without this, Railway's automatic detection tried to also build the client, which was wasteful and, as it turned out, also wrong (see Problem 3 below).                                                                                                             |
 | `apps/client/.env.example` (new)                                | Documents `VITE_WS_URL`                                                                                                           | So nobody has to rediscover this from scratch later.                                                                                                                                                                                                                |
 
-The full suite, now at 413 tests, plus typecheck and lint, all pass unchanged. This was
+The full suite, now at 414 tests, plus typecheck and lint, all pass unchanged. This was
 purely additive config, no game logic was touched.
 
 ## 4. Problem: "the branch already merged, where did my changes go?"

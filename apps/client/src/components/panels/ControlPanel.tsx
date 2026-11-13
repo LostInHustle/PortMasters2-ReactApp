@@ -10,12 +10,13 @@ import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 // the bottom action bar's primary call to action and hint, one per phase.
 export function ControlPanel() {
   const { tr } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const { send } = useWs();
   const confirmRestart = useConfirmRestart();
   const openManual = useOpenManual();
   const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
+  const isHost = serverState?.host === currentUser;
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
@@ -153,6 +154,18 @@ export function ControlPanel() {
       >
         {tr('📖 手册', '📖 Manual')}
       </button>
+      {isHost && (
+        <button
+          className="btn btn-ghost"
+          onClick={confirmRestart}
+          title={tr(
+            '立即开启全新一局，全员进度重置，难度保持不变',
+            "Start a brand new voyage now, resetting everyone's progress at the same difficulty",
+          )}
+        >
+          {tr('🔄 重新起航', '🔄 Set Sail Again')}
+        </button>
+      )}
       {primary}
     </>
   );

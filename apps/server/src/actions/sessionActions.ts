@@ -20,16 +20,16 @@ export function handleReadyForNextPhase(sess: SharedSession, slot: number): bool
   return true;
 }
 
-// Mirrors the restart branch in PortMasters2/server.py handle_game_action: the room only
-// resets once every other captain has also finished (settled or bankrupt), keeping the whole
-// roster in sync.
+// Mirrors the restart branch in PortMasters2/server.py handle_game_action: the host may reset
+// the whole room at any time. Everyone else must wait until every other captain has finished
+// (settled or bankrupt), keeping the whole roster in sync.
 export function handleRestart(
   state: ServerState,
   sess: SharedSession,
   slot: number,
   username: string,
 ): boolean {
-  if (!sess.games.every((g, i) => i === slot || g.gameOver)) {
+  if (!sess.canRestart(slot)) {
     sendToUser(state, username, {
       type: 'system_message',
       message: '需等待其他玩家完成本局后才能重新起航',

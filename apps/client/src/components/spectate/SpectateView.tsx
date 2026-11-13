@@ -5,10 +5,11 @@ import { useSession } from '../../state/SessionContext.js';
 import { useSpectate } from '../../state/SpectateContext.js';
 import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCard.js';
 
-// A read only, updating live view of another captain's fleet, kept in step with
+// A read only, updating live view of a captain's fleet, kept in step with
 // PortMasters2/PortMasters_online.html renderCaptainViewer. The name list on the left is always
-// visible (even with just one other captain) so switching never requires closing the window;
-// the detail pane on the right is what changes.
+// visible so switching never requires closing the window; the detail pane on the right is what
+// changes. Everyone can watch the other captains, and the host can also open their own fleet
+// from the status panel, which renders it through this same layout.
 //
 // The detail pane borrows the atomic pieces from FleetCard (BuffChips/InventoryList/Modules/
 // WorkerTeam) but deliberately NOT the .status-section wrappers the 300px sidebar uses. Six
@@ -25,15 +26,19 @@ import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCa
 // different component at the same position, or that behavior comes straight back.
 export function SpectateView() {
   const { tr, lang } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const { isSpectating, target, closeSpectate, setTarget } = useSpectate();
 
   if (!isSpectating) return null;
-  const otherGames = serverState?.otherGames ?? {};
-  const og = target ? otherGames[target] : undefined;
+  const isHost = serverState?.host === currentUser;
+  const games =
+    isHost && currentUser && serverState
+      ? { ...serverState.otherGames, [currentUser]: serverState.yourGame }
+      : (serverState?.otherGames ?? {});
+  const og = target ? games[target] : undefined;
   if (!og || !target) return null;
-  const others = serverState?.players.filter((p) => p.name in otherGames) ?? [];
-  const online = others.find((p) => p.name === target)?.online ?? false;
+  const entries = serverState?.players.filter((p) => p.name in games) ?? [];
+  const online = entries.find((p) => p.name === target)?.online ?? false;
   const recentLogs = og.logs.slice(-8).reverse();
 
   return (
@@ -69,7 +74,7 @@ export function SpectateView() {
         </div>
         <div className="spectate-body">
           <div className="sp-names">
-            {others.map((p) => (
+            {entries.map((p) => (
               <div
                 key={p.name}
                 className={`sp-name-item ${p.name === target ? 'active' : ''}`}
@@ -79,6 +84,7 @@ export function SpectateView() {
                 <span className="nm">
                   {p.name}
                   {p.isHost && ' 👑'}
+                  {p.name === currentUser && tr('（我）', ' (You)')}
                 </span>
               </div>
             ))}
@@ -157,8 +163,8 @@ export function SpectateView() {
         </div>
         <div className="spectate-foot">
           {tr(
-            '💡 此窗口可随时关闭再打开；等待全员结束本局后即可一同重新起航。',
-            '💡 Open or close this window any time. Once everyone else finishes their game, you can set sail together again.',
+            '💡 此窗口可随时关闭再打开；房主可随时重新起航，其他船长需等全员结束本局。',
+            '💡 Open or close this window any time. The host can set sail again at any moment; other captains can do so once every game has ended.',
           )}
         </div>
       </div>

@@ -7,13 +7,14 @@ import { useConfirmRestart } from './useConfirmRestart.js';
 // Mirrors PortMasters2/PortMasters_online.html bankruptcyHTML.
 export function BankruptcyView() {
   const { tr } = useTranslate();
-  const { serverState } = useSession();
+  const { currentUser, serverState } = useSession();
   const confirmRestart = useConfirmRestart();
   const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   const others = Object.values(serverState?.otherGames ?? {});
   if (!g) return null;
   const partnerPlaying = others.some((og) => !og.gameOver);
+  const isHost = serverState?.host === currentUser;
 
   return (
     <div className="center-block" style={{ textAlign: 'center' }}>
@@ -49,10 +50,15 @@ export function BankruptcyView() {
         )}
       />
       <p style={{ color: 'var(--ink-soft)', margin: '8px 0' }}>
-        {tr(
-          '本局已结束，需等待其他船长都完成或结束比赛后才能重新起航。',
-          'Your game is over. Once every other captain finishes their voyage, you can all set sail again.',
-        )}
+        {isHost
+          ? tr(
+              '本局已结束。你是房主，可随时重新起航，开启全新一局。',
+              'Your game is over. As the host, you can set sail again at any time for a brand new voyage.',
+            )
+          : tr(
+              '本局已结束，需等待其他船长都完成或结束比赛后才能重新起航。',
+              'Your game is over. Once every other captain finishes their voyage, you can all set sail again.',
+            )}
       </p>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
         {partnerPlaying && (
@@ -70,10 +76,17 @@ export function BankruptcyView() {
         <button
           className="btn btn-lg"
           onClick={confirmRestart}
-          title={tr(
-            '需等待其他船长也结束本局，所有人的进度将一同重置',
-            'Requires every other captain to finish too; everyone resets together',
-          )}
+          title={
+            isHost
+              ? tr(
+                  '立即为全员开启全新一局，难度保持不变',
+                  'Starts a brand new voyage for everyone right away at the same difficulty',
+                )
+              : tr(
+                  '需等待其他船长也结束本局，所有人的进度将一同重置',
+                  'Requires every other captain to finish too; everyone resets together',
+                )
+          }
         >
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
         </button>

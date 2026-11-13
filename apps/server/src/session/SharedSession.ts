@@ -150,6 +150,12 @@ export class SharedSession {
     this.start();
   }
 
+  // The host may reset the room at any time. Everyone else must wait until every other captain
+  // has finished (settled or bankrupt), keeping the whole roster in sync.
+  canRestart(slot: number): boolean {
+    return this.host === this.players[slot] || this.games.every((g, i) => i === slot || g.gameOver);
+  }
+
   // ---------- End session vote ----------
   // Unlike gateComplete, a bankrupt/finished player is NOT counted automatically here, disbanding the
   // room is a bigger decision than advancing a phase, so every single player must explicitly

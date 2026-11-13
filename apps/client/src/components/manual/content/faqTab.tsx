@@ -28,8 +28,10 @@ export function FaqTab() {
           </li>
           <li>
             <strong>Can I still play after bankruptcy?</strong> Your run is over, but you can open
-            the "👀 Spectator Window" to watch the other voyages live, and you never block them;
-            once they finish, click "Set Sail Again" for a fresh run together.
+            the "👀 Spectator Window" to watch the other voyages live, and you never block them. The
+            host can click "Set Sail Again" at any time for a fresh run; other captains can do so
+            once every game has ended. The host can also click their own fleet card on the left to
+            view their own account in the same spectator window.
           </li>
           <li>
             <strong>Another captain disconnected?</strong> The session stays on the server, so they
@@ -86,8 +88,8 @@ export function FaqTab() {
         <li>
           <strong>破产后还能玩吗？</strong>
           本局确实是出局了，不过可以打开「👀
-          观战窗口」实时围观其他船长的航行，也不会拖慢他们；等其他船长结束后点「🔄
-          重新起航」就能一起开新局。
+          观战窗口」实时围观其他船长的航行，也不会拖慢他们；房主可以随时点「🔄
+          重新起航」开新局，其他船长则需等全员结束本局。房主还可以点击左侧自己的船队栏，用同一个观战窗口查看自己的账户。
         </li>
         <li>
           <strong>其他船长掉线怎么办？</strong>

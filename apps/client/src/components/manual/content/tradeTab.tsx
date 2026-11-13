@@ -27,7 +27,8 @@ export function TradeTab() {
           <li>
             The Fellow Captains panel on the right shows every other captain's gold, renown, stock,
             artisans and buffs in real time, so{' '}
-            <strong>see what they need before naming your price</strong>.
+            <strong>see what they need before naming your price</strong>. The host can also click
+            their own fleet card on the left to see it in the same window.
           </li>
         </ul>
         <h4>🌐 Online Mechanics</h4>
@@ -51,8 +52,9 @@ export function TradeTab() {
             offline).
           </li>
           <li>
-            <strong>Restart</strong>: once every game in the room has ended (finished or bankrupt),
-            any captain can reset for a new run.
+            <strong>Restart</strong>: the host can reset at any time, sending everyone back to Round
+            1 at the same difficulty; other captains can restart once every game in the room has
+            ended (finished or bankrupt).
           </li>
         </ul>
       </>
@@ -73,7 +75,8 @@ export function TradeTab() {
         <li>所有船长都点击「✅ 准备就绪」后进入工匠管理；未成交订单自动作废。</li>
         <li>
           右侧「同行船队」面板实时展示其他船长的存款、声望、库存、工匠与增益，
-          <strong>看准他们缺什么再开价</strong>。
+          <strong>看准他们缺什么再开价</strong>
+          。房主点击左侧自己的船队栏，也能用同一个观战窗口查看自己的账户。
         </li>
       </ul>
       <h4>🌐 联机机制</h4>
@@ -97,7 +100,7 @@ export function TradeTab() {
         </li>
         <li>
           <strong>重新开始</strong>
-          ：所有玩家都结束本局（完赛或破产）后，任一船长可重置开新局。
+          ：房主可以随时重置开新局，全员进度重置为第1程，难度保持不变；其他船长需等全员结束本局后才能重新起航。
         </li>
       </ul>
     </>
