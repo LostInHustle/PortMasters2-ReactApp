@@ -1,8 +1,7 @@
-/* Ported verbatim from PortMasters2/PortMasters_online.html <style> block (lines 8 to 1180).
-   Kept as one global stylesheet (not CSS Modules) because every component references the
-   original's global class names directly (className="btn btn-success", "stat-row", etc.);
-   transcribing the stylesheet 1:1 is the closest match and the lowest risk. Imported once in
-   main.tsx so it applies across the app, exactly as the original <style> covered the whole
+/* Adapted from the PortMasters2/PortMasters_online.html <style> block. Every component
+   references the original global class names directly (className="btn btn-success",
+   "stat-row", etc.), so this stays one global stylesheet rather than CSS Modules. Imported
+   once in main.tsx so it applies across the app, as the original <style> covered the whole
    document. */
 /* ============================================================
    PortMasters 2 Design System
@@ -16,18 +15,10 @@
   --z-toast: 3000;
 
   /* Maritime Silk Road color palette */
-  --ocean-950: #082f49;
   --ocean-900: #0c4a6e;
   --ocean-700: #0369a1;
   --ocean-500: #0ea5e9;
   --ocean-300: #7dd3fc;
-  --ocean-100: #e0f2fe;
-  --teal-500: #14b8a6;
-  --teal-300: #5eead4;
-  --gold-500: #f59e0b;
-  --gold-300: #fcd34d;
-  --sand-100: #fef3c7;
-  --coral-500: #f43f5e;
   --ink: #0f172a;
   --ink-soft: #475569;
   --ink-faint: #94a3b8;

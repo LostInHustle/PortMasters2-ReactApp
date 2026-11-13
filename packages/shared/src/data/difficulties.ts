@@ -64,7 +64,7 @@ export const PIRATE_LOSS_TIERS: Record<PirateLossTier, number> = {
 export const ESCORT_COST_MIN = 10;
 export const ESCORT_COST_PCT = 0.1;
 
-// Corrupt broker hazard, hard mode only.
+// Shady broker hazard, hard mode only.
 export const BROKER_CORRUPTION_CHANCE = 0.3;
 export const BROKER_CORRUPTION_RISK = 0.2;
 

@@ -10,16 +10,10 @@
    changes no game logic. Both builds carry the same text of this layer.
    ============================================================ */
 :root {
-  --ocean-950: #0a3038;
   --ocean-900: #16323a;
   --ocean-700: #0b6a70;
   --ocean-500: #0e8274;
   --ocean-300: #7fd6cb;
-  --ocean-100: #dff5f1;
-  --teal-500: #0e8274;
-  --teal-300: #7adfd2;
-  --gold-500: #e3b341;
-  --gold-300: #f6dc8c;
   --ink: #16323a;
   --ink-soft: #4a646b;
   --ink-faint: #5d767c;

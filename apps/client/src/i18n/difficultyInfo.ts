@@ -36,7 +36,7 @@ const DIFFICULTY_INFO: Record<Difficulty, DifficultyInfo> = {
     badge: { zh: '高难', en: 'Hard' },
     tagline: { zh: '为老练船长准备的完整挑战', en: 'The full challenge for seasoned captains' },
     summary: {
-      zh: '高难模式是一段更长的航程，共 16 个回合，并开放完整的海上贸易。它的规则从第 1 回合起就比轻松更严苛：海盗更为凶悍，部分牙行还会暗通海盗。丝路特许随后在第 6 回合引入瓷土与铜矿，并在第 10 回合引入香料与珍珠，连同它们的进阶成品、海外港口、专精工匠，以及更加丰富的福缘、船舶模块与季风。需要同时打理的事务多得多，对舱位与金币的竞争也会激烈许多，因此它更看重你长远的谋划与权衡。',
+      zh: '高难模式是一段更长的航程，共 16 个回合，并开放完整的海上贸易。它的规则从第 1 回合起就比轻松更严苛：海盗更为凶悍，部分可疑牙行还会暗通海盗。丝路特许随后在第 6 回合引入瓷土与铜矿，并在第 10 回合引入香料与珍珠，连同它们的进阶成品、海外港口、专精工匠，以及更加丰富的福缘、船舶模块与季风。需要同时打理的事务多得多，对舱位与金币的竞争也会激烈许多，因此它更看重你长远的谋划与权衡。',
       en: 'Hard mode is a longer voyage of 16 rounds that opens the full maritime trade. Its rules are harsher than Easy from the first round: pirates raid harder, and some brokers tip them off. The Silk Road Charter then brings in porcelain clay and copper ore at round six and spices and pearls at round ten, together with their advanced products, the foreign ports, the specialist artisans, and a much richer set of fortunes, ship modules and monsoons. There is a great deal more to manage at once and the competition for cargo space and coin grows far fiercer, so it rewards careful long term planning and judgement.',
     },
   },
