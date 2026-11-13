@@ -816,11 +816,11 @@ html[lang='zh-CN'] .mate-note {
 
 /* ===== The deck: rail, stage with its control bar, console ===== */
 #app {
-  max-width: 1780px;
-  padding: 16px;
-  gap: 14px 16px;
-  grid-template-columns: clamp(250px, 19vw, 290px) minmax(0, 1fr) clamp(280px, 22vw, 325px);
-  grid-template-rows: auto minmax(0, 1fr) 150px auto;
+  max-width: 1600px;
+  padding: 14px 20px;
+  gap: 12px;
+  grid-template-columns: clamp(232px, 21vw, 292px) minmax(0, 1fr) clamp(272px, 24vw, 348px);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   grid-template-areas:
     'header header header'
     'me main partner'
@@ -832,7 +832,10 @@ html[lang='zh-CN'] .mate-note {
   min-height: 0;
   padding: 10px 16px;
 }
-@media (min-width: 1280px) and (min-height: 700px) {
+/* The deck fits the screen from laptop width upward, the same point where the parallel release
+   stops stacking. Each panel scrolls on its own, and a pad held sideways keeps a wide stage
+   between two slim rails. */
+@media (min-width: 1024px) {
   #app {
     height: 100vh;
     height: 100dvh;
@@ -842,29 +845,19 @@ html[lang='zh-CN'] .mate-note {
     max-height: none;
     min-height: 0;
   }
-}
-@media (max-width: 1279px) {
-  #app {
-    grid-template-columns: 260px minmax(0, 1fr);
-    grid-template-rows: auto auto auto auto auto;
-    grid-template-areas:
-      'header header'
-      'me main'
-      'me actions'
-      'partner partner'
-      'log log';
-  }
-  .log-panel {
-    height: 150px;
-  }
-  .phase-panel {
-    max-height: none;
+  /* Eight stops share the narrow stage instead of pushing the last one past the edge. */
+  .step {
+    min-width: 0;
   }
 }
-@media (max-width: 1024px) {
+/* Smaller screens scroll as a page. The stage and its control bar come first, then the fleet
+   card, the fellow captains and the log, so the next decision is always above the reference
+   panels rather than below them. */
+@media (max-width: 1023px) {
   #app {
     padding: 12px;
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
     grid-template-areas:
       'header'
       'main'
@@ -873,10 +866,14 @@ html[lang='zh-CN'] .mate-note {
       'partner'
       'log';
   }
-  .control-panel {
-    position: sticky;
-    bottom: 10px;
-    z-index: 40;
+  .side-panel,
+  .phase-panel {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+  .log-panel {
+    height: 260px;
   }
 }
 @media (max-width: 760px) {
@@ -914,6 +911,27 @@ html[lang='zh-CN'] .mate-note {
 #toast-stack {
   top: 84px;
 }
+/* Opens the captain's own fleet in the spectator window. The whole fleet card header does the
+   same on a click. */
+.crew-head-self {
+  cursor: pointer;
+}
+.self-view-btn {
+  display: block;
+  width: 100%;
+  margin: -2px 0 12px;
+  padding: 8px 12px;
+}
+/* The fleet card already carries that button. On a portrait screen the card sits below the
+   stage, so the header offers the same shortcut there. */
+.header-self-view {
+  display: none;
+}
+@media (max-width: 1023px) and (min-height: 521px) {
+  .header-self-view {
+    display: inline-block;
+  }
+}
 .card-grid {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
 }
@@ -945,7 +963,8 @@ html[lang='zh-CN'] .mate-note {
   justify-content: flex-start;
 }
 .control-panel {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  container: controlbar / inline-size;
 }
 .control-spacer {
   display: none;
@@ -969,13 +988,39 @@ html[lang='zh-CN'] .mate-note {
   border-radius: 8px;
   background: rgba(248, 251, 249, 0.96);
 }
-@media (max-width: 1024px) {
-  .control-panel {
-    flex-wrap: wrap;
-  }
+/* When the bar is too narrow for the hint to share a line with the buttons, the hint takes the
+   first line and the chip and buttons share the second, instead of the hint shrinking to a bare
+   icon or the main button dropping onto a third line. */
+@container controlbar (max-width: 800px) {
   .control-hint {
+    order: -1;
+    flex: 1 1 100%;
     white-space: normal;
-    flex-basis: 200px;
+  }
+  .control-spacer {
+    display: block;
+    flex: 1;
+  }
+}
+/* The header buttons share each row evenly instead of leaving one stranded on its own line. */
+@media (max-width: 1023px) and (min-height: 521px) {
+  .header {
+    border-radius: 22px;
+    padding: 12px;
+  }
+  .header-actions {
+    flex: 1 1 100%;
+  }
+  .header-actions > * {
+    flex: 1 1 calc(25% - 8px);
+    min-width: 0;
+    justify-content: center;
+    text-align: center;
+  }
+}
+@media (max-width: 560px) and (min-height: 521px) {
+  .header-actions > * {
+    flex-basis: calc(50% - 8px);
   }
 }
 /* ===== Login and register: a short, wide card. The harbor greeting sits on the left, the form
@@ -1060,7 +1105,7 @@ html[lang='zh-CN'] .mate-note {
 }
 /* Landscape phones: the header shrinks to one slim row and the control bar becomes a thumb
    column beside the stage, so the cards keep most of the short screen. */
-@media (max-height: 520px) and (orientation: landscape) and (max-width: 1024px) {
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1023px) {
   #app {
     padding: 8px;
     gap: 8px;
@@ -1089,6 +1134,11 @@ html[lang='zh-CN'] .mate-note {
     padding: 6px 10px;
     font-size: 12px;
     white-space: nowrap;
+  }
+  #status-panel {
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
   .control-panel {
     position: sticky;

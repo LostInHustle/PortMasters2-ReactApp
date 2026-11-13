@@ -22,7 +22,7 @@ export function StatusPanel() {
   const g = serverState?.yourGame;
   if (!g) return null;
 
-  const isHost = serverState?.host === currentUser;
+  const openOwnView = () => openSpectate(currentUser ?? undefined);
 
   const showDue = !NO_DUE_PHASES.has(g.phase) && !g.gameOver;
   const pendWages = g.estimatedWages;
@@ -33,14 +33,12 @@ export function StatusPanel() {
   return (
     <div className="panel side-panel" id="status-panel">
       <div
-        className="crew-head"
-        style={isHost ? { cursor: 'pointer' } : undefined}
-        title={
-          isHost
-            ? tr('在观战窗口中查看我的船队', 'View my fleet in the spectator window')
-            : undefined
-        }
-        onClick={isHost ? () => openSpectate(currentUser ?? undefined) : undefined}
+        className="crew-head crew-head-self"
+        title={tr(
+          '在观战窗口中查看我的船队，就像其他船长看到的那样',
+          'See your own fleet in the spectator window, just as the other captains see it',
+        )}
+        onClick={openOwnView}
       >
         <div className="avatar" style={captainHueStyle(currentUser)}>
           {captainGlyph(currentUser, iconMode)}
@@ -54,8 +52,10 @@ export function StatusPanel() {
           </div>
         </div>
         <span className="dot on" title={tr('在线', 'Online')} />
-        {isHost && <span className="roster-toggle">🔍</span>}
       </div>
+      <button type="button" className="btn btn-ghost self-view-btn" onClick={openOwnView}>
+        {tr('👀 观战视图', '👀 Spectator View')}
+      </button>
       {showDue && pendTotal > 0 && (
         <MateNote>
           {!safe

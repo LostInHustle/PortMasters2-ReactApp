@@ -54,10 +54,17 @@ export function SetSailPhase() {
         <div className="pm-banner">
           <span className="pm-icon">📣</span>
           <span>
-            {tr('欢迎来到 PortMasters 2！', 'Welcome to PortMasters 2!')}
+            <strong>{tr('欢迎来到 PortMasters 2！', 'Welcome to PortMasters 2!')}</strong>
             {tr(
-              '本作引入增值税、所得税、工匠工资、多人同步互市等深度机制，上手门槛高于一代。建议先按 F1 阅读手册；若感到吃力，可先体验 ',
-              ' This sequel adds VAT, income tax, artisan wages and synchronized bartering with fellow captains, a steeper curve than the original. Press F1 to read the manual; if it feels overwhelming, warm up with ',
+              '本作引入增值税、所得税、工匠工资、全员同步互市等深度机制，',
+              ' This sequel adds VAT, income tax, artisan wages and synchronized bartering with fellow captains, making for ',
+            )}
+            <strong>{tr('上手门槛高于一代', 'a steeper curve than the original')}</strong>
+            {tr('。建议先按 ', '. Press ')}
+            <span className="kbd">F1</span>
+            {tr(
+              ' 阅读手册；若感到吃力，可先体验 ',
+              ' to read the manual; if it feels overwhelming, warm up with ',
             )}
             <a href={pm1Url(lang)} target="_blank" rel="noopener noreferrer">
               {pm1Label(lang)}
@@ -85,9 +92,11 @@ export function SetSailPhase() {
             </span>
           ))}
           <br />
+          {tr('每个阶段都需', 'Every phase advances only after ')}
+          <strong>{tr('全员确认', 'everyone confirms')}</strong>
           {tr(
-            '每个阶段都需所有船长确认后同步推进；互市阶段可与其他船长自由交易货物与金币。',
-            'Every phase advances only after every captain confirms; during Barter you can trade goods and gold freely with anyone.',
+            '后同步推进；互市阶段可与同行自由交易货物与金币。',
+            '; during Barter you can trade goods and gold freely.',
           )}
         </div>
       </div>

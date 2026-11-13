@@ -8,8 +8,8 @@ import { BuffChips, InventoryList, Modules, WorkerTeam } from '../panels/FleetCa
 // A read only, updating live view of a captain's fleet, kept in step with
 // PortMasters2/PortMasters_online.html renderCaptainViewer. The name list on the left is always
 // visible so switching never requires closing the window; the detail pane on the right is what
-// changes. Everyone can watch the other captains, and the host can also open their own fleet
-// from the status panel, which renders it through this same layout.
+// changes. Everyone can watch the other captains, and every captain can also open their own
+// fleet from the status panel, which renders it through this same layout.
 //
 // The detail pane borrows the atomic pieces from FleetCard (BuffChips/InventoryList/Modules/
 // WorkerTeam) but deliberately NOT the .status-section wrappers the 300px sidebar uses. Six
@@ -30,9 +30,8 @@ export function SpectateView() {
   const { isSpectating, target, closeSpectate, setTarget } = useSpectate();
 
   if (!isSpectating) return null;
-  const isHost = serverState?.host === currentUser;
   const games =
-    isHost && currentUser && serverState
+    currentUser && serverState
       ? { ...serverState.otherGames, [currentUser]: serverState.yourGame }
       : (serverState?.otherGames ?? {});
   const og = target ? games[target] : undefined;

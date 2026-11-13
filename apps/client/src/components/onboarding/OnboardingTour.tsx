@@ -60,15 +60,33 @@ export function OnboardingTour() {
         <h4>{tr('1️⃣ 一切围绕现金流', '1️⃣ Cash flow is everything')}</h4>
         <p>
           {tr(
-            '每回合必须支付工匠工资与 15 金币维护费，付不起立即破产。左侧面板会实时核算「本回合应付款项」，时刻盯紧它。',
-            'Every round you must pay artisan wages plus 15 gold upkeep, miss it and you go bankrupt instantly. The left panel tallies "Due This Round" live; keep an eye on it.',
+            <>
+              每回合必须支付<strong>工匠工资</strong>与 <strong>15 金币维护费</strong>
+              ，付不起立即破产。左侧面板会实时核算「本回合应付款项」，时刻盯紧它。
+            </>,
+            <>
+              Every round you must pay <strong>artisan wages</strong> plus{' '}
+              <strong>15 gold upkeep</strong>. Miss it and you go bankrupt instantly. The left panel
+              tallies "Due This Round" live; keep an eye on it.
+            </>,
           )}
         </p>
         <h4>{tr('2️⃣ 与其他船长同步航行', '2️⃣ You sail in lockstep with your fellow captains')}</h4>
         <p>
           {tr(
-            '每个阶段都需所有船长确认才推进（看底部「🔄 全员就绪 n / N」）。右侧面板列出每位船长，点击可查看其存款、声望、货物、工匠与增益；互市阶段可与任意人自由交易，💬 聊天随时沟通。',
-            "Every phase advances only when every captain confirms (see the '🔄 Ready n / N' chip at the bottom). The right panel lists every captain, click one to see their gold, renown, cargo, artisans and buffs; trade freely with anyone during Barter and talk any time via 💬.",
+            <>
+              每个阶段都需<strong>全员确认</strong>
+              才推进（看底部「🔄 全员就绪 n /
+              N」）。右侧面板可随时查看每位同行的存款、声望与状态，点击某一行即可在观战窗口查看其货物、工匠与增益；左侧自己船队栏上的「👀
+              观战视图」按钮，可用同样的方式查看自己的账户；互市阶段可自由交易，💬 聊天随时沟通。
+            </>,
+            <>
+              Every phase advances only when <strong>everyone confirms</strong> (see the '🔄 Ready n
+              / N' chip at the bottom). The right panel shows each fellow captain's gold, renown and
+              status; click a row for their cargo, artisans and buffs in the spectator window. The
+              👀 Spectator View button on your own fleet card shows your own account the same way.
+              Trade freely during Barter and talk any time via 💬.
+            </>,
           )}
         </p>
         <h4>{tr('3️⃣ 生产成品才赚大钱', '3️⃣ Real money is in finished goods')}</h4>
