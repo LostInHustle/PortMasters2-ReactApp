@@ -60,7 +60,7 @@ export function purchaseIntel(ctx: BrokerIntelContext, rng: Rng): boolean {
 }
 
 // Mirrors PortMasters2/server.py _maybe_corrupt_broker: in modes
-// with the hazard enabled, a paid whisper may come from a corrupt broker who tips off pirates,
+// with the hazard enabled, a paid whisper may come from a shady broker who tips off pirates,
 // raising this round's raid chance. Tips stack across the round.
 function maybeCorruptBroker(ctx: BrokerIntelContext, rng: Rng): void {
   if (!difficultyBrokerCorruption(ctx.difficulty)) return;

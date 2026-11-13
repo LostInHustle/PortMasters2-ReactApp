@@ -1,22 +1,61 @@
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
-import { useSpectate } from '../../state/SpectateContext.js';
-import { useWs } from '../../ws/WsContext.js';
-import { useOpenManual } from '../manual/ManualModal.js';
 import { useConfirmRestart } from '../phases/useConfirmRestart.js';
 
+const COLLAPSE_KEY = 'pm2_controls_collapsed';
+
+function readControlsCollapsed(): boolean {
+  try {
+    return localStorage.getItem(COLLAPSE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 // Mirrors PortMasters2/PortMasters_online.html renderControls:
-// the bottom action bar's primary call to action and hint, one per phase.
+// the bar is a status strip, not a second copy of the stage. The manual lives in the
+// header, the phase action sits on its phase card, and the game over restart sits on
+// the stage.
 export function ControlPanel() {
   const { tr } = useTranslate();
   const { currentUser, serverState } = useSession();
-  const { send } = useWs();
   const confirmRestart = useConfirmRestart();
-  const openManual = useOpenManual();
-  const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   const isHost = serverState?.host === currentUser;
+  const [collapsed, setCollapsed] = useState(readControlsCollapsed);
+
+  useLayoutEffect(() => {
+    document.getElementById('control-panel')?.classList.toggle('collapsed', collapsed);
+  }, [collapsed]);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(COLLAPSE_KEY, next ? '1' : '0');
+      } catch {
+        // A blocked storage area just means the choice will not survive a reload.
+      }
+      return next;
+    });
+  };
+
+  const toggleTitle = collapsed
+    ? tr('展开操作栏', 'Expand the action bar')
+    : tr('收起操作栏', 'Collapse the action bar');
+  const collapseToggle = (
+    <button
+      className="btn btn-ghost control-toggle"
+      onClick={toggleCollapsed}
+      aria-expanded={!collapsed}
+      aria-controls="control-panel"
+      aria-label={toggleTitle}
+      title={toggleTitle}
+    >
+      {collapsed ? '▴' : '▾'}
+    </button>
+  );
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
@@ -37,36 +76,16 @@ export function ControlPanel() {
           </span>
         )}
         <div className="control-spacer" />
-        <button className="btn btn-ghost" onClick={() => openManual()}>
-          {tr('📖 手册', '📖 Manual')}
-        </button>
-        {isBankrupt && partnerPlaying && (
-          <button className="btn btn-ghost" onClick={() => openSpectate()}>
-            {tr('👀 观战同行', '👀 Spectate')}
-          </button>
-        )}
-        <button className="btn btn-danger" onClick={confirmRestart}>
-          {tr('🔄 重新起航', '🔄 Set Sail Again')}
-        </button>
+        {collapseToggle}
       </>
     );
   }
 
   const readyCount = serverState?.phaseReadyCount ?? 0;
-  let primary: ReactNode = null;
   let hint = '';
 
   switch (g.phase) {
     case 0:
-      primary = serverState?.youReady ? (
-        <button className="btn btn-grey btn-lg" disabled>
-          {tr('⌛ 已确认，等待其他船长', '⌛ Confirmed, waiting for others')}
-        </button>
-      ) : (
-        <button className="btn btn-success btn-lg" onClick={() => send({ action: 'startBoon' })}>
-          {tr('🧭 扬帆起航，抽取福缘', '🧭 Set Sail & Draw Fortunes')}
-        </button>
-      );
       hint = serverState?.youReady
         ? tr('等待其他船长确认后进入福缘抽取', 'Waiting for the others to confirm')
         : tr('所有船长都确认后进入福缘抽取', 'Fortune draw begins once everyone confirms');
@@ -75,11 +94,6 @@ export function ControlPanel() {
       hint = tr('请在上方卡片中选择并锁定一项福缘', 'Pick and lock one fortune card above');
       break;
     case 1:
-      primary = (
-        <button className="btn btn-lg" onClick={() => send({ action: 'ready_for_next_phase' })}>
-          {tr('✅ 完成采购', '✅ Done Procuring')}
-        </button>
-      );
       hint = tr(
         '采购完成后确认，全员就绪即进入互市',
         'Confirm when done buying. Barter starts when everyone is ready',
@@ -92,41 +106,15 @@ export function ControlPanel() {
       );
       break;
     case 'worker_mgmt':
-      primary = (
-        <button className="btn btn-lg" onClick={() => send({ action: 'ready_for_next_phase' })}>
-          {tr('✅ 完成工匠管理', '✅ Done Managing')}
-        </button>
-      );
       hint = tr('雇佣并指派任务后确认', 'Hire and assign tasks, then confirm');
       break;
     case 2:
-      primary = (
-        <button className="btn btn-lg" onClick={() => send({ action: 'ready_for_next_phase' })}>
-          {tr('✅ 完成交易', '✅ Done Trading')}
-        </button>
-      );
       hint = tr('交付订单后确认，进入结算', 'Deliver your orders, then confirm to enter Upkeep');
       break;
     case 3:
-      primary = (
-        <button
-          className="btn btn-warning btn-lg"
-          onClick={() => send({ action: 'doMaintenance' })}
-        >
-          {tr('💸 支付维护费', '💸 Pay Upkeep')}
-        </button>
-      );
       hint = tr('支付后等待其他船长完成结算', 'After paying, wait for the others to settle');
       break;
     case 4:
-      primary = (
-        <button
-          className="btn btn-success btn-lg"
-          onClick={() => send({ action: 'ready_for_next_phase' })}
-        >
-          {tr('⏭️ 结束本回合', '⏭️ End Round')}
-        </button>
-      );
       hint = tr(
         '可先升级商船，再结束本回合',
         'Upgrade your ship first if you like, then end the round',
@@ -147,16 +135,9 @@ export function ControlPanel() {
       </span>
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
-      <button
-        className="btn btn-ghost"
-        onClick={() => openManual()}
-        title={tr('快捷键 F1', 'Shortcut: F1')}
-      >
-        {tr('📖 手册', '📖 Manual')}
-      </button>
       {isHost && (
         <button
-          className="btn btn-ghost"
+          className="btn btn-ghost control-secondary"
           onClick={confirmRestart}
           title={tr(
             '立即开启全新一局，全员进度重置，难度保持不变',
@@ -166,7 +147,7 @@ export function ControlPanel() {
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
         </button>
       )}
-      {primary}
+      {collapseToggle}
     </>
   );
 }

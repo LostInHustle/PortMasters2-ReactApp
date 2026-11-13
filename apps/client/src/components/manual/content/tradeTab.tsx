@@ -27,8 +27,9 @@ export function TradeTab() {
           <li>
             The Fellow Captains panel on the right shows every other captain's gold, renown and
             status in real time; click a row to open the spectator window with their cargo, artisans
-            and buffs, so <strong>see what they need before naming your price</strong>. The host can
-            also click their own fleet card on the left to see it in the same window.
+            and buffs, so <strong>see what they need before naming your price</strong>. The 👀
+            Spectator View button on your own fleet card on the left shows your own account in the
+            same window.
           </li>
         </ul>
         <h4>🌐 Online Mechanics</h4>
@@ -76,7 +77,7 @@ export function TradeTab() {
         <li>
           右侧「同行船队」面板实时展示其他船长的存款、声望与状态，点击某一行即可在观战窗口查看其库存、工匠与增益，
           <strong>看准他们缺什么再开价</strong>
-          。房主点击左侧自己的船队栏，也能用同一个观战窗口查看自己的账户。
+          。左侧自己船队栏上的「👀 观战视图」按钮，可以用同一个观战窗口查看自己的账户。
         </li>
       </ul>
       <h4>🌐 联机机制</h4>

@@ -1,5 +1,6 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { useSpectate } from '../../state/SpectateContext.js';
 import { useLogout } from '../../state/useLogout.js';
 import { useOpenManual } from '../manual/ManualModal.js';
 import { IconToggle } from './IconToggle.js';
@@ -11,6 +12,7 @@ export function Header() {
   const { tr } = useTranslate();
   const { currentUser, toggleChat, serverState, voteEndSession } = useSession();
   const openManual = useOpenManual();
+  const { openSpectate } = useSpectate();
   const logout = useLogout();
 
   // Mirrors PortMasters2/PortMasters_online.html confirmEndSession/
@@ -64,6 +66,18 @@ export function Header() {
         >
           {tr('💬 聊天', '💬 Chat')}
         </button>
+        {serverState && (
+          <button
+            className="btn btn-ghost header-self-view"
+            onClick={() => openSpectate(currentUser ?? undefined)}
+            title={tr(
+              '在观战窗口中查看我的船队，就像其他船长看到的那样',
+              'See your own fleet in the spectator window, just as the other captains see it',
+            )}
+          >
+            {tr('👀 观战视图', '👀 Spectator View')}
+          </button>
+        )}
         {serverState && (
           <button
             className="btn btn-warning"

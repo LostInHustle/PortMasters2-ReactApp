@@ -16,7 +16,8 @@ This edition keeps everything the original did and changes only the engine room:
 - 🔤 **TypeScript everywhere**, from the difficulty ladder to the barter exploit guard, with strict compiler settings.
 - 🧪 **A real test suite.** 386 tests across 38 test files cover the shared data tables, the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip.
 - 🌍 **English (default) and Simplified Chinese**, switchable any time with the 🌐 button on every screen, including the login and lobby pages.
-- 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and who is in port.
+- 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and, in the lobby, how many voyages are recruiting.
+- 📱 The layout adapts to the screen. From laptop width upward, and on a pad held sideways, the fleet rail, the stage with its control bar, and the roster with the log share one locked deck, and each panel scrolls on its own. Below that width the page scrolls in reading order: the stage and its control bar come first, then your fleet card, the fellow captains and the log, so the next decision is always above the reference panels.
 - 🀄 Icons are emojis by default. The 🀄 button in the lobby and in the game header switches goods, artisans and captain avatars to Chinese characters, and back again. Each captain also gets a medal in a color of their own.
 - 🤲 In every pair of buttons the way back sits on the left and the action sits on the right, so Cancel and Decline are on the left and Create Room and Accept are on the right.
 - 👑 **Emperor Mandates.** At set milestones an imperial commission lands in the Trade phase, a golden order worth several ordinary ones, with the last of the voyage marked as the closing commission.
@@ -116,7 +117,7 @@ The project is an npm workspaces monorepo. Three packages, each with one job:
     │   │                 # protocol dispatcher that turns messages into state
     │   ├── components/   # layout, auth, lobby, the panels, the phase screens,
     │   │                 # the modal/manual/chat/tooltip/spectate systems
-    │   └── styles/       # the global stylesheet
+    │   └── styles/       # the global stylesheets: base, Tidelight and enhancements
     └── tests/            # 73 vitest tests, no browser needed
 ```
 
@@ -126,7 +127,7 @@ The guiding rule is that anything which must be identical on both sides lives in
 
 ## 🎮 4. Gameplay Mechanics
 
-A game lasts **8 rounds** on Easy, **12** on Standard or **16** on Hard, and every round runs through **8 phases**. No phase advances until every captain confirms.
+A voyage lasts **8 rounds** on Easy, **12** on Standard or **16** on Hard, and every round runs through **8 phases**. No phase advances until every captain confirms.
 
 | Phase           | What happens                                                                                                                                       |
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -144,8 +145,8 @@ A game lasts **8 rounds** on Easy, **12** on Standard or **16** on Hard, and eve
 Every session starts on **Easy**. Whoever sends the invitation or opens the room chooses the level, and an invited captain reads what it means and confirms before the voyage begins, so everyone always sails the same difficulty.
 
 - **Easy (8 rounds)** keeps the whole voyage on the founding set of goods: three raw materials, four starter products, the first three artisan guilds, and their matching fortunes, modules, ports and monsoons. The market never gets crowded, which makes it the gentle place to start.
-- **Standard (12 rounds)** opens the full trade at a brisker pace, with the Silk Road Charter expanding on Rounds 4 and 8, but no corrupt brokers.
-- **Hard (16 rounds)** is the full challenge with the corrupt broker hazard switched on, expanding on Rounds 6 and 10. There is far more to manage and the competition for cargo and coin is fierce.
+- **Standard (12 rounds)** opens the full trade at a brisker pace, with the Silk Road Charter expanding on Rounds 4 and 8, but no shady brokers.
+- **Hard (16 rounds)** is the full challenge with the shady broker hazard switched on, expanding on Rounds 6 and 10. There is far more to manage and the competition for cargo and coin is fierce.
 
 ### 📦 Resources & Products
 
@@ -194,7 +195,7 @@ Everything else is point and click. Hover any underlined hint for a tooltip, and
 
 ## 🏆 7. Game End & Rankings
 
-When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish. The host can set sail again at any time, replacing the current game with a brand new run at the same difficulty; other captains can do so once every other captain's game has ended. The host can also open their own fleet in the spectator window by clicking their own fleet card on the left.
+When the last voyage settles, your renown (the cumulative net profit of every delivered order) earns you a merchant rating. Because a longer voyage earns far more, each difficulty has its own thresholds. The top **Sovereign of the Silk Road** rating asks for renown of **1200+ on Easy**, **3000+ on Standard**, or **6000+ on Hard**. A bankrupt captain can still open the spectator window and watch the others finish. The host can set sail again at any time, replacing the current game with a brand new run at the same difficulty; other captains can do so once every other captain's game has ended. Every captain can also open their own fleet in the spectator window with the 👀 Spectator View button on their own fleet card on the left.
 
 ---
 

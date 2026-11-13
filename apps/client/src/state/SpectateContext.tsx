@@ -23,9 +23,9 @@ const SpectateContext = createContext<SpectateContextValue | null>(null);
 // Generalizes PortMasters2/PortMasters_online.html's openSpectate/closeSpectate and the
 // prototype's later openCaptainViewer (which doubles this same window as a
 // "click any roster widget" detail view, not just the own bankruptcy automatic watch) into one
-// target aware viewer: `target` names which captain's fleet is shown, another captain for
-// everyone and the host's own fleet when opened from their status panel, defaulting to the
-// first other captain available when no specific target is requested.
+// target aware viewer: `target` names which captain's fleet is shown, another captain from the
+// roster or the captain's own fleet from their status panel, defaulting to the first other
+// captain available when no specific target is requested.
 export function SpectateProvider({ children }: { children: ReactNode }) {
   const [isSpectating, setIsSpectating] = useState(false);
   const [target, setTargetState] = useState<string | null>(null);
