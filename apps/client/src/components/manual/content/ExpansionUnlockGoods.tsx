@@ -186,25 +186,25 @@ export function ExpansionUnlockGoods() {
             <td>🧱 瓷土</td>
             <td>市舶新政</td>
             <td>泉州港、福州港</td>
-            <td>8 - 12</td>
+            <td>8~12</td>
           </tr>
           <tr>
             <td>⛏️ 铜矿</td>
             <td>市舶新政</td>
             <td>广州港、高丽港</td>
-            <td>10 - 15</td>
+            <td>10~15</td>
           </tr>
           <tr>
             <td>🌶️ 香料</td>
             <td>万国通商</td>
             <td>三佛齐港、大食港</td>
-            <td>14 - 20</td>
+            <td>14~20</td>
           </tr>
           <tr>
             <td>🦪 珍珠</td>
             <td>万国通商</td>
             <td>广州港、三佛齐港</td>
-            <td>16 - 24</td>
+            <td>16~24</td>
           </tr>
         </tbody>
       </table>
@@ -226,7 +226,7 @@ export function ExpansionUnlockGoods() {
             <td>市舶新政</td>
             <td>铜矿×3</td>
             <td>45</td>
-            <td>55 - 72</td>
+            <td>55~72</td>
             <td>铜匠</td>
           </tr>
           <tr>
@@ -234,7 +234,7 @@ export function ExpansionUnlockGoods() {
             <td>市舶新政</td>
             <td>瓷土×3</td>
             <td>65</td>
-            <td>78 - 100</td>
+            <td>78~100</td>
             <td>陶匠</td>
           </tr>
           <tr>
@@ -242,7 +242,7 @@ export function ExpansionUnlockGoods() {
             <td>万国通商</td>
             <td>香料×2 + 丝绸×1</td>
             <td>85</td>
-            <td>100 - 130</td>
+            <td>100~130</td>
             <td>香料师</td>
           </tr>
           <tr>
@@ -250,7 +250,7 @@ export function ExpansionUnlockGoods() {
             <td>万国通商</td>
             <td>珍珠×2 + 丝绸×1</td>
             <td>105</td>
-            <td>125 - 160</td>
+            <td>125~160</td>
             <td>珠宝匠</td>
           </tr>
         </tbody>

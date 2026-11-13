@@ -98,8 +98,8 @@ export function BrokerWhisper({ g }: { g: PlayerGameState }) {
           >
             {tr('🔮 购买密语', '🔮 Buy Whisper')} ({g.intelCost}💰)
             {remaining > 0
-              ? tr(` · 剩余 ${remaining} 条`, ` · ${remaining} left`)
-              : tr(' · 已无更多', ' · sold out')}
+              ? tr(` · 剩余 ${remaining} 条`, `, ${remaining} left`)
+              : tr(' · 已无更多', ', sold out')}
           </button>
         </div>
         {revealed.length > 0 ? (

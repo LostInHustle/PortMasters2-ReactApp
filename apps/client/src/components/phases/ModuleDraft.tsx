@@ -87,6 +87,9 @@ export function ModuleDraft({ g, draft, slotsFull }: ModuleDraftProps) {
           flexWrap: 'wrap',
         }}
       >
+        <button className="btn btn-ghost" onClick={() => send({ action: 'cancelModuleDraft' })}>
+          {tr('❌ 关闭', '❌ Close')}
+        </button>
         <button
           className={`btn ${g.draftRerolled ? 'btn-grey' : 'btn-gold'}`}
           disabled={g.draftRerolled}
@@ -103,9 +106,6 @@ export function ModuleDraft({ g, draft, slotsFull }: ModuleDraftProps) {
           {g.draftRerolled
             ? tr('🔀 本回合已换过一批', '🔀 Batch already changed')
             : tr('🔀 换一批', '🔀 Change Batch')}
-        </button>
-        <button className="btn btn-ghost" onClick={() => send({ action: 'cancelModuleDraft' })}>
-          {tr('❌ 关闭', '❌ Close')}
         </button>
       </div>
     </div>

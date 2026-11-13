@@ -46,7 +46,7 @@ export function StartTab() {
             keep the payroll small.
           </li>
           <li>
-            <strong>Trade</strong>: deliver orders marked ✅ in-stock whose reward beats the
+            <strong>Trade</strong>: deliver orders marked ✅ in stock whose reward beats the
             shipping cost.
           </li>
           <li>

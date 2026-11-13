@@ -25,7 +25,7 @@ export function PhaseBrief({ phaseKey, extraChips }: { phaseKey: Phase; extraChi
         <h2>
           {tr(
             `${pf(meta.name)}阶段 · 第 ${serverState.yourGame.currentRound} 程`,
-            `${pf(meta.name)} Phase · Round ${serverState.yourGame.currentRound}`,
+            `${pf(meta.name)} Phase, Round ${serverState.yourGame.currentRound}`,
           )}
         </h2>
         <p>{pf(meta.brief)}</p>

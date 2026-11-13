@@ -9,7 +9,8 @@ export function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   const info = difficultyInfo(difficulty);
   return (
     <span className={`chip tip diff-${info.key}`} data-tip={pf(info.summary)}>
-      {tr('难度', 'Difficulty')}：{pf(info.badge)}
+      {tr('难度：', 'Difficulty: ')}
+      {pf(info.badge)}
     </span>
   );
 }

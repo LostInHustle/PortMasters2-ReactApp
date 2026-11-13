@@ -1,6 +1,7 @@
 import { difficultyInfo } from '../../i18n/difficultyInfo.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
+import { Medal } from '../common/Medal.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html renderOpenRooms (lines 2337-2356):
 // the lobby's "browse open rooms" list, fed by open_rooms_update (roomManager.ts's
@@ -27,7 +28,7 @@ export function OpenRoomsList() {
       {joinable.map((r) => (
         <div key={r.host} className="online-user-item">
           <span className="u-name">
-            <span className="dot on" />
+            <Medal name={r.host} small />
             {r.host}
             <span
               className={`diff-badge diff-${r.difficulty}`}

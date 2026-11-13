@@ -26,7 +26,7 @@ export function LogPanel() {
   return (
     <div className="panel log-panel" id="log-panel" ref={ref}>
       <div className="log-title">
-        {tr('📜 航海日志 · 最近操作记录', "📜 Captain's Log · Recent Actions")}
+        {tr('📜 航海日志 · 最近操作记录', "📜 Captain's Log, Recent Actions")}
       </div>
       {logs && logs.length > 0 ? (
         logs.map((m, i) => (

@@ -24,14 +24,14 @@ export function ExpansionTab() {
           own pace. <strong>Standard mode</strong> is the 12 round middle rung: it also opens the
           full trade, with the Silk Road Charter unlocking at Rounds 4 and 8, but with no corrupt
           brokers. <strong>Hard mode</strong> is the longer 16 round voyage that opens the full
-          maritime trade with the charter unlocking at Rounds 6 and 10 and the corrupt-broker hazard
+          maritime trade with the charter unlocking at Rounds 6 and 10 and the corrupt broker hazard
           switched on, so there is a great deal more to manage and the competition for cargo space
           and coin grows much fiercer. The phased unlocks below happen on Standard and Hard but
           never on Easy. Raids bite harder as you climb the ladder too: a successful raid takes a
           share of your current gold (a larger share later in the voyage and on higher difficulties)
           and the escort fee scales with your wealth as well; and on Hard a Broker's Whisper can
           come from a corrupt broker who tips off pirates and raises that voyage's raid chance,
-          turning the escort call at Upkeep into a genuine trade-off.
+          turning the escort call at Upkeep into a genuine tradeoff.
         </p>
         <p>
           The difficulty is settled before a voyage begins. The inviting captain chooses the level

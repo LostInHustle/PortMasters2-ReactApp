@@ -1,6 +1,7 @@
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useModal } from '../modal/ModalContext.js';
+import { Medal } from '../common/Medal.js';
 import { InviteComposer } from './InviteComposer.js';
 
 // Ported from PortMasters2/PortMasters_online.html renderOnlineUsers (lines 2064-2093). The
@@ -28,8 +29,9 @@ export function OnlineUsersList() {
       {onlineUsers.map((user) => (
         <div key={user} className="online-user-item">
           <span className="u-name">
-            <span className="dot on" />
+            <Medal name={user} small />
             {user}
+            <span className="dot on" />
           </span>
           {user === lastInviteTo ? (
             <button className="btn btn-grey" disabled>

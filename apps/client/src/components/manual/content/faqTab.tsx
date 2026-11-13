@@ -45,7 +45,7 @@ export function FaqTab() {
         <h4>⌨️ Shortcuts</h4>
         <ul>
           <li>
-            <span className="kbd">F1</span> opens this manual · <span className="kbd">Esc</span>{' '}
+            <span className="kbd">F1</span> opens this manual, <span className="kbd">Esc</span>{' '}
             closes dialogs / the spectator window / chat
           </li>
         </ul>

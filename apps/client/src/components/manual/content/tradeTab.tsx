@@ -25,8 +25,8 @@ export function TradeTab() {
             Once both captains click "✅ Ready", the artisan phase begins; unaccepted offers expire.
           </li>
           <li>
-            The right-hand panel shows your partner's gold, renown, stock, artisans and buffs in
-            real time, so <strong>see what they need before naming your price</strong>.
+            The right panel shows your partner's gold, renown, stock, artisans and buffs in real
+            time, so <strong>see what they need before naming your price</strong>.
           </li>
         </ul>
         <h4>🌐 Online Mechanics</h4>

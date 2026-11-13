@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { phaseHue } from '../../i18n/phaseFlow.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { ArtisansPhase } from '../phases/ArtisansPhase.js';
@@ -66,7 +68,11 @@ export function PhasePanel() {
   }
 
   return (
-    <div className="panel phase-panel" id="phase-panel">
+    <div
+      className="panel phase-panel"
+      id="phase-panel"
+      style={{ '--hue': phaseHue(phase) } as CSSProperties}
+    >
       <div className="phase-view phase-enter" key={String(phase)}>
         <Stepper currentKey={phase} />
         {inner}

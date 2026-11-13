@@ -55,16 +55,6 @@ export function BankruptcyView() {
         )}
       </p>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
-        <button
-          className="btn btn-lg"
-          onClick={confirmRestart}
-          title={tr(
-            '需等待其他船长也结束本局，所有人的进度将一同重置',
-            'Requires every other captain to finish too; everyone resets together',
-          )}
-        >
-          {tr('🔄 重新起航', '🔄 Set Sail Again')}
-        </button>
         {partnerPlaying && (
           <button
             className="btn btn-lg btn-ghost"
@@ -77,6 +67,16 @@ export function BankruptcyView() {
             {tr('👀 打开观战窗口', '👀 Open Spectator Window')}
           </button>
         )}
+        <button
+          className="btn btn-lg"
+          onClick={confirmRestart}
+          title={tr(
+            '需等待其他船长也结束本局，所有人的进度将一同重置',
+            'Requires every other captain to finish too; everyone resets together',
+          )}
+        >
+          {tr('🔄 重新起航', '🔄 Set Sail Again')}
+        </button>
       </div>
     </div>
   );

@@ -126,7 +126,7 @@ export function WorkerTeam({ g }: { g: PlayerGameState }) {
           {pf(wt.name)}
         </span>
         <span className="muted" style={{ marginRight: 6 }}>
-          {detail.join(' · ')}
+          {detail.join(tr(' · ', ', '))}
         </span>
         <span className="count">×{list.length}</span>
       </div>
@@ -145,7 +145,7 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
   const { tr, lang } = useTranslate();
   return (
     <>
-      <div className="status-section">
+      <div className="status-section ss-overview">
         <h3>{tr('📊 航海概况', '📊 Voyage Overview')}</h3>
         <div className="stat-row">
           <span
@@ -203,11 +203,11 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <span className="stat-value">{phaseName(g.phase, lang)}</span>
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-buffs">
         <h3>{tr('🪄 本回合增益', '🪄 Round Buffs')}</h3>
         <BuffChips g={g} />
       </div>
-      <div className="status-section">
+      <div className="status-section ss-env">
         <h3>{tr('🌦️ 全球环境', '🌦️ Global Environment')}</h3>
         <div style={{ fontSize: 12, color: 'var(--ink-soft)', lineHeight: 1.55 }}>
           {g.monsoon_state?.icon ?? '🌦️'} <strong>{monsoonName(g.monsoon_state, lang)}</strong>
@@ -215,7 +215,7 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           {monsoonDesc(g.monsoon_state, lang)}
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-ship">
         <h3>{tr('🚢 旗舰状态', '🚢 Flagship')}</h3>
         <div className="stat-row">
           <span
@@ -227,13 +227,13 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           >
             {tr('商船等级', 'Ship level')}
           </span>
-          <span className="stat-value">Lv.{g.shipLevel}</span>
+          <span className="stat-value">{tr(`${g.shipLevel} 级`, `Lv.${g.shipLevel}`)}</span>
         </div>
         <div className="stat-row">
           <span
             className="tip"
             data-tip={tr(
-              '运费 = max(5, 货物件数×2 − 船级×5 − 福缘减免)',
+              '运费 = 货物件数×2 − 船级×5 − 福缘减免，最低 5 金币',
               'Shipping = max(5, items ×2 − level ×5 − fortune discounts)',
             )}
           >
@@ -253,11 +253,11 @@ export function CrewSections({ g }: { g: PlayerGameState }) {
           <Modules g={g} />
         </div>
       </div>
-      <div className="status-section">
+      <div className="status-section ss-cargo">
         <h3>{tr('📦 船舱货物', '📦 Cargo Hold')}</h3>
         <InventoryList g={g} />
       </div>
-      <div className="status-section">
+      <div className="status-section ss-crew">
         <h3>{tr('👥 工匠团队', '👥 Artisan Team')}</h3>
         <WorkerTeam g={g} />
       </div>

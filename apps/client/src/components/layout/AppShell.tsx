@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts.js';
+import { phaseSky } from '../../i18n/phaseFlow.js';
 import { useSession } from '../../state/SessionContext.js';
 import { LoginOverlay } from '../auth/LoginOverlay.js';
 import { ChatWindow } from '../chat/ChatWindow.js';
@@ -17,8 +19,23 @@ import { ToastStack } from './ToastStack.js';
 // than a single chatPartner string: that field covers both the 1:1 fast path and a 2-5 player
 // room once it has actually started, and naturally falls back to the lobby after session_ended.
 export function AppShell() {
-  const { currentUser, serverState } = useSession();
+  const { currentUser, serverState, room } = useSession();
   useKeyboardShortcuts();
+
+  // The sky follows the round: night for the login screen and the endings, a harbor morning
+  // for the lobby, lantern dusk for the waiting room, and first light through dusk for the
+  // phases of a round. The stylesheet paints each one from this single attribute.
+  const game = serverState?.yourGame;
+  const sky = !currentUser
+    ? 'night'
+    : game
+      ? phaseSky(game.bankrupt ? 'bankruptcy' : game.phase)
+      : room
+        ? 'dusk'
+        : 'harbor';
+  useEffect(() => {
+    document.body.dataset.sky = sky;
+  }, [sky]);
 
   return (
     <>

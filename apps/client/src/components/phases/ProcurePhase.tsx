@@ -52,10 +52,7 @@ export function ProcurePhase() {
   if (g.equippedModules.some((m) => m.id === 'smugglers_hold')) {
     discountChips.push({
       key: 'sh',
-      label: tr(
-        '🏴‍☠️ 走私暗舱：采购成本实付85折',
-        "🏴‍☠️ Smuggler's Hold: purchases at ~85% of sticker price",
-      ),
+      label: tr('🏴‍☠️ 走私暗舱：采购成本实付85折', "🏴‍☠️ Smuggler's Hold: ~15% off purchases"),
     });
   }
 
@@ -113,7 +110,7 @@ export function ProcurePhase() {
                           <>{r.price}💰</>
                         )}
                         {r.materialDetails &&
-                          ` · ${tr('用料', 'uses')} ${tnames(r.materialDetails, lang)}`}
+                          `${tr(' · 用料', ', uses')} ${tnames(r.materialDetails, lang)}`}
                       </span>
                     </div>
                   );

@@ -78,11 +78,11 @@ export function CreateRoomComposer() {
           justifyContent: 'center',
         }}
       >
-        <button className="btn btn-gold btn-lg" onClick={confirm}>
-          {tr('📨 创建房间', '📨 Create Room')}
-        </button>
         <button className="btn btn-ghost btn-lg" onClick={closeModal}>
           {tr('取消', 'Cancel')}
+        </button>
+        <button className="btn btn-gold btn-lg" onClick={confirm}>
+          {tr('📨 创建房间', '📨 Create Room')}
         </button>
       </div>
     </>

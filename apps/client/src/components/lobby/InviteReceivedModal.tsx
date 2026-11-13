@@ -67,11 +67,11 @@ function InviteReceivedContent({
           justifyContent: 'center',
         }}
       >
-        <button className="btn btn-success btn-lg" onClick={() => respondInvite(true)}>
-          {tr('✅ 同意并接受', '✅ Agree and Accept')}
-        </button>
         <button className="btn btn-danger btn-lg" onClick={() => respondInvite(false)}>
           {tr('❌ 婉拒', '❌ Decline')}
+        </button>
+        <button className="btn btn-success btn-lg" onClick={() => respondInvite(true)}>
+          {tr('✅ 同意并接受', '✅ Agree and Accept')}
         </button>
       </div>
     </>

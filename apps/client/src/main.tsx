@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
 import './styles/global.css';
 import './styles/enhancements.css';
+import './styles/tidelight.css';
 
 const rootEl = document.getElementById('root');
 if (!rootEl) throw new Error('#root element not found');

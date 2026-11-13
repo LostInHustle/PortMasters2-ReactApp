@@ -83,7 +83,7 @@ export function WorkersTab() {
           </li>
           <li>
             Each artisan takes one task per round; regular artisans make 1 item,{' '}
-            <strong>skilled ⭐</strong> ones (auto-promoted after 2 lifetime items) make 2.
+            <strong>skilled ⭐</strong> ones (promoted automatically after 2 lifetime items) make 2.
           </li>
           <li>
             Wages are paid automatically at Upkeep, so{' '}
@@ -141,25 +141,25 @@ export function WorkersTab() {
             <td>👔 麻衣</td>
             <td>麻布×2</td>
             <td>15</td>
-            <td>30 - 42</td>
+            <td>30~42</td>
           </tr>
           <tr>
             <td>👕 布衣</td>
             <td>麻布×2 + 丝绸×1</td>
             <td>35</td>
-            <td>50 - 65</td>
+            <td>50~65</td>
           </tr>
           <tr>
             <td>👗 绫罗绸缎</td>
             <td>丝绸×3</td>
             <td>60</td>
-            <td>70 - 90</td>
+            <td>70~90</td>
           </tr>
           <tr>
             <td>🌸 香囊</td>
             <td>丝绸×1 + 茶叶×2</td>
             <td>80</td>
-            <td>95 - 120</td>
+            <td>95~120</td>
           </tr>
         </tbody>
       </table>

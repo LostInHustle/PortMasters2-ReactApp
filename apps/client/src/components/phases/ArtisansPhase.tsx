@@ -124,7 +124,7 @@ export function ArtisansPhase() {
                       onClick={() => send({ action: 'hireWorker', workerType: wt.key })}
                       title={pf(wt.tip)}
                     >
-                      {tr('＋ 雇佣', '＋ Hire')}
+                      {tr('＋ 雇佣', '+ Hire')}
                     </button>
                   </td>
                 </tr>

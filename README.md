@@ -16,6 +16,9 @@ This edition keeps everything the original did and changes only the engine room:
 - 🔤 **TypeScript everywhere**, from the difficulty ladder to the barter exploit guard, with strict compiler settings.
 - 🧪 **A real test suite.** 348 tests cover the formulas, the phase state machine, the auth hashing, the lobby, the protocol dispatcher and a full socket round trip. They run in about a second.
 - 🌍 **English (default) and Simplified Chinese**, switchable any time with the 🌐 button on every screen, including the login and lobby pages.
+- 🎨 A new look called Tidelight. A round is one day at sea, so the sky moves from first light at Set Sail to dusk at the Shipyard, with a night harbor behind the login page, a bright harbor morning in the lobby and lantern dusk in the waiting room. Every panel wears a color of its own, and your first mate leaves short notes about what you owe this round and who is in port.
+- 🀄 Icons are emojis by default. The 🀄 button in the lobby and in the game header switches goods, artisans and captain avatars to Chinese characters, and back again. Each captain also gets a medal in a color of their own.
+- 🤲 In every pair of buttons the way back sits on the left and the action sits on the right, so Cancel and Decline are on the left and Create Room and Accept are on the right.
 - 👑 **Emperor Mandates.** At set milestones an imperial commission lands in the Trade phase, a golden order worth several ordinary ones, with the last of the voyage marked as the closing commission.
 - 🎯 **Directed barter offers.** Post to the whole room, or address an offer to one captain so only they can see and accept it. The server enforces that, not just the interface.
 - 🪶 **Small, readable files.** The original is two very large files, a Python server and one HTML page. Here the same game is 154 focused source files, each one mapping to a single piece of the original, with 36 more holding the tests.

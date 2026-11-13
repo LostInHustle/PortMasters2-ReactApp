@@ -2,6 +2,8 @@ import { pm1Label, pm1Url } from '../../i18n/pm1Links.js';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useLogout } from '../../state/useLogout.js';
+import { MateNote } from '../common/MateNote.js';
+import { IconToggle } from '../layout/IconToggle.js';
 import { LangToggle } from '../layout/LangToggle.js';
 import { useModal } from '../modal/ModalContext.js';
 import { CreateRoomComposer } from './CreateRoomComposer.js';
@@ -18,7 +20,8 @@ import { RoomLobbyView } from './RoomLobbyView.js';
 // btn-logout-lobby.
 export function LobbyOverlay() {
   const { tr, lang } = useTranslate();
-  const { currentUser, room } = useSession();
+  const { currentUser, room, openRooms } = useSession();
+  const recruiting = openRooms.filter((r) => r.host !== currentUser).length;
   const { openModal } = useModal();
   const logout = useLogout();
   useInviteReceivedModal();
@@ -55,6 +58,7 @@ export function LobbyOverlay() {
           }}
         >
           <LangToggle className="btn btn-ghost" />
+          <IconToggle className="btn btn-ghost" />
           <button
             className="btn btn-ghost"
             onClick={logout}
@@ -68,14 +72,18 @@ export function LobbyOverlay() {
         {room ? (
           <RoomLobbyView />
         ) : (
-          <>
-            <h3 style={{ color: 'var(--ocean-900)', margin: '12px 0', fontSize: 15 }}>
+          <div id="room-browse-view">
+            <h3
+              id="lb-online-title"
+              style={{ color: 'var(--ocean-900)', margin: '12px 0', fontSize: 15 }}
+            >
               {tr('🧑‍✈️ 在线玩家', '🧑‍✈️ Players Online')}
             </h3>
             <div id="online-users-list">
               <OnlineUsersList />
             </div>
             <div
+              className="lb-rooms-head"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -85,7 +93,10 @@ export function LobbyOverlay() {
                 gap: 8,
               }}
             >
-              <h3 style={{ color: 'var(--ocean-900)', margin: 0, fontSize: 15 }}>
+              <h3
+                id="lb-rooms-title"
+                style={{ color: 'var(--ocean-900)', margin: 0, fontSize: 15 }}
+              >
                 {tr('🧑‍🤝‍🧑 招募中的航程', '🧑‍🤝‍🧑 Open Voyages')}
               </h3>
               <button
@@ -102,7 +113,20 @@ export function LobbyOverlay() {
             <div id="open-rooms-list">
               <OpenRoomsList />
             </div>
-          </>
+            <MateNote id="lb-mate">
+              {recruiting === 0
+                ? tr(
+                    '船长，港里暂时没有招募中的航程。不妨自己招募船队，他们总会来的。',
+                    'No open voyages in port right now, Captain. Host a voyage of your own. They always come.',
+                  )
+                : tr(
+                    `船长，港里有 ${recruiting} 支船队正在招募。若都不合意，就自己招募船队。`,
+                    recruiting === 1
+                      ? 'One voyage is recruiting in port, Captain. If it does not suit you, host a voyage of your own.'
+                      : `${recruiting} voyages are recruiting in port, Captain. If none suits you, host a voyage of your own.`,
+                  )}
+            </MateNote>
+          </div>
         )}
 
         <div className="pm-banner" style={{ marginTop: 18 }}>

@@ -68,8 +68,8 @@ export function FlowTab() {
         </table>
         <p>
           The "🔄 Ready n/N" chip in the bottom bar shows sync progress; once you confirm, a waiting
-          hint appears until your partner does too. Bankrupt players count as auto-ready and never
-          block their partner.
+          hint appears until your partner does too. Bankrupt players count as ready automatically
+          and never block their partner.
         </p>
       </>
     );

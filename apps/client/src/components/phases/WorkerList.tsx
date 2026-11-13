@@ -42,7 +42,8 @@ export function WorkerList({ type, list, tasks }: WorkerListProps) {
       {list.map((w, i) => (
         <div className="worker-row" key={i}>
           <span className="w-state">
-            {name} {i + 1} ·{' '}
+            {name} {i + 1}
+            {tr(' · ', ', ')}
             {w.task ? (
               <span className="busy">
                 {tr(`⚙️ 制作 ${w.task} 中`, `⚙️ crafting ${tn(w.task, lang)}`)}

@@ -68,7 +68,7 @@ export function BoonsTab() {
               <td>
                 🔮 Farsight
                 <br />
-                <span className="muted">New Maritime Edict · Round 6+</span>
+                <span className="muted">New Maritime Edict, Round 6+</span>
               </td>
               <td>Gain 1 free Broker's Whisper clue this round</td>
               <td>Want to lock in a Trade phase order early</td>
@@ -77,7 +77,7 @@ export function BoonsTab() {
               <td>
                 🏮 Porcelain & Bronze Consortium
                 <br />
-                <span className="muted">New Maritime Edict · Round 6+</span>
+                <span className="muted">New Maritime Edict, Round 6+</span>
               </td>
               <td>Celadon Porcelain and Bronze Mirror orders pay +15% this round</td>
               <td>Stockpiled Celadon Porcelain/Bronze Mirror ready to deliver</td>
@@ -86,7 +86,7 @@ export function BoonsTab() {
               <td>
                 🧾 Frontier Tariff Relief
                 <br />
-                <span className="muted">New Maritime Edict · Round 6+</span>
+                <span className="muted">New Maritime Edict, Round 6+</span>
               </td>
               <td>VAT on finished goods deliveries is halved this round</td>
               <td>Planning to deliver lots of products this round</td>
@@ -95,7 +95,7 @@ export function BoonsTab() {
               <td>
                 💎 Treasures from Afar
                 <br />
-                <span className="muted">Ten Thousand Kingdoms Trade · Round 10+</span>
+                <span className="muted">Ten Thousand Kingdoms Trade, Round 10+</span>
               </td>
               <td>Foreign Perfume Oil and Pearl Necklace orders pay +15% this round</td>
               <td>Stockpiled Foreign Perfume Oil/Pearl Necklace ready to deliver</td>
@@ -104,7 +104,7 @@ export function BoonsTab() {
               <td>
                 🛡️ Deep Sea Escort Pact
                 <br />
-                <span className="muted">Ten Thousand Kingdoms Trade · Round 10+</span>
+                <span className="muted">Ten Thousand Kingdoms Trade, Round 10+</span>
               </td>
               <td>Escort hiring costs half price and pirate risk is halved this round</td>
               <td>When the trade wind's pirate risk is high</td>
@@ -113,7 +113,7 @@ export function BoonsTab() {
               <td>
                 🛍️ Merchants Converge
                 <br />
-                <span className="muted">Ten Thousand Kingdoms Trade · Round 10+</span>
+                <span className="muted">Ten Thousand Kingdoms Trade, Round 10+</span>
               </td>
               <td>1 extra order appears in the Trade phase this round</td>
               <td>Want more delivery opportunities</td>

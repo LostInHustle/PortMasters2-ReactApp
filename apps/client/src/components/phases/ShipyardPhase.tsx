@@ -26,13 +26,13 @@ export function ShipyardPhase() {
           <h3>{tr('🚢 旗舰档案', '🚢 Flagship Profile')}</h3>
           <div className="stat-row" style={{ fontSize: 13 }}>
             <span>{tr('当前等级', 'Current level')}</span>
-            <strong>Lv.{g.shipLevel} / 3</strong>
+            <strong>{tr(`${g.shipLevel} 级`, `Lv.${g.shipLevel}`)} / 3</strong>
           </div>
           <div className="stat-row" style={{ fontSize: 13 }}>
             <span
               className="tip"
               data-tip={tr(
-                '每单运费 = max(5, 件数×2 − 此减免)',
+                '每单运费 = 件数×2 − 此减免，最低 5 金币',
                 'Shipping per order = max(5, items ×2 − this discount)',
               )}
             >
@@ -75,16 +75,16 @@ export function ShipyardPhase() {
               )}
             >
               {tr(
-                `⚓ 升级商船至 Lv.${g.shipLevel + 1}（${upgCost}💰）`,
+                `⚓ 升级商船至 ${g.shipLevel + 1} 级（${upgCost}💰）`,
                 `⚓ Upgrade Ship to Lv.${g.shipLevel + 1} (${upgCost}💰)`,
               )}
               <span className="btn-sub">
-                {tr('运费/单再 −5 金币 · +1 模块槽', 'Shipping −5 gold/order · +1 module slot')}
+                {tr('运费/单再 −5 金币 · +1 模块槽', 'Shipping −5 gold/order, +1 module slot')}
               </span>
             </button>
           ) : (
             <span className="chip green">
-              {tr('⚓ 旗舰已满级 Lv.3', '⚓ Flagship at max level (Lv.3)')}
+              {tr('⚓ 旗舰已满级（3 级）', '⚓ Flagship at max level (Lv.3)')}
             </span>
           )}
           {!g.draftOpen && (
@@ -104,7 +104,7 @@ export function ShipyardPhase() {
                         "View this round's fixed 3 module options and install one",
                       )
                   : tr(
-                      '商船升至 Lv.1 后解锁模块槽位，方可选择船舶模块',
+                      '商船升至 1 级后解锁模块槽位，方可选择船舶模块',
                       'Upgrade your ship to Lv.1 to unlock module slots before choosing',
                     )
               }

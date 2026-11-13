@@ -36,6 +36,9 @@ export function ControlPanel() {
           </span>
         )}
         <div className="control-spacer" />
+        <button className="btn btn-ghost" onClick={() => openManual()}>
+          {tr('📖 手册', '📖 Manual')}
+        </button>
         {isBankrupt && partnerPlaying && (
           <button className="btn btn-ghost" onClick={() => openSpectate()}>
             {tr('👀 观战同行', '👀 Spectate')}
@@ -43,9 +46,6 @@ export function ControlPanel() {
         )}
         <button className="btn btn-danger" onClick={confirmRestart}>
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
-        </button>
-        <button className="btn btn-ghost" onClick={() => openManual()}>
-          {tr('📖 手册', '📖 Manual')}
         </button>
       </>
     );
@@ -59,7 +59,7 @@ export function ControlPanel() {
     case 0:
       primary = serverState?.youReady ? (
         <button className="btn btn-grey btn-lg" disabled>
-          {tr('⌛ 已确认，等待伙伴', '⌛ Confirmed, waiting for partner')}
+          {tr('⌛ 已确认，等待其他船长', '⌛ Confirmed, waiting for others')}
         </button>
       ) : (
         <button className="btn btn-success btn-lg" onClick={() => send({ action: 'startBoon' })}>
@@ -146,7 +146,6 @@ export function ControlPanel() {
       </span>
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
-      {primary}
       <button
         className="btn btn-ghost"
         onClick={() => openManual()}
@@ -154,6 +153,7 @@ export function ControlPanel() {
       >
         {tr('📖 手册', '📖 Manual')}
       </button>
+      {primary}
     </>
   );
 }

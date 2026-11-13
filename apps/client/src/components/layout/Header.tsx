@@ -2,6 +2,7 @@ import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
 import { useLogout } from '../../state/useLogout.js';
 import { useOpenManual } from '../manual/ManualModal.js';
+import { IconToggle } from './IconToggle.js';
 import { LangToggle } from './LangToggle.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html's .header markup (lines 1191-1206)
@@ -40,7 +41,7 @@ export function Header() {
           <div className="subtitle">
             {tr(
               '海上丝绸之路 · 联机贸易战略：采购 · 互市 · 生产 · 远航',
-              'Maritime Silk Road · Online Trading: Procure · Barter · Produce · Voyage',
+              'Maritime Silk Road, Online Trading: Procure, Barter, Produce, Voyage',
             )}
           </div>
         </div>
@@ -48,6 +49,7 @@ export function Header() {
       <div className="header-actions">
         {currentUser && <span className="me-chip">{currentUser}</span>}
         <LangToggle />
+        <IconToggle />
         <button
           className="btn btn-ghost"
           onClick={() => openManual()}

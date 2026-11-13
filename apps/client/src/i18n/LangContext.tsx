@@ -1,4 +1,13 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
+import { loadIconMode, setIconMode, storeIconMode, type IconMode } from './iconMode.js';
 
 export type Lang = 'zh' | 'en';
 
@@ -48,6 +57,8 @@ export function pf<T>(o: Bilingual<T> | undefined, lang: Lang): T | '' {
 interface LangContextValue {
   lang: Lang;
   toggleLang: () => void;
+  iconMode: IconMode;
+  toggleIconMode: () => void;
 }
 
 const LangContext = createContext<LangContextValue | null>(null);
@@ -68,7 +79,38 @@ export function LangProvider({ children }: { children: ReactNode }) {
     setLang(next);
   }, [lang]);
 
-  const value = useMemo(() => ({ lang, toggleLang }), [lang, toggleLang]);
+  // Icon style (emojis or Chinese characters) lives beside the language on purpose: both change
+  // what nearly every component prints, and every component that prints text already listens
+  // to this context, so one provider redraws the whole app for either switch.
+  const [iconMode, setIconModeState] = useState<IconMode>(loadIconMode);
+  // The icon tables are read during render, so their mirror must be current before any child
+  // renders. Assigning it here is idempotent, which keeps it safe under repeated renders.
+  setIconMode(iconMode);
+
+  const toggleIconMode = useCallback(() => {
+    const next: IconMode = iconMode === 'han' ? 'emoji' : 'han';
+    storeIconMode(next);
+    setIconModeState(next);
+  }, [iconMode]);
+
+  // The stylesheet keys a few rules off these two attributes: character seals for goods, and
+  // the type size of the first mate's notes in Chinese.
+  useEffect(() => {
+    document.body.dataset.icons = iconMode;
+  }, [iconMode]);
+  useEffect(() => {
+    document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+    document.title = tr(
+      lang,
+      'PortMasters 2 · 海上丝绸之路（联机版）',
+      'PortMasters 2, Maritime Silk Road (Online)',
+    );
+  }, [lang]);
+
+  const value = useMemo(
+    () => ({ lang, toggleLang, iconMode, toggleIconMode }),
+    [lang, toggleLang, iconMode, toggleIconMode],
+  );
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 }

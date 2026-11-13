@@ -64,7 +64,7 @@ export function ExpansionUnlockArtisansPorts() {
             <tr>
               <td>Goryeo</td>
               <td>New Maritime Edict</td>
-              <td>A cross-sea trade hub and the chief source of Copper Ore</td>
+              <td>A cross sea trade hub and the chief source of Copper Ore</td>
             </tr>
             <tr>
               <td>Srivijaya</td>

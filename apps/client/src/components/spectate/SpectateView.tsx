@@ -47,14 +47,14 @@ export function SpectateView() {
         <div className="spectate-head">
           <span className="sp-live">
             <span className="sp-live-dot" />
-            LIVE
+            {tr('实时', 'LIVE')}
           </span>
           <div className="sp-title">
             {tr(`👀 ${target} 的商队`, `👀 ${target}'s Fleet`)}
             <div className="sp-sub">
               {tr(
                 `第 ${og.currentRound} / ${og.maxRounds} 程 · ${phaseName(og.phase, lang)}阶段 · 只读视角，随其操作实时更新`,
-                `Round ${og.currentRound} / ${og.maxRounds} · ${phaseName(og.phase, lang)} phase · read only, updates live`,
+                `Round ${og.currentRound} / ${og.maxRounds}, ${phaseName(og.phase, lang)} phase, read only, updates live`,
               )}
             </div>
           </div>
@@ -96,7 +96,7 @@ export function SpectateView() {
               <div className="sp-tile">
                 <div className="k">{tr('商船', 'Flagship')}</div>
                 <div className="v">
-                  🚢 Lv.{og.shipLevel}
+                  🚢 {tr(`${og.shipLevel} 级`, `Lv.${og.shipLevel}`)}
                   <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-faint)' }}>
                     {' '}
                     {og.equippedModules.length}/{og.shipLevel}
@@ -142,7 +142,7 @@ export function SpectateView() {
             </div>
 
             <div className="sp-pane">
-              <h4>{tr('📜 近期动态 · 最新在前', '📜 Recent Activity · Newest first')}</h4>
+              <h4>{tr('📜 近期动态 · 最新在前', '📜 Recent Activity, Newest first')}</h4>
               {recentLogs.length > 0 ? (
                 recentLogs.map((m, i) => (
                   <div className="sp-feed-item" key={i}>

@@ -1,5 +1,6 @@
 import type { ProductId, WorkerAttr, WorkerTypeId } from '@pm2/shared';
 import type { Bilingual, Lang } from './LangContext.js';
+import { getIconMode } from './iconMode.js';
 import { pf } from './LangContext.js';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html WORKER_TYPES (lines 1571-1593):
@@ -89,6 +90,25 @@ export const WORKER_TYPES: WorkerTypeInfo[] = [
     },
   },
 ];
+
+// The Chinese character each artisan type shows when a player switches the icon style. The
+// icon field becomes a live reading of that style, so every `wt.icon` call site follows it.
+const WORKER_HAN: Record<WorkerTypeId, string> = {
+  weaver: '织',
+  master: '纺',
+  sachet_maker: '囊',
+  coppersmith: '铜',
+  potter: '陶',
+  perfumer: '香',
+  jeweler: '宝',
+};
+for (const wt of WORKER_TYPES) {
+  const emoji = wt.icon;
+  Object.defineProperty(wt, 'icon', {
+    get: () => (getIconMode() === 'han' ? WORKER_HAN[wt.key] : emoji),
+    enumerable: true,
+  });
+}
 
 // Accepts a plain string (not narrowed to WorkerTypeId) since callers include values lifted
 // out of regex-matched log text (serverTextRules.ts), which can't be statically known to be a

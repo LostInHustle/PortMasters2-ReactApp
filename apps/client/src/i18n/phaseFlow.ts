@@ -96,3 +96,39 @@ export function phaseName(key: Phase, lang: Lang): string {
   const meta = idx === undefined ? undefined : PHASE_FLOW[idx];
   return meta ? pf(meta.name, lang) : tr(lang, '准备中', 'Preparing');
 }
+
+// The sky and the identity hue each phase wears. A round is one day at sea: first light for
+// Set Sail and Fortune, morning for Procure, noon for Barter, Artisans and Trade, dusk for
+// Upkeep and Shipyard, night for the endings. Kept identical to the single file build.
+const PHASE_SKY: Record<string, string> = {
+  0: 'dawn',
+  5: 'dawn',
+  1: 'morning',
+  trade: 'noon',
+  worker_mgmt: 'noon',
+  2: 'noon',
+  3: 'dusk',
+  4: 'dusk',
+  endgame: 'night',
+  bankruptcy: 'night',
+};
+const PHASE_HUE: Record<string, number> = {
+  0: 68,
+  5: 325,
+  1: 154,
+  trade: 40,
+  worker_mgmt: 305,
+  2: 282,
+  3: 261,
+  4: 90,
+  endgame: 132,
+  bankruptcy: 325,
+};
+
+export function phaseSky(key: Phase): string {
+  return PHASE_SKY[String(key)] ?? 'morning';
+}
+
+export function phaseHue(key: Phase): number {
+  return PHASE_HUE[String(key)] ?? 154;
+}

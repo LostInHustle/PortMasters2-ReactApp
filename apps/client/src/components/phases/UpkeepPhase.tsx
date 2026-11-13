@@ -87,7 +87,7 @@ export function UpkeepPhase() {
                 本程海盗袭扰概率为 <strong>{riskPct}%</strong>
                 （含天象与可疑牙行的影响），若触发将损失当前金币的 <strong>{lossPct}%</strong>
                 （按现有现金约为 {projectedLoss} 金币）。护航费用按当前财富计算，本次为{' '}
-                <strong>{escortCost}</strong> 金币，可完全免疫本次结算的海盗 RNG。
+                <strong>{escortCost}</strong> 金币，可完全免疫本次结算的海盗随机事件。
               </>,
               <>
                 This voyage&apos;s pirate raid chance is <strong>{riskPct}%</strong> (weather plus

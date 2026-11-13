@@ -12,15 +12,7 @@ import { TradeTab } from './content/tradeTab.js';
 import { WorkersTab } from './content/workersTab.js';
 
 export type ManualTabId =
-  | 'start'
-  | 'flow'
-  | 'economy'
-  | 'workers'
-  | 'trade'
-  | 'boons'
-  | 'ship'
-  | 'expansion'
-  | 'faq';
+  'start' | 'flow' | 'economy' | 'workers' | 'trade' | 'boons' | 'ship' | 'expansion' | 'faq';
 
 // Ported verbatim from PortMasters2/PortMasters_online.html MANUAL_TABS_I18N (lines 3426-3450).
 const TAB_IDS: ManualTabId[] = [
@@ -80,7 +72,7 @@ export function ManualModal({ initialTab }: { initialTab?: ManualTabId }) {
 
   return (
     <>
-      <h2>{tr('📖 PortMasters 2 · 航海手册', "📖 PortMasters 2 · Captain's Manual")}</h2>
+      <h2>{tr('📖 PortMasters 2 · 航海手册', "📖 PortMasters 2, Captain's Manual")}</h2>
       <div className="manual-tabs">
         {TAB_IDS.map((id) => (
           <button

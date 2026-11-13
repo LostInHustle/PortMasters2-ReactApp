@@ -61,11 +61,11 @@ export function InviteComposer({ to }: { to: string }) {
           justifyContent: 'center',
         }}
       >
-        <button className="btn btn-success btn-lg" onClick={confirm}>
-          {tr('📨 发送邀请', '📨 Send Invitation')}
-        </button>
         <button className="btn btn-ghost btn-lg" onClick={closeModal}>
           {tr('取消', 'Cancel')}
+        </button>
+        <button className="btn btn-success btn-lg" onClick={confirm}>
+          {tr('📨 发送邀请', '📨 Send Invitation')}
         </button>
       </div>
     </>

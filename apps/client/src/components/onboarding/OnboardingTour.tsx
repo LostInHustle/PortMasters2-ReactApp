@@ -90,11 +90,11 @@ export function OnboardingTour() {
           flexWrap: 'wrap',
         }}
       >
-        <button className="btn btn-success btn-lg" onClick={() => finish(false)}>
-          {tr('⚓ 我已了解，开始航行', "⚓ Got it, let's sail")}
-        </button>
         <button className="btn btn-gold btn-lg" onClick={() => finish(true)}>
           {tr('📖 先看完整手册', '📖 Read the full manual first')}
+        </button>
+        <button className="btn btn-success btn-lg" onClick={() => finish(false)}>
+          {tr('⚓ 我已了解，开始航行', "⚓ Got it, let's sail")}
         </button>
       </div>
     </>

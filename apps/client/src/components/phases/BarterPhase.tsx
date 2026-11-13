@@ -148,17 +148,17 @@ export function BarterPhase() {
               </div>
               <div className="actions">
                 <button
+                  className="btn btn-danger"
+                  onClick={() => send({ action: 'rejectTrade', orderId: o.id })}
+                >
+                  {tr('❌ 拒绝', '❌ Decline')}
+                </button>
+                <button
                   className="btn btn-success"
                   onClick={() => send({ action: 'acceptTrade', orderId: o.id })}
                   title={tr('接受后立即完成互换', 'Accept to swap immediately')}
                 >
                   {tr('✅ 接受成交', '✅ Accept')}
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => send({ action: 'rejectTrade', orderId: o.id })}
-                >
-                  {tr('❌ 拒绝', '❌ Decline')}
                 </button>
               </div>
             </div>
@@ -303,7 +303,7 @@ export function BarterPhase() {
         >
           {myReady
             ? tr('⏳ 已准备，等待其他船长就绪', '⏳ Ready: waiting for others')
-            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering · Ready')}
+            : tr('✅ 互市完毕，准备就绪', '✅ Done Bartering, Ready')}
           <span className="btn-sub">
             {myReady ? '' : tr('全员就绪后进入工匠管理', 'Advances once everyone is ready')}
           </span>

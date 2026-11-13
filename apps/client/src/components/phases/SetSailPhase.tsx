@@ -30,7 +30,7 @@ export function SetSailPhase() {
       <div className="subtitle-text">
         {tr(
           '海上丝绸之路 · 扬帆远航 · 与其他船长竞航，成为海上霸主！',
-          'The Maritime Silk Road · Set your course · Race your fellow captains to rule the seas!',
+          'The Maritime Silk Road, Set your course, Race your fellow captains to rule the seas!',
         )}
       </div>
       <EnvironmentBanner g={g} />
@@ -105,12 +105,12 @@ function RoundStartPhase() {
         <EnvironmentBanner g={g} />
         <div style={{ fontSize: 54 }}>🌅</div>
         <div className="hero-title">
-          {tr(`第 ${g.currentRound} 程 · 整装启航`, `Round ${g.currentRound} · Ready to Sail`)}
+          {tr(`第 ${g.currentRound} 程 · 整装启航`, `Round ${g.currentRound}, Ready to Sail`)}
         </div>
         <div className="subtitle-text">
           {tr(
             `航程进度 ${g.currentRound} / ${g.maxRounds} · 与其他船长确认后抽取本程福缘`,
-            `Voyage ${g.currentRound} of ${g.maxRounds} · confirm with your fellow captains to draw this round's fortunes`,
+            `Voyage ${g.currentRound} of ${g.maxRounds}, confirm with your fellow captains to draw this round's fortunes`,
           )}
         </div>
         {s && (
@@ -161,10 +161,12 @@ function RoundStartPhase() {
             </div>
             <div className="stat-row" style={{ fontSize: 13 }}>
               <span>
-                <strong>{tr('当前现金 · 声望', 'Gold · Renown')}</strong>
+                <strong>{tr('当前现金 · 声望', 'Gold, Renown')}</strong>
               </span>
               <strong>
-                {s.money} {gold} · {s.score}
+                {s.money} {gold}
+                {tr(' · ', ', ')}
+                {s.score}
               </strong>
             </div>
           </div>
