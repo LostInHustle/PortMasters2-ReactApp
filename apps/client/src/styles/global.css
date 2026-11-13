@@ -1264,6 +1264,27 @@ a {
   color: rgba(224, 242, 254, 0.8);
   font-size: 11.5px;
 }
+/* The action bar collapses to a slim strip so it stops crowding the stage.
+   The ready chip and the phase action stay visible, so the bar never has to be reopened
+   just to keep playing; the hint and secondary buttons return on expand. */
+.control-panel.collapsed {
+  padding: 6px 12px;
+  gap: 8px;
+}
+.control-panel.collapsed .control-hint,
+.control-panel.collapsed .control-secondary {
+  display: none;
+}
+.control-panel .btn.control-toggle {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 1;
+}
 
 /* ===== Log ===== */
 .log-panel {

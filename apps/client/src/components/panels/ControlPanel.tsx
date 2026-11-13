@@ -1,3 +1,4 @@
+import { useLayoutEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslate } from '../../i18n/useTranslate.js';
 import { useSession } from '../../state/SessionContext.js';
@@ -5,6 +6,16 @@ import { useSpectate } from '../../state/SpectateContext.js';
 import { useWs } from '../../ws/WsContext.js';
 import { useOpenManual } from '../manual/ManualModal.js';
 import { useConfirmRestart } from '../phases/useConfirmRestart.js';
+
+const COLLAPSE_KEY = 'pm2_controls_collapsed';
+
+function readControlsCollapsed(): boolean {
+  try {
+    return localStorage.getItem(COLLAPSE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
 
 // Mirrors PortMasters2/PortMasters_online.html renderControls:
 // the bottom action bar's primary call to action and hint, one per phase.
@@ -17,6 +28,39 @@ export function ControlPanel() {
   const { openSpectate } = useSpectate();
   const g = serverState?.yourGame;
   const isHost = serverState?.host === currentUser;
+  const [collapsed, setCollapsed] = useState(readControlsCollapsed);
+
+  useLayoutEffect(() => {
+    document.getElementById('control-panel')?.classList.toggle('collapsed', collapsed);
+  }, [collapsed]);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(COLLAPSE_KEY, next ? '1' : '0');
+      } catch {
+        // A blocked storage area just means the choice will not survive a reload.
+      }
+      return next;
+    });
+  };
+
+  const toggleTitle = collapsed
+    ? tr('展开操作栏', 'Expand the action bar')
+    : tr('收起操作栏', 'Collapse the action bar');
+  const collapseToggle = (
+    <button
+      className="btn btn-ghost control-toggle"
+      onClick={toggleCollapsed}
+      aria-expanded={!collapsed}
+      aria-controls="control-panel"
+      aria-label={toggleTitle}
+      title={toggleTitle}
+    >
+      {collapsed ? '▴' : '▾'}
+    </button>
+  );
 
   if (!g || g.gameOver) {
     const isBankrupt = g?.bankrupt;
@@ -37,17 +81,18 @@ export function ControlPanel() {
           </span>
         )}
         <div className="control-spacer" />
-        <button className="btn btn-ghost" onClick={() => openManual()}>
+        <button className="btn btn-ghost control-secondary" onClick={() => openManual()}>
           {tr('📖 手册', '📖 Manual')}
         </button>
         {isBankrupt && partnerPlaying && (
-          <button className="btn btn-ghost" onClick={() => openSpectate()}>
+          <button className="btn btn-ghost control-secondary" onClick={() => openSpectate()}>
             {tr('👀 观战同行', '👀 Spectate')}
           </button>
         )}
         <button className="btn btn-danger" onClick={confirmRestart}>
           {tr('🔄 重新起航', '🔄 Set Sail Again')}
         </button>
+        {collapseToggle}
       </>
     );
   }
@@ -148,7 +193,7 @@ export function ControlPanel() {
       <span className="control-hint">💡 {hint}</span>
       <div className="control-spacer" />
       <button
-        className="btn btn-ghost"
+        className="btn btn-ghost control-secondary"
         onClick={() => openManual()}
         title={tr('快捷键 F1', 'Shortcut: F1')}
       >
@@ -156,7 +201,7 @@ export function ControlPanel() {
       </button>
       {isHost && (
         <button
-          className="btn btn-ghost"
+          className="btn btn-ghost control-secondary"
           onClick={confirmRestart}
           title={tr(
             '立即开启全新一局，全员进度重置，难度保持不变',
@@ -167,6 +212,7 @@ export function ControlPanel() {
         </button>
       )}
       {primary}
+      {collapseToggle}
     </>
   );
 }
